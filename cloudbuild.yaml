@@ -58,9 +58,9 @@ steps:
       name: "gcr.io/$PROJECT_ID/kubails-builder"
       args: ["kubails", "infra", "unauthenticate"]
 
-    - id: "Send slack success notification"
-      name: "gcr.io/$PROJECT_ID/kubails-builder"
-      args: ["kubails", "notify", "slack", "success", "${_SLACK_WEBHOOK}", "--namespace", "${BRANCH_NAME}", "--commit", "${SHORT_SHA}"]
+    # - id: "Send slack success notification"
+    #   name: "gcr.io/$PROJECT_ID/kubails-builder"
+    #   args: ["kubails", "notify", "slack", "success", "${_SLACK_WEBHOOK}", "--namespace", "${BRANCH_NAME}", "--commit", "${SHORT_SHA}"]
 
 substitutions:
     _SLACK_WEBHOOK: ""

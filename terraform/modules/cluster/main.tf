@@ -1,7 +1,7 @@
 # The Kubernetes cluster where all of the application containers will be deployed to.
 resource "google_container_cluster" "primary" {
     name = "${var.cluster_name}"
-    zone = "${var.zone}"
+    location = "${var.zone}"
     min_master_version = "${var.cluster_version}"
     remove_default_node_pool = true
 
@@ -32,7 +32,7 @@ resource "google_container_cluster" "primary" {
 resource "google_container_node_pool" "primary" {
     name = "${google_container_cluster.primary.name}-node-pool"
     cluster = "${google_container_cluster.primary.name}"
-    zone = "${var.zone}"
+    location = "${var.zone}"
     initial_node_count = "${var.initial_node_count}"
 
     autoscaling {

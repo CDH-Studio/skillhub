@@ -10,7 +10,7 @@
     "__project_name": "skillhub",
     "__project_title": "Skillhub",
     "__remote_repo_host": "github",
-    "__remote_repo_owner": "CDH-Studio",
+    "__remote_repo_owner": "cdh-studio",
     "__services": {
         "backend": {
             "container_port": "5000",

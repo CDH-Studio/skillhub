@@ -29,11 +29,11 @@
         "compression": "^1.7.3",
         "cors": "^2.8.5",
         "dotenv": "^6.1.0",
-        "feathers-sequelize": "^4.1.0",
+        "feathers-sequelize": "^5.1.3",
         "helmet": "^3.15.0",
         "pg": "^7.6.1",
         "pg-hstore": "^2.3.2",
-        "sequelize": "^4.41.2",
+        "sequelize": "^5.3.0",
         "sequelize-cli": "^5.3.0",
         "winston": "^3.1.0"
     },

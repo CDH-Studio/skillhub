@@ -8,7 +8,7 @@ variable "cluster_name" {
 
 variable "cluster_version" {
     type = "string"
-    default = "1.11.6"
+    default = "1.11.8"
 }
 
 variable "initial_node_count" {

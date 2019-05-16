@@ -1,17 +1,14 @@
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: ingress-nginx
-  namespace: ingress-nginx
   labels:
     app: ingress-nginx
+  name: ingress-nginx
+  namespace: ingress-nginx
 spec:
   externalTrafficPolicy: Cluster
-  type: LoadBalancer
-  loadBalancerIP: ''
-  selector:
-    app: ingress-nginx
+  loadBalancerIP: 35.203.71.18
   ports:
   - name: http
     port: 80
@@ -19,3 +16,6 @@ spec:
   - name: https
     port: 443
     targetPort: https
+  selector:
+    app: ingress-nginx
+  type: LoadBalancer
