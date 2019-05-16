@@ -1,0 +1,48 @@
+
+{{- if and .Values.__services .Values.serviceName}}
+{{- $serviceMap := index .Values.__services .Values.serviceName}}
+{{- $host := printf "%s%s" (.Values.subdomain | default "" | lower) (index $serviceMap "host")}}
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: {{.Values.serviceName}}-ingress
+    namespace: {{.Values.namespace | default "" | lower}}
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+    tls:
+    - secretName: {{.Values.__wildcard_certificate_secret}}
+    rules:
+    - host: {{$host}}
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{.Values.serviceName}}
+            servicePort: {{index $serviceMap "external_port"}}
+    # Only production gets a www alias
+    # (because we don't have wildcart certs to add www to every per-branch/per-commit aliases)
+    {{- if eq .Values.namespace .Values.__production_namespace}}
+    - host: {{printf "www.%s" $host}}
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{.Values.serviceName}}
+            servicePort: {{index $serviceMap "external_port"}}
+    {{- end}}
+    # Per-commit urls
+    {{- if ne .Values.namespace .Values.__production_namespace}}
+    {{- $tagged_host := printf "%s-%s" (.Values.tag | default "" | lower) $host}}
+    - host: {{$tagged_host}}
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{.Values.serviceName}}
+            servicePort: {{index $serviceMap "external_port"}}
+    {{- end}}
+{{- end}}
+

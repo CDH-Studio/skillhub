@@ -1,0 +1,48 @@
+{
+    "name": "backend",
+    "version": "0.0.1",
+    "main": "src",
+    "scripts": {
+        "test": "NODE_ENV= NODE_PATH=src npm run jest",
+        "lint": "NODE_PATH=src eslint 'src/**/*.js'",
+        "start": "NODE_PATH=src nodemon src/",
+        "start:prod": "NODE_PATH=src node src/",
+        "jest": "jest",
+        "sequelize:init": "sequelize init",
+        "sequelize:generate:model": "sequelize model:create",
+        "sequelize:generate:migration": "sequelize migration:create",
+        "sequelize:generate:seed": "sequelize seed:create",
+        "db:create": "sequelize db:create",
+        "db:seed": "NODE_PATH=src sequelize db:seed:all",
+        "db:migrate": "NODE_PATH=src sequelize db:migrate",
+        "db:retryable-migrate": "sh ./scripts/retryable-db-migrate.sh"
+    },
+    "dependencies": {
+        "@feathersjs/authentication": "^2.1.16",
+        "@feathersjs/authentication-jwt": "^2.0.10",
+        "@feathersjs/authentication-local": "^1.2.9",
+        "@feathersjs/configuration": "^2.0.4",
+        "@feathersjs/errors": "^3.3.6",
+        "@feathersjs/express": "^1.2.7",
+        "@feathersjs/feathers": "^3.2.3",
+        "@feathersjs/socketio": "^3.2.7",
+        "compression": "^1.7.3",
+        "cors": "^2.8.5",
+        "dotenv": "^6.1.0",
+        "feathers-sequelize": "^4.1.0",
+        "helmet": "^3.15.0",
+        "pg": "^7.6.1",
+        "pg-hstore": "^2.3.2",
+        "sequelize": "^4.41.2",
+        "sequelize-cli": "^5.3.0",
+        "winston": "^3.1.0"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.11.1",
+        "jest": "^23.6.0",
+        "nodemon": "^1.18.10",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.2"
+    }
+}

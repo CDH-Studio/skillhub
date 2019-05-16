@@ -1,0 +1,68 @@
+steps:
+    - id: "Build images"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      args: ["kubails", "service", "images", "build", "--branch", "${BRANCH_NAME}", "--commit", "${SHORT_SHA}"]
+
+    - id: "Run CI on all services"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      args: ["kubails", "service", "ci", "--tag", "${BRANCH_NAME}"]
+
+    - id: "Push built images"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      args: ["kubails", "service", "images", "push", "--branch", "${BRANCH_NAME}", "--commit", "${SHORT_SHA}"]
+
+    - id: "Get project service account key to access Terraform state"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      args: ["kubails", "infra", "authenticate"]
+
+    - id: "Generate Kubernetes service manifests"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      entrypoint: "bash"
+      args:
+          - -c
+          - |
+            kubails cluster manifests generate --tag ${SHORT_SHA} --namespace ${BRANCH_NAME}
+            bash ./scripts/cloudbuild_cleanup.sh $?
+
+    - id: "Deploy generated Kubernetes manifests"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      entrypoint: "bash"
+      args:
+          - -c
+          - |
+            kubails cluster authenticate
+            kubails cluster manifests deploy --namespace ${BRANCH_NAME}
+            bash ./scripts/cloudbuild_cleanup.sh $?
+
+    - id: "Decrypt and deploy secrets files"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      entrypoint: "bash"
+      args:
+          - -c
+          - |
+            kubails cluster authenticate
+            kubails cluster secrets deploy --namespace ${BRANCH_NAME}
+            bash ./scripts/cloudbuild_cleanup.sh $?
+
+    - id: "Cleanup unused Kubernetes namespaces"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      entrypoint: "bash"
+      args:
+          - -c
+          - |
+            kubails cluster authenticate
+            kubails cluster cleanup-namespaces
+            bash ./scripts/cloudbuild_cleanup.sh $?
+
+    - id: "Cleanup service account key"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      args: ["kubails", "infra", "unauthenticate"]
+
+    - id: "Send slack success notification"
+      name: "gcr.io/$PROJECT_ID/kubails-builder"
+      args: ["kubails", "notify", "slack", "success", "${_SLACK_WEBHOOK}", "--namespace", "${BRANCH_NAME}", "--commit", "${SHORT_SHA}"]
+
+substitutions:
+    _SLACK_WEBHOOK: ""
+
+timeout: 1800s

@@ -1,0 +1,24 @@
+{
+    "development": {
+        "username": "app-database-user",
+        "password": null,
+        "database": "app-database",
+        "host": "backend-database",
+        "dialect": "postgres",
+        "operatorsAliases": false,
+        "define": {
+            "freezeTableName": true
+        }
+    },
+    "production": {
+        "username": "app-database-user",
+        "password": null,
+        "database": "app-database",
+        "host": "backend-database",
+        "dialect": "postgres",
+        "operatorsAliases": false,
+        "define": {
+            "freezeTableName": true
+        }
+    }
+}

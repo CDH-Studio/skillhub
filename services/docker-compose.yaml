@@ -1,0 +1,47 @@
+services:
+    backend:
+        command: npm start
+        depends_on:
+        - backend-database-migrate
+        - backend-database
+        image: backend
+        links:
+        - backend-database
+        ports:
+        - 5000:5000
+        volumes:
+        - ./backend/:/backend
+        - backend-deps:/backend/node_modules
+    backend-database:
+        environment:
+            POSTGRES_DB: app-database
+            POSTGRES_USER: app-database-user
+        image: postgres:11.1
+        volumes:
+        - backend-database-data:/var/lib/postgresql/data
+    backend-database-migrate:
+        build:
+            context: ./backend
+        command: sh -c "npm run db:retryable-migrate && npm run db:seed"
+        depends_on:
+        - backend-database
+        image: backend
+        links:
+        - backend-database
+    frontend:
+        build:
+            args:
+                app_env: dev
+            context: ./frontend
+        image: frontend
+        ports:
+        - 3000:3000
+        volumes:
+        - ./frontend/:/frontend
+        - frontend-deps:/frontend/node_modules
+version: '2'
+volumes:
+    backend-database-data:
+        driver: local
+    backend-deps:
+    frontend-deps:
