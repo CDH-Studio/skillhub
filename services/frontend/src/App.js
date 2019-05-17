@@ -2,6 +2,7 @@ import React from "react";
 import {Provider} from "react-redux";
 import {Switch, Route} from "react-router";
 import {ConnectedRouter} from "connected-react-router";
+import {Landing} from "scenes/";
 import configureStore, {history} from "store/";
 import "./App.scss";
 
@@ -21,7 +22,7 @@ const AppLayout = () => (
             path="/"
             render={() => (
                 <div id="app">
-                    <h1>Frontend</h1>
+                    <Landing />
                 </div>
             )}
         />

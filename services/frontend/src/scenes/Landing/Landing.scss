@@ -1,0 +1,70 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+.landing {
+    display: flex;
+    flex-direction: column;
+
+    .landing-header {
+        align-items: center;
+        background-color: $color-primary;
+        display: flex;
+        justify-content: space-between;
+        padding: $default-spacing $default-spacing*2;
+
+        .logo-icon {
+            height: 32px;
+            width: 32px;
+        }
+
+        .landing-auth {
+            display: flex;
+
+            button {
+                background: none;
+                border: none;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            .landing-login {
+                color: $color-light;
+                padding: $default-spacing/2 $default-spacing*1.5;
+            }
+
+            .landing-signup {
+                @include hover-background($color-light, darken($color-light, 5%));
+
+                border-radius: $default-border-radius;
+                color: $color-primary;
+                margin-left: $default-spacing * 2;
+                padding: $default-spacing/2 $default-spacing*1.5;
+            }
+        }
+    }
+
+    .landing-jumbotron {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin-top: 25vh;
+
+        .landing-tagline {
+            color: $color-text-secondary;
+            font-weight: bold;
+            margin-bottom: $default-spacing * 2;
+        }
+
+        .landing-create-profile {
+            @include hover-background($color-primary, $color-primary-hover);
+            @include fab-dropshadow();
+
+            border: none;
+            border-radius: $default-border-radius;
+            color: $color-light;
+            font-weight: bold;
+            padding: $default-spacing $default-spacing*4;
+        }
+    }
+}

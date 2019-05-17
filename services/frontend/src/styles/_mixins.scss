@@ -3,44 +3,48 @@
 $default-transition-time: 0.1s;
 $default-percentage: 5%;
 
+@mixin smooth-transition-all() {
+    transition: all $default-transition-time $smooth-transition;
+}
+
 @mixin header-font() {
-    font-family: "Nunito", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 @mixin body-font() {
-    font-family: "PT Sans", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
-@mixin hover-background($background-color, $percentage: $default-percentage, $color-function: "darken") {
-    background-color: $background-color;
-    cursor: pointer;
-    transition: background-color $default-transition-time;
+@mixin fab-dropshadow() {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+}
+
+@mixin hover-background($color, $hover-color) {
+    @include smooth-transition-all();
+
+    background-color: $color;
 
     &:hover, &:focus {
-        background-color: call(get-function($color-function), $background-color, $percentage);
+        background-color: $hover-color;
     }
 }
 
-@mixin hover-color($color, $percentage: $default-percentage, $color-function: "darken") {
+@mixin hover-text($color, $hover-color) {
+    @include smooth-transition-all();
+
     color: $color;
-    cursor: pointer;
-    transition: color $default-transition-time;
 
     &:hover, &:focus {
-        color: call(get-function($color-function), $color, $percentage);
+        color: $hover-color;
     }
 }
 
-@mixin hover-border($color, $percentage: $default-percentage, $color-function: "darken") {
+@mixin hover-border($color, $hover-color) {
+    @include smooth-transition-all();
+
     border-color: $color;
-    cursor: pointer;
-    transition: border-color $default-transition-time;
 
     &:hover, &:focus {
-        border-color: call(get-function($color-function), $color, $percentage);
+        border-color: $hover-color;
     }
-}
-
-@mixin card-shadow() {
-    box-shadow: 0 2px 57px 0 rgba(0, 0, 0, 0.5);
 }

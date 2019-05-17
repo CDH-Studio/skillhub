@@ -1,92 +1,66 @@
 /** Primary Colors - Indigo (Vivid) **/
 
-$color-primary-1: hsl(234, 90%, 25%);
-$color-primary-2: hsl(232, 86%, 32%);
-$color-primary-3: hsl(230, 80%, 38%);
-$color-primary-4: hsl(228, 74%, 43%);
-$color-primary-5: hsl(223, 71%, 47%);
-$color-primary-6: hsl(224, 69%, 54%);
-$color-primary-7: hsl(222, 81%, 65%);
-$color-primary-8: hsl(219, 95%, 76%);
-$color-primary-9: hsl(216, 100%, 85%);
-$color-primary-10: hsl(216, 100%, 93%);
-
-/** Secondary Colors - Pink (Vivid) **/
-
-$color-secondary-1: hsl(320, 100%, 19%);
-$color-secondary-2: hsl(322, 93%, 27%);
-$color-secondary-3: hsl(324, 93%, 33%);
-$color-secondary-4: hsl(326, 90%, 39%);
-$color-secondary-5: hsl(328, 85%, 46%);
-$color-secondary-6: hsl(330, 79%, 56%);
-$color-secondary-7: hsl(334, 86%, 67%);
-$color-secondary-8: hsl(336, 100%, 77%);
-$color-secondary-9: hsl(338, 100%, 86%);
-$color-secondary-10: hsl(341, 100%, 95%);
+$color-primary-1: #0D47A1;
+$color-primary-2: #1565C0;
+$color-primary-3: #1976D2;
+$color-primary-4: #1E88E5;
+$color-primary-5: #2196F3;
+$color-primary-6: #42A5F5;
+$color-primary-7: #64B5F6;
+$color-primary-8: #90CAF9;
+$color-primary-9: #BBDEFB;
+$color-primary-10: #E3F2FD;
 
 /** Neutral Colors - Blue Grey **/
 
-$color-neutral-1: hsl(209, 61%, 16%);
-$color-neutral-2: hsl(211, 39%, 23%);
-$color-neutral-3: hsl(209, 34%, 30%);
-$color-neutral-4: hsl(209, 35%, 39%);
-$color-neutral-5: hsl(210, 22%, 49%);
-$color-neutral-6: hsl(209, 23%, 60%);
-$color-neutral-7: hsl(211, 27%, 70%);
-$color-neutral-8: hsl(210, 31%, 80%);
-$color-neutral-9: hsl(212, 33%, 89%);
-$color-neutral-10: hsl(210, 36%, 96%);
-
-/** Supporting Colors - Green (Vivid) **/
-
-$color-accent-1: hsl(170, 97%, 15%);
-$color-accent-2: hsl(168, 80%, 23%);
-$color-accent-3: hsl(166, 72%, 28%);
-$color-accent-4: hsl(164, 71%, 34%);
-$color-accent-5: hsl(162, 63%, 41%);
-$color-accent-6: hsl(160, 51%, 49%);
-$color-accent-7: hsl(158, 58%, 62%);
-$color-accent-8: hsl(156, 73%, 74%);
-$color-accent-9: hsl(154, 75%, 87%);
-$color-accent-10: hsl(152, 68%, 96%);
+$color-neutral-1: #102A43;
+$color-neutral-2: #243B53;
+$color-neutral-3: #334E68;
+$color-neutral-4: #416588;
+$color-neutral-5: #627D98;
+$color-neutral-6: #829AB1;
+$color-neutral-7: #9FB3C8;
+$color-neutral-8: #BCCCD;
+$color-neutral-9: #D9E2EC;
+$color-neutral-10: #F0F4F;
 
 /** Supporting Colors - Red (Vivid) **/
 
-$color-attention-1: hsl(348, 94%, 20%);
-$color-attention-2: hsl(350, 94%, 28%);
-$color-attention-3: hsl(352, 90%, 35%);
-$color-attention-4: hsl(354, 85%, 44%);
-$color-attention-5: hsl(356, 75%, 53%);
-$color-attention-6: hsl(360, 83%, 62%);
-$color-attention-7: hsl(360, 91%, 69%);
-$color-attention-8: hsl(360, 100%, 80%);
-$color-attention-9: hsl(360, 100%, 87%);
-$color-attention-10: hsl(360, 100%, 95%);
+$color-attention-1: #610316;
+$color-attention-2: #8A041A;
+$color-attention-3: #AB091E;
+$color-attention-4: #CF1124;
+$color-attention-5: #E12D39;
+$color-attention-6: #EF4E4;
+$color-attention-7: #F86A6;
+$color-attention-8: #FF9B9;
+$color-attention-9: #FFBDB;
+$color-attention-10: #FFE3E;
 
 /** Supporting Colors - Yellow (Vivid) **/
 
-$color-notice-1: hsl(15, 86%, 30%);
-$color-notice-2: hsl(22, 82%, 39%);
-$color-notice-3: hsl(29, 80%, 44%);
-$color-notice-4: hsl(36, 77%, 49%);
-$color-notice-5: hsl(42, 87%, 55%);
-$color-notice-6: hsl(44, 92%, 63%);
-$color-notice-7: hsl(48, 94%, 68%);
-$color-notice-8: hsl(48, 95%, 76%);
-$color-notice-9: hsl(48, 100%, 88%);
-$color-notice-10: hsl(49, 100%, 96%);
+$color-notice-1: #8D2B0B;
+$color-notice-2: #B44D12;
+$color-notice-3: #CB6E17;
+$color-notice-4: #DE911;
+$color-notice-5: #F0B429;
+$color-notice-6: #F7C948;
+$color-notice-7: #FADB5F;
+$color-notice-8: #FCE588;
+$color-notice-9: #FFF3C4;
+$color-notice-10: #FFFBE;
 
 /** Semantic Colors **/
 
-$color-primary: $color-primary-6;
-$color-primary-hover: $color-primary-5;
+$color-primary: $color-primary-5;
+$color-primary-hover: $color-primary-4;
 $color-primary-dark: $color-primary-2;
 $color-primary-light: $color-primary-9;
 $color-primary-super-light: $color-primary-10;
-$color-secondary: $color-secondary-7;
-$color-secondary-hover: $color-primary-6;
-$color-secondary-dark: $color-secondary-2;
-$color-secondary-light: $color-secondary-9;
+/* $color-secondary: $color-secondary-7; */
+/* $color-secondary-hover: $color-primary-6; */
+/* $color-secondary-dark: $color-secondary-2; */
+/* $color-secondary-light: $color-secondary-9; */
 $color-light: rgba(255, 255, 255, 90%);
 $color-text-primary: $color-neutral-2;
 $color-text-secondary: $color-neutral-6;
@@ -95,12 +69,10 @@ $color-background-dark: $color-neutral-2;
 $color-background-light: $color-neutral-10;
 $color-background-white: #FFFFFF;
 $color-card-header: $color-neutral-9;
-$color-positive: $color-accent-5;
-$color-positive-dark: $color-accent-1;
-$color-positive-light: $color-accent-9;
-$color-negative: $color-attention-5;
-$color-negative-dark: $color-attention-1;
-$color-negative-light: $color-attention-9;
-$color-debt: $color-notice-4;
-$color-debt-dark: $color-notice-1;
-$color-debt-light: $color-notice-9;
+$color-card-background: #FAFAFA;
+$color-attention: attention-5;
+$color-attention-dark: attention-1;
+$color-attention-light: attention-9;
+$color-notice: notice-4;
+$color-notice-dark: notice-1;
+$color-notice-light: notice-9;
