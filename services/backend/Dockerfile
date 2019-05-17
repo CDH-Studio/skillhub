@@ -1,4 +1,4 @@
-FROM node:8.9.4-alpine
+FROM node:10.15.3-alpine
 
 RUN mkdir -p /backend
 WORKDIR /backend
