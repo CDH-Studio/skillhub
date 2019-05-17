@@ -5,10 +5,10 @@
 #################################################################################
 
 start:
-	kubails service start
+	docker-compose -f ./services/docker-compose.yaml up --build
 
 down:
-	kubails service destroy
+	docker-compose -f ./services/docker-compose.yaml down -v
 
 #################################################################################
 # SELF DOCUMENTING COMMANDS
