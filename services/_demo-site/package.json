@@ -1,0 +1,12 @@
+{
+    "name": "backend",
+    "version": "0.0.1",
+    "main": "index.js",
+    "scripts": {
+        "start": "NODE_PATH=src node index.js"
+    },
+    "dependencies": {
+        "express": "^4.17.0"
+    },
+    "devDependencies": {}
+}
