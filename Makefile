@@ -10,6 +10,21 @@ start:
 down:
 	docker-compose -f ./services/docker-compose.yaml down -v
 
+lint-backend-locally:
+	docker-compose -f ./services/docker-compose.yaml exec backend npm run lint
+
+lint-frontend-locally:
+	docker-compose -f ./services/docker-compose.yaml exec frontend npm run lint
+
+test-backend-locally:
+	docker-compose -f ./services/docker-compose.yaml exec backend npm run lint
+
+test-frontend-locally:
+	docker-compose -f ./services/docker-compose.yaml exec frontend npm run test
+
+inspect-database:
+	docker-compose -f ./services/docker-compose.yaml exec backend-database psql app-database app-database-user
+
 #################################################################################
 # SELF DOCUMENTING COMMANDS
 #################################################################################
