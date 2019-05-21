@@ -33,27 +33,6 @@
             "type": "NodePort",
             "wait_for_service": "backend-database"
         },
-        "_demo-site": {
-            "container_port": "5000",
-            "env": [],
-            "external_port": "80",
-            "folder": "_demo-site",
-            "host": "project.skillhub.ca",
-            "image": "demo-site",
-            "image_in_project": true,
-            "persistent_volume": {},
-            "pre_startup_command": null,
-            "production_replicas": 1,
-            "replicas": 1,
-            "secrets": {},
-            "templates": [
-                "deployment",
-                "ingress",
-                "service"
-            ],
-            "type": "NodePort",
-            "wait_for_service": null
-        },
         "backend-database": {
             "container_port": "5432",
             "env": [
