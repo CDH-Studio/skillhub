@@ -5,7 +5,7 @@
     "scripts": {
         "test": "NODE_ENV= NODE_PATH=src npm run jest",
         "lint": "NODE_PATH=src eslint 'src/**/*.js'",
-        "start": "NODE_PATH=src nodemon src/",
+        "start": "NODE_PATH=src nodemon --legacy-watch src/",
         "start:prod": "NODE_PATH=src node src/",
         "jest": "jest",
         "sequelize:init": "sequelize init",
