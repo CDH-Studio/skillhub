@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@feathersjs/client": "^3.7.8",
+    "@material-ui/core": "^3.9.3",
     "axios": "~0.18.0",
     "classnames": "~2.2.5",
     "connected-react-router": "^5.0.1",
