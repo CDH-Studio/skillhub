@@ -4,7 +4,6 @@
     "paginate": {
     },
     "authentication": {
-        "secret": "to generate",
         "strategies": [
             "jwt",
             "local"

@@ -24,7 +24,11 @@
             "pre_startup_command": "npm run db:retryable-migrate && npm run db:seed",
             "production_replicas": 1,
             "replicas": 1,
-            "secrets": {},
+            "secrets": {
+                "name": "backend-secrets",
+                "file": ".env.encrypted",
+                "variables": ["TOKEN_SECRET"]
+            },
             "templates": [
                 "deployment",
                 "ingress",

@@ -5,6 +5,14 @@ const local = require("@feathersjs/authentication-local");
 module.exports = function (app) {
     const config = app.get("authentication");
 
+    if (process.env.NODE_ENV !== "production") {
+        // Developers don't need to have access to the production secret.
+        // It doesn't matter if this gets leaked since it only affects the local dev environments.
+        config.secret = "19db1e0eeac5b29eff312b0f2ce8cdd1d83865763a40a14f4aea7869807f0d0";
+    } else {
+        config.secret = process.env.TOKEN_SECRET;
+    }
+
     // Set up authentication with the secret
     app.configure(authentication(config));
     app.configure(jwt());
