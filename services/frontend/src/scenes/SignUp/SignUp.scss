@@ -14,13 +14,10 @@
     flex: 1;
     justify-content: center;
 
-    .signup-form-card {
-        @include card-dropshadow();
-
-        background-color: $color-card-background;
+    .signup-form-card-content {
         display: flex;
         flex-direction: column;
-        padding: $default-spacing*2;
+        padding: $default-spacing * 2;
         width: 300px;
 
         .signup-form-title {
