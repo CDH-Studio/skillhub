@@ -1,4 +1,4 @@
-/** Primary Colors - Indigo (Vivid) **/
+/** Primary Colors - Blue **/
 
 $color-primary-1: #0D47A1;
 $color-primary-2: #1565C0;
@@ -10,6 +10,19 @@ $color-primary-7: #64B5F6;
 $color-primary-8: #90CAF9;
 $color-primary-9: #BBDEFB;
 $color-primary-10: #E3F2FD;
+
+/** Secondary Colors - Teal **/
+
+$color-secondary-1: #004D40;
+$color-secondary-2: #00695C;
+$color-secondary-3: #00796B;
+$color-secondary-4: #00897B;
+$color-secondary-5: #009688;
+$color-secondary-6: #26A69A;
+$color-secondary-7: #4DB6AC;
+$color-secondary-8: #80CBC4;
+$color-secondary-9: #B2DFDB;
+$color-secondary-10: #E0F2F1;
 
 /** Neutral Colors - Blue Grey **/
 
@@ -57,10 +70,9 @@ $color-primary-hover: $color-primary-4;
 $color-primary-dark: $color-primary-2;
 $color-primary-light: $color-primary-9;
 $color-primary-super-light: $color-primary-10;
-/* $color-secondary: $color-secondary-7; */
-/* $color-secondary-hover: $color-primary-6; */
-/* $color-secondary-dark: $color-secondary-2; */
-/* $color-secondary-light: $color-secondary-9; */
+$color-secondary: $color-secondary-5;
+$color-secondary-dark: $color-secondary-2;
+$color-secondary-light: $color-secondary-9;
 $color-light: rgba(255, 255, 255, 90%);
 $color-text-primary: $color-neutral-2;
 $color-text-secondary: $color-neutral-6;
