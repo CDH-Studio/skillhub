@@ -6,6 +6,7 @@
 
 h1, h2, h3, h4, h5, h6 {
     @include header-font();
+    color: $color-text-primary;
 }
 
 html, body, #root, #app {

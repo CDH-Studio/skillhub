@@ -36,8 +36,10 @@
             .landing-signup {
                 @include hover-background($color-light, darken($color-light, 5%));
 
+                align-items: center;
                 border-radius: $default-border-radius;
                 color: $color-primary;
+                display: flex;
                 margin-left: $default-spacing * 2;
                 padding: $default-spacing/2 $default-spacing*1.5;
             }
@@ -60,9 +62,10 @@
             @include hover-background($color-primary, $color-primary-hover);
             @include fab-dropshadow();
 
-            border: none;
+            align-items: center;
             border-radius: $default-border-radius;
             color: $color-light;
+            display: flex;
             font-weight: bold;
             padding: $default-spacing $default-spacing*4;
         }
