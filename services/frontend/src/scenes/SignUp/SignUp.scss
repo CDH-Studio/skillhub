@@ -1,0 +1,67 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+.signup {
+    display: flex;
+    min-height: 100%;
+
+}
+
+.signup-form {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+
+    .signup-form-card {
+        @include card-dropshadow();
+
+        background-color: $color-card-background;
+        display: flex;
+        flex-direction: column;
+        padding: $default-spacing*2;
+        width: 300px;
+
+        .signup-form-title {
+            font-weight: bold;
+            margin-bottom: $default-spacing * 1.5;
+        }
+
+        .signup-form-email {
+            margin-bottom: $default-spacing * 1.5;
+        }
+
+        .signup-form-password {
+            margin-bottom: $default-spacing;
+        }
+
+        .signup-form-submit {
+            border: none;
+            border-radius: $default-border-radius;
+            background-color: $color-primary;
+            color: $color-light;
+            margin-top: $default-spacing;
+            padding: $default-spacing/2 $default-spacing*1.5;
+        }
+    }
+}
+
+.signup-branding {
+    align-items: center;
+    background-color: $color-primary;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+
+    .signup-branding-container {
+        align-items: center;
+        display: flex;
+
+        .signup-branding-name {
+            color: $color-light;
+            margin-left: $default-spacing;
+            font-size: 60px;
+        }
+    }
+}
