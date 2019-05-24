@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import TextField from "@material-ui/core/TextField";
@@ -30,7 +31,13 @@ const SignUpForm = () => (
                     label="Password"
                 />
 
-                <button className="signup-form-submit">SIGN UP</button>
+                <Button
+                    className="signup-form-submit"
+                    color="primary"
+                    variant="contained"
+                >
+                    SIGN UP
+                </Button>
             </CardContent>
         </Card>
     </div>
