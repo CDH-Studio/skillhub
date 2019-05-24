@@ -2,7 +2,9 @@ import React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import TextField from "@material-ui/core/TextField";
+import {Link} from "react-router-dom";
 import {Logo} from "assets/icons";
+import ScreenUrls from "utils/screenUrls";
 import "./SignUp.scss";
 
 const SignUpLayout = () => (
@@ -36,10 +38,12 @@ const SignUpForm = () => (
 
 const SignUpBranding = () => (
     <div className="signup-branding">
-        <div className="signup-branding-container">
-            <Logo className="signup-branding-logo" />
-            <h1 className="signup-branding-name">SKILLHUB</h1>
-        </div>
+        <Link to={ScreenUrls.LANDING}>
+            <div className="signup-branding-container">
+                <Logo className="signup-branding-logo" />
+                <h1 className="signup-branding-name">SKILLHUB</h1>
+            </div>
+        </Link>
     </div>
 );
 
