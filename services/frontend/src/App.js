@@ -2,7 +2,7 @@ import React from "react";
 import {Provider} from "react-redux";
 import {Switch, Route} from "react-router";
 import {ConnectedRouter} from "connected-react-router";
-import {Landing} from "scenes/";
+import {Landing, Profile} from "scenes/";
 import configureStore, {history} from "store/";
 import "./App.scss";
 
@@ -17,16 +17,22 @@ const App = () => (
 );
 
 const AppLayout = () => (
-    <Switch>
-        <Route
-            path="/"
-            render={() => (
-                <div id="app">
+    <div id="app">
+        <Switch>
+            <Route
+                path="/profile"
+                render={() => (
+                    <Profile />
+                )}
+            />
+            <Route
+                path="/"
+                render={() => (
                     <Landing />
-                </div>
-            )}
-        />
-    </Switch>
+                )}
+            />
+        </Switch>
+    </div>
 );
 
 export default App;
