@@ -12,7 +12,7 @@ module.exports = (DataTypes) => ({
     },
     primaryRole: {
         type: DataTypes.STRING
-    }
+    },
     contactEmail: {
         type: DataTypes.STRING
     },
