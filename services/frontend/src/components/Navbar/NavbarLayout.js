@@ -1,6 +1,8 @@
 import React from "react";
 import {Logo} from "assets/icons";
 import { Button, Tabs, Tab } from '@material-ui/core'
+import ScreenUrls from "utils/screenUrls";
+import { Link } from 'react-router-dom'
 import "./Navbar.scss";
 
 const NavbarLayout = () => {
@@ -12,21 +14,18 @@ const NavbarLayout = () => {
 
     return (
         <div className="navbar">
-            <div className="navbar-header">
-                <a href="/">
-                    <Logo className="logo-icon" />
-                </a>
+            <a className="navbar-brand" href="/">
+                <Logo className="logo-icon" />
+            </a>
+            <Tabs className="navbar-links" value={value} onChange={handleChange}>
+                <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile"></Tab>
+                <Tab to="/app/people" component={Link} label="People" ></Tab>
+                <Tab to="/app/people" component={Link} label="Projects"></Tab>
+            </Tabs> 
 
-                <Tabs value={value} onChange={handleChange}>
-                        <a href="/profile"><Tab label="Profile"/></a>
-                        <a href=""><Tab label="People" /></a>
-                        <Tab label="Projects" />
-                </Tabs> 
-
-                <div className="navbar-controls">
-                    <Button className="navbar-search">ff</Button>
-                    <Button className="navbar-tools">SIGN UP</Button>
-                </div>
+            <div className="navbar-controls">
+                <Button className="navbar-search">Search</Button>
+                <Button className="navbar-tools">tools</Button>
             </div>
         </div>
     );

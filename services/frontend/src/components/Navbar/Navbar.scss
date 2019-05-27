@@ -4,67 +4,41 @@
 
 .navbar {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    background-color: $color-primary;
+    justify-content: space-between;
+    padding: $default-spacing $default-spacing*2;
 
-    .navbar-header {
-        align-items: center;
-        background-color: $color-primary;
+    .navbar-brand {
+        flex: 1;
         display: flex;
-        justify-content: space-between;
-        padding: $default-spacing $default-spacing*2;
-
+        justify-content: flex-start;
         .logo-icon {
             height: 32px;
             width: 32px;
         }
-
-        .navbar-auth {
-            display: flex;
-
-            button {
-                background: none;
-                border: none;
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            .navbar-login {
-                color: $color-light;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-
-            .navbar-signup {
-                @include hover-background($color-light, darken($color-light, 5%));
-
-                border-radius: $default-border-radius;
-                color: $color-primary;
-                margin-left: $default-spacing * 2;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
+    }
+    .navbar-links {
+        display: flex;
+        justify-content: center;
+        .MuiTabs-flexContainer a {
+            text-transform: none;
+            color: white;
+            opacity: 1;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .MuiTabs-indicator {
+            background-color: white;
         }
     }
-
-    .navbar-jumbotron {
-        align-items: center;
+    .navbar-controls {
+        flex: 1;
         display: flex;
-        flex-direction: column;
-        margin-top: 25vh;
-
-        .navbar-tagline {
-            color: $color-text-secondary;
-            font-weight: bold;
-            margin-bottom: $default-spacing * 2;
-        }
-
-        .navbar-create-navbar {
-            @include hover-background($color-primary, $color-primary-hover);
-            @include fab-dropshadow();
-
-            border: none;
-            border-radius: $default-border-radius;
-            color: $color-light;
-            font-weight: bold;
-            padding: $default-spacing $default-spacing*4;
+        justify-content: flex-end;
+        
+        button {
+            color: white;
         }
     }
 }
