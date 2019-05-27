@@ -15,10 +15,9 @@ module.exports = function (app) {
         }
     });
 
-    // eslint-disable-next-line no-unused-vars
-    users.associate = function (models) {
-        // Define associations here
-        // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    users.associate = function(models) {
+        users.hasOne(models.profiles);
+        users.hasMany(models.projectChangeRecords);
     };
 
     return users;
