@@ -1,24 +1,22 @@
 // Initializes the `profileSkills` service on path `/profileSkills`
-// const createService = require("feathers-sequelize");
+const createService = require("feathers-sequelize");
 const createModel = require("./profileSkills.db");
-// const hooks = require("./profileSkills.hooks");
+const hooks = require("./profileSkills.hooks");
 
 module.exports = function (app) {
-    // Only setting up the model here; don't (yet) need the service
     const Model = createModel(app);
+    const paginate = app.get("paginate");
 
-    // const paginate = app.get("paginate");
+    const options = {
+        Model,
+        paginate
+    };
 
-    // const options = {
-    //     Model,
-    //     paginate
-    // };
+    // Initialize our service with any options it requires
+    app.use("/profileSkills", createService(options));
 
-    // // Initialize our service with any options it requires
-    // app.use("/profileSkills", createService(options));
+    // Get our initialized service so that we can register hooks
+    const service = app.service("profileSkills");
 
-    // // Get our initialized service so that we can register hooks
-    // const service = app.service("profileSkills");
-
-    // service.hooks(hooks);
+    service.hooks(hooks);
 };
