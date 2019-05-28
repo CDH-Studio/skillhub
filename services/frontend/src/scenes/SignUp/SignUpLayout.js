@@ -8,14 +8,19 @@ import {Logo} from "assets/icons";
 import ScreenUrls from "utils/screenUrls";
 import "./SignUp.scss";
 
-const SignUpLayout = () => (
+const SignUpLayout = ({emailInput, passwordInput, onSignUpClick}) => (
     <div className="signup">
-        <SignUpForm />
+        <SignUpForm
+            emailInput={emailInput}
+            passwordInput={passwordInput}
+            onSignUpClick={onSignUpClick}
+        />
+
         <SignUpBranding />
     </div>
 );
 
-const SignUpForm = () => (
+const SignUpForm = ({emailInput, passwordInput, onSignUpClick}) => (
     <div className="signup-form">
         <Card>
             <CardContent className="signup-form-card-content">
@@ -24,17 +29,21 @@ const SignUpForm = () => (
                 <TextField
                     className="signup-form-email"
                     label="Email"
+                    {...emailInput}
                 />
 
                 <TextField
                     className="signup-form-password"
                     label="Password"
+                    type="password"
+                    {...passwordInput}
                 />
 
                 <Button
                     className="signup-form-submit"
                     color="primary"
                     variant="contained"
+                    onClick={onSignUpClick}
                 >
                     SIGN UP
                 </Button>
