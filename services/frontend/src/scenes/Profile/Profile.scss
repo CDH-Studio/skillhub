@@ -3,68 +3,52 @@
 @import "styles/_mixins.scss";
 
 .profile {
+    align-items: flex-start;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    height: calc(100% - #{$navbar-height});
+    justify-content: space-between;
+    padding: 0;
 
-    .profile-header {
-        align-items: center;
-        background-color: $color-primary;
-        display: flex;
-        justify-content: space-between;
-        padding: $default-spacing $default-spacing*2;
-
-        .logo-icon {
-            height: 32px;
-            width: 32px;
-        }
-
-        .profile-auth {
-            display: flex;
-
-            button {
-                background: none;
-                border: none;
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            .profile-login {
-                color: $color-light;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-
-            .profile-signup {
-                @include hover-background($color-light, darken($color-light, 5%));
-
-                border-radius: $default-border-radius;
-                color: $color-primary;
-                margin-left: $default-spacing * 2;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-        }
-    }
-
-    .profile-jumbotron {
+    .profile-content {
         align-items: center;
         display: flex;
         flex-direction: column;
-        margin-top: 25vh;
+        height: 100%;
+        overflow: auto;
+        padding: $default-spacing;
 
-        .profile-tagline {
-            color: $color-text-secondary;
-            font-weight: bold;
-            margin-bottom: $default-spacing * 2;
+        .profile-content-title {
+            color: $color-neutral-6;
         }
 
-        .profile-create-profile {
-            @include hover-background($color-primary, $color-primary-hover);
-            @include fab-dropshadow();
-
-            border: none;
-            border-radius: $default-border-radius;
-            color: $color-light;
-            font-weight: bold;
-            padding: $default-spacing $default-spacing*4;
+        .profile-content-card {
+            margin: 16px $default-spacing*5 $default-spacing 0px;
+            padding: $default-spacing;
         }
     }
+
+    .profile-sidebar {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: $default-spacing * 2;        
+
+        .profile-list-item {
+            border-left: 3px solid transparent;
+            padding: $default-spacing*0.5 $default-spacing*1.5;
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+        }        
+
+        .is-current {
+            background-color: $color-light;
+            border-left: 3px solid $color-primary !important;
+            font-weight: bold;
+        }
+    }   
 }

@@ -1,0 +1,50 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+.navbar {
+    align-items: center;
+    background-color: $color-primary;
+    display: flex;
+    height: $navbar-height;
+    justify-content: space-between;
+    padding: $default-spacing $default-spacing*2;
+
+    .navbar-brand {
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+
+        .logo-icon {
+            height: 32px;
+            width: 32px;
+        }
+    }
+
+    .navbar-links {
+        display: flex;
+        justify-content: center;
+
+        .MuiTabs-flexContainer a {
+            color: $color-light;
+            font-size: $default-spacing;
+            opacity: 1;
+            text-decoration: none;
+            text-transform: none;
+        }
+
+        .MuiTabs-indicator {
+            background-color: $color-light;
+        }
+    }
+
+    .navbar-controls {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        
+        button {
+            color: $color-light;
+        }
+    }
+}
