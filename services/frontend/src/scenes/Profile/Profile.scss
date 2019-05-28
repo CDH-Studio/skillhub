@@ -16,15 +16,14 @@
         flex-direction: column;
         height: 100%;
         overflow: auto;
-        h2 {
+        padding: $default-spacing;
+
+        .profile-content-title {
             color: $color-neutral-6;
         }
-        div {
-            margin: $default-spacing;
-        }
-        section div {
-            padding: $default-spacing;
+        .profile-content-card {
             margin: 16px $default-spacing*5 $default-spacing 0px;
+            padding: $default-spacing;
         }
     }
 
@@ -35,18 +34,18 @@
         justify-content: center;
         margin: $default-spacing * 2;        
 
-        .profile-scroll-nav li {
-            padding: $default-spacing * 0.5 $default-spacing * 1.5;
+        .profile-list-item {
             border-left: 3px solid transparent;
+            padding: $default-spacing * 0.5 $default-spacing * 1.5;
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
         }        
-        
-        .profile-scroll-nav li a {
-            text-decoration: none;
-            color: inherit;
-        }
+
         .is-current {
-            border-left: 3px solid $color-primary !important;
             background-color: $color-light;
+            border-left: 3px solid $color-primary !important;
             font-weight: bold;
         }
     }   

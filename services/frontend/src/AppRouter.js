@@ -2,11 +2,11 @@ import React from "react";
 import {Switch, Route} from "react-router";
 import {Profile, People} from "scenes/";
 import ScreenUrls from "utils/screenUrls";
-import { Navbar } from 'components/'
+import { Navbar } from "components/";
 
 const AppRouter = () => (
     <div id="app">
-        <Navbar/>
+        <Navbar />
         <Switch>
             <Route path={ScreenUrls.PROFILE} component={Profile} />
             <Route path={ScreenUrls.PEOPLE} component={People} />
@@ -15,4 +15,4 @@ const AppRouter = () => (
     </div>
 );
 
-export default AppRouter
+export default AppRouter;

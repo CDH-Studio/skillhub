@@ -3,15 +3,15 @@
 @import "styles/_mixins.scss";
 
 .navbar {
-    display: flex;
     align-items: center;
     background-color: $color-primary;
+    display: flex;
     justify-content: space-between;
     padding: $default-spacing $default-spacing*2;
 
     .navbar-brand {
-        flex: 1;
         display: flex;
+        flex: 1;
         justify-content: flex-start;
         .logo-icon {
             height: 32px;
@@ -21,15 +21,16 @@
     .navbar-links {
         display: flex;
         justify-content: center;
+
         .MuiTabs-flexContainer a {
-            text-transform: none;
-            color: white;
+            color: $color-light;
+            font-size: $default-spacing;
             opacity: 1;
             text-decoration: none;
-            font-size: 16px;
+            text-transform: none;
         }
         .MuiTabs-indicator {
-            background-color: white;
+            background-color: $color-light;
         }
     }
     .navbar-controls {
@@ -38,7 +39,7 @@
         justify-content: flex-end;
         
         button {
-            color: white;
+            color: $color-light;
         }
     }
 }
