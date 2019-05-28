@@ -6,6 +6,7 @@
     align-items: center;
     background-color: $color-primary;
     display: flex;
+    height: $navbar-height;
     justify-content: space-between;
     padding: $default-spacing $default-spacing*2;
 
@@ -18,6 +19,7 @@
             width: 32px;
         }
     }
+
     .navbar-links {
         display: flex;
         justify-content: center;
@@ -29,10 +31,12 @@
             text-decoration: none;
             text-transform: none;
         }
+
         .MuiTabs-indicator {
             background-color: $color-light;
         }
     }
+
     .navbar-controls {
         flex: 1;
         display: flex;

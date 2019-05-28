@@ -6,7 +6,7 @@
     align-items: flex-start;
     display: flex;
     flex-direction: row;
-    height: calc(100% - 80px);
+    height: calc(100% - #{$navbar-height});
     justify-content: space-between;
     padding: 0;
 
@@ -21,6 +21,7 @@
         .profile-content-title {
             color: $color-neutral-6;
         }
+
         .profile-content-card {
             margin: 16px $default-spacing*5 $default-spacing 0px;
             padding: $default-spacing;
@@ -36,7 +37,8 @@
 
         .profile-list-item {
             border-left: 3px solid transparent;
-            padding: $default-spacing * 0.5 $default-spacing * 1.5;
+            padding: $default-spacing*0.5 $default-spacing*1.5;
+
             a {
                 color: inherit;
                 text-decoration: none;
