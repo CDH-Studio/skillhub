@@ -29,6 +29,7 @@ const onSignUp = async (email, password, setErrorMessage, setInvalidEmail, setIs
 
     try {
         validateUserInfo(email, password);
+        clearInfoState();  // So that the user doesn't see old errors while waiting for the request
         setIsLoading(true);
 
         await api.service("users").create({email, password});
