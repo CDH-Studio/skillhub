@@ -6,7 +6,7 @@ import "./Profile.scss";
 
 const ProfileLayout = () => {
     return (
-        <Grid className="profile container">
+        <Grid className="profile">
             <ProfileSidebar />
             <ProfileContent />
         </Grid>
