@@ -11,7 +11,7 @@ const NavbarLayout = () => {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-    }
+    };
 
     return (
         <div className="navbar">
