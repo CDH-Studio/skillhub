@@ -57,3 +57,29 @@
         }
     }
 }
+
+.form-error {
+    align-items: center;
+    display: none;
+    margin-bottom: $default-spacing;
+
+    &.form-error--visible {
+        display: flex;
+    }
+
+    .form-error-message {
+        color: $color-attention;
+        font-size: 14px;
+        margin-left: $default-spacing / 2;
+    }
+}
+
+.loading-button {
+    .loading-button-indicator {
+        color: $color-light;
+
+        /* Need to override Material-UI's inline styles */
+        height: 24px !important;  
+        width: 24px !important;
+    }
+}
