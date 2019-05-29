@@ -10,7 +10,7 @@ module.exports = function(app) {
         // app.channel("anonymous").join(connection);
     });
 
-    app.on("login", (authResult, { connection }) => {
+    app.on("login", (authResult, {connection}) => {
         // connection can be undefined if there is no
         // real-time connection, e.g. when logging in via REST
         if (connection) {

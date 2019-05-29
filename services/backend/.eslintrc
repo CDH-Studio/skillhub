@@ -54,6 +54,14 @@
 		],
 		"no-var": [
             "error"
+        ],
+        "object-curly-spacing": [
+            "error",
+            "never"
+        ],
+        "array-bracket-spacing": [
+            "error",
+            "never"
         ]
     }
 }
