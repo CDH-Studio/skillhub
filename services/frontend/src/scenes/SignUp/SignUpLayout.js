@@ -79,7 +79,7 @@ const FormError = ({className, message = ""}) => (
     <div
         className={classNames(
             "form-error",
-            {"form-error--visible": message !== ""},
+            {"form-error--visible": message && message !== ""},
             className
         )}
     >

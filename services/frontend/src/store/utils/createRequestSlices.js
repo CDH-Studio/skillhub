@@ -37,10 +37,10 @@ const routerResetReducers = routerActionTypes.reduce((acc, actionType) => {
  *          watchRequestSaga: (saga) => saga
  *      }
  *
- *  Notes: 
+ *  Notes:
  *
  *      - The selector `get${mountpoint}${type}` has its capitalization modified to make sense.
- *          - e.g. given a mountpoint of 'authRequests' and a type of 'login', 
+ *          - e.g. given a mountpoint of 'authRequests' and a type of 'login',
  *            the selector would be 'getAuthRequestsLogin'.
  *
  *  Why this is being done:
@@ -122,7 +122,7 @@ export const createRequestSlice = (mountpoint, type) => {
 
         const success = function*() {
             successCalled = true;
-            yield put(slice.actions[successAction]());
+            yield put(successAction());
         };
 
         return function*(action) {
@@ -143,20 +143,20 @@ export const createRequestSlice = (mountpoint, type) => {
                 // Reset the flag for the next request
                 successCalled = false;
             } catch (e) {
-                yield put(slice.actions[failureAction](e.message));
+                yield put(failureAction(e.message));
             }
         };
     };
 
     slice.watchRequestSaga = (saga, {routeChangeCancellable = false, processEvery = true} = {}) => function*() {
         const effect = processEvery ? takeEvery : takeLatest;
-        yield effect(slice.actions[requestAction], requestSaga(saga, routeChangeCancellable));
+        yield effect(requestAction, requestSaga(saga, routeChangeCancellable));
     };
 
     return slice;
 };
 
-/*  Creates a group of request slices that are mounted under a single mountpoint in the store. 
+/*  Creates a group of request slices that are mounted under a single mountpoint in the store.
  *
  *  @param {string} mountpoint           Where the 'master' request reducer is mounted in the store
  *  @param {Array<string>} requestTypes  The names of the types of requests that will be made
@@ -208,7 +208,7 @@ const createRequestSlices = (mountpoint, requestTypes = []) => {
     const requestsReducer = (state = {}, action) => requestTypes.reduce((acc, type) => {
         acc[type] = typeSlices[type].reducer(acc[type], action);
         return acc;
-    }, state);
+    }, {...state});
 
     return {
         slice: mountpoint,

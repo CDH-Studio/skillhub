@@ -1,7 +1,6 @@
 import {CALL_HISTORY_METHOD, LOCATION_CHANGE} from "connected-react-router";
 import ScreenUrls from "utils/screenUrls";
 
-// NOTE: This can't go in store/rootActions because it'll cause cyclical dependencies. No bueno.
 export const routerActionTypes = [CALL_HISTORY_METHOD, LOCATION_CHANGE];
 
 const isRouteBlacklisted = (route, routesBlacklist) => (
@@ -27,5 +26,5 @@ const tryingToAccessRoutes = (payload, routesBlacklist = []) => {
     }
 };
 
-export const tryingToAccessApp = (payload) => tryingToAccessRoutes(payload, [ScreenUrls.APP]);
+export const tryingToAccessApp = (payload) => tryingToAccessRoutes(payload, [ScreenUrls.APP_ROUTER]);
 export const tryingToAccessAuth = (payload) => tryingToAccessRoutes(payload, [ScreenUrls.LOGIN, ScreenUrls.SIGN_UP]);
