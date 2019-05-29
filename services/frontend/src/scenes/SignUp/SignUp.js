@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from "react";
 import {useInput, useOnEnterKey} from "utils/hooks";
 import api from "api/";
+import ScreenUrls from "utils/screenUrls";
 import SignUpLayout from "./SignUpLayout";
 
 const EMAIL_REGEX = /^\S+@\S+$/;
@@ -20,11 +21,11 @@ const validateUserInfo = (email, password) => {
     }
 };
 
-const onSignUp = async (email, password, setErrorMessage, setInvalidEmail, setIsLoading) => {
+const onSignUp = async (email, password, setErrorMessage, setIsEmailInvalid, setIsLoading, history) => {
     const clearInfoState = () => {
         setIsLoading(false);
         setErrorMessage("");
-        setInvalidEmail(false);
+        setIsEmailInvalid(false);
     };
 
     try {
@@ -33,8 +34,9 @@ const onSignUp = async (email, password, setErrorMessage, setInvalidEmail, setIs
         setIsLoading(true);
 
         await api.service("users").create({email, password});
+        await api.authenticate({strategy: "local", email, password});
 
-        clearInfoState();
+        history.push(ScreenUrls.PROFILE);
     } catch (error) {
         const {message} = error;
 
@@ -43,16 +45,16 @@ const onSignUp = async (email, password, setErrorMessage, setInvalidEmail, setIs
         if (message in errorMessageMap) {
             setErrorMessage(errorMessageMap[message]);
         } else if (message === "Invalid email") {
-            setInvalidEmail(true);
+            setIsEmailInvalid(true);
         } else {
             setErrorMessage(message);
         }
     }
 };
 
-const SignUp = () => {
+const SignUp = ({history}) => {
     const [errorMessage, setErrorMessage] = useState("");
-    const [invalidEmail, setInvalidEmail] = useState(false);
+    const [isEmailInvalid, setIsEmailInvalid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const emailInput = useInput();
@@ -62,8 +64,8 @@ const SignUp = () => {
     const {value: password} = passwordInput;
 
     const onSignUpClick = useCallback(
-        async () => onSignUp(email, password, setErrorMessage, setInvalidEmail, setIsLoading),
-        [email, password, setErrorMessage, setInvalidEmail, setIsLoading]
+        async () => onSignUp(email, password, setErrorMessage, setIsEmailInvalid, setIsLoading, history),
+        [email, password, setErrorMessage, setIsEmailInvalid, setIsLoading, history]
     );
 
     const onInputEnter = useCallback(useOnEnterKey(onSignUpClick), [onSignUpClick]);
@@ -74,7 +76,7 @@ const SignUp = () => {
             passwordInput={passwordInput}
             isLoading={isLoading}
             errorMessage={errorMessage}
-            invalidEmail={invalidEmail}
+            isEmailInvalid={isEmailInvalid}
             onSignUpClick={onSignUpClick}
             onInputEnter={onInputEnter}
         />

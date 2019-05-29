@@ -16,7 +16,7 @@ const SignUpLayout = (formProps) => (
 );
 
 const SignUpForm = ({
-    emailInput, passwordInput, isLoading, errorMessage, invalidEmail, onSignUpClick, onInputEnter
+    emailInput, passwordInput, isLoading, errorMessage, isEmailInvalid, onSignUpClick, onInputEnter
 }) => (
     <div className="signup-form">
         <Card>
@@ -27,7 +27,7 @@ const SignUpForm = ({
 
                 <EmailInput
                     className="signup-form-email"
-                    invalid={invalidEmail}
+                    invalid={isEmailInvalid}
                     onKeyPress={onInputEnter}
                     {...emailInput}
                 />

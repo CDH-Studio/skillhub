@@ -1,5 +1,5 @@
 const ScreenUrls = {
-    APPROUTER: "/app",
+    APP_ROUTER: "/app",
     LANDING: "/",
     PROFILE: "/app/profile",
     PEOPLE: "/app/people",

@@ -36,7 +36,7 @@ const theme = createMuiTheme({
 const AppLayout = () => (
     <div id="app">
         <Switch>
-            <Route path={ScreenUrls.APPROUTER} component={AppRouter} />
+            <Route path={ScreenUrls.APP_ROUTER} component={AppRouter} />
             <Route path={ScreenUrls.SIGN_UP} component={SignUp} />
             <Route path={ScreenUrls.LANDING} component={Landing} />
         </Switch>

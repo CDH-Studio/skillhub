@@ -4,6 +4,7 @@ import {Profile, People} from "scenes/";
 import ScreenUrls from "utils/screenUrls";
 import {Navbar} from "components/";
 
+// TODO: Protect the AppRouter from unauthenticated users. Will be done as part of CDHSH-3.
 const AppRouter = () => (
     <>
         <Navbar />

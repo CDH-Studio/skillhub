@@ -1,6 +1,4 @@
-/*  The following is quite possibly one of the hackiest things I've ever done.
- *
- *  What this is doing:
+/*  What this is doing:
  *
  *      This is iterating through every feathers service's API method and explicitly
  *      binding it back to the service itself.
