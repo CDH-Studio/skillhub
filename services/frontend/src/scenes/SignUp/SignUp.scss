@@ -5,81 +5,11 @@
 .signup {
     display: flex;
     min-height: 100%;
-}
 
-.signup-form {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    justify-content: center;
-
-    .signup-form-card-content {
-        display: flex;
-        flex-direction: column;
-        padding: $default-spacing * 2;
-        width: 300px;
-
-        .signup-form-title {
-            font-weight: bold;
-            margin-bottom: $default-spacing * 1.5;
-        }
-
-        .signup-form-email {
-            margin-bottom: $default-spacing * 1.5;
-        }
-
-        .signup-form-password {
-            margin-bottom: $default-spacing;
-        }
-
-        .signup-form-submit {
-            border-radius: $default-border-radius;
-            margin-top: $default-spacing;
-        }
-    }
-}
-
-.signup-branding {
-    align-items: center;
-    background-color: $color-primary;
-    display: flex;
-    flex: 1;
-    justify-content: center;
-
-    .signup-branding-container {
+    .signup-form {
         align-items: center;
         display: flex;
-
-        .signup-branding-name {
-            color: $color-light;
-            margin-left: $default-spacing;
-            font-size: 60px;
-        }
-    }
-}
-
-.form-error {
-    align-items: center;
-    display: none;
-    margin-bottom: $default-spacing;
-
-    &.form-error--visible {
-        display: flex;
-    }
-
-    .form-error-message {
-        color: $color-attention;
-        font-size: 14px;
-        margin-left: $default-spacing / 2;
-    }
-}
-
-.loading-button {
-    .loading-button-indicator {
-        color: $color-light;
-
-        /* Need to override Material-UI's inline styles */
-        height: 24px !important;  
-        width: 24px !important;
+        flex: 1;
+        justify-content: center;
     }
 }
