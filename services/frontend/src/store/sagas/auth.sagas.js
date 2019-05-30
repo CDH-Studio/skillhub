@@ -8,20 +8,20 @@ import ScreenUrls from "utils/screenUrls";
 
 function* authSignUp({payload}, success) {
     const {email, password} = payload;
-    User.validateUserInfo(email, password);
+    User.validateInfo(email, password);
 
     yield call(api.service("users").create, {email, password});
-    yield call(success);
+    yield call(success);  // Mark success before continuing with other actions
 
     yield put(authRequestsSlice.login.actions.request(payload));
 }
 
 function* authLogin({payload}, success) {
     const {email, password} = payload;
-    User.validateUserInfo(email, password);
+    User.validateInfo(email, password);
 
     yield call(api.authenticate, {strategy: "local", email, password});
-    yield call(success);
+    yield call(success);  // Mark success before continuing with other actions
 
     yield put(push(ScreenUrls.APP_ROUTER));
 }

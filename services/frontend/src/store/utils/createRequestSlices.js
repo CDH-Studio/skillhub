@@ -54,7 +54,7 @@ const routerResetReducers = routerActionTypes.reduce((acc, actionType) => {
  *      and an 'error' variable need to be stored somewhere for the UI to react to.
  *      This 'state' is either usually stored in Redux or in local React component state.
  *
- *      Since we need to be able to model the high-level state of uFincs all in Redux land
+ *      Since we want to be able to model the high-level state all in Redux land
  *      (so that it is independent of the view layer), then we need to specifically
  *      manage 'request state' in Redux.
  *
@@ -62,13 +62,13 @@ const routerResetReducers = routerActionTypes.reduce((acc, actionType) => {
  *      we'll need a common pattern to encapsulate the async request flow, otherwise
  *      there'll be a hundred and one slighly different implementations of how to call the API.
  *
- *      To that end, this 'request slice' factory takes in an 'type' string and
+ *      To that end, this 'request slice' factory takes in a 'type' string and
  *      creates a set of actions, reducers, and selectors that are all consistently
  *      named based on that 'type' string.
  *
  *      However, we also need to manage the transitions between each of the request's states.
  *      This is what the 'request saga' is for: it delegates the actual request logic
- *      to another saga that can be bound after the creation of 'request slice', but it augments
+ *      to another saga that can be bound after the creation of the 'request slice', but it augments
  *      the request logic with handling of the 'success' and 'failed' states. This way, the
  *      actual request logic is kept as simple as possible, and code duplication is minimized.
  *
@@ -101,6 +101,8 @@ export const createRequestSlice = (mountpoint, type) => {
 
     const mountpointSelector = `${mountpoint}.${type}`;
 
+    // This manually builds up the same kind of object that would be output by createSlice().
+    // We do this so that the actions and selectors are named as we want.
     const slice = {
         slice: type,
         reducer,
@@ -117,6 +119,18 @@ export const createRequestSlice = (mountpoint, type) => {
         }
     };
 
+    // This requestSaga is used to wrap the saga that'll be performing the async request(s)/other side effects
+    // for this particular request slice.
+    //
+    // It handles try/catching any errors, and dispatching success/failure actions as necessary, so that the
+    // wrapped saga only has to concern itself with the core logic of handling the async request(s)/side effects.
+    //
+    // Note that unlike regular sagas, wrapped request sagas are passed an extra parameter: `success`.
+    // The `success` function can be (but does not have to be) invoked by the saga to indicate that the async
+    // request/side effect has been completed successfully, before going on and doing other actions.
+    //
+    // If the `success` function is not invoked, it will be invoked automatically at the completion of the wrapped saga,
+    // assuming no errors were thrown.
     const requestSaga = (saga, routeChangeCancellable) => {
         let successCalled = false;
 
@@ -136,6 +150,7 @@ export const createRequestSlice = (mountpoint, type) => {
                     yield call(saga, action, success);
                 }
 
+                // Call success if the saga didn't already invoke it
                 if (!successCalled) {
                     yield call(success);
                 }
@@ -148,6 +163,8 @@ export const createRequestSlice = (mountpoint, type) => {
         };
     };
 
+    // This is just the 'watch' runner for the requestSaga.
+    // It can be used by forking, e.g. `yield fork(slice.watchRequestSaga(saga))`.
     slice.watchRequestSaga = (saga, {routeChangeCancellable = false, processEvery = true} = {}) => function*() {
         const effect = processEvery ? takeEvery : takeLatest;
         yield effect(requestAction, requestSaga(saga, routeChangeCancellable));
