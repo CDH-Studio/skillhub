@@ -1,0 +1,9 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+.logo-icon {
+    stroke: $color-primary;
+    stroke-width: 5;
+    shape-rendering: crispEdges;
+}

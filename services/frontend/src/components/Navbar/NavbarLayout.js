@@ -15,9 +15,11 @@ const NavbarLayout = () => {
 
     return (
         <div className="navbar">
-            <Link to={ScreenUrls.LANDING} className="navbar-brand">
-                <Logo className="logo-icon" />
-            </Link>
+            <div className="navbar-brand">
+                <Link to={ScreenUrls.LANDING}>
+                    <Logo className="logo-icon" />
+                </Link>
+            </div>
 
             <Tabs className="navbar-links" value={value} onChange={handleChange}>
                 <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile" />
