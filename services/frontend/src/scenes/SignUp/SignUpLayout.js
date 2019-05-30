@@ -5,7 +5,7 @@ import "./SignUp.scss";
 const SignUpLayout = ({errorMessage, isEmailInvalid, isLoading, onSignUp}) => (
     <div className="signup">
         <div className="signup-form">
-            <AuthForm 
+            <AuthForm
                 title="SIGN UP"
                 errorMessage={errorMessage}
                 isEmailInvalid={isEmailInvalid}

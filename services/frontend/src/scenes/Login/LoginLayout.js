@@ -5,7 +5,7 @@ import "./Login.scss";
 const LoginLayout = ({errorMessage, isEmailInvalid, isLoading, onLogin}) => (
     <div className="login">
         <div className="login-form">
-            <AuthForm 
+            <AuthForm
                 title="LOGIN"
                 errorMessage={errorMessage}
                 isEmailInvalid={isEmailInvalid}

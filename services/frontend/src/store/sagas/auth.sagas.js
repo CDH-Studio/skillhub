@@ -1,7 +1,7 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects";
 import {push, replace} from "connected-react-router";
 import api from "api/";
-import {authRequestsSlice} from "store/slices";
+import {authRequestsSlice, userSlice} from "store/slices";
 import {routerActionTypes, tryingToAccessApp, tryingToAccessAuth} from "store/utils";
 import {User} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
@@ -20,9 +20,10 @@ function* authLogin({payload}, success) {
     const {email, password} = payload;
     User.validateInfo(email, password);
 
-    yield call(api.authenticate, {strategy: "local", email, password});
+    const result = yield call(api.authenticate, {strategy: "local", email, password});
     yield call(success);  // Mark success before continuing with other actions
 
+    yield put(userSlice.actions.setUser({id: result.user.id, email}));
     yield put(push(ScreenUrls.APP_ROUTER));
 }
 
