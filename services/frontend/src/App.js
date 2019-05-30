@@ -4,7 +4,7 @@ import {ThemeProvider} from "@material-ui/styles";
 import {createMuiTheme} from "@material-ui/core/styles";
 import {Provider} from "react-redux";
 import {Switch, Route} from "react-router";
-import {Landing, SignUp} from "scenes/";
+import {Landing, Login, SignUp} from "scenes/";
 import configureStore, {history} from "store/";
 import ScreenUrls from "utils/screenUrls";
 import AppRouter from "./AppRouter";
@@ -37,6 +37,7 @@ const AppLayout = () => (
     <div id="app">
         <Switch>
             <Route path={ScreenUrls.APP_ROUTER} component={AppRouter} />
+            <Route path={ScreenUrls.LOGIN} component={Login} />
             <Route path={ScreenUrls.SIGN_UP} component={SignUp} />
             <Route path={ScreenUrls.LANDING} component={Landing} />
         </Switch>

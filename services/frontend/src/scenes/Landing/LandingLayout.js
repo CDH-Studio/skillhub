@@ -10,7 +10,7 @@ const LandingLayout = () => (
             <Logo className="logo-icon" />
 
             <div className="landing-auth">
-                <button className="landing-login">LOGIN</button>
+                <Link className="landing-login" to={ScreenUrls.LOGIN}>LOGIN</Link>
                 <Link className="landing-signup" to={ScreenUrls.SIGN_UP}>SIGN UP</Link>
             </div>
         </div>
