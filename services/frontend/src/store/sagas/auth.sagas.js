@@ -24,7 +24,12 @@ function* authLogin({payload}, success) {
     yield call(success);  // Mark success before continuing with other actions
 
     yield put(userSlice.actions.setUser({id: result.user.id, email}));
-    yield put(push(ScreenUrls.APP_ROUTER));
+    yield put(push(ScreenUrls.PROFILE));
+}
+
+function* authLogout() {
+    yield call(api.logout);
+    yield put(push(ScreenUrls.LANDING));
 }
 
 function* authenticateAppAccess({payload}) {
@@ -47,6 +52,11 @@ function* authSaga() {
 
     yield fork(authRequestsSlice.login.watchRequestSaga(
         authLogin,
+        {routeChangeCancellable: true, processEvery: false}
+    ));
+
+    yield fork(authRequestsSlice.logout.watchRequestSaga(
+        authLogout,
         {routeChangeCancellable: true, processEvery: false}
     ));
 

@@ -1,8 +1,9 @@
 import React from "react";
+import connect from "./connect";
 import NavbarLayout from "./NavbarLayout";
 
-const Navbar = () => (
-    <NavbarLayout />
+const Navbar = ({onLogout}) => (
+    <NavbarLayout onLogout={onLogout} />
 );
 
-export default Navbar;
+export default connect(Navbar);
