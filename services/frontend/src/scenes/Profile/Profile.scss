@@ -1,39 +1,86 @@
 @import "styles/_colors.scss";
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
+@import "styles/_media_queries.scss";
+
+
+.scrollable-container {
+    height: calc(100% - #{$navbar-height});
+    overflow: auto;
+}
+  
 
 .profile {
-    align-items: flex-start;
+    max-width: $tablet-width;
+    min-width: $minimum-width;
+    padding: 0 $default-spacing;
+    margin: 0 auto;
     display: flex;
-    flex-direction: row;
-    height: calc(100% - #{$navbar-height});
-    justify-content: space-between;
-    padding: 0;
 
     .profile-content {
-        align-items: center;
         display: flex;
         flex-direction: column;
-        height: 100%;
         overflow: auto;
-        padding: $default-spacing;
+        padding: $default-spacing*2;
 
         .profile-content-title {
             color: $color-neutral-6;
         }
 
-        .profile-content-card {
-            margin: 16px $default-spacing*5 $default-spacing 0px;
-            padding: $default-spacing;
+        .profile-card:first-child {
+            margin: 0 0 $default-spacing 0;
         }
+
+        .profile-card {
+            padding: $default-spacing;
+            margin:  $default-spacing 0;
+            display: flex;
+
+            .profile-picture {
+                height: 64px;
+                width: 64px;
+                font-size: 30px;
+            }
+            
+            .profile-card-content {
+                margin: 0px $default-spacing;
+
+                .profile-card-title {
+                    font-size: $font-size-title;
+                    font-weight: bold;
+                    margin-bottom: $default-spacing*0.5;
+                }
+
+                .profile-card-subtitle {
+                    font-size: $font-size-subtitle;
+                    color: $color-primary;
+                    margin: $default-spacing*0.5 0;
+                }
+
+                .profile-card-contact {
+                    margin-top: $default-spacing;
+                    
+                    p {
+                        color: $color-neutral-6;
+                        font-size: $font-size-content;
+                        margin: $default-spacing*0.5 0;
+                    }
+
+                    p:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+
     }
 
     .profile-sidebar {
         align-items: center;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        margin: $default-spacing * 2;        
+        justify-content: flex-start;
+        padding: $default-spacing*2;        
 
         .profile-list-item {
             border-left: 3px solid transparent;
@@ -51,4 +98,16 @@
             font-weight: bold;
         }
     }   
+}
+
+@include laptop-width {
+    .profile {
+    max-width: 960px;
+    }
+}
+
+@include desktop-width {
+    .profile {
+    max-width: 1140px;
+    }
 }
