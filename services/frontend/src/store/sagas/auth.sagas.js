@@ -27,6 +27,11 @@ function* authLogin({payload}, success) {
     yield put(push(ScreenUrls.APP_ROUTER));
 }
 
+function* authLogout() {
+    yield call(api.logout);
+    yield put(push(ScreenUrls.LANDING));
+}
+
 function* authenticateAppAccess({payload}) {
     if (tryingToAccessApp(payload) && !api.isAuthenticated()) {
         yield put(replace(ScreenUrls.LOGIN));
@@ -47,6 +52,11 @@ function* authSaga() {
 
     yield fork(authRequestsSlice.login.watchRequestSaga(
         authLogin,
+        {routeChangeCancellable: true, processEvery: false}
+    ));
+
+    yield fork(authRequestsSlice.logout.watchRequestSaga(
+        authLogout,
         {routeChangeCancellable: true, processEvery: false}
     ));
 

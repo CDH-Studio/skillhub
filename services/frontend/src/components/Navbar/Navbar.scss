@@ -47,4 +47,12 @@
             color: $color-light;
         }
     }
+
+}
+
+.navbar-menu {
+    .navbar-menu-trigger {
+        /* Move the menu icon closer to the border to account for the icon's hover/focus animation */
+        margin-right: -$default-spacing;
+    }
 }
