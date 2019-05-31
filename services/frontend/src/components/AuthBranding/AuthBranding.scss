@@ -1,0 +1,21 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+
+.auth-branding {
+    align-items: center;
+    background-color: $color-primary;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+
+    .auth-branding-container {
+        align-items: center;
+        display: flex;
+
+        .auth-branding-name {
+            color: $color-light;
+            margin-left: $default-spacing;
+            font-size: 60px;
+        }
+    }
+}

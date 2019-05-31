@@ -2,11 +2,11 @@
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
 
-.signup {
+.login {
     display: flex;
     min-height: 100%;
 
-    .signup-form {
+    .login-form {
         align-items: center;
         display: flex;
         flex: 1;

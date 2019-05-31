@@ -1,0 +1,30 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+.auth-form {
+    .auth-form-card-content {
+        display: flex;
+        flex-direction: column;
+        padding: $default-spacing * 2;
+        width: 300px;
+
+        .auth-form-title {
+            font-weight: bold;
+            margin-bottom: $default-spacing * 1.5;
+        }
+
+        .auth-form-email {
+            margin-bottom: $default-spacing * 1.5;
+        }
+
+        .auth-form-password {
+            margin-bottom: $default-spacing;
+        }
+
+        .auth-form-submit {
+            border-radius: $default-border-radius;
+            margin-top: $default-spacing;
+        }
+    }
+}

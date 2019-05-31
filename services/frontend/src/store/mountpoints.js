@@ -1,4 +1,5 @@
 export default {
     authRequests: "authRequests",
-    router: "router"
+    router: "router",
+    user: "user"
 };

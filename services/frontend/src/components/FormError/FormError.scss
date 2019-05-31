@@ -1,0 +1,18 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+
+.form-error {
+    align-items: center;
+    display: none;
+    margin-bottom: $default-spacing;
+
+    &.form-error--visible {
+        display: flex;
+    }
+
+    .form-error-message {
+        color: $color-attention;
+        font-size: 14px;
+        margin-left: $default-spacing / 2;
+    }
+}

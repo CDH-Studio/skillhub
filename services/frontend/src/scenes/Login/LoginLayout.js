@@ -1,16 +1,16 @@
 import React from "react";
 import {AuthBranding, AuthForm} from "components/";
-import "./SignUp.scss";
+import "./Login.scss";
 
-const SignUpLayout = ({errorMessage, isEmailInvalid, isLoading, onSignUp}) => (
-    <div className="signup">
-        <div className="signup-form">
+const LoginLayout = ({errorMessage, isEmailInvalid, isLoading, onLogin}) => (
+    <div className="login">
+        <div className="login-form">
             <AuthForm
-                title="SIGN UP"
+                title="LOGIN"
                 errorMessage={errorMessage}
                 isEmailInvalid={isEmailInvalid}
                 isLoading={isLoading}
-                onSubmit={onSignUp}
+                onSubmit={onLogin}
             />
         </div>
 
@@ -18,4 +18,4 @@ const SignUpLayout = ({errorMessage, isEmailInvalid, isLoading, onSignUp}) => (
     </div>
 );
 
-export default SignUpLayout;
+export default LoginLayout;
