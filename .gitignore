@@ -104,6 +104,9 @@ ENV/
 # Visual Studio Code
 .vscode
 
+# IntelliJ
+.idea
+
 .terraform
 skillhub-account.json
 
