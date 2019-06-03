@@ -13,7 +13,7 @@ const NavbarLayout = ({onLogout}) => {
     return (
         <div className="navbar">
             <div className="navbar-brand">
-                <Link to={ScreenUrls.PROFILE} >
+                <Link to={ScreenUrls.PROFILE} onClick={()=>setActiveTab(0)}>
                     <Logo className="logo-icon" />
                 </Link>
             </div>
