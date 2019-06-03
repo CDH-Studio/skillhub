@@ -2,9 +2,7 @@ import React from "react";
 import Scrollspy from "react-scrollspy";
 import {Avatar} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
-import Email from "@material-ui/icons/Email";
-import LocalPhone from "@material-ui/icons/LocalPhone";
-import Icon from '@material-ui/core/Icon';
+import {Email, LocalPhone} from "@material-ui/icons";
 import "./Profile.scss";
 
 const ProfileLayout = () => {
@@ -13,7 +11,7 @@ const ProfileLayout = () => {
             <div className="profile">
                 <ProfileSidebar />
                 <ProfileContent />
-            </div> 
+            </div>
         </div>
     );
 };
@@ -22,7 +20,7 @@ const ProfileSidebar = () => (
     <div className="profile-sidebar" item={true} xs={4}>
         <Scrollspy
             className="profile-scroll-nav"
-            rootEl=".profile-content"
+            rootEl=".scrollable-container"
             items={["profile-personal-details", "profile-skills", "profile-projects"]}
             currentClassName="is-current"
         >
@@ -42,34 +40,9 @@ const ProfileSidebar = () => (
 const ProfileContent = () => (
     <div className="profile-content" item={true} xs={8}>
         <section id="profile-personal-details">
-            <Paper className="profile-card">
-                <Avatar className="profile-picture">
-                    DS
-                </Avatar> 
-
-                <div className="profile-card-content">
-                    <h2 className="profile-card-title">
-                        Devin Sit
-                    </h2>
-
-                    <h3 className="profile-card-subtitle">
-                        Software Developer
-                    </h3>
-
-                    <div className="profile-card-contact">
-                        <p>
-                            <Email />
-                            Devin.Sit@Canada.ca
-                        </p>
-
-                        <p>
-                            <LocalPhone />
-                            123-456-7890
-                        </p>
-                    </div>
-                </div>
-            </Paper>
+            <ProfileDetails />
         </section>
+
         <section id="profile-skills">
             <h2>Skills</h2>
             <Paper className="profile-card">
@@ -139,6 +112,36 @@ const ProfileContent = () => (
             </Paper>
         </section>
     </div>
+);
+
+const ProfileDetails = () => (
+    <Paper className="profile-card">
+        <Avatar className="profile-card-picture">
+            DS
+        </Avatar>
+
+        <div className="profile-card-content">
+            <h2 className="profile-card-title">
+                Devin Sit
+            </h2>
+
+            <h3 className="profile-card-subtitle">
+                Software Developer
+            </h3>
+
+            <div className="profile-card-contact">
+                <p className="profile-card-text">
+                    <Email />
+                    Devin.Sit@Canada.ca
+                </p>
+
+                <p className="profile-card-text">
+                    <LocalPhone />
+                    123-456-7890
+                </p>
+            </div>
+        </div>
+    </Paper>
 );
 
 export default ProfileLayout;
