@@ -1,7 +1,6 @@
 import React from "react";
 import Scrollspy from "react-scrollspy";
-import {Avatar} from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
+import {Avatar, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import "./Profile.scss";
 
