@@ -1,42 +1,20 @@
 import React from "react";
-import Scrollspy from "react-scrollspy";
+import {ScrollContainer, Sidebar} from "components/";
 import {Avatar, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import "./Profile.scss";
 
-const ProfileLayout = () => {
+const ProfileLayout = (props) => {
     return (
-        <div className="scrollable-container">
-            <div className="profile">
-                <ProfileSidebar />
-                <ProfileContent />
-            </div>
-        </div>
+        <ScrollContainer>
+            <Sidebar
+                sections={props.sections}
+                containerClass={props.containerClass}
+            />
+            <ProfileContent />
+        </ScrollContainer>
     );
 };
-
-const ProfileSidebar = () => (
-    <div className="profile-sidebar">
-        <Scrollspy
-            className="profile-scroll-nav"
-            rootEl=".scrollable-container"
-            items={["profile-personal-details", "profile-skills", "profile-projects"]}
-            currentClassName="is-current"
-        >
-            <li className="profile-list-item">
-                <a href="#profile-personal-details">Personal Details</a>
-            </li>
-
-            <li className="profile-list-item">
-                <a href="#profile-skills">Skills</a>
-            </li>
-
-            <li className="profile-list-item">
-                <a href="#profile-projects">Projects</a>
-            </li>
-        </Scrollspy>
-    </div>
-);
 
 const ProfileContent = () => (
     <div className="profile-content">

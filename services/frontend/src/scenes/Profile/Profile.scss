@@ -3,118 +3,67 @@
 @import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
 
+.profile-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: $default-spacing*2;
 
-.scrollable-container {
-    height: calc(100% - #{$navbar-height});
-    overflow: auto;
+    .profile-content-title {
+        color: $color-neutral-6;
+    }
 
-    .profile {
+    .profile-card:first-child {
+        margin-top:$default-spacing;
+    }
+
+    .profile-card {
         display: flex;
-        margin: 0 auto;
-        max-width: $tablet-width;
-        min-width: $minimum-width;
-        padding: 0 $default-spacing;
+        margin:  $default-spacing 0;
+        padding: $default-spacing*2;
 
-        @include laptop-width {
-            & {
-                max-width: $laptop-width;
-            }
+        .profile-card-picture {
+            font-size: 30px;
+            height: 64px;
+            width: 64px;
         }
+        
+        .profile-card-content {
+            margin: 0 $default-spacing*2;
 
-        @include desktop-width {
-            & {
-                max-width: $desktop-width;
-            }
-        }
-        .profile-content {
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-            overflow: auto;
-            padding: $default-spacing*2;
-
-            .profile-content-title {
-                color: $color-neutral-6;
+            .profile-card-title {
+                font-size: $font-size-title;
+                font-weight: bold;
+                margin-bottom: $default-spacing*0.7;
             }
 
-            .profile-card:first-child {
-                margin-top:$default-spacing;
+            .profile-card-subtitle {
+                color: $color-primary;
+                font-size: $font-size-subtitle;
+                margin-bottom: $default-spacing;
+                margin-top: $default-spacing*0.7;
             }
 
-            .profile-card {
-                display: flex;
-                margin:  $default-spacing 0;
-                padding: $default-spacing*2;
-
-                .profile-card-picture {
-                    font-size: 30px;
-                    height: 64px;
-                    width: 64px;
-                }
+            .profile-card-contact {
+                margin-top: $default-spacing*0.5;
                 
-                .profile-card-content {
-                    margin: 0 $default-spacing*2;
+                .profile-card-text {
+                    align-items: center;
+                    color: $color-neutral-6;
+                    display: flex;
+                    font-size: $font-size-content;
+                    margin: $default-spacing*0.7 0;
 
-                    .profile-card-title {
-                        font-size: $font-size-title;
-                        font-weight: bold;
-                        margin-bottom: $default-spacing*0.7;
+                    svg {
+                        font-size: $font-size-content;
+                        margin-right: $default-spacing*0.2;
                     }
+                }
 
-                    .profile-card-subtitle {
-                        color: $color-primary;
-                        font-size: $font-size-subtitle;
-                        margin-bottom: $default-spacing;
-                        margin-top: $default-spacing*0.7;
-                    }
-
-                    .profile-card-contact {
-                        margin-top: $default-spacing*0.5;
-                        
-                        .profile-card-text {
-                            align-items: center;
-                            color: $color-neutral-6;
-                            display: flex;
-                            font-size: $font-size-content;
-                            margin: $default-spacing*0.7 0;
-
-                            svg {
-                                font-size: $font-size-content;
-                            }
-                        }
-
-                        .profile-card-text:last-child {
-                            margin-bottom: 0;
-                        }
-                    }
+                .profile-card-text:last-child {
+                    margin-bottom: 0;
                 }
             }
         }
-
-        .profile-sidebar {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding: $default-spacing*2;        
-            position: sticky;
-            height: 100%;
-            top: 0;
-
-            .profile-list-item {
-                border-left: 3px solid transparent;
-                padding: $default-spacing*0.5 $default-spacing*1.5;
-
-                a {
-                    color: inherit;
-                    text-decoration: none;
-                }
-            }        
-
-            .is-current {
-                background-color: $color-light;
-                border-left: 3px solid $color-primary;
-            }
-        }   
     }
 }
