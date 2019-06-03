@@ -4,12 +4,12 @@ import {Avatar, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import "./Profile.scss";
 
-const ProfileLayout = (props) => {
+const ProfileLayout = ({sections, containerClass}) => {
     return (
         <ScrollContainer>
             <Sidebar
-                sections={props.sections}
-                containerClass={props.containerClass}
+                sections={sections}
+                containerClass={containerClass}
             />
             <ProfileContent />
         </ScrollContainer>
