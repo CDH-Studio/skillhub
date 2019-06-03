@@ -16,7 +16,7 @@ const ProfileLayout = () => {
 };
 
 const ProfileSidebar = () => (
-    <div className="profile-sidebar" item={true} xs={4}>
+    <div className="profile-sidebar">
         <Scrollspy
             className="profile-scroll-nav"
             rootEl=".scrollable-container"
@@ -26,9 +26,11 @@ const ProfileSidebar = () => (
             <li className="profile-list-item">
                 <a href="#profile-personal-details">Personal Details</a>
             </li>
+
             <li className="profile-list-item">
                 <a href="#profile-skills">Skills</a>
             </li>
+
             <li className="profile-list-item">
                 <a href="#profile-projects">Projects</a>
             </li>
@@ -37,7 +39,7 @@ const ProfileSidebar = () => (
 );
 
 const ProfileContent = () => (
-    <div className="profile-content" item={true} xs={8}>
+    <div className="profile-content">
         <section id="profile-personal-details">
             <ProfileDetails />
         </section>
@@ -76,6 +78,7 @@ const ProfileContent = () => (
                 i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
             </Paper>
         </section>
+
         <section id="profile-projects">
             <h2>Projects</h2>
             <Paper className="profile-card">
