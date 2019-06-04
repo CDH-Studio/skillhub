@@ -3,7 +3,7 @@ import ProjectsLayout from "./ProjectsLayout";
 
 class Projects extends React.Component {
     state = {
-        activeFilter: "all"  // "all", "recentlyActive", "inactive"
+        activeFilter: "all"  // "all", "active", "inactive"
     };
 
     onFilterClick = (filter) => () => {
