@@ -1,4 +1,3 @@
-'use strict';
 const tableNames = require("db/tableNames");
 const {PROFILES, PROFILE_IDS} = require("db/seedData");
 
