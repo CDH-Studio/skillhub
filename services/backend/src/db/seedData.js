@@ -8,9 +8,27 @@ const USERS = [
     }
 ];
 
+const PROFILES = [
+    {
+        id: "52e89288-f5f7-43aa-b4cd-0b9e7d6ee458",
+        userId: "3e26fac0-7786-40f3-86bb-f175ff3d721d",
+        name: "test@test.com",
+        primaryRole: "Developer",
+        contactEmail: "test@test.com",
+        phone: "905-541-5810",
+        slackHandle: "testguy",
+        rocketChatHandle: "testman",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    }
+];
+
 const USER_IDS = USERS.map((user) => user.id);
+const PROFILE_IDS = PROFILES.map((profile) => profile.id);
 
 module.exports = {
     USERS,
-    USER_IDS
+    USER_IDS,
+    PROFILES,
+    PROFILE_IDS
 };
