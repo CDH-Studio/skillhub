@@ -4,35 +4,16 @@ import {Card, CardContent, IconButton} from "@material-ui/core";
 import {ChevronRight} from "@material-ui/icons";
 import "./Projects.scss";
 
-const test = "A service for taking image macros (i.e. memes) and determining how likely they are to be dank or not.";
-
-const test2 = [
-    {
-        name: "React",
-        isHighlyProficient: true
-    },
-    {
-        name: "Docker",
-        isHighlyProficient: true
-    },
-    {
-        name: "Kubernetes",
-        isHighlyProficient: false
-    },
-    {
-        name: "JavaScript",
-        isHighlyProficient: false
-    }
-];
-
-const ProjectsLayout = ({activeFilter, onFilterClick}) => (
+const ProjectsLayout = ({projects, activeFilter, onFilterClick}) => (
     <div className="projects">
         <ProjectsHeader
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
         />
 
-        <ProjectsList />
+        <ProjectsList
+            projects={projects}
+        />
     </div>
 );
 
@@ -72,19 +53,26 @@ const FilterButton = ({label, isActive = false, onClick}) => (
     </button>
 );
 
-const ProjectsList = () => (
-    <div className="projects-list">
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-    </div>
-);
-
-const ProjectCard = ({name = "Dank Meme Classifier", description = test, skills = test2}) => {
-    const skillBadges = useMemo(() => skills.slice(0, 3).map((props) => (
-        <SkillBadge
-            key={props.name}
+const ProjectsList = ({projects}) => {
+    const projectCards = useMemo(() => projects.map((props) => (
+        <ProjectCard
+            key={props.id}
             {...props}
+        />
+    )), [projects]);
+
+    return (
+        <div className="projects-list">
+            {projectCards}
+        </div>
+    );
+};
+
+const ProjectCard = ({name, description, skills}) => {
+    const skillBadges = useMemo(() => skills.slice(0, 3).map((name) => (
+        <SkillBadge
+            key={name}
+            name={name}
         />
     )), [skills]);
 
@@ -128,11 +116,11 @@ const ActiveBadge = ({isActive = true}) => (
     />
 );
 
-const SkillBadge = ({name = "Docker", isHighlyProficient = false}) => (
+const SkillBadge = ({name, isHighlySkilled = false}) => (
     <TextBadge
         className="skill-badge"
         text={name}
-        isHighlighted={isHighlyProficient}
+        isHighlighted={isHighlySkilled}
     />
 );
 
