@@ -12,7 +12,7 @@ h1, h2, h3, h4, h5, h6 {
 html, body, #root, #app {
     @include body-font();
 
-    min-height: 100%;
+    height: 100%;
     width: 100%;
 }
 

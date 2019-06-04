@@ -2,7 +2,10 @@ import React, {useMemo} from "react";
 import classNames from "classnames";
 import {Card, CardContent, IconButton} from "@material-ui/core";
 import {ChevronRight} from "@material-ui/icons";
+import {Project} from "utils/models";
 import "./Projects.scss";
+
+const DISPLAY_SKILL_COUNT = 3;
 
 const ProjectsLayout = ({projects, activeFilter, onFilterClick}) => (
     <div className="projects">
@@ -21,20 +24,20 @@ const ProjectsHeader = ({activeFilter, onFilterClick}) => (
     <div className="projects-header">
         <FilterButton
             label="All"
-            isActive={activeFilter === "all"}
-            onClick={onFilterClick("all")}
+            isActive={activeFilter === Project.FILTER_ALL}
+            onClick={onFilterClick(Project.FILTER_ALL)}
         />
 
         <FilterButton
             label="Active"
-            isActive={activeFilter === "active"}
-            onClick={onFilterClick("active")}
+            isActive={activeFilter === Project.FILTER_ACTIVE}
+            onClick={onFilterClick(Project.FILTER_ACTIVE)}
         />
 
         <FilterButton
             label="Inactive"
-            isActive={activeFilter === "inactive"}
-            onClick={onFilterClick("inactive")}
+            isActive={activeFilter === Project.FILTER_INACTIVE}
+            onClick={onFilterClick(Project.FILTER_INACTIVE)}
         />
     </div>
 );
@@ -45,8 +48,6 @@ const FilterButton = ({label, isActive = false, onClick}) => (
             "filter-button",
             {"filter-button--active": isActive}
         )}
-        variant="contained"
-        color="primary"
         onClick={onClick}
     >
         {label}
@@ -69,7 +70,8 @@ const ProjectsList = ({projects}) => {
 };
 
 const ProjectCard = ({name, description, skills}) => {
-    const skillBadges = useMemo(() => skills.slice(0, 3).map((name) => (
+    // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card
+    const skillBadges = useMemo(() => skills.slice(0, DISPLAY_SKILL_COUNT).map((name) => (
         <SkillBadge
             key={name}
             name={name}
@@ -90,7 +92,7 @@ const ProjectCard = ({name, description, skills}) => {
                     <div className="project-card-skills">
                         {skillBadges}
 
-                        {skills.length > 3 && (
+                        {skills.length > DISPLAY_SKILL_COUNT && (
                             <div className="project-card-more-skills">
                                 More skills...
                             </div>
