@@ -1,9 +1,20 @@
-// const {authenticate} = require("@feathersjs/authentication").hooks;
+const {authenticate} = require("@feathersjs/authentication").hooks;
+
+const includeSkills = () => (context) => {
+    const SkillsModel = context.app.services.skills.Model;
+
+    context.params.sequelize = {
+        include: [{model: SkillsModel}],
+        raw: false
+    };
+
+    return context;
+};
 
 module.exports = {
     before: {
-        all: [],
-        find: [],
+        all: [authenticate("jwt")],
+        find: [includeSkills()],
         get: [],
         create: [],
         update: [],
