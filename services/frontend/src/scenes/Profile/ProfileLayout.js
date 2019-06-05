@@ -1,14 +1,43 @@
 import React from "react";
-import {ScrollContainer, Sidebar} from "components/";
+import {ScrollContainer, NavSidebar} from "components/";
 import {Avatar, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import "./Profile.scss";
 
-const ProfileLayout = ({sections, containerClass}) => {
+const containerClass = ".scroll-container";
+
+const sections = [
+    {
+        name: "Personal Details",
+        selector: "profile-personal-details"
+    },
+    {
+        name: "Skills",
+        selector: "profile-skills"
+    },
+    {
+        name: "Projects",
+        selector: "profile-projects"
+    }
+];
+
+const renderSectionComponent = (sectionName) => {
+    switch (sectionName) {
+        case "Personal Details":
+            return <PersonalDetails />;
+        case "Skills":
+            return <Skills sectionName={sectionName} />;
+        case "Projects":
+            return <Projects sectionName={sectionName} />;
+        default:
+    }
+};
+
+const ProfileLayout = () => {
     return (
         <ScrollContainer>
-            <Sidebar
-                sections={sections}
+            <NavSidebar
+                scrollSpySelectors={sections}
                 containerClass={containerClass}
             />
             <ProfileContent />
@@ -18,83 +47,17 @@ const ProfileLayout = ({sections, containerClass}) => {
 
 const ProfileContent = () => (
     <div className="profile-content">
-        <section id="profile-personal-details">
-            <ProfileDetails />
-        </section>
-
-        <section id="profile-skills">
-            <h2>Skills</h2>
-            <Paper className="profile-card">
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-                <br /><br />
-
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-            </Paper>
-        </section>
-
-        <section id="profile-projects">
-            <h2>Projects</h2>
-            <Paper className="profile-card">
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-                <br /><br />
-
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-                Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-                sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-                rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-                eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-                cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-                i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-            </Paper>
-        </section>
+        {
+            sections.map((section, index) => (
+                <section id={section.selector} key={index}>
+                    {renderSectionComponent(section.name)}
+                </section>
+            ))
+        }
     </div>
 );
 
-const ProfileDetails = () => (
+const PersonalDetails = () => (
     <Paper className="profile-card">
         <Avatar className="profile-card-picture">
             DS
@@ -124,4 +87,77 @@ const ProfileDetails = () => (
     </Paper>
 );
 
+const Skills = ({sectionName}) => (
+    <>
+        <h2>{sectionName}</h2>
+        <Paper className="profile-card">
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+
+            <br /><br />
+
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+        </Paper>
+    </>
+);
+
+const Projects = ({sectionName}) => (
+    <>
+        <h2>{sectionName}</h2>
+        <Paper className="profile-card">
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+
+            <br /><br />
+
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+
+            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
+            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
+            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
+            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
+            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
+            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+        </Paper>
+    </>
+);
 export default ProfileLayout;

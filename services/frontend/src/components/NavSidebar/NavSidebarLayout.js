@@ -1,22 +1,20 @@
 import React from "react";
 import Scrollspy from "react-scrollspy";
-import "./Sidebar.scss";
+import "./NavSidebar.scss";
 
-const SidebarLayout = ({sections, children, containerClass}) => {
+const NavSidebarLayout = ({scrollSpySelectors, children, containerClass}) => {
     return (
         <div className="sidebar">
             <Scrollspy
                 className="scroll-nav"
                 rootEl={containerClass}
-                items={sections}
+                items={scrollSpySelectors}
                 currentClassName="is-current"
             >
-                {
-                    children
-                }
+                {children}
             </Scrollspy>
         </div>
     );
 };
 
-export default SidebarLayout;
+export default NavSidebarLayout;

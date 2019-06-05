@@ -13,7 +13,7 @@ const NavbarLayout = ({onLogout}) => {
     return (
         <div className="navbar">
             <div className="navbar-brand">
-                <Link to={ScreenUrls.PROFILE} onClick={()=>setActiveTab(0)}>
+                <Link to={ScreenUrls.PROFILE} onClick={() => setActiveTab(0)}>
                     <Logo className="logo-icon" />
                 </Link>
             </div>
@@ -31,15 +31,13 @@ const NavbarLayout = ({onLogout}) => {
     );
 };
 
-const NavbarTabs = ({activeTab, onTabChange}) => {
-    return (
-        <Tabs className="navbar-links" value={activeTab} onChange={onTabChange}>
-            <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile" />
-            <Tab to={ScreenUrls.PEOPLE} component={Link} label="People" />
-            <Tab to={ScreenUrls.PROJECTS} component={Link} label="Projects" />
-        </Tabs>
-    );
-};
+const NavbarTabs = ({activeTab, onTabChange}) => (
+    <Tabs className="navbar-links" value={activeTab} onChange={onTabChange}>
+        <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile" />
+        <Tab to={ScreenUrls.PEOPLE} component={Link} label="People" />
+        <Tab to={ScreenUrls.PROJECTS} component={Link} label="Projects" />
+    </Tabs>
+);
 
 const NavbarSearch = () => (
     <IconButton className="navbar-search">

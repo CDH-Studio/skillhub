@@ -7,20 +7,20 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: $default-spacing*2;
+    padding: $default-spacing * 2;
 
     .profile-content-title {
         color: $color-neutral-6;
     }
 
     .profile-card:first-child {
-        margin-top:$default-spacing;
+        margin-top: $default-spacing;
     }
 
     .profile-card {
         display: flex;
         margin:  $default-spacing 0;
-        padding: $default-spacing*2;
+        padding: $default-spacing * 2;
 
         .profile-card-picture {
             font-size: 30px;
@@ -34,29 +34,29 @@
             .profile-card-title {
                 font-size: $font-size-title;
                 font-weight: bold;
-                margin-bottom: $default-spacing*0.7;
+                margin-bottom: $default-spacing * 0.75;
             }
 
             .profile-card-subtitle {
                 color: $color-primary;
                 font-size: $font-size-subtitle;
                 margin-bottom: $default-spacing;
-                margin-top: $default-spacing*0.7;
+                margin-top: $default-spacing * 0.75;
             }
 
             .profile-card-contact {
-                margin-top: $default-spacing*0.5;
+                margin-top: $default-spacing * 0.5;
                 
                 .profile-card-text {
                     align-items: center;
                     color: $color-neutral-6;
                     display: flex;
                     font-size: $font-size-content;
-                    margin: $default-spacing*0.7 0;
+                    margin: $default-spacing*0.75 0;
 
                     svg {
                         font-size: $font-size-content;
-                        margin-right: $default-spacing*0.2;
+                        margin-right: $default-spacing * 0.25;
                     }
                 }
 
