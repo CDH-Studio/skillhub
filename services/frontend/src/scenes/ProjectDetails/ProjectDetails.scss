@@ -2,3 +2,53 @@
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
 
+.project-details {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    height: calc(100% - #{$navbar-height});
+    justify-content: space-between;
+    padding: 0;
+
+    .project-details-content {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: auto;
+        padding: $default-spacing;
+
+        .project-details-content-title {
+            color: $color-neutral-6;
+        }
+
+        .project-details-content-card {
+            margin: 16px $default-spacing*5 $default-spacing 0px;
+            padding: $default-spacing;
+        }
+    }
+
+    .project-details-sidebar {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: $default-spacing * 2;
+
+        .project-details-list-item {
+            border-left: 3px solid transparent;
+            padding: $default-spacing*0.5 $default-spacing*1.5;
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+
+        .is-current {
+            background-color: $color-light;
+            border-left: 3px solid $color-primary !important;
+            font-weight: bold;
+        }
+    }
+}
