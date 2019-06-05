@@ -1,4 +1,5 @@
 import {createSlice} from "redux-starter-kit";
+import {createRequestSlices} from "store/utils";
 import mounts from "store/mountpoints";
 
 export const projectsSlice = createSlice({
@@ -12,3 +13,5 @@ export const projectsSlice = createSlice({
         }
     }
 });
+
+export const projectsRequestsSlice = createRequestSlices(mounts.projectsRequests, ["fetchAll"]);
