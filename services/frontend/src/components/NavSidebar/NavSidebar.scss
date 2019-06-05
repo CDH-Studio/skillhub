@@ -1,0 +1,28 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+
+.sidebar {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
+    padding: $default-spacing*2;        
+    position: sticky;
+    top: 0;
+
+    .list-item {
+        border-left: 3px solid transparent;
+        padding: $default-spacing*0.5 $default-spacing*1.5;
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+    }        
+
+    .is-current {
+        background-color: $color-light;
+        border-left: 3px solid $color-primary;
+    }
+}   
