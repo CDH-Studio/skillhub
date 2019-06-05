@@ -1,54 +1,73 @@
 @import "styles/_colors.scss";
 @import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
+@import "../../components/NavSideBar/NavSidebar.scss";
 
-.project-details {
-    align-items: flex-start;
+.sidebar:last-child{
+    margin-top: 25px;
+}
+.project-details-content {
     display: flex;
-    flex-direction: row;
-    height: calc(100% - #{$navbar-height});
-    justify-content: space-between;
-    padding: 0;
+    flex: 1;
+    flex-direction: column;
+    padding: $default-spacing * 2;
 
-    .project-details-content {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        overflow: auto;
-        padding: $default-spacing;
-
-        .project-details-content-title {
-            color: $color-neutral-6;
-        }
-
-        .project-details-content-card {
-            margin: 16px $default-spacing*5 $default-spacing 0px;
-            padding: $default-spacing;
-        }
+    .project-details-content-title {
+        color: $color-neutral-6;
     }
 
-    .project-details-sidebar {
-        align-items: center;
+    .project-details-card:first-child {
+        margin-top: $default-spacing;
+    }
+
+    .project-details-card {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: $default-spacing * 2;
+        margin:  $default-spacing 0;
+        padding: $default-spacing * 2;
 
-        .project-details-list-item {
-            border-left: 3px solid transparent;
-            padding: $default-spacing*0.5 $default-spacing*1.5;
-
-            a {
-                color: inherit;
-                text-decoration: none;
-            }
+        .project-details-card-picture {
+            font-size: 30px;
+            height: 64px;
+            width: 64px;
         }
 
-        .is-current {
-            background-color: $color-light;
-            border-left: 3px solid $color-primary !important;
-            font-weight: bold;
+        .project-details-card-content {
+            margin: 0 $default-spacing*2;
+
+            .project-details-card-title {
+                font-size: $font-size-title;
+                font-weight: bold;
+                margin-bottom: $default-spacing * 0.75;
+            }
+
+            .project-details-card-subtitle {
+                color: $color-primary;
+                font-size: $font-size-subtitle;
+                margin-bottom: $default-spacing;
+                margin-top: $default-spacing * 0.75;
+            }
+
+            .project-details-card-contact {
+                margin-top: $default-spacing * 0.5;
+
+                .project-details-card-text {
+                    align-items: center;
+                    color: $color-neutral-6;
+                    display: flex;
+                    font-size: $font-size-content;
+                    margin: $default-spacing*0.75 0;
+
+                    svg {
+                        font-size: $font-size-content;
+                        margin-right: $default-spacing * 0.25;
+                    }
+                }
+
+                .project-details-card-text:last-child {
+                    margin-bottom: 0;
+                }
+            }
         }
     }
 }
