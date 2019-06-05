@@ -55,10 +55,11 @@ const FilterButton = ({label, isActive = false, onClick}) => (
 );
 
 const ProjectsList = ({projects}) => {
-    const projectCards = useMemo(() => projects.map((props) => (
+    const projectCards = useMemo(() => projects.map((project) => (
         <ProjectCard
-            key={props.id}
-            {...props}
+            key={project.id}
+            isActive={Project.isActive(project)}
+            {...project}
         />
     )), [projects]);
 
@@ -69,7 +70,7 @@ const ProjectsList = ({projects}) => {
     );
 };
 
-const ProjectCard = ({name, description, skills}) => {
+const ProjectCard = ({name, description, skills, isActive}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card
     const skillBadges = useMemo(() => skills.slice(0, DISPLAY_SKILL_COUNT).map((name) => (
         <SkillBadge
@@ -82,7 +83,7 @@ const ProjectCard = ({name, description, skills}) => {
         <Card className="project-card">
             <CardContent className="project-card-content">
                 <div className="project-card-active-section">
-                    <ActiveBadge />
+                    <ActiveBadge isActive={isActive} />
                 </div>
 
                 <div className="project-card-content-section">

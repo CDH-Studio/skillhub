@@ -14,7 +14,7 @@ export default class Project {
         if (filter === Project.FILTER_ALL) {
             return projects;
         } else if (filter === Project.FILTER_ACTIVE) {
-            return projects.filter((project) => Project.isActive(project));
+            return projects.filter((project) => Project.isActive(project)).sort(sortLastActiveFirst);
         } else if (filter === Project.FILTER_INACTIVE) {
             return projects.filter((project) => !Project.isActive(project));
         } else {
@@ -22,3 +22,5 @@ export default class Project {
         }
     }
 }
+
+const sortLastActiveFirst = (a, b) => new Date(b.lastActive) - new Date(a.lastActive);

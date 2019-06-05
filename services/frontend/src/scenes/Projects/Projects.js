@@ -8,13 +8,19 @@ const lastMonth = (() => {
     return date;
 })();
 
+const lastWeek = (() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 7);
+    return date;
+})();
+
 const dummyData = [
     {
         id: "1",
         name: "Dank Meme Classifier",
         description: "A service for taking memes and dtermining if they are dank",
         skills: ["React", "Docker", "Kubernetes", "JavaScript"],
-        lastActive: new Date()
+        lastActive: lastWeek
     },
     {
         id: "2",
