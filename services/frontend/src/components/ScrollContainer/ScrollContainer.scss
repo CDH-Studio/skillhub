@@ -1,0 +1,28 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
+
+.scroll-container {
+    height: calc(100% - #{$navbar-height});
+    overflow: auto;
+
+    .content-area {
+        display: flex;
+        margin: 0 auto;
+        max-width: $tablet-width;
+        min-width: $minimum-width;
+        padding: 0 $default-spacing;
+
+        @include laptop-width {
+            & {
+                max-width: $laptop-width;
+            }
+        }
+
+        @include desktop-width {
+            & {
+                max-width: $desktop-width;
+            }
+        }
+    }
+}
