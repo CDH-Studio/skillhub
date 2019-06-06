@@ -82,7 +82,7 @@ const ProjectCard = ({name, description, skills, isActive}) => {
     return (
         <Card className="project-card">
             <CardContent className="project-card-content">
-                <div className="project-card-active-section">
+                <div className="project-card-activity-section">
                     <ActiveBadge isActive={isActive} />
                 </div>
 
