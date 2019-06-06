@@ -64,19 +64,19 @@ const ProjectContent = () => (
 );
 
 const ProjectInfo = ({name, description, isActive}) => (
-   <Card className="project-details-card">
-            <CardContent className="project-info-card-content">
-                <div className="project-info-card-active-section">
-                    <ActiveBadge isActive={isActive} />
-                </div>
+    <Card className="project-details-card">
+        <CardContent className="project-info-card-content">
+            <div className="project-info-card-active-section">
+                <ActiveBadge isActive={isActive} />
+            </div>
 
-                <div className="project-info-card-content-section">
-                    <h3 className="project-info-card-name">{name} Dank Meme Generator</h3>
-                    <p className="project-info-card-description">{description} abc</p>
+            <div className="project-info-card-content-section">
+                <h3 className="project-info-card-name">{name} Dank Meme Generator</h3>
+                <p className="project-info-card-description">{description} abc</p>
 
-                </div>
-            </CardContent>
-        </Card>
+            </div>
+        </CardContent>
+    </Card>
 );
 
 const Contributors = ({sectionName}) => (
@@ -158,7 +158,7 @@ const Changelog = ({sectionName}) => (
             cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
             i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
 
-            <br /><br />
+            <br /> <br />
 
             Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
             sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
@@ -196,8 +196,5 @@ const TextBadge = ({className, text, isHighlighted = false}) => (
         {text}
     </div>
 );
-
-
-
 
 export default ProjectDetailsLayout;

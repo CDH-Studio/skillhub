@@ -1,8 +1,8 @@
-import React from "react"
+import React from "react";
 import ProjectDetailsLayout from "./ProjectDetailsLayout";
 
 const ProjectDetails = () => (
-  <ProjectDetailsLayout />
+    <ProjectDetailsLayout />
 );
 
 export default ProjectDetails;
