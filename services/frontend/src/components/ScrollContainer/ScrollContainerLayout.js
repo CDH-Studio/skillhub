@@ -1,10 +1,10 @@
 import React from "react";
 import "./ScrollContainer.scss";
 
-const ScrollContainer = ({children}) => {
+const ScrollContainer = ({children, className}) => {
     return (
         <div className="scroll-container">
-            <div className="content-area">
+            <div className={className}>
                 {children}
             </div>
         </div>

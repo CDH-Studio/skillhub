@@ -2,11 +2,12 @@
 @import "styles/_dimens.scss";
 @import "styles/_media_queries.scss";
 
+
 .scroll-container {
     height: calc(100% - #{$navbar-height});
     overflow: auto;
 
-    .content-area {
+    [class$="-page"]{
         display: flex;
         margin: 0 auto;
         max-width: $tablet-width;
@@ -24,5 +25,6 @@
                 max-width: $desktop-width;
             }
         }
+
     }
 }
