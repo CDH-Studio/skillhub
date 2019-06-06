@@ -7,7 +7,7 @@ export default class Project {
 
     static isActive(project = {}) {
         // An active project is (currently) defined as having been active within the last 30 days.
-        return ((new Date()) - project.lastActive) < THIRTY_DAYS;
+        return ((new Date()) - new Date(project.lastActive)) < THIRTY_DAYS;
     }
 
     static filterProjects(projects, filter = Project.FILTER_ALL) {
