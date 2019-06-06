@@ -1,5 +1,4 @@
 import {call, put, take, takeLatest} from "redux-saga/effects";
-
 import api from "api/";
 import {authRequestsSlice, projectsRequestsSlice, skillsRequestsSlice} from "store/";
 import {routerActionTypes, tryingToAccessApp} from "store/utils";
