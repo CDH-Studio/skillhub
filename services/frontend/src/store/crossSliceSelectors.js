@@ -1,15 +1,10 @@
 import {createSelector} from "redux-starter-kit";
 import {projectsSlice, skillsSlice} from "./slices";
+import {Project} from "utils/models";
 
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
-    (projects, skills) => (
-        Object.keys(projects).map((projectId) => {
-            const project = {...projects[projectId]};
-            project.skills = project.skills.map((skillId) => skills[skillId].name);
-            return project;
-        })
-    )
+    (projectsById, skillsById) => Project.mergeWithSkills(projectsById, skillsById)
 );
 
 export const crossSliceSelectors = {
