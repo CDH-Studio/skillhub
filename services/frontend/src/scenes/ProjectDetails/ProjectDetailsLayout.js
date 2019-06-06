@@ -1,7 +1,6 @@
 import React from "react";
 import {ScrollContainer, NavSidebar} from "components/";
 import {Card, CardContent, Paper} from "@material-ui/core";
-import classNames from "classnames";
 import "./ProjectDetails.scss";
 
 const containerClass = ".scroll-container";
@@ -63,11 +62,11 @@ const ProjectContent = () => (
     </div>
 );
 
-const ProjectInfo = ({name, description, isActive}) => (
+const ProjectInfo = ({name, description}) => (
     <Card className="project-details-card">
         <CardContent className="project-info-card-content">
             <div className="project-info-card-active-section">
-                <ActiveBadge isActive={isActive} />
+                <h3>Active</h3>
             </div>
 
             <div className="project-info-card-content-section">
@@ -177,24 +176,5 @@ const Changelog = ({sectionName}) => (
     </>
 );
 
-const ActiveBadge = ({isActive = true}) => (
-    <TextBadge
-        className="active-badge"
-        text={isActive ? "Active" : "Inactive"}
-        isHighlighted={isActive}
-    />
-);
-
-const TextBadge = ({className, text, isHighlighted = false}) => (
-    <div
-        className={classNames(
-            "text-badge",
-            {"text-badge--highlighted": isHighlighted},
-            className
-        )}
-    >
-        {text}
-    </div>
-);
 
 export default ProjectDetailsLayout;
