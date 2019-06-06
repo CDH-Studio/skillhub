@@ -1,14 +1,14 @@
 import React from "react";
 import {ScrollContainer, NavSidebar} from "components/";
-import {Avatar, Paper} from "@material-ui/core";
-import {Email, LocalPhone} from "@material-ui/icons";
+import {Card, CardContent, Paper} from "@material-ui/core";
+import classNames from "classnames";
 import "./ProjectDetails.scss";
 
 const containerClass = ".scroll-container";
 
 const ProjectDetailsLayout = () => {
     return (
-        <ScrollContainer>
+        <ScrollContainer className="project">
             <NavSidebar
                 scrollSpySelectors={sections}
                 containerClass={containerClass}
@@ -63,34 +63,20 @@ const ProjectContent = () => (
     </div>
 );
 
-const ProjectInfo = () => (
-    <Paper className="project-details-card">
-        <Avatar className="project-details-card-picture">
-            DS
-        </Avatar>
+const ProjectInfo = ({name, description, isActive}) => (
+   <Card className="project-details-card">
+            <CardContent className="project-info-card-content">
+                <div className="project-info-card-active-section">
+                    <ActiveBadge isActive={isActive} />
+                </div>
 
-        <div className="project-details-card-content">
-            <h2 className="project-details-card-title">
-                Devin Sit
-            </h2>
+                <div className="project-info-card-content-section">
+                    <h3 className="project-info-card-name">{name} Dank Meme Generator</h3>
+                    <p className="project-info-card-description">{description} abc</p>
 
-            <h3 className="project-details-card-subtitle">
-                Software Developer
-            </h3>
-
-            <div className="project-details-card-contact">
-                <p className="project-details-card-text">
-                    <Email />
-                    Devin.Sit@Canada.ca
-                </p>
-
-                <p className="project-details-card-text">
-                    <LocalPhone />
-                    123-456-7890
-                </p>
-            </div>
-        </div>
-    </Paper>
+                </div>
+            </CardContent>
+        </Card>
 );
 
 const Contributors = ({sectionName}) => (
@@ -190,6 +176,28 @@ const Changelog = ({sectionName}) => (
         </Paper>
     </>
 );
+
+const ActiveBadge = ({isActive = true}) => (
+    <TextBadge
+        className="active-badge"
+        text={isActive ? "Active" : "Inactive"}
+        isHighlighted={isActive}
+    />
+);
+
+const TextBadge = ({className, text, isHighlighted = false}) => (
+    <div
+        className={classNames(
+            "text-badge",
+            {"text-badge--highlighted": isHighlighted},
+            className
+        )}
+    >
+        {text}
+    </div>
+);
+
+
 
 
 export default ProjectDetailsLayout;

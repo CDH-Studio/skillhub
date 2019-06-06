@@ -35,7 +35,7 @@ const renderSectionComponent = (sectionName) => {
 
 const ProfileLayout = () => {
     return (
-        <ScrollContainer>
+        <ScrollContainer className="profile">
             <NavSidebar
                 scrollSpySelectors={sections}
                 containerClass={containerClass}
