@@ -7,6 +7,12 @@ const lastMonth = (() => {
     return date;
 })();
 
+const nextMonth = (() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 31);
+    return date;
+})();
+
 const lastWeek = (() => {
     const date = new Date();
     date.setDate(date.getDate() - 7);
@@ -17,11 +23,15 @@ describe("normalizeApiResultsForRedux", () => {
     const projectsList = [
         new Project({id: "1", skills: [{id: "a"}, {id: "b"}]}),
         new Project({id: "2", skills: [{id: "c"}, {id: "z"}]}),
+        new Project({id: "3", skills: []}),
+        new Project({id: "4", skills: null})
     ];
 
     const projectsMap = {
         [projectsList[0].id]: {...projectsList[0], skills: ["a", "b"]},
         [projectsList[1].id]: {...projectsList[1], skills: ["c", "z"]},
+        [projectsList[2].id]: {...projectsList[2], skills: []},
+        [projectsList[3].id]: {...projectsList[3], skills: []}
     };
 
     it("normalizes a list of projects to a map of projects with just skill IDs", () => {
@@ -35,6 +45,10 @@ describe("isActive", () => {
         expect(Project.isActive(new Project({lastActive: lastWeek}))).toBe(true);
     });
 
+    it("returns true when the project was somehow last active in the future", () => {
+        expect(Project.isActive(new Project({lastActive: nextMonth}))).toBe(true);
+    });
+
     it("returns false when the project was last active more than 30 days ago", () => {
         expect(Project.isActive(new Project({lastActive: lastMonth}))).toBe(false);
     });
@@ -42,6 +56,8 @@ describe("isActive", () => {
     it("returns false when given nothing", () => {
         expect(Project.isActive()).toBe(false);
         expect(Project.isActive({})).toBe(false);
+        expect(Project.isActive(null)).toBe(false);
+        expect(Project.isActive(undefined)).toBe(false);
     });
 });
 

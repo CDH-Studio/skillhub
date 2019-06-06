@@ -27,16 +27,25 @@ export default class Project {
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(projects = []) {
         return projects.reduce((acc, project) => {
-            const processedProject = {...project};
-            processedProject.skills = processedProject.skills.map(({id}) => id);
+            const processedProject = new Project(project);
+
+            if (processedProject.skills) {
+                processedProject.skills = processedProject.skills.map(({id}) => id);
+            } else {
+                processedProject.skills = [];
+            }
 
             acc[processedProject.id] = processedProject;
             return acc;
         }, {});
     }
 
+    /* An active project is (currently) defined as having been active within the last 30 days. */
     static isActive(project = {}) {
-        // An active project is (currently) defined as having been active within the last 30 days.
+        if (!project) {
+            return false;
+        }
+
         return ((new Date()) - new Date(project.lastActive)) < THIRTY_DAYS;
     }
 
@@ -52,6 +61,7 @@ export default class Project {
         }
     }
 
+    /* Denormalize a set of projects that have skill IDs with the corresponding set of skills. */
     static mergeWithSkills(projectsById = {}, skillsById = {}) {
         return Object.keys(projectsById).map((projectId) => {
             const project = {...projectsById[projectId]};
