@@ -33,7 +33,7 @@ variable "cluster_initial_node_count" {
 
 variable "cluster_machine_type" {
     type = "string"
-    default = "custom-1-2048"
+    default = "n1-standard-1"
 }
 
 variable "cluster_preemptible" {
