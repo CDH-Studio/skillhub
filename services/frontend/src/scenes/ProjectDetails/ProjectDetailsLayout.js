@@ -52,7 +52,7 @@ const renderSectionComponent = (sectionName) => {
 };
 
 const ProjectContent = () => (
-    <div className="project-content">
+    <div className="project-details-content">
         {
             sections.map((section, index) => (
                 <section id={section.selector} key={index}>
@@ -150,19 +150,6 @@ const UsedSkills = ({sectionName}) => (
 
             <br /><br />
 
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
         </Paper>
     </>
 );

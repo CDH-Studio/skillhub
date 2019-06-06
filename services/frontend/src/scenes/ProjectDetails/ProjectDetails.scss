@@ -2,16 +2,15 @@
 @import "styles/_dimens.scss";
 @import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
-@import "../../components/NavSideBar/NavSidebar.scss";
 
-.sidebar:last-child{
-    margin-top: 25px;
+.scroll-nav .list-item:last-child{
+    margin-top: $default-spacing;
 }
 .project-details-content {
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: $default-spacing * 2;
+    padding: $default-spacing ;
 
     .project-details-content-title {
         color: $color-neutral-6;
