@@ -176,5 +176,4 @@ const Changelog = ({sectionName}) => (
     </>
 );
 
-
 export default ProjectDetailsLayout;
