@@ -5,4 +5,6 @@ const ProjectDetails = () => (
     <ProjectDetailsLayout />
 );
 
+//const {match:{params}}= this.props;
+
 export default ProjectDetails;
