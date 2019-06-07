@@ -2,15 +2,15 @@ import uuidv4 from "uuid/v4";
 
 export default class Profile {
     constructor({
-        id = uuidv4(), 
-        name = "", 
+        id = uuidv4(),
+        name = "",
         primaryRole = "",
-        contactEmail = "", 
-        phone = "", 
-        slackHandle = "", 
-        rocketChatHandle = "", 
-        userId = uuidv4(), 
-        createdAt = new Date(), 
+        contactEmail = "",
+        phone = "",
+        slackHandle = "",
+        rocketChatHandle = "",
+        userId = uuidv4(),
+        createdAt = new Date(),
         updatedAt = new Date(),
     }) {
         this.id = id;
