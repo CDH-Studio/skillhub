@@ -2,6 +2,7 @@ import {call, put, take, takeLatest} from "redux-saga/effects";
 import api from "api/";
 import {authRequestsSlice, projectsRequestsSlice, skillsRequestsSlice} from "store/";
 import {routerActionTypes, tryingToAccessApp} from "store/utils";
+import { profilesRequestsSlice } from "store/slices";
 
 /* Things to do after first logging in or after the user
  * refreshes the page while logged in (e.g. fetch up data). */
@@ -10,6 +11,7 @@ function* appBoot() {
     yield take(skillsRequestsSlice.fetchAll.actions.success);
 
     yield put(projectsRequestsSlice.fetchAll.actions.request());
+    yield put(profilesRequestsSlice.fetchAll.actions.request());
 }
 
 /* The first app boot is handled when the authenticated user navigates to

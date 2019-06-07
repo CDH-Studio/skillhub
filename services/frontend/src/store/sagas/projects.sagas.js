@@ -5,6 +5,7 @@ import {Project} from "utils/models";
 
 function* projectsFetchAll() {
     const result = yield call(api.service("projects").find);
+    console.log(result)
     const normalizedProjects = Project.normalizeApiResultsForRedux(result);
 
     yield put(projectsSlice.actions.setProjects(normalizedProjects));
