@@ -4,6 +4,7 @@ import {Email, LocalPhone} from "@material-ui/icons";
 import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
 import {Project} from "utils/models";
 import "./Profile.scss";
+import { profilesRequestsSlice } from "store";
 
 const containerClass = ".scroll-container";
 
@@ -62,7 +63,7 @@ const ProfileContent = ({...sectionProps}) => (
     </div>
 );
 
-const PersonalDetails = () => (
+const PersonalDetails = ({userProfile}) => (
     <Paper className="profile-card">
         <Avatar className="profile-card-picture">
             DS
@@ -70,7 +71,7 @@ const PersonalDetails = () => (
 
         <div className="profile-card-content">
             <h2 className="profile-card-title">
-                Devin Sit
+                {userProfile}
             </h2>
 
             <h3 className="profile-card-subtitle">

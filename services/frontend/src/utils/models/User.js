@@ -10,4 +10,8 @@ export default class User {
             throw new Error("Invalid email");
         }
     }
+
+    static getId(currentUser) {
+        return currentUser.id;
+    }
 }

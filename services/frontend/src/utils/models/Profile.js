@@ -31,8 +31,25 @@ export default class Profile {
         return Profiles.reduce((acc, profile) => {
             const processedProfile = new Profile(profile);
 
-            acc[processedProfile.id] = processedProfile;
+            acc[processedProfile.userId] = processedProfile;
             return acc;
         }, {});
+    }
+
+    static filterForCurrentUser(ProfilesById, currentUserId) {
+<<<<<<< Updated upstream
+        const a = Object.keys(ProfilesById).filter((profileId) => (
+           ProfilesById[profileId].userId === currentUserId
+        ));
+        console.log(a)
+
+        return a;
+=======
+        return ProfilesById[
+            Object.keys(ProfilesById).filter((profileId) => (
+                ProfilesById[profileId].userId === currentUserId
+            ))[0]
+        ];
+>>>>>>> Stashed changes
     }
 }

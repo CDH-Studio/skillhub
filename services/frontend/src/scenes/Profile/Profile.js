@@ -1,6 +1,8 @@
 import React from "react";
 import ProfileLayout from "./ProfileLayout";
+import connect from "./connect";
 
+<<<<<<< Updated upstream
 const lastMonth = (() => {
     const date = new Date();
     date.setDate(date.getDate() - 31);
@@ -37,10 +39,17 @@ const dummyData = [
     }
 ];
 
-const Profile = ({projects = dummyData}) => (
-    <ProfileLayout
+const Profile = ({projects = dummyData, userProfile}) => {
+    console.log(userProfile)
+    return <ProfileLayout
         projects={projects}
+        userProfile={userProfile}
+=======
+const Profile = ({userProfile = []}) => {
+    return <ProfileLayout 
+       userProfile = {userProfile} 
+>>>>>>> Stashed changes
     />
-);
+};
 
-export default Profile;
+export default connect(Profile);

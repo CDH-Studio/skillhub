@@ -1,5 +1,6 @@
-import {createSlice} from "redux-starter-kit";
+import {createSlice, createSelector} from "redux-starter-kit";
 import mounts from "store/mountpoints";
+import {User} from "utils/models";
 
 export const userSlice = createSlice({
     slice: mounts.user,
@@ -10,3 +11,8 @@ export const userSlice = createSlice({
         setUser: (state, action) => action.payload
     }
 });
+
+userSlice.selectors.getUserId = createSelector(
+    [userSlice.selectors.getUser],
+    (currentUser) => User.getId(currentUser)
+);
