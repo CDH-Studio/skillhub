@@ -38,6 +38,7 @@ const dummyData = [
     }
 ];
 
+//Split at each word, take the first letter and then convert them to uppercase.
 const addAvatarAcronym = (name) => (
     name.split(" ").reduce((acc, word) => {
         return acc = acc + word[0];
@@ -46,11 +47,13 @@ const addAvatarAcronym = (name) => (
 
 const Profile = ({projects = dummyData, userProfile}) => {
     userProfile.nameAcronym = addAvatarAcronym(userProfile.name);
-    
-    return <ProfileLayout
-        projects={projects}
-        userProfile={userProfile}
-    />
+
+    return (
+        <ProfileLayout
+            projects={projects}
+            userProfile={userProfile}
+        />
+    );
 };
 
 export default connect(Profile);

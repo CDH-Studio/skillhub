@@ -31,11 +31,12 @@ export default class Profile {
         return Profiles.reduce((acc, profile) => {
             const processedProfile = new Profile(profile);
 
-            acc[processedProfile.userId] = processedProfile;
+            acc[processedProfile.id] = processedProfile;
             return acc;
         }, {});
     }
 
+    //Iterate over profiles checking for the current user's id, then return that user's entire profile.
     static filterForCurrentUser(ProfilesById, currentUserId) {
         return ProfilesById[
             Object.keys(ProfilesById).filter((profileId) => (
