@@ -29,6 +29,25 @@ const USERS = [
 
 const USER_IDS = USERS.map((user) => user.id);
 
+// In order to maintain seeder order integrity, this profile is created separately,
+// because the seeder for it came first.
+const TEST_PROFILE = [
+    {
+        id: "52e89288-f5f7-43aa-b4cd-0b9e7d6ee458",
+        userId: USER_IDS[0],
+        name: "testBro",
+        primaryRole: "Developer",
+        contactEmail: "test@test.com",
+        phone: "905-541-5810",
+        slackHandle: "testguy",
+        rocketChatHandle: "testman",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    }
+];
+
+const TEST_PROFILE_ID = TEST_PROFILE.map(getId);
+
 const PROFILES = [
     {
         id: "7835a29d-b447-4812-b263-36ac30b9a053",
@@ -41,11 +60,71 @@ const PROFILES = [
         rocketChatHandle: "devin",
         createdAt: new Date(),
         updatedAt: new Date()
+    },
+    {
+        id: "7492d22b-5a2a-4b4f-bdea-277ec262082a",
+        userId: null,
+        name: "Bhalachandra Malghan",
+        primaryRole: "Software Developer",
+        contactEmail: "Bhalachandra.Malghan@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "bhala",
+        rocketChatHandle: "bhala",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "6273733c-04d4-41c8-851d-e2b70356e67b",
+        userId: null,
+        name: "Joshua Gorman",
+        primaryRole: "Software Developer",
+        contactEmail: "Joshua.Gorman@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "josh",
+        rocketChatHandle: "josh",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "f293a510-7477-4f48-857d-a59bcd16c9c4",
+        userId: null,
+        name: "Sam Heaton",
+        primaryRole: "Software Developer",
+        contactEmail: "Sam.Heaton@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "sam",
+        rocketChatHandle: "sam",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "2108b4e7-daf1-438f-9ad7-7612ef034bd4",
+        userId: null,
+        name: "Jared Ridyard",
+        primaryRole: "Software Developer",
+        contactEmail: "Jared.Ridyard@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "jared",
+        rocketChatHandle: "jared",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "508f28a4-1dc2-4fb2-8273-1af56a72d673",
+        userId: null,
+        name: "Naman Sethi",
+        primaryRole: "Software Developer",
+        contactEmail: "Sethi.Naman@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "sethi",
+        rocketChatHandle: "sethi",
+        createdAt: new Date(),
+        updatedAt: new Date()
     }
 ];
 
 const PROFILE_IDS = PROFILES.map((profile) => profile.id);
-const PROFILE_IDS_BY_NAME = PROFILES.reduce(keyIdByName, {});
+const PROFILE_IDS_BY_NAME = [...TEST_PROFILE, ...PROFILES].reduce(keyIdByName, {});
 
 const SKILLS = [
     {
@@ -322,6 +401,8 @@ module.exports = {
     PROJECT_SKILL_IDS,
     SKILLS,
     SKILL_IDS,
+    TEST_PROFILE,
+    TEST_PROFILE_ID,
     USERS,
     USER_IDS
 };
