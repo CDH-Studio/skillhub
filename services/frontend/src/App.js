@@ -2,6 +2,7 @@ import React from "react";
 import {ConnectedRouter} from "connected-react-router";
 import {ThemeProvider} from "@material-ui/styles";
 import {createMuiTheme} from "@material-ui/core/styles";
+import {PersistGate} from "redux-persist/integration/react";
 import {Provider} from "react-redux";
 import {Switch, Route} from "react-router";
 import {Landing, Login, SignUp} from "scenes/";
@@ -10,7 +11,7 @@ import ScreenUrls from "utils/screenUrls";
 import AppRouter from "./AppRouter";
 import "./App.scss";
 
-const store = configureStore();
+const {store, persistor} = configureStore();
 
 const theme = createMuiTheme({
     palette: {
@@ -46,11 +47,13 @@ const AppLayout = () => (
 
 const App = () => (
     <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <ThemeProvider theme={theme}>
-                <AppLayout />
-            </ThemeProvider>
-        </ConnectedRouter>
+        <PersistGate loading={null} persistor={persistor}>
+            <ConnectedRouter history={history}>
+                <ThemeProvider theme={theme}>
+                    <AppLayout />
+                </ThemeProvider>
+            </ConnectedRouter>
+        </PersistGate>
     </Provider>
 );
 
