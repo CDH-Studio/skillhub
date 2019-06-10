@@ -4,7 +4,6 @@ import {Email, LocalPhone} from "@material-ui/icons";
 import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
 import {Project} from "utils/models";
 import "./Profile.scss";
-import { profilesRequestsSlice } from "store";
 
 const containerClass = ".scroll-container";
 
@@ -36,7 +35,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const ProfileLayout = ({projects}) => {
+const ProfileLayout = ({projects, userProfile}) => {
     return (
         <ScrollContainer>
             <NavSidebar
@@ -46,6 +45,7 @@ const ProfileLayout = ({projects}) => {
 
             <ProfileContent
                 projects={projects}
+                userProfile={userProfile}
             />
         </ScrollContainer>
     );
@@ -66,27 +66,27 @@ const ProfileContent = ({...sectionProps}) => (
 const PersonalDetails = ({userProfile}) => (
     <Paper className="profile-card">
         <Avatar className="profile-card-picture">
-            DS
+            {userProfile.nameAcronym}
         </Avatar>
 
         <div className="profile-card-content">
             <h2 className="profile-card-title">
-                {userProfile}
+                {userProfile.name}
             </h2>
 
             <h3 className="profile-card-subtitle">
-                Software Developer
+                {userProfile.primaryRole}
             </h3>
 
             <div className="profile-card-contact">
                 <p className="profile-card-text">
                     <Email />
-                    Devin.Sit@Canada.ca
+                    {userProfile.contactEmail}
                 </p>
 
                 <p className="profile-card-text">
                     <LocalPhone />
-                    123-456-7890
+                    {userProfile.phone}
                 </p>
             </div>
         </div>

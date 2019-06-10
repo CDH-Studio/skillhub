@@ -20,14 +20,5 @@ profilesSlice.selectors.getCurrentUserProfile = createSelector(
     [profilesSlice.selectors.getProfiles, userSlice.selectors.getUserId],
     (profilesById, currentUserId) => Profile.filterForCurrentUser(profilesById, currentUserId)
 );
-<<<<<<< Updated upstream
-=======
-/*
-profilesSlice.selectors.getCurrentUserProfile = {
-    "getCurrentUserProfile": getCurrentUserProfile
-};
-console.log(profilesSlice)
-*/
->>>>>>> Stashed changes
 
 export const profilesRequestsSlice = createRequestSlices(mounts.profilesRequests, ["fetchAll"]);
