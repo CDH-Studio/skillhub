@@ -19,7 +19,8 @@
 
     .profile-card {
         display: flex;
-        margin:  $default-spacing 0;
+        margin-bottom: $default-spacing * 2;
+        margin-top: $default-spacing;
         padding: $default-spacing * 2;
 
         .profile-card-picture {
@@ -66,4 +67,19 @@
             }
         }
     }
+
+    .profile-card-projects {
+        flex-direction: column;
+        padding: 0;
+
+        .profile-project-card {
+            margin: $default-spacing 0;
+            width: auto;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
 }
+
