@@ -8,7 +8,7 @@ export const profilesSlice = createSlice({
     reducers: {
         setProfiles: (state, action) => action.payload,
         addProfile: (state, action) => {
-            // Expects a Project object as payload
+            // Expects a Profile object as payload
             state[action.payload.id] = action.payload;
         }
     }
