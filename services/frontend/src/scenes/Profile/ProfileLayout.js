@@ -1,7 +1,8 @@
 import React from "react";
-import {ScrollContainer, NavSidebar} from "components/";
 import {Avatar, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
+import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
+import {Project} from "utils/models";
 import "./Profile.scss";
 
 const containerClass = ".scroll-container";
@@ -21,36 +22,40 @@ const sections = [
     }
 ];
 
-const renderSectionComponent = (sectionName) => {
+const renderSectionComponent = (sectionName, sectionProps) => {
     switch (sectionName) {
         case "Personal Details":
-            return <PersonalDetails />;
+            return <PersonalDetails {...sectionProps} />;
         case "Skills":
-            return <Skills sectionName={sectionName} />;
+            return <Skills sectionName={sectionName} {...sectionProps} />;
         case "Projects":
-            return <Projects sectionName={sectionName} />;
+            return <Projects sectionName={sectionName} {...sectionProps} />;
         default:
+            return null;
     }
 };
 
-const ProfileLayout = () => {
+const ProfileLayout = ({projects}) => {
     return (
         <ScrollContainer>
             <NavSidebar
                 scrollSpySelectors={sections}
                 containerClass={containerClass}
             />
-            <ProfileContent />
+
+            <ProfileContent
+                projects={projects}
+            />
         </ScrollContainer>
     );
 };
 
-const ProfileContent = () => (
+const ProfileContent = ({...sectionProps}) => (
     <div className="profile-content">
         {
             sections.map((section, index) => (
                 <section id={section.selector} key={index}>
-                    {renderSectionComponent(section.name)}
+                    {renderSectionComponent(section.name, sectionProps)}
                 </section>
             ))
         }
@@ -124,40 +129,23 @@ const Skills = ({sectionName}) => (
     </>
 );
 
-const Projects = ({sectionName}) => (
+const Projects = ({sectionName, projects}) => (
     <>
         <h2>{sectionName}</h2>
-        <Paper className="profile-card">
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
 
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            <br /><br />
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-        </Paper>
+        <div className="profile-card profile-card-projects">
+            {
+                projects.map((project) => (
+                    <ProjectCard
+                        className="profile-project-card"
+                        key={project.id}
+                        isActive={Project.isActive(project)}
+                        {...project}
+                    />
+                ))
+            }
+        </div>
     </>
 );
+
 export default ProfileLayout;
