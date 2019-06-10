@@ -6,7 +6,7 @@ export default class Project {
     constructor({
         id = uuidv4(), name = "", description = "",
         lastActive = null, createdAt = new Date(), updatedAt = new Date(),
-        skills = []
+        skills = [], profiles = []
     }) {
         this.id = id;
         this.name = name;
@@ -17,6 +17,7 @@ export default class Project {
 
         // Aggregate/derived (from store) properties
         this.skills = skills;
+        this.profiles = profiles;
     }
 
     static get FILTER_ALL() {return "all";}

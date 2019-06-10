@@ -1,12 +1,13 @@
 import {createSelector, createSlice} from "redux-starter-kit";
+import {createRequestSlices} from "store/utils";
 import mounts from "store/mountpoints";
 
 const initialState = {
     // byId stores the whole ProjectProfile object, keyed by ID
     byId: {},
-    // byProjectId stores references (IDs) of ProjectProfile objects, keyed by their projectId
+    // byProjectId stores references (lists of IDs) of ProjectProfile objects, keyed by their projectId
     byProjectId: {},
-    // byProfileId stores references (IDs) of ProjectProfile objects, keyed by their profileId
+    // byProfileId stores references (lists of IDs) of ProjectProfile objects, keyed by their profileId
     byProfileId: {}
 };
 
@@ -16,8 +17,22 @@ const addProjectProfile = (state, action) => {
     const {id, projectId, profileId} = payload;
 
     state.byId[id] = payload;
-    state.byProjectId[projectId] = id;
-    state.byProfileId[profileId] = id;
+
+    if (!state.byProjectId[projectId]) {
+        state.byProjectId[projectId] = [];
+    }
+
+    if (!state.byProfileId[profileId]) {
+        state.byProfileId[profileId] = [];
+    }
+
+    if (!state.byProjectId[projectId].includes(id)) {
+        state.byProjectId[projectId].push(id);
+    }
+
+    if (!state.byProfileId[profileId].includes(id)) {
+        state.byProfileId[profileId].push(id);
+    }
 };
 
 export const projectProfilesSlice = createSlice({
@@ -27,10 +42,14 @@ export const projectProfilesSlice = createSlice({
         addProjectProfile,
         addProjectProfiles: (state, action) => {
             // Expects a list of ProjectProfile objects as payload
-            action.payload.forEach((projectProfile) => addProjectProfile(state, projectProfile));
+            action.payload.forEach((projectProfile) => addProjectProfile(state, {payload: projectProfile}));
         }
     }
 });
+
+export const projectProfilesRequestsSlice = createRequestSlices(mounts.projectProfilesRequests, ["fetchAll"]);
+
+/* Extra Selectors */
 
 const getById = createSelector(
     [projectProfilesSlice.selectors.getProjectProfiles],

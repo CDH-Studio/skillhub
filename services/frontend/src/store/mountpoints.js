@@ -5,6 +5,7 @@ export default {
     projects: "projects",
     projectsRequests: "projectsRequests",
     projectProfiles: "projectProfiles",
+    projectProfilesRequests: "projectProfilesRequests",
     skills: "skills",
     skillsRequests: "skillsRequests",
     router: "router",
