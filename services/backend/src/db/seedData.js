@@ -12,6 +12,11 @@ const lastWeek = (() => {
 
 const getId = (obj) => obj.id;
 
+const keyIdByName = (acc, obj) => {
+    acc[obj.name] = obj.id;
+    return acc;
+};
+
 const USERS = [
     {
         id: "3e26fac0-7786-40f3-86bb-f175ff3d721d",
@@ -24,10 +29,12 @@ const USERS = [
 
 const USER_IDS = USERS.map((user) => user.id);
 
-const PROFILES = [
+// In order to maintain seeder order integrity, this profile is created separately,
+// because the seeder for it came first.
+const TEST_PROFILE = [
     {
         id: "52e89288-f5f7-43aa-b4cd-0b9e7d6ee458",
-        userId: "3e26fac0-7786-40f3-86bb-f175ff3d721d",
+        userId: USER_IDS[0],
         name: "testBro",
         primaryRole: "Developer",
         contactEmail: "test@test.com",
@@ -39,7 +46,85 @@ const PROFILES = [
     }
 ];
 
+const TEST_PROFILE_ID = TEST_PROFILE.map(getId);
+
+const PROFILES = [
+    {
+        id: "7835a29d-b447-4812-b263-36ac30b9a053",
+        userId: null,
+        name: "Devin Sit",
+        primaryRole: "Software Developer",
+        contactEmail: "Devin.Sit@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "devin",
+        rocketChatHandle: "devin",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "7492d22b-5a2a-4b4f-bdea-277ec262082a",
+        userId: null,
+        name: "Bhalachandra Malghan",
+        primaryRole: "Software Developer",
+        contactEmail: "Bhalachandra.Malghan@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "bhala",
+        rocketChatHandle: "bhala",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "6273733c-04d4-41c8-851d-e2b70356e67b",
+        userId: null,
+        name: "Joshua Gorman",
+        primaryRole: "Software Developer",
+        contactEmail: "Joshua.Gorman@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "josh",
+        rocketChatHandle: "josh",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "f293a510-7477-4f48-857d-a59bcd16c9c4",
+        userId: null,
+        name: "Sam Heaton",
+        primaryRole: "Software Developer",
+        contactEmail: "Sam.Heaton@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "sam",
+        rocketChatHandle: "sam",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "2108b4e7-daf1-438f-9ad7-7612ef034bd4",
+        userId: null,
+        name: "Jared Ridyard",
+        primaryRole: "Software Developer",
+        contactEmail: "Jared.Ridyard@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "jared",
+        rocketChatHandle: "jared",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "508f28a4-1dc2-4fb2-8273-1af56a72d673",
+        userId: null,
+        name: "Naman Sethi",
+        primaryRole: "Software Developer",
+        contactEmail: "Sethi.Naman@canada.ca",
+        phone: "123-456-7890",
+        slackHandle: "sethi",
+        rocketChatHandle: "sethi",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    }
+];
+
 const PROFILE_IDS = PROFILES.map((profile) => profile.id);
+const PROFILE_IDS_BY_NAME = [...TEST_PROFILE, ...PROFILES].reduce(keyIdByName, {});
 
 const SKILLS = [
     {
@@ -99,6 +184,7 @@ const SKILLS = [
 ];
 
 const SKILL_IDS = SKILLS.map(getId);
+const SKILL_IDS_BY_NAME = SKILLS.reduce(keyIdByName, {});
 
 const PROJECTS = [
     {
@@ -128,89 +214,175 @@ const PROJECTS = [
 ];
 
 const PROJECT_IDS = PROJECTS.map(getId);
+const PROJECT_IDS_BY_NAME = PROJECTS.reduce(keyIdByName, {});
+
+const PROJECT_PROFILES = [
+    {
+        id: "d653f7e8-8003-4a4a-9c9a-7fe88d62e51b",
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        profileId: PROFILE_IDS_BY_NAME["Devin Sit"],
+        role: "Software Developer",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "97eb4342-06ce-47c9-a983-a41f514b1a18",
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        profileId: PROFILE_IDS_BY_NAME["Bhalachandra Malghan"],
+        role: "Software Developer",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "0f467d15-a44d-4003-b150-5489731996a7",
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
+        role: "Software Developer",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "0f8c32b3-1da2-4215-bf13-f4f298017fd4",
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        profileId: PROFILE_IDS_BY_NAME["Test Bro"],
+        role: "The Test Bro",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "b56ca429-7e70-471e-80ad-b92e568254aa",
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
+        role: "Software Developer",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "2d463ce4-cd8a-4cd1-9829-2634342061a5",
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        profileId: PROFILE_IDS_BY_NAME["Jared Ridyard"],
+        role: "Software Developer",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "e115172e-9d03-40dd-80d6-4a1d0e65629a",
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        profileId: PROFILE_IDS_BY_NAME["Naman Sethi"],
+        role: "Software Developer",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "24dcae33-9848-4ab8-87c6-43886638df4d",
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        profileId: PROFILE_IDS_BY_NAME["Test Bro"],
+        role: "The Test Bro",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "caa2c404-3040-4df7-ab41-8581ea5d75b1",
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        profileId: PROFILE_IDS_BY_NAME["Devin Sit"],
+        role: "Creator of All",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "f36aa07b-e592-4648-9922-7ad8ae9ca829",
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        profileId: PROFILE_IDS_BY_NAME["Test Bro"],
+        role: "The Test Bro",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    }
+];
+
+const PROJECT_PROFILE_IDS = PROJECT_PROFILES.map(getId);
 
 const PROJECT_SKILLS = [
     {
         id: "4042339e-47d4-4b09-afb9-65d0fb7b905e",
-        projectId: PROJECT_IDS[0],
-        skillId: SKILL_IDS[0],
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        skillId: SKILL_IDS_BY_NAME["React"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "49a6e762-e097-4333-a404-b06bd36cb495",
-        projectId: PROJECT_IDS[0],
-        skillId: SKILL_IDS[1],
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        skillId: SKILL_IDS_BY_NAME["Docker"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "6fe93fe0-fdf3-46af-bad9-1b7985e466a4",
-        projectId: PROJECT_IDS[0],
-        skillId: SKILL_IDS[2],
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        skillId: SKILL_IDS_BY_NAME["Kubernetes"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "3f1fd112-2003-476f-adf6-cd0a17d1b2bf",
-        projectId: PROJECT_IDS[0],
-        skillId: SKILL_IDS[4],
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        skillId: SKILL_IDS_BY_NAME["JavaScript"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "81a22025-78dd-4485-b270-71184cd05799",
-        projectId: PROJECT_IDS[1],
-        skillId: SKILL_IDS[4],
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        skillId: SKILL_IDS_BY_NAME["JavaScript"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "b84f307c-aa10-417d-8b7f-9134f0a5ae36",
-        projectId: PROJECT_IDS[1],
-        skillId: SKILL_IDS[5],
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        skillId: SKILL_IDS_BY_NAME["Feathers.js"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "676a08a3-5c7d-45c0-84fe-297b6a840262",
-        projectId: PROJECT_IDS[1],
-        skillId: SKILL_IDS[0],
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        skillId: SKILL_IDS_BY_NAME["React"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "86cc9cf5-de9f-4232-b2ad-e9c2f23de3dd",
-        projectId: PROJECT_IDS[1],
-        skillId: SKILL_IDS[1],
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        skillId: SKILL_IDS_BY_NAME["Docker"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "5ac63694-08e2-4d47-bf80-c0fb243afe2d",
-        projectId: PROJECT_IDS[2],
-        skillId: SKILL_IDS[7],
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        skillId: SKILL_IDS_BY_NAME["Python"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "795152f6-a779-4c3f-9473-5ddd2c029617",
-        projectId: PROJECT_IDS[2],
-        skillId: SKILL_IDS[8],
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        skillId: SKILL_IDS_BY_NAME["Django"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "26ea5874-766f-4c29-af49-4aeb141a6ce4",
-        projectId: PROJECT_IDS[2],
-        skillId: SKILL_IDS[1],
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        skillId: SKILL_IDS_BY_NAME["Docker"],
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         id: "fbcbe2ee-b756-45c4-afe4-819ec830cf42",
-        projectId: PROJECT_IDS[2],
-        skillId: SKILL_IDS[6],
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        skillId: SKILL_IDS_BY_NAME["AWS"],
         createdAt: new Date(),
         updatedAt: new Date()
     }
@@ -223,10 +395,14 @@ module.exports = {
     PROFILE_IDS,
     PROJECTS,
     PROJECT_IDS,
+    PROJECT_PROFILES,
+    PROJECT_PROFILE_IDS,
     PROJECT_SKILLS,
     PROJECT_SKILL_IDS,
     SKILLS,
     SKILL_IDS,
+    TEST_PROFILE,
+    TEST_PROFILE_ID,
     USERS,
     USER_IDS
 };
