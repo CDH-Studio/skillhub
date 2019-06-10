@@ -68,11 +68,9 @@ const ProjectInfo = ({name, description}) => (
             <div className="project-info-card-active-section">
                 <h3>Active</h3>
             </div>
-
             <div className="project-info-card-content-section">
                 <h3 className="project-info-card-name">{name} Dank Meme Generator</h3>
                 <p className="project-info-card-description">{description} abc</p>
-
             </div>
         </CardContent>
     </Card>
