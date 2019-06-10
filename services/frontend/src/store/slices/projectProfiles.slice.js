@@ -66,9 +66,21 @@ const getByProfileId = createSelector(
     (projectProfiles) => projectProfiles.byProfileId
 );
 
+const getProjectsByProfile = (profileId) => createSelector(
+    [getByProfileId],
+    (byProfileId) => byProfileId[profileId]
+);
+
+const getProfilesByProject = (projectId) => createSelector(
+    [getByProjectId],
+    (byProjectId) => byProjectId[projectId]
+);
+
 projectProfilesSlice.selectors = {
     ...projectProfilesSlice.selectors,
     getById,
     getByProjectId,
-    getByProfileId
+    getByProfileId,
+    getProjectsByProfile,
+    getProfilesByProject
 };
