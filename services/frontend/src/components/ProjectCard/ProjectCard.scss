@@ -2,10 +2,22 @@
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
 
+$project-card-width: $default-spacing * 34;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
 .project-card {
     display: flex;
     flex-shrink: 0;
-    max-width: $default-spacing * 34;
+    width: $project-card-width;
+
+    @include query-project-card-width {
+        width: auto;
+    }
 
     .project-card-content {
         display: flex;
@@ -20,6 +32,10 @@
 
         .project-card-content-section {
             flex: 3;
+
+            @include query-project-card-width {
+                margin-left: $default-spacing;
+            }
 
             .project-card-name {
                 font-size: $font-size-subtitle;
