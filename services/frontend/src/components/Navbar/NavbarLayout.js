@@ -6,33 +6,25 @@ import {Logo} from "assets/icons";
 import ScreenUrls from "utils/screenUrls";
 import "./Navbar.scss";
 
-const NavbarLayout = ({onLogout}) => {
-    const [activeTab, setActiveTab] = useState(0);
-    const onTabChange = useCallback((event, tab) => setActiveTab(tab), [setActiveTab]);
-
-    return (
-        <div className="navbar">
-            <div className="navbar-brand">
-                <Link to={ScreenUrls.PROFILE} onClick={() => setActiveTab(0)}>
-                    <Logo className="logo-icon" />
-                </Link>
-            </div>
-
-            <NavbarTabs
-                activeTab={activeTab}
-                onTabChange={onTabChange}
-            />
-
-            <div className="navbar-controls">
-                <NavbarSearch />
-                <NavbarMenu onLogout={onLogout} />
-            </div>
+const NavbarLayout = ({activeTab, onLogout}) => (
+    <div className="navbar">
+        <div className="navbar-brand">
+            <Link to={ScreenUrls.PROFILE}>
+                <Logo className="logo-icon" />
+            </Link>
         </div>
-    );
-};
 
-const NavbarTabs = ({activeTab, onTabChange}) => (
-    <Tabs className="navbar-links" value={activeTab} onChange={onTabChange}>
+        <NavbarTabs activeTab={activeTab} />
+
+        <div className="navbar-controls">
+            <NavbarSearch />
+            <NavbarMenu onLogout={onLogout} />
+        </div>
+    </div>
+);
+
+const NavbarTabs = ({activeTab = 0}) => (
+    <Tabs className="navbar-links" value={activeTab}>
         <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile" />
         <Tab to={ScreenUrls.PEOPLE} component={Link} label="People" />
         <Tab to={ScreenUrls.PROJECTS} component={Link} label="Projects" />
