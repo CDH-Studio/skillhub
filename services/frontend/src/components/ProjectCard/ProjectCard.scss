@@ -9,6 +9,7 @@
 
     .project-card-content {
         display: flex;
+        flex: 1;
         padding: $default-spacing*1.5 $default-spacing*2;
 
         .project-card-activity-section {
@@ -38,13 +39,13 @@
                 .skill-badge {
                     margin: $default-spacing / 2;
                 }
+            }
 
-                .project-card-more-skills {
-                    color: $color-text-secondary;
-                    font-weight: bold;
-                    margin: 0 $default-spacing/2;
-                    margin-top: $default-spacing;
-                }
+            .project-card-more-skills {
+                color: $color-text-secondary;
+                font-weight: bold;
+                margin: 0 $default-spacing/2;
+                margin-top: $default-spacing;
             }
         }
 

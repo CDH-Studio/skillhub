@@ -28,13 +28,13 @@ const ProjectCard = ({className, name, description, skills, isActive}) => {
 
                     <div className="project-card-skills">
                         {skillBadges}
-
-                        {skills.length > DISPLAY_SKILL_COUNT && (
-                            <div className="project-card-more-skills">
-                                More skills...
-                            </div>
-                        )}
                     </div>
+
+                    {skills.length > DISPLAY_SKILL_COUNT && (
+                        <div className="project-card-more-skills">
+                            More skills...
+                        </div>
+                    )}
                 </div>
 
                 <div className="project-card-nav-section">
