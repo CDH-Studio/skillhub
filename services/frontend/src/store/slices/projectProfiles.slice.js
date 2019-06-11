@@ -3,11 +3,31 @@ import mounts from "store/mountpoints";
 
 const initialState = {
     // byId stores the whole ProjectProfile object, keyed by ID
+    // i.e. {[id]: ProjectProfile}
     byId: {},
     // byProjectId stores references (lists of IDs) of ProjectProfile objects, keyed by their projectId
+    // i.e. {[projectId]: [ProjectProfile.id]}
     byProjectId: {},
     // byProfileId stores references (lists of IDs) of ProjectProfile objects, keyed by their profileId
+    // i.e. {[profileId]: [ProjectProfile.id]}
     byProfileId: {}
+};
+
+/* Adds a projectProfile ID to one of the byProjectId or byProfileId states. */
+const addProjectProfileId = (state, action) => {
+    // Expects an object like {associationId: "", id: ""} as payload
+    // where 'associationId' is one of either a project ID or a profile ID,
+    // and 'id' is a projectProfile ID
+    const {payload} = action;
+    const {id, associationId}= payload;
+
+    if (!state[associationId]) {
+        state[associationId] = [];
+    }
+
+    if (!state[associationId].includes(id)) {
+        state[associationId].push(id);
+    }
 };
 
 const addProjectProfile = (state, action) => {
@@ -17,21 +37,8 @@ const addProjectProfile = (state, action) => {
 
     state.byId[id] = payload;
 
-    if (!state.byProjectId[projectId]) {
-        state.byProjectId[projectId] = [];
-    }
-
-    if (!state.byProfileId[profileId]) {
-        state.byProfileId[profileId] = [];
-    }
-
-    if (!state.byProjectId[projectId].includes(id)) {
-        state.byProjectId[projectId].push(id);
-    }
-
-    if (!state.byProfileId[profileId].includes(id)) {
-        state.byProfileId[profileId].push(id);
-    }
+    addProjectProfileId(state.byProjectId, {payload: {id, associationId: projectId}});
+    addProjectProfileId(state.byProfileId, {payload: {id, associationId: profileId}});
 };
 
 export const projectProfilesSlice = createSlice({
@@ -63,21 +70,9 @@ const getByProfileId = createSelector(
     (projectProfiles) => projectProfiles.byProfileId
 );
 
-const getProjectsByProfile = (profileId) => createSelector(
-    [getByProfileId],
-    (byProfileId) => byProfileId[profileId]
-);
-
-const getProfilesByProject = (projectId) => createSelector(
-    [getByProjectId],
-    (byProjectId) => byProjectId[projectId]
-);
-
 projectProfilesSlice.selectors = {
     ...projectProfilesSlice.selectors,
     getById,
     getByProjectId,
-    getByProfileId,
-    getProjectsByProfile,
-    getProfilesByProject
+    getByProfileId
 };

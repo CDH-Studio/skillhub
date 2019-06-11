@@ -31,7 +31,7 @@ const processProjectProfiles = () => (context) => {
 
     context.result = processedResult;
     return context;
-}
+};
 
 module.exports = {
     before: {
@@ -47,7 +47,7 @@ module.exports = {
     after: {
         all: [],
         find: [dehydrate(), processProjectProfiles()],
-        get: [],
+        get: [dehydrate(), processProjectProfiles()],
         create: [],
         update: [],
         patch: [],
