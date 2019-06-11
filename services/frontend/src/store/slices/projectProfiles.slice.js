@@ -1,5 +1,4 @@
 import {createSelector, createSlice} from "redux-starter-kit";
-import {createRequestSlices} from "store/utils";
 import mounts from "store/mountpoints";
 
 const initialState = {
@@ -46,8 +45,6 @@ export const projectProfilesSlice = createSlice({
         }
     }
 });
-
-export const projectProfilesRequestsSlice = createRequestSlices(mounts.projectProfilesRequests, ["fetchAll"]);
 
 /* Extra Selectors */
 
