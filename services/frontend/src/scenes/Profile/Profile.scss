@@ -7,7 +7,8 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: $default-spacing * 2;
+    padding: $default-spacing * 4;
+    padding-top: $default-spacing;
 
     .profile-content-title {
         color: $color-neutral-6;
@@ -16,70 +17,69 @@
     .profile-card:first-child {
         margin-top: $default-spacing;
     }
+}
 
-    .profile-card {
-        display: flex;
-        margin-bottom: $default-spacing * 2;
-        margin-top: $default-spacing;
-        padding: $default-spacing * 2;
+.profile-card {
+    display: flex;
+    margin-bottom: $default-spacing * 2;
+    margin-top: $default-spacing;
+    padding: $default-spacing * 2;
 
-        .profile-card-picture {
-            font-size: 30px;
-            height: 64px;
-            width: 64px;
-        }
-        
-        .profile-card-content {
-            margin: 0 $default-spacing*2;
-
-            .profile-card-title {
-                font-size: $font-size-title;
-                font-weight: bold;
-                margin-bottom: $default-spacing * 0.75;
-            }
-
-            .profile-card-subtitle {
-                color: $color-primary;
-                font-size: $font-size-subtitle;
-                margin-bottom: $default-spacing;
-                margin-top: $default-spacing * 0.75;
-            }
-
-            .profile-card-contact {
-                margin-top: $default-spacing * 0.5;
-                
-                .profile-card-text {
-                    align-items: center;
-                    color: $color-neutral-6;
-                    display: flex;
-                    font-size: $font-size-content;
-                    margin: $default-spacing*0.75 0;
-
-                    svg {
-                        font-size: $font-size-content;
-                        margin-right: $default-spacing * 0.25;
-                    }
-                }
-
-                .profile-card-text:last-child {
-                    margin-bottom: 0;
-                }
-            }
-        }
+    .profile-card-picture {
+        font-size: 30px;
+        height: 64px;
+        width: 64px;
     }
+    
+    .profile-card-content {
+        margin: 0 $default-spacing*2;
 
-    .profile-card-projects {
-        flex-direction: column;
-        padding: 0;
+        .profile-card-title {
+            font-size: $font-size-title;
+            font-weight: bold;
+            margin-bottom: $default-spacing * 0.75;
+        }
 
-        .profile-project-card {
-            margin: $default-spacing 0;
-            width: auto;
+        .profile-card-subtitle {
+            color: $color-primary;
+            font-size: $font-size-subtitle;
+            margin-bottom: $default-spacing;
+            margin-top: $default-spacing * 0.75;
+        }
 
-            &:first-child {
-                margin-top: 0;
+        .profile-card-contact {
+            margin-top: $default-spacing * 0.5;
+            
+            .profile-card-text {
+                align-items: center;
+                color: $color-neutral-6;
+                display: flex;
+                font-size: $font-size-content;
+                margin: $default-spacing*0.75 0;
+
+                svg {
+                    font-size: $font-size-content;
+                    margin-right: $default-spacing * 0.25;
+                }
+            }
+
+            .profile-card-text:last-child {
+                margin-bottom: 0;
             }
         }
     }
 }
 
+.profile-card-projects {
+    flex-direction: column;
+    padding: 0;
+
+    .profile-project-card {
+        margin: $default-spacing 0;
+        width: auto;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}

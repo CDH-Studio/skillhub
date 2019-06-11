@@ -13,5 +13,5 @@ export const userSlice = createSlice({
 
 userSlice.selectors.getUserId = createSelector(
     [userSlice.selectors.getUser],
-    (currentUser = "") => currentUser.id
+    (currentUser) => currentUser.id
 );

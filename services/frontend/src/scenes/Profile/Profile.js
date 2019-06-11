@@ -45,13 +45,16 @@ const addAvatarAcronym = (name) => (
     }, []).toUpperCase()
 );
 
-const Profile = ({projects = dummyData, userProfile}) => {
-    userProfile.nameAcronym = addAvatarAcronym(userProfile.name);
+const Profile = ({projects = dummyData, userProfile, profileLoadingState}) => {
+    if (userProfile) {
+        userProfile.nameAcronym = addAvatarAcronym(userProfile.name);
+    }
 
     return (
         <ProfileLayout
             projects={projects}
             userProfile={userProfile}
+            profileLoaded={profileLoadingState}
         />
     );
 };

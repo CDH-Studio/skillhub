@@ -63,35 +63,42 @@ const ProfileContent = ({...sectionProps}) => (
     </div>
 );
 
-const PersonalDetails = ({userProfile}) => (
-    <Paper className="profile-card">
-        <Avatar className="profile-card-picture">
-            {userProfile.nameAcronym}
-        </Avatar>
+const PersonalDetails = ({userProfile, profileLoaded}) => {
+    if (userProfile || profileLoaded) {
+        return (
+            <Paper className="profile-card">
+                <Avatar className="profile-card-picture">
+                    {userProfile.nameAcronym}
+                </Avatar>
 
-        <div className="profile-card-content">
-            <h2 className="profile-card-title">
-                {userProfile.name}
-            </h2>
+                <div className="profile-card-content">
+                    <h2 className="profile-card-title">
+                        {userProfile.name}
+                    </h2>
 
-            <h3 className="profile-card-subtitle">
-                {userProfile.primaryRole}
-            </h3>
+                    <h3 className="profile-card-subtitle">
+                        {userProfile.primaryRole}
+                    </h3>
 
-            <div className="profile-card-contact">
-                <p className="profile-card-text">
-                    <Email />
-                    {userProfile.contactEmail}
-                </p>
+                    <div className="profile-card-contact">
+                        <p className="profile-card-text">
+                            <Email />
+                            {userProfile.contactEmail}
+                        </p>
 
-                <p className="profile-card-text">
-                    <LocalPhone />
-                    {userProfile.phone}
-                </p>
-            </div>
-        </div>
-    </Paper>
-);
+                        <p className="profile-card-text">
+                            <LocalPhone />
+                            {userProfile.phone}
+                        </p>
+                    </div>
+                </div>
+            </Paper>
+        );
+    }
+    else {
+        return null;
+    }
+};
 
 const Skills = ({sectionName}) => (
     <>

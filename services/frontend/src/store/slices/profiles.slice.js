@@ -18,7 +18,7 @@ export const profilesSlice = createSlice({
 
 profilesSlice.selectors.getCurrentUserProfile = createSelector(
     [profilesSlice.selectors.getProfiles, userSlice.selectors.getUserId],
-    (profilesById = {}, currentUserId = "") => Profile.filterForCurrentUser(profilesById, currentUserId)
+    (profilesById, currentUserId) => Profile.filterForCurrentUser(profilesById, currentUserId)
 );
 
 export const profilesRequestsSlice = createRequestSlices(mounts.profilesRequests, ["fetchAll"]);

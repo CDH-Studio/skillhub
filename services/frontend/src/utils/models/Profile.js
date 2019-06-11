@@ -37,11 +37,12 @@ export default class Profile {
     }
 
     //Iterate over profiles checking for the current user's id, then return that user's entire profile.
-    static filterForCurrentUser(ProfilesById, currentUserId) {
-        return ProfilesById[
-            Object.keys(ProfilesById).filter((profileId) => (
-                ProfilesById[profileId].userId === currentUserId
+    static filterForCurrentUser(profilesById = {}, currentUserId = "") {
+        const filteredProfile = profilesById[
+            Object.keys(profilesById).filter((profileId) => (
+                profilesById[profileId].userId === currentUserId
             ))[0]
         ];
+        return (!filteredProfile ? null : filteredProfile);
     }
 }
