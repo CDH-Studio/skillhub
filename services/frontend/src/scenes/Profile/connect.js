@@ -1,13 +1,10 @@
 import {connect} from "react-redux";
-import {profilesSlice, profilesRequestsSlice} from "store/slices";
+import {crossSliceSelectors} from "store/";
+import {profilesRequestsSlice} from "store/slices";
 
-const mapStateToProps = (state) => {
-    const profileLoadState = profilesRequestsSlice.fetchAll.selectors.getState(state);
-
-    return {
-        userProfile: profilesSlice.selectors.getCurrentUserProfile(state),
-        profileLoadingState: profileLoadState.loading
-    };
-};
+const mapStateToProps = (state) => ({
+    userProfile: crossSliceSelectors.getUserProfile(state),
+    profileLoadingState: profilesRequestsSlice.fetchAll.selectors.getLoading(state)
+});
 
 export default connect(mapStateToProps, null);

@@ -38,23 +38,26 @@ const dummyData = [
     }
 ];
 
-//Split at each word, take the first letter and then convert them to uppercase.
-const addAvatarAcronym = (name) => (
-    name.split(" ").reduce((acc, word) => {
-        return acc = acc + word[0];
-    }, []).toUpperCase()
-);
+//Split at each word, take the first and last words and then grab their first letters.
+const generateAvatarInitials = (name) => {
+    const initials = name.trim().split(" ");
+    initials.splice(1, initials.length-2);
+
+    return initials.reduce((acc, word) => (
+        acc + word[0]
+    ), []).toUpperCase();
+};
 
 const Profile = ({projects = dummyData, userProfile, profileLoadingState}) => {
     if (userProfile) {
-        userProfile.nameAcronym = addAvatarAcronym(userProfile.name);
+        userProfile.avatarInitials = generateAvatarInitials(userProfile.name);
     }
 
     return (
         <ProfileLayout
             projects={projects}
             userProfile={userProfile}
-            profileLoaded={profileLoadingState}
+            profileLoading={profileLoadingState}
         />
     );
 };

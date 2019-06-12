@@ -4,7 +4,7 @@ const EMAIL_REGEX = /^\S+@\S+$/;
 export default class User {
     constructor({
         id = uuidv4(),
-        name = "",
+        name = ""
     }) {
         this.id = id;
         this.name = name;

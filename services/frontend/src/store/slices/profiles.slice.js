@@ -1,7 +1,5 @@
-import {createSlice, createSelector} from "redux-starter-kit";
+import {createSlice} from "redux-starter-kit";
 import {createRequestSlices} from "store/utils";
-import {userSlice} from "./user.slice";
-import {Profile} from "utils/models";
 import mounts from "store/mountpoints";
 
 export const profilesSlice = createSlice({
@@ -15,10 +13,5 @@ export const profilesSlice = createSlice({
         }
     }
 });
-
-profilesSlice.selectors.getCurrentUserProfile = createSelector(
-    [profilesSlice.selectors.getProfiles, userSlice.selectors.getUserId],
-    (profilesById, currentUserId) => Profile.filterForCurrentUser(profilesById, currentUserId)
-);
 
 export const profilesRequestsSlice = createRequestSlices(mounts.profilesRequests, ["fetchAll"]);
