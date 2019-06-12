@@ -1,5 +1,7 @@
 class Project {
-    static processProjectProfiles(projects = []) {
+    /* Extracts the projectProfiles from the associated profile objects
+     * and replaces the profiles as a top-level attribute of the project objects. */
+    static extractProjectProfiles(projects = []) {
         return projects.map((project) => {
             const processedProject = {...project};
             delete processedProject.profiles;

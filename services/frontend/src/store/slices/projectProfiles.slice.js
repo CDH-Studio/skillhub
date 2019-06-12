@@ -15,18 +15,18 @@ const initialState = {
 
 /* Adds a projectProfile ID to one of the byProjectId or byProfileId states. */
 const addProjectProfileId = (state, action) => {
-    // Expects an object like {associationId: "", id: ""} as payload
-    // where 'associationId' is one of either a project ID or a profile ID,
+    // Expects an object like {foreignId: "", id: ""} as payload
+    // where 'foreignId' is one of either a project ID or a profile ID,
     // and 'id' is a projectProfile ID
     const {payload} = action;
-    const {id, associationId} = payload;
+    const {id, foreignId} = payload;
 
-    if (!state[associationId]) {
-        state[associationId] = [];
+    if (!state[foreignId]) {
+        state[foreignId] = [];
     }
 
-    if (!state[associationId].includes(id)) {
-        state[associationId].push(id);
+    if (!state[foreignId].includes(id)) {
+        state[foreignId].push(id);
     }
 };
 
@@ -37,8 +37,8 @@ const addProjectProfile = (state, action) => {
 
     state.byId[id] = payload;
 
-    addProjectProfileId(state.byProfileId, {payload: {id, associationId: profileId}});
-    addProjectProfileId(state.byProjectId, {payload: {id, associationId: projectId}});
+    addProjectProfileId(state.byProfileId, {payload: {id, foreignId: profileId}});
+    addProjectProfileId(state.byProjectId, {payload: {id, foreignId: projectId}});
 };
 
 export const projectProfilesSlice = createSlice({

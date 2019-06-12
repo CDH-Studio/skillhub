@@ -1,7 +1,8 @@
 import uuidv4 from "uuid/v4";
+import {reduceToObject} from "utils/helperFunctions";
 
 export default class Skill {
-    constructor({id = uuidv4(), name = "", createdAt = new Date(), updatedAt = new Date()}) {
+    constructor({id = uuidv4(), name = "", createdAt = new Date(), updatedAt = new Date()} = {}) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
@@ -11,9 +12,6 @@ export default class Skill {
     /* Normalizes the list of skills that the API returns into a map of {ID -> skill},
      * for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(skills = []) {
-        return skills.reduce((acc, skill) => {
-            acc[skill.id] = skill;
-            return acc;
-        }, {});
+        return skills.reduce(reduceToObject(), {});
     }
 }

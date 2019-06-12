@@ -1,12 +1,13 @@
 import {createMatchSelector} from "connected-react-router";
 import {createSelector} from "redux-starter-kit";
-import ScreenUrls from "utils/screenUrls";
+import {reduceToObject} from "utils/helperFunctions";
 import {Profile, Project, ProjectProfile} from "utils/models";
+import ScreenUrls from "utils/screenUrls";
 import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice} from "./slices";
 
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
-    (projectsById, skillsById) => Project.mergeWithSkills(projectsById, skillsById)
+    Project.mergeWithSkills
 );
 
 const getProjectIdFromUrl = createSelector(
@@ -26,25 +27,22 @@ const getUserProfile = createSelector(
 
 const getProjectsWithSkillsById = createSelector(
     [getProjectsWithSkills],
-    (projectsWithSkills) => projectsWithSkills.reduce((acc, project) => {
-        acc[project.id] = project;
-        return acc;
-    }, {})
+    (projectsWithSkills) => projectsWithSkills.reduce(reduceToObject(), {})
 );
 
 const getProfileForUser = createSelector(
     [userSlice.selectors.getUserId, profilesSlice.selectors.getProfiles],
-    (userId, profiles) => Object.values(profiles).filter((profile) => profile.userId === userId)[0]
+    Profile.findByUserId
 );
 
 const getProjectsForUser = createSelector(
     [
         getProfileForUser,
-        projectProfilesSlice.selectors.getByProfileId,
+        getProjectsWithSkillsById,
         projectProfilesSlice.selectors.getById,
-        getProjectsWithSkillsById
+        projectProfilesSlice.selectors.getByProfileId
     ],
-    (profile, projectProfilesByProfileId, projectProfilesById, projectsById) => {
+    (profile, projectsById, projectProfilesById, projectProfilesByProfileId) => {
         if (!profile || !(profile.id in projectProfilesByProfileId)) {
             return [];
         }

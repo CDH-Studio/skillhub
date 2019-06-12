@@ -1,4 +1,5 @@
 import uuidv4 from "uuid/v4";
+import {reduceToObject} from "utils/helperFunctions";
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30 * 1000;  // Milliseconds for 30 days
 
@@ -29,7 +30,7 @@ export default class Project {
     /* Normalizes the list of projects that the API returns into a map of {ID -> project},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(projects = []) {
-        return projects.reduce((acc, project) => {
+        const processProject = (project) => {
             const processedProject = new Project(project);
 
             if (processedProject.skills) {
@@ -38,9 +39,10 @@ export default class Project {
                 processedProject.skills = [];
             }
 
-            acc[processedProject.id] = processedProject;
-            return acc;
-        }, {});
+            return processedProject;
+        };
+
+        return projects.reduce(reduceToObject(processProject), {});
     }
 
     static extractProjectProfiles(projects = []) {

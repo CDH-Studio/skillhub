@@ -1,4 +1,5 @@
 import uuidv4 from "uuid/v4";
+import {reduceToObject} from "utils/helperFunctions";
 
 export default class Profile {
     constructor({
@@ -12,7 +13,7 @@ export default class Profile {
         userId = uuidv4(),
         createdAt = new Date(),
         updatedAt = new Date(),
-    }) {
+    } = {}) {
         this.id = id;
         this.name = name;
         this.primaryRole = primaryRole;
@@ -28,15 +29,16 @@ export default class Profile {
     /* Normalizes the list of Profiles that the API returns into a map of {ID -> Profile},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(Profiles = []) {
-        return Profiles.reduce((acc, profile) => {
-            const processedProfile = new Profile(profile);
-
-            acc[processedProfile.id] = processedProfile;
-            return acc;
-        }, {});
+        const processProfile = (profile) => new Profile(profile);
+        return Profiles.reduce(reduceToObject(processProfile), {});
     }
 
-    //Iterate over profiles checking for the current user's id, then return that user's entire profile.
+    static findByUserId(userId, profiles = {}) {
+        const filteredProfiles = Object.values(profiles).filter((profile) => profile.userId === userId);
+        return (filteredProfiles.length > 0) ? filteredProfiles[0] : null;
+    }
+
+    // Iterate over profiles checking for the current user's id, then return that user's entire profile.
     static getUserProfile(profilesById, userId) {
         if (!profilesById || !userId) return null;
 
