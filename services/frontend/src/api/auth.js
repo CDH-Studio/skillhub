@@ -7,7 +7,7 @@ const authConfig = {
     storageKey: AUTH_STORAGE_KEY
 };
 
-const auth = (api) =>  {
+const auth = (api) => {
     const authService = feathers.authentication(authConfig);
     api.configure(authService);
 

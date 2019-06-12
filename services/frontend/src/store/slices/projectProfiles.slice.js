@@ -19,7 +19,7 @@ const addProjectProfileId = (state, action) => {
     // where 'associationId' is one of either a project ID or a profile ID,
     // and 'id' is a projectProfile ID
     const {payload} = action;
-    const {id, associationId}= payload;
+    const {id, associationId} = payload;
 
     if (!state[associationId]) {
         state[associationId] = [];
