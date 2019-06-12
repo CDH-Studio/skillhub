@@ -39,6 +39,26 @@ describe("normalizeApiResultsForRedux", () => {
     });
 });
 
+describe("extraProjectProfiles", () => {
+    const projects = [
+        new Project({projectProfiles: [{id: "1"}, {id: "2"}]}),
+        new Project({projectProfiles: [{id: "3"}]}),
+        new Project({projectProfiles: []}),
+        new Project()
+    ];
+
+    const projectProfiles = [{id: "1"}, {id: "2"}, {id: "3"}];
+
+    it("extracts the lists of each project's projectProfiles into one list of projectProfiles", () => {
+        expect(Project.extractProjectProfiles(projects)).toEqual(projectProfiles);
+    });
+
+    it("returns an empty array when given no input", () => {
+        expect(Project.extractProjectProfiles()).toEqual([]);
+        expect(Project.extractProjectProfiles([])).toEqual([]);
+    });
+});
+
 describe("isActive", () => {
     it("returns true when the project was last active less than 30 days ago", () => {
         expect(Project.isActive(new Project({lastActive: new Date()}))).toBe(true);

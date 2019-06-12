@@ -6,8 +6,8 @@ export default class Project {
     constructor({
         id = uuidv4(), name = "", description = "",
         lastActive = null, createdAt = new Date(), updatedAt = new Date(),
-        skills = []
-    }) {
+        skills = [], projectProfiles = []
+    } = {}) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -17,6 +17,9 @@ export default class Project {
 
         // Aggregate/derived (from store) properties
         this.skills = skills;
+
+        // Temporary related properties; might exist from API results, but aren't used past initial processing
+        this.projectProfiles = projectProfiles;
     }
 
     static get FILTER_ALL() {return "all";}
