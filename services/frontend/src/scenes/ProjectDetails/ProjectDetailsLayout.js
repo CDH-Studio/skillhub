@@ -62,7 +62,7 @@ const ProjectContent = ({...sectionProps}) => (
     </div>
 );
 
-const ProjectInfo = ({sectionName, project}) => {
+const ProjectInfo = ({project}) => {
     return (
         <Card className="project-details-card">
             <CardContent className="project-info-card-content">
@@ -78,7 +78,7 @@ const ProjectInfo = ({sectionName, project}) => {
     );
 };
 
-const Contributors = ({sectionName, project}) => (
+const Contributors = ({sectionName}) => (
     <>
         <h2>{sectionName}</h2>
         <Paper className="project-details-card">
@@ -129,7 +129,7 @@ const Contributors = ({sectionName, project}) => (
     </>
 );
 
-const UsedSkills = ({sectionName, project}) => (
+const UsedSkills = ({sectionName}) => (
     <>
         <h2>{sectionName}</h2>
         <Paper className="project-details-card">
