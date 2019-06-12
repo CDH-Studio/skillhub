@@ -1,12 +1,13 @@
 import React, {useMemo} from "react";
 import classNames from "classnames";
+import {Link} from "react-router-dom";
 import {Card, CardContent, IconButton} from "@material-ui/core";
 import {ChevronRight} from "@material-ui/icons";
 import "./ProjectCard.scss";
 
 const DISPLAY_SKILL_COUNT = 3;
 
-const ProjectCard = ({className, name, description, skills, isActive}) => {
+const ProjectCard = ({className, name, description, skills, isActive, id}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     const skillBadges = useMemo(() => skills.slice(0, DISPLAY_SKILL_COUNT).map((name) => (
         <SkillBadge
@@ -36,11 +37,12 @@ const ProjectCard = ({className, name, description, skills, isActive}) => {
                         </div>
                     )}
                 </div>
-
                 <div className="project-card-nav-section">
-                    <IconButton>
-                        <ChevronRight className="project-card-nav" />
-                    </IconButton>
+                    <Link to={"/app/projects/"+id}>
+                        <IconButton>
+                            <ChevronRight className="project-card-nav" />
+                        </IconButton>
+                    </Link>
                 </div>
             </CardContent>
         </Card>
