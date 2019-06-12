@@ -12,4 +12,31 @@ export default class ProjectProfile {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    static mapProfileIdToProjectProfiles(profileId, byId, byProfileId) {
+        return byProfileId[profileId].map((id) => byId[id]);
+    }
+
+    static mapProjectIdToProjectProfiles(projectId, byId, byProjectId) {
+        return byProjectId[projectId].map((id) => byId[id]);
+    }
+
+    static mapProjectProfilesToProfiles(projectProfiles, profilesById) {
+        return mapProjectProfilesToModel("profileId", projectProfiles, profilesById);
+    }
+
+    static mapProjectProfilesToProjects(projectProfiles, projectsById) {
+        return mapProjectProfilesToModel("projectId", projectProfiles, projectsById);
+    }
 }
+
+const mapProjectProfilesToModel = (foreignKey, projectProfiles, associatedModelsById) => (
+    projectProfiles.reduce((acc, {[foreignKey]: foreignId}) => {
+        if (foreignId in associatedModelsById) {
+            acc = [...acc, associatedModelsById[foreignId]];
+        }
+
+        return acc;
+    }, [])
+);
+

@@ -40,6 +40,10 @@ export default class Project {
         }, {});
     }
 
+    static extractProjectProfiles(projects = []) {
+        return projects.reduce((acc, project) => [...acc, ...project.projectProfiles], []);
+    }
+
     /* An active project is (currently) defined as having been active within the last 30 days. */
     static isActive(project = {}) {
         if (!project) {

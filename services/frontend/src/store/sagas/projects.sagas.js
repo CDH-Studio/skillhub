@@ -6,7 +6,7 @@ import {Project} from "utils/models";
 function* projectsFetchAll() {
     const result = yield call(api.service("projects").find);
 
-    const projectProfiles = result.reduce((acc, project) => [...acc, ...project.projectProfiles], []);
+    const projectProfiles = Project.extractProjectProfiles(result);
     const normalizedProjects = Project.normalizeApiResultsForRedux(result);
 
     yield put(projectsSlice.actions.setProjects(normalizedProjects));

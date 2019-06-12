@@ -1,8 +1,8 @@
-import {createSelector} from "redux-starter-kit";
-import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice} from "./slices";
-import {Profile, Project} from "utils/models";
 import {createMatchSelector} from "connected-react-router";
+import {createSelector} from "redux-starter-kit";
 import ScreenUrls from "utils/screenUrls";
+import {Profile, Project, ProjectProfile} from "utils/models";
+import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice} from "./slices";
 
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
@@ -44,22 +44,16 @@ const getProjectsForUser = createSelector(
         projectProfilesSlice.selectors.getById,
         getProjectsWithSkillsById
     ],
-    (profile, projectProfilesByProfileId, projectProfilesById, projects) => {
-        if (profile && profile.id in projectProfilesByProfileId) {
-            const projectProfiles = projectProfilesByProfileId[profile.id].map((id) => projectProfilesById[id]);
-
-            const userProjects = projectProfiles.reduce((acc, {projectId}) => {
-                if (projectId in projects) {
-                    acc = [...acc, projects[projectId]];
-                }
-
-                return acc;
-            }, []);
-
-            return userProjects;
-        } else {
+    (profile, projectProfilesByProfileId, projectProfilesById, projectsById) => {
+        if (!profile || !(profile.id in projectProfilesByProfileId)) {
             return [];
         }
+
+        const projectProfiles = ProjectProfile.mapProfileIdToProjectProfiles(
+            profile.id, projectProfilesById, projectProfilesByProfileId
+        );
+
+        return ProjectProfile.mapProjectProfilesToProjects(projectProfiles, projectsById);
     }
 );
 

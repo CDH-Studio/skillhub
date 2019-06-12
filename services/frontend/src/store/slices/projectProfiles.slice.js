@@ -5,12 +5,12 @@ const initialState = {
     // byId stores the whole ProjectProfile object, keyed by ID
     // i.e. {[id]: ProjectProfile}
     byId: {},
-    // byProjectId stores references (lists of IDs) of ProjectProfile objects, keyed by their projectId
-    // i.e. {[projectId]: [ProjectProfile.id]}
-    byProjectId: {},
     // byProfileId stores references (lists of IDs) of ProjectProfile objects, keyed by their profileId
     // i.e. {[profileId]: [ProjectProfile.id]}
-    byProfileId: {}
+    byProfileId: {},
+    // byProjectId stores references (lists of IDs) of ProjectProfile objects, keyed by their projectId
+    // i.e. {[projectId]: [ProjectProfile.id]}
+    byProjectId: {}
 };
 
 /* Adds a projectProfile ID to one of the byProjectId or byProfileId states. */
@@ -37,8 +37,8 @@ const addProjectProfile = (state, action) => {
 
     state.byId[id] = payload;
 
-    addProjectProfileId(state.byProjectId, {payload: {id, associationId: projectId}});
     addProjectProfileId(state.byProfileId, {payload: {id, associationId: profileId}});
+    addProjectProfileId(state.byProjectId, {payload: {id, associationId: projectId}});
 };
 
 export const projectProfilesSlice = createSlice({
@@ -60,19 +60,19 @@ const getById = createSelector(
     (projectProfiles) => projectProfiles.byId
 );
 
-const getByProjectId = createSelector(
-    [projectProfilesSlice.selectors.getProjectProfiles],
-    (projectProfiles) => projectProfiles.byProjectId
-);
-
 const getByProfileId = createSelector(
     [projectProfilesSlice.selectors.getProjectProfiles],
     (projectProfiles) => projectProfiles.byProfileId
 );
 
+const getByProjectId = createSelector(
+    [projectProfilesSlice.selectors.getProjectProfiles],
+    (projectProfiles) => projectProfiles.byProjectId
+);
+
 projectProfilesSlice.selectors = {
     ...projectProfilesSlice.selectors,
     getById,
-    getByProjectId,
-    getByProfileId
+    getByProfileId,
+    getByProjectId
 };
