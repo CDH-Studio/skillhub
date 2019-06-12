@@ -1,5 +1,6 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const {Project} = require("utils/models");
 
 const includeAssociations = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
@@ -15,21 +16,7 @@ const includeAssociations = () => (context) => {
 };
 
 const processProjectProfiles = () => (context) => {
-    const {result} = context;
-
-    const processedResult = result.map((project) => {
-        const processedProject = {...project};
-        delete processedProject.profiles;
-
-        processedProject.projectProfiles = project.profiles.reduce((acc, {projectProfiles}) => {
-            acc = [...acc, projectProfiles];
-            return acc;
-        }, []);
-
-        return processedProject;
-    });
-
-    context.result = processedResult;
+    context.result = Project.processProjectProfiles(context.result);
     return context;
 };
 
