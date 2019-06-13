@@ -38,37 +38,3 @@ describe("getUserProfile", () => {
         expect(Profile.getUserProfile(allProfiles, undefined)).toEqual(null);
     });
 });
-
-describe("findByUserId", () => {
-    const userId = "010";
-
-    const userProfile = new Profile({userId});
-
-    const profilesWithout = {
-        1: new Profile({id: 1, userId: "no"}),
-        2: new Profile({id: 2, userId: "also no"})
-    };
-
-    const profiles = {
-        [userProfile.id]: userProfile,
-        ...profilesWithout
-    };
-
-    it("can find the profile from the given user ID", () => {
-        expect(Profile.findByUserId(userId, profiles)).toEqual(userProfile);
-    });
-
-    it("returns null when no profile could be found for the user", () => {
-        expect(Profile.findByUserId(userId, profilesWithout)).toBe(null);
-    });
-
-    it("returns null when no user ID is provided", () => {
-        expect(Profile.findByUserId(null, profilesWithout)).toBe(null);
-        expect(Profile.findByUserId(undefined, profilesWithout)).toBe(null);
-    });
-
-    it("returns null when no profiles are provided", () => {
-        expect(Profile.findByUserId(userId, null)).toBe(null);
-        expect(Profile.findByUserId(userId)).toBe(null);
-    });
-});

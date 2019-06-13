@@ -15,7 +15,7 @@ export const initialState = {
 
 /* Adds a projectProfile ID to one of the byProjectId or byProfileId states. */
 const addProjectProfileId = (state, action) => {
-    // Expects an object like {foreignId: "", id: ""} as payload
+    // Expects an object like {foreignId: "", id: ""} as payload,
     // where 'foreignId' is one of either a project ID or a profile ID,
     // and 'id' is a projectProfile ID
     const {payload} = action;

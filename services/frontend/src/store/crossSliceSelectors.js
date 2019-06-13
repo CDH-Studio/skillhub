@@ -10,6 +10,11 @@ const getProjectsWithSkills = createSelector(
     Project.mergeWithSkills
 );
 
+const getProjectsWithSkillsById = createSelector(
+    [getProjectsWithSkills],
+    (projectsWithSkills) => projectsWithSkills.reduce(arrayToObject(), {})
+);
+
 const getProjectIdFromUrl = createSelector(
     [createMatchSelector(ScreenUrls.PROJECT_DETAILS)],
     (match) => match.params.id
@@ -22,22 +27,12 @@ const getProjectFromUrlId = createSelector(
 
 const getUserProfile = createSelector(
     [profilesSlice.selectors.getProfiles, userSlice.selectors.getUserId],
-    (profilesById, userId) => Profile.getUserProfile(profilesById, userId)
-);
-
-const getProjectsWithSkillsById = createSelector(
-    [getProjectsWithSkills],
-    (projectsWithSkills) => projectsWithSkills.reduce(arrayToObject(), {})
-);
-
-const getProfileForUser = createSelector(
-    [userSlice.selectors.getUserId, profilesSlice.selectors.getProfiles],
-    Profile.findByUserId
+    Profile.getUserProfile
 );
 
 const getProjectsForUser = createSelector(
     [
-        getProfileForUser,
+        getUserProfile,
         getProjectsWithSkillsById,
         projectProfilesSlice.selectors.getById,
         projectProfilesSlice.selectors.getByProfileId
@@ -47,9 +42,9 @@ const getProjectsForUser = createSelector(
 
 export const crossSliceSelectors = {
     getProjectsWithSkills,
+    getProjectsWithSkillsById,
     getProjectIdFromUrl,
     getProjectFromUrlId,
     getUserProfile,
-    getProfileForUser,
     getProjectsForUser
 };

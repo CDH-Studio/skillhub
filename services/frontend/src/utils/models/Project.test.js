@@ -39,7 +39,7 @@ describe("normalizeApiResultsForRedux", () => {
     });
 });
 
-describe("extraProjectProfiles", () => {
+describe("extractProjectProfiles", () => {
     const projects = [
         new Project({projectProfiles: [{id: "1"}, {id: "2"}]}),
         new Project({projectProfiles: [{id: "3"}]}),

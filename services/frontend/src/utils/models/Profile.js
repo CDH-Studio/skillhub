@@ -33,24 +33,14 @@ export default class Profile {
         return profiles.reduce(arrayToObject(processProfile), {});
     }
 
-    static findByUserId(userId, profiles = {}) {
-        if (profiles) {
-            const filteredProfiles = Object.values(profiles).filter((profile) => profile.userId === userId);
-            return (filteredProfiles.length > 0) ? filteredProfiles[0] : null;
-        } else {
-            return null;
-        }
-    }
-
-    // Iterate over profiles checking for the current user's id, then return that user's entire profile.
+    /* Iterate over profiles checking for the current user's id, then return that user's entire profile. */
     static getUserProfile(profilesById, userId) {
         if (!profilesById || !userId) return null;
 
-        const foundProfileIndex = Object.keys(profilesById).filter((profileId) =>
+        const foundProfileIndex = Object.keys(profilesById).filter((profileId) => (
             profilesById[profileId].userId === userId
-        ).join();
+        )).join();
 
         return foundProfileIndex ? profilesById[foundProfileIndex] : null;
-
     }
 }
