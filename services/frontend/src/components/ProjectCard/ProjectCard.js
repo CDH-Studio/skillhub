@@ -38,7 +38,7 @@ const ProjectCard = ({className, id, name, description, skills, isActive}) => {
                     )}
                 </div>
                 <div className="project-card-nav-section">
-                    <Link to={`/app/projects/"${id}`}>
+                    <Link to={`/app/projects/${id}`}>
                         <IconButton>
                             <ChevronRight className="project-card-nav" />
                         </IconButton>
