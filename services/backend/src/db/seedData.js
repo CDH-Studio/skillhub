@@ -244,7 +244,7 @@ const PROJECT_PROFILES = [
     {
         id: "0f8c32b3-1da2-4215-bf13-f4f298017fd4",
         projectId: PROJECT_IDS_BY_NAME["Skillhub"],
-        profileId: PROFILE_IDS_BY_NAME["Test Bro"],
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
         role: "The Test Bro",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -276,7 +276,7 @@ const PROJECT_PROFILES = [
     {
         id: "24dcae33-9848-4ab8-87c6-43886638df4d",
         projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
-        profileId: PROFILE_IDS_BY_NAME["Test Bro"],
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
         role: "The Test Bro",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -292,7 +292,7 @@ const PROJECT_PROFILES = [
     {
         id: "f36aa07b-e592-4648-9922-7ad8ae9ca829",
         projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
-        profileId: PROFILE_IDS_BY_NAME["Test Bro"],
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
         role: "The Test Bro",
         createdAt: new Date(),
         updatedAt: new Date()

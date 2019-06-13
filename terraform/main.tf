@@ -67,6 +67,7 @@ module "cluster" {
     cluster_name = "${var.__project_name}-cluster"
     initial_node_count = "${var.cluster_initial_node_count}"
     node_machine_type = "${var.cluster_machine_type}"
+    node_disk_size = "${var.cluster_disk_size}"
     preemptible_nodes = "${var.cluster_preemptible}"
 
     network_link = "${module.networking.network_link}"

@@ -8,6 +8,8 @@ resource "google_sourcerepo_repository" "primary" {
 
 resource "google_cloudbuild_trigger" "primary" {
     depends_on = ["google_sourcerepo_repository.primary"]
+    description = "Push to any branch"
+    filename = "cloudbuild.yaml"
     project = "${var.gcp_project}"
 
     trigger_template {
@@ -16,5 +18,8 @@ resource "google_cloudbuild_trigger" "primary" {
         repo_name = "${google_sourcerepo_repository.primary.name}"
     }
 
-    filename = "cloudbuild.yaml"
+    lifecycle {
+        # 'substitutions' includes the Slack webhook that is added manually (since it's a secret)
+        ignore_changes = ["substitutions"]
+    }
 }
