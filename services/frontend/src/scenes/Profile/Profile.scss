@@ -7,7 +7,8 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: $default-spacing * 2;
+    padding: $default-spacing * 4;
+    padding-top: $default-spacing;
 
     .profile-content-title {
         color: $color-neutral-6;
@@ -16,12 +17,21 @@
     .profile-card:first-child {
         margin-top: $default-spacing;
     }
+}
+
+.profile-card {
+    display: flex;
+    margin-bottom: $default-spacing * 2;
+    margin-top: $default-spacing;
+    padding: $default-spacing * 2;
+}
+
+#profile-personal-details{
+    display: flex;
+    justify-content: center;
 
     .profile-card {
-        display: flex;
-        margin-bottom: $default-spacing * 2;
-        margin-top: $default-spacing;
-        padding: $default-spacing * 2;
+        flex: 1;
 
         .profile-card-picture {
             font-size: 30px;
@@ -67,7 +77,9 @@
             }
         }
     }
+}
 
+#profile-projects {
     .profile-card-projects {
         flex-direction: column;
         padding: 0;
@@ -82,4 +94,3 @@
         }
     }
 }
-

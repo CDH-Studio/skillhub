@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, Paper} from "@material-ui/core";
+import {Avatar, CircularProgress, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
 import {Project} from "utils/models";
@@ -22,20 +22,7 @@ const sections = [
     }
 ];
 
-const renderSectionComponent = (sectionName, sectionProps) => {
-    switch (sectionName) {
-        case "Personal Details":
-            return <PersonalDetails {...sectionProps} />;
-        case "Skills":
-            return <Skills sectionName={sectionName} {...sectionProps} />;
-        case "Projects":
-            return <Projects sectionName={sectionName} {...sectionProps} />;
-        default:
-            return null;
-    }
-};
-
-const ProfileLayout = ({projects}) => {
+const ProfileLayout = ({projects, userProfile, profileLoading}) => {
     return (
         <ScrollContainer>
             <NavSidebar
@@ -45,6 +32,8 @@ const ProfileLayout = ({projects}) => {
 
             <ProfileContent
                 projects={projects}
+                userProfile={userProfile}
+                profileLoading={profileLoading}
             />
         </ScrollContainer>
     );
@@ -62,35 +51,58 @@ const ProfileContent = ({...sectionProps}) => (
     </div>
 );
 
-const PersonalDetails = () => (
-    <Paper className="profile-card">
-        <Avatar className="profile-card-picture">
-            DS
-        </Avatar>
+const renderSectionComponent = (sectionName, sectionProps) => {
+    switch (sectionName) {
+        case "Personal Details":
+            return <PersonalDetails {...sectionProps} />;
+        case "Skills":
+            return <Skills sectionName={sectionName} {...sectionProps} />;
+        case "Projects":
+            return <Projects sectionName={sectionName} {...sectionProps} />;
+        default:
+            return null;
+    }
+};
 
-        <div className="profile-card-content">
-            <h2 className="profile-card-title">
-                Devin Sit
-            </h2>
+const PersonalDetails = ({userProfile, profileLoading}) => {
+    //if there is no userprofile or the profile is currently loading
+    if (!userProfile || profileLoading) {
+        return (
+            <CircularProgress className="loading-button-indicator" />
+        );
+    }
+    else {
+        return (
+            <Paper className="profile-card">
+                <Avatar className="profile-card-picture">
+                    {userProfile.avatarInitials}
+                </Avatar>
 
-            <h3 className="profile-card-subtitle">
-                Software Developer
-            </h3>
+                <div className="profile-card-content">
+                    <h2 className="profile-card-title">
+                        {userProfile.name}
+                    </h2>
 
-            <div className="profile-card-contact">
-                <p className="profile-card-text">
-                    <Email />
-                    Devin.Sit@Canada.ca
-                </p>
+                    <h3 className="profile-card-subtitle">
+                        {userProfile.primaryRole}
+                    </h3>
 
-                <p className="profile-card-text">
-                    <LocalPhone />
-                    123-456-7890
-                </p>
-            </div>
-        </div>
-    </Paper>
-);
+                    <div className="profile-card-contact">
+                        <p className="profile-card-text">
+                            <Email />
+                            {userProfile.contactEmail}
+                        </p>
+
+                        <p className="profile-card-text">
+                            <LocalPhone />
+                            {userProfile.phone}
+                        </p>
+                    </div>
+                </div>
+            </Paper>
+        );
+    }
+};
 
 const Skills = ({sectionName}) => (
     <>

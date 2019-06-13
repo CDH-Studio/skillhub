@@ -35,4 +35,16 @@ export default class Profile {
             return acc;
         }, {});
     }
+
+    //Iterate over profiles checking for the current user's id, then return that user's entire profile.
+    static getUserProfile(profilesById, userId) {
+        if (!profilesById || !userId) return null;
+
+        const foundProfileIndex = Object.keys(profilesById).filter((profileId) =>
+            profilesById[profileId].userId === userId
+        ).join();
+
+        return foundProfileIndex ? profilesById[foundProfileIndex] : null;
+
+    }
 }
