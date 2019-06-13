@@ -26,16 +26,20 @@ export default class Profile {
         this.updatedAt = updatedAt;
     }
 
-    /* Normalizes the list of Profiles that the API returns into a map of {ID -> Profile},
+    /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
-    static normalizeApiResultsForRedux(Profiles = []) {
+    static normalizeApiResultsForRedux(profiles = []) {
         const processProfile = (profile) => new Profile(profile);
-        return Profiles.reduce(arrayToObject(processProfile), {});
+        return profiles.reduce(arrayToObject(processProfile), {});
     }
 
     static findByUserId(userId, profiles = {}) {
-        const filteredProfiles = Object.values(profiles).filter((profile) => profile.userId === userId);
-        return (filteredProfiles.length > 0) ? filteredProfiles[0] : null;
+        if (profiles) {
+            const filteredProfiles = Object.values(profiles).filter((profile) => profile.userId === userId);
+            return (filteredProfiles.length > 0) ? filteredProfiles[0] : null;
+        } else {
+            return null;
+        }
     }
 
     // Iterate over profiles checking for the current user's id, then return that user's entire profile.
