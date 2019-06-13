@@ -14,19 +14,19 @@ export default class ProjectProfile {
     }
 
     static mapProfileIdToProjectProfiles(profileId, byId, byProfileId) {
-        return byProfileId[profileId].map((id) => byId[id]);
+        return mapForeignIdToProjectProfiles(profileId, byId, byProfileId);
     }
 
     static mapProjectIdToProjectProfiles(projectId, byId, byProjectId) {
-        return byProjectId[projectId].map((id) => byId[id]);
+        return mapForeignIdToProjectProfiles(projectId, byId, byProjectId);
     }
 
     static mapProjectProfilesToProfiles(projectProfiles, profilesById) {
-        return mapProjectProfilesToModel("profileId", projectProfiles, profilesById);
+        return mapProjectProfilesToForeignModel("profileId", projectProfiles, profilesById);
     }
 
     static mapProjectProfilesToProjects(projectProfiles, projectsById) {
-        return mapProjectProfilesToModel("projectId", projectProfiles, projectsById);
+        return mapProjectProfilesToForeignModel("projectId", projectProfiles, projectsById);
     }
 
     static mapProfileToProjects(
@@ -44,13 +44,24 @@ export default class ProjectProfile {
     }
 }
 
-const mapProjectProfilesToModel = (foreignKey, projectProfiles, associatedModelsById) => (
-    projectProfiles.reduce((acc, {[foreignKey]: foreignId}) => {
-        if (foreignId in associatedModelsById) {
-            acc = [...acc, associatedModelsById[foreignId]];
+const mapForeignIdToProjectProfiles = (foreignId, byId, byForeignId) => {
+    if (foreignId in byForeignId) {
+        return byForeignId[foreignId].map((id) => byId[id]);
+    }
+
+    return [];
+};
+
+const mapProjectProfilesToForeignModel = (foreignKey, projectProfiles, foreignModelsById) => {
+    const addedIds = {};
+
+    return projectProfiles.reduce((acc, {[foreignKey]: foreignId}) => {
+        if (foreignId in foreignModelsById && !(foreignId in addedIds)) {
+            acc = [...acc, foreignModelsById[foreignId]];
+            addedIds[foreignId] = true;
         }
 
         return acc;
-    }, [])
-);
+    }, []);
+};
 
