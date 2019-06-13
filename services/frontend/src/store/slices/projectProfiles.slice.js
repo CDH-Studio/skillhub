@@ -1,7 +1,7 @@
 import {createSelector, createSlice} from "redux-starter-kit";
 import mounts from "store/mountpoints";
 
-const initialState = {
+export const initialState = {
     // byId stores the whole ProjectProfile object, keyed by ID
     // i.e. {[id]: ProjectProfile}
     byId: {},
