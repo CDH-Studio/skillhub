@@ -40,7 +40,7 @@ function* authenticateAppAccess({payload}) {
 
 function* redirectAuthenticatedUserToApp({payload}) {
     if (tryingToAccessAuth(payload) && api.isAuthenticated()) {
-        yield put(replace(ScreenUrls.APP_ROUTER));
+        yield put(replace(ScreenUrls.PROFILE));
     }
 }
 

@@ -1,8 +1,8 @@
 import {createSelector} from "redux-starter-kit";
-import {projectsSlice, skillsSlice} from "./slices";
+import {profilesSlice, projectsSlice, skillsSlice, userSlice} from "./slices";
+import {Profile, Project} from "utils/models";
 import {createMatchSelector} from "connected-react-router";
 import ScreenUrls from "utils/screenUrls";
-import {Project} from "utils/models";
 
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
@@ -19,8 +19,14 @@ const getProjectFromUrlId = createSelector(
     (projectsById, projectId) => projectsById[projectId]
 );
 
+const getUserProfile = createSelector(
+    [profilesSlice.selectors.getProfiles, userSlice.selectors.getUserId],
+    (profilesById, userId) => Profile.getUserProfile(profilesById, userId)
+);
+
 export const crossSliceSelectors = {
     getProjectsWithSkills,
     getProjectIdFromUrl,
-    getProjectFromUrlId
+    getProjectFromUrlId,
+    getUserProfile
 };

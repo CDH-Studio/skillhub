@@ -1,5 +1,6 @@
 import React from "react";
 import ProfileLayout from "./ProfileLayout";
+import connect from "./connect";
 
 const lastMonth = (() => {
     const date = new Date();
@@ -37,10 +38,28 @@ const dummyData = [
     }
 ];
 
-const Profile = ({projects = dummyData}) => (
-    <ProfileLayout
-        projects={projects}
-    />
-);
+//Split at each word, take the first and last words and then grab their first letters.
+const generateAvatarInitials = (name) => {
+    const initials = name.trim().split(" ");
+    initials.splice(1, initials.length-2);
 
-export default Profile;
+    return initials.reduce((acc, word) => (
+        acc + word[0]
+    ), []).toUpperCase();
+};
+
+const Profile = ({projects = dummyData, userProfile, profileLoadingState}) => {
+    if (userProfile) {
+        userProfile.avatarInitials = generateAvatarInitials(userProfile.name);
+    }
+
+    return (
+        <ProfileLayout
+            projects={projects}
+            userProfile={userProfile}
+            profileLoading={profileLoadingState}
+        />
+    );
+};
+
+export default connect(Profile);

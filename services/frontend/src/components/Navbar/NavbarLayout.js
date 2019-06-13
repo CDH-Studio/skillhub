@@ -9,9 +9,9 @@ import "./Navbar.scss";
 const NavbarLayout = ({activeTab, onLogout}) => (
     <div className="navbar">
         <div className="navbar-brand">
-            <Link to={ScreenUrls.PROFILE}>
+            <IconButton className="logo-link" to={ScreenUrls.PROFILE} component={Link}>
                 <Logo className="logo-icon" />
-            </Link>
+            </IconButton>
         </div>
 
         <NavbarTabs activeTab={activeTab} />
