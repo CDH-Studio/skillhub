@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import {Avatar, CircularProgress, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
@@ -73,7 +74,7 @@ const PersonalDetails = ({profile, isLoading}) => {
     }
     else {
         return (
-            <Paper className="profile-card">
+            <Paper className="profile-card profile-card-personal-details">
                 <Avatar className="profile-card-picture">
                     {profile.avatarInitials}
                 </Avatar>
@@ -104,42 +105,53 @@ const PersonalDetails = ({profile, isLoading}) => {
     }
 };
 
-const Skills = ({sectionName}) => (
-    <>
-        <h2>{sectionName}</h2>
-        <Paper className="profile-card">
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            <br /><br />
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-        </Paper>
-    </>
+const SkillBadge = ({name, isHighlySkilled = false}) => (
+    <TextBadge
+        className="skill-badge"
+        text={name}
+        isHighlighted={isHighlySkilled}
+    />
 );
+
+const TextBadge = ({className, text, isHighlighted = false}) => (
+    <div
+        className={classNames(
+            "text-badge",
+            {"text-badge--highlighted": isHighlighted},
+            className
+        )}
+    >
+        {text}
+    </div>
+);
+
+const Skills = ({sectionName, userProfile, profileLoading}) => {
+    if (!userProfile || profileLoading) {
+        return (
+            <CircularProgress className="loading-button-indicator" />
+        );
+    }
+    else {
+        const skills = userProfile.skills;
+
+        const skillBadges = skills.map((skill) => (
+            <SkillBadge
+                key={skill.name}
+                name={skill.name}
+                isHighlySkilled={skill.isHighlySkilled}
+            />
+        ));
+
+        return (
+            <>
+                <h2>{sectionName}</h2>
+                <Paper className="profile-card profile-card-skills">
+                    {skillBadges}
+                </Paper>
+            </>
+        );
+    }
+};
 
 const Projects = ({sectionName, projects}) => (
     <>
