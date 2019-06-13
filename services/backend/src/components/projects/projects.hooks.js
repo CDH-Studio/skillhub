@@ -15,8 +15,8 @@ const includeAssociations = () => (context) => {
     return context;
 };
 
-const extractProjectProfiles = () => (context) => {
-    context.result = Project.extractProjectProfiles(context.result);
+const processProjectProfiles = () => (context) => {
+    context.result = Project.processProjectProfiles(context.result);
     return context;
 };
 
@@ -33,8 +33,8 @@ module.exports = {
 
     after: {
         all: [],
-        find: [dehydrate(), extractProjectProfiles()],
-        get: [dehydrate(), extractProjectProfiles()],
+        find: [dehydrate(), processProjectProfiles()],
+        get: [dehydrate(), processProjectProfiles()],
         create: [],
         update: [],
         patch: [],

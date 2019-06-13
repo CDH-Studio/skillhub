@@ -42,17 +42,7 @@ const getProjectsForUser = createSelector(
         projectProfilesSlice.selectors.getById,
         projectProfilesSlice.selectors.getByProfileId
     ],
-    (profile, projectsById, projectProfilesById, projectProfilesByProfileId) => {
-        if (!profile || !(profile.id in projectProfilesByProfileId)) {
-            return [];
-        }
-
-        const projectProfiles = ProjectProfile.mapProfileIdToProjectProfiles(
-            profile.id, projectProfilesById, projectProfilesByProfileId
-        );
-
-        return ProjectProfile.mapProjectProfilesToProjects(projectProfiles, projectsById);
-    }
+    ProjectProfile.mapProfileToProjects
 );
 
 export const crossSliceSelectors = {

@@ -28,6 +28,20 @@ export default class ProjectProfile {
     static mapProjectProfilesToProjects(projectProfiles, projectsById) {
         return mapProjectProfilesToModel("projectId", projectProfiles, projectsById);
     }
+
+    static mapProfileToProjects(
+        profile = {}, projectsById = {}, projectProfilesById = {}, projectProfilesByProfileId = {}
+    ) {
+        if (!profile || !(profile.id in projectProfilesByProfileId)) {
+            return [];
+        }
+
+        const projectProfiles = ProjectProfile.mapProfileIdToProjectProfiles(
+            profile.id, projectProfilesById, projectProfilesByProfileId
+        );
+
+        return ProjectProfile.mapProjectProfilesToProjects(projectProfiles, projectsById);
+    }
 }
 
 const mapProjectProfilesToModel = (foreignKey, projectProfiles, associatedModelsById) => (
