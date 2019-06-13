@@ -1,10 +1,6 @@
 @import "styles/_colors.scss";
 @import "styles/_dimens.scss";
 
-.project-page .scroll-nav .list-item:last-child {
-    margin-top: $default-spacing*1.5;
-}
-
 .sidebar {
     align-items: center;
     display: flex;

@@ -7,7 +7,7 @@ import "./ProjectCard.scss";
 
 const DISPLAY_SKILL_COUNT = 3;
 
-const ProjectCard = ({className, name, description, skills, isActive, id}) => {
+const ProjectCard = ({className, id, name, description, skills, isActive}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     const skillBadges = useMemo(() => skills.slice(0, DISPLAY_SKILL_COUNT).map((name) => (
         <SkillBadge
@@ -38,7 +38,7 @@ const ProjectCard = ({className, name, description, skills, isActive, id}) => {
                     )}
                 </div>
                 <div className="project-card-nav-section">
-                    <Link to={"/app/projects/"+id}>
+                    <Link to={`/app/projects/"${id}`}>
                         <IconButton>
                             <ChevronRight className="project-card-nav" />
                         </IconButton>
