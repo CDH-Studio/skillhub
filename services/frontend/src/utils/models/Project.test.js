@@ -117,8 +117,8 @@ describe("mergeWithSkills", () => {
     const skillB = new Skill({id: "b", name: "test2"});
     const skillC = new Skill({id: "c", name: "test3"});
 
-    const project1WithSkills = {...project1, skills: [skillA.name, skillB.name]};
-    const project2WithSkills = {...project2, skills: [skillB.name, skillC.name]};
+    const project1WithSkills = {...project1, skills: [{name: skillA.name}, {name: skillB.name}]};
+    const project2WithSkills = {...project2, skills: [{name: skillB.name}, {name: skillC.name}]};
 
     const projects = {[project1.id]: project1, [project2.id]: project2};
     const skills = {[skillA.id]: skillA, [skillB.id]: skillB, [skillC.id]: skillC};

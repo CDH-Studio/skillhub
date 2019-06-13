@@ -1,6 +1,7 @@
-import React, {useMemo} from "react";
+import React from "react";
 import classNames from "classnames";
 import {Link} from "react-router-dom";
+import {SkillBadges} from "components/";
 import {Card, CardContent, IconButton} from "@material-ui/core";
 import {ChevronRight} from "@material-ui/icons";
 import "./ProjectCard.scss";
@@ -9,13 +10,6 @@ const DISPLAY_SKILL_COUNT = 3;
 
 const ProjectCard = ({className, id, name, description, skills, isActive}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
-    const skillBadges = useMemo(() => skills.slice(0, DISPLAY_SKILL_COUNT).map((name) => (
-        <SkillBadge
-            key={name}
-            name={name}
-        />
-    )), [skills]);
-
     return (
         <Card className={classNames("project-card", className)}>
             <CardContent className="project-card-content">
@@ -28,7 +22,10 @@ const ProjectCard = ({className, id, name, description, skills, isActive}) => {
                     <p className="project-card-description">{description}</p>
 
                     <div className="project-card-skills">
-                        {skillBadges}
+                        <SkillBadges
+                            displayCount={DISPLAY_SKILL_COUNT}
+                            skills={skills}
+                        />
                     </div>
 
                     {skills.length > DISPLAY_SKILL_COUNT && (
@@ -54,14 +51,6 @@ const ActiveBadge = ({isActive = true}) => (
         className="active-badge"
         text={isActive ? "Active" : "Inactive"}
         isHighlighted={isActive}
-    />
-);
-
-const SkillBadge = ({name, isHighlySkilled = false}) => (
-    <TextBadge
-        className="skill-badge"
-        text={name}
-        isHighlighted={isHighlySkilled}
     />
 );
 

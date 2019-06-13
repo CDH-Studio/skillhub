@@ -21,6 +21,7 @@
 
 .profile-card {
     display: flex;
+    flex: 1;
     margin-bottom: $default-spacing * 2;
     margin-top: $default-spacing;
     padding: $default-spacing * 2;
@@ -87,23 +88,7 @@
         flex: 1;
         display: flex;
         flex-wrap: wrap;
-        margin-top: $default-spacing;     /* And yes, the brackets are needed. Otherwise, it renders as
-                                                    just "margin: -8px". */
-        .skill-badge {
-            margin: $default-spacing / 2;
-        }
-    }
-
-    .text-badge {
-        background-color: $color-neutral-8;
-        border-radius: $default-border-radius;
-        color: $color-text-primary;
-        padding: $default-spacing/2 $default-spacing;
-
-        &.text-badge--highlighted {
-            background-color: $color-secondary;
-            color: $color-light;
-        }
+        margin-top: $default-spacing;
     }
 }
 

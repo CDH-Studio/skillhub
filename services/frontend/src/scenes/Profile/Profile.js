@@ -4,22 +4,18 @@ import connect from "./connect";
 
 const dummySkills = [
     {
-        id: "1",
         name: "Kubernetes",
         isHighlySkilled: false
     },
     {
-        id: "2",
         name: "Docker",
         isHighlySkilled: true
     },
     {
-        id: "3",
         name: "Django",
         isHighlySkilled: false
     },
     {
-        id: "4",
         name: "React",
         isHighlySkilled: true
     },
@@ -38,7 +34,7 @@ const generateAvatarInitials = (name) => {
 const Profile = ({projects = [], profile = {}, isLoading = false}) => {
     if (profile) {
         profile.skills = dummySkills;
-        profile.avatarInitials = generateAvatarInitials(userProfile.name);
+        profile.avatarInitials = generateAvatarInitials(profile.name);
     }
 
     return (

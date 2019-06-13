@@ -1,8 +1,7 @@
 import React from "react";
-import classNames from "classnames";
 import {Avatar, CircularProgress, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
-import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
+import {NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
 import {Project} from "utils/models";
 import "./Profile.scss";
 
@@ -23,22 +22,26 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, isLoading}) => {
-    return (
-        <ScrollContainer className="profile">
-            <NavSidebar
-                scrollSpySelectors={sections}
-                containerClass={containerClass}
-            />
-
-            <ProfileContent
-                projects={projects}
-                profile={profile}
-                isLoading={isLoading}
-            />
-        </ScrollContainer>
-    );
-};
+const ProfileLayout = ({projects, profile, isLoading}) => (
+    <ScrollContainer className="profile">
+        {
+            (!profile || isLoading) ? (
+                <CircularProgress className="loading-button-indicator" />
+            ) : (
+                <>
+                    <NavSidebar
+                        scrollSpySelectors={sections}
+                        containerClass={containerClass}
+                    />
+                    <ProfileContent
+                        projects={projects}
+                        profile={profile}
+                    />
+                </>
+            )
+        }
+    </ScrollContainer>
+);
 
 const ProfileContent = ({...sectionProps}) => (
     <div className="profile-content">
@@ -65,98 +68,51 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile, isLoading}) => {
-    //if there is no userprofile or the profile is currently loading
-    if (!profile || isLoading) {
-        return (
-            <CircularProgress className="loading-button-indicator" />
-        );
-    }
-    else {
-        return (
-            <Paper className="profile-card profile-card-personal-details">
-                <Avatar className="profile-card-picture">
-                    {profile.avatarInitials}
-                </Avatar>
+const PersonalDetails = ({profile}) => (
+    <Paper className="profile-card profile-card-personal-details">
+        <Avatar className="profile-card-picture">
+            {profile.avatarInitials}
+        </Avatar>
 
-                <div className="profile-card-content">
-                    <h2 className="profile-card-title">
-                        {profile.name}
-                    </h2>
+        <div className="profile-card-content">
+            <h2 className="profile-card-title">
+                {profile.name}
+            </h2>
 
-                    <h3 className="profile-card-subtitle">
-                        {profile.primaryRole}
-                    </h3>
+            <h3 className="profile-card-subtitle">
+                {profile.primaryRole}
+            </h3>
 
-                    <div className="profile-card-contact">
-                        <p className="profile-card-text">
-                            <Email />
-                            {profile.contactEmail}
-                        </p>
+            <div className="profile-card-contact">
+                <p className="profile-card-text">
+                    <Email />
+                    {profile.contactEmail}
+                </p>
 
-                        <p className="profile-card-text">
-                            <LocalPhone />
-                            {profile.phone}
-                        </p>
-                    </div>
-                </div>
-            </Paper>
-        );
-    }
-};
-
-const SkillBadge = ({name, isHighlySkilled = false}) => (
-    <TextBadge
-        className="skill-badge"
-        text={name}
-        isHighlighted={isHighlySkilled}
-    />
+                <p className="profile-card-text">
+                    <LocalPhone />
+                    {profile.phone}
+                </p>
+            </div>
+        </div>
+    </Paper>
 );
 
-const TextBadge = ({className, text, isHighlighted = false}) => (
-    <div
-        className={classNames(
-            "text-badge",
-            {"text-badge--highlighted": isHighlighted},
-            className
-        )}
-    >
-        {text}
-    </div>
-);
-
-const Skills = ({sectionName, userProfile, profileLoading}) => {
-    if (!userProfile || profileLoading) {
-        return (
-            <CircularProgress className="loading-button-indicator" />
-        );
-    }
-    else {
-        const skills = userProfile.skills;
-
-        const skillBadges = skills.map((skill) => (
-            <SkillBadge
-                key={skill.name}
-                name={skill.name}
-                isHighlySkilled={skill.isHighlySkilled}
+const Skills = ({sectionName, profile}) => (
+    <>
+        <h2>{sectionName}</h2>
+        <Paper className="profile-card profile-card-skills">
+            <SkillBadges
+                displayCount={profile.skills.length}
+                skills={profile.skills}
             />
-        ));
-
-        return (
-            <>
-                <h2>{sectionName}</h2>
-                <Paper className="profile-card profile-card-skills">
-                    {skillBadges}
-                </Paper>
-            </>
-        );
-    }
-};
+        </Paper>
+    </>
+);
 
 const Projects = ({sectionName, projects}) => (
     <>
         <h2>{sectionName}</h2>
-
         <div className="profile-card profile-card-projects">
             {
                 projects.map((project) => (
