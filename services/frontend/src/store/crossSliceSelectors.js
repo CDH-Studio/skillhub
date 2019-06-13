@@ -1,6 +1,6 @@
 import {createMatchSelector} from "connected-react-router";
 import {createSelector} from "redux-starter-kit";
-import {reduceToObject} from "utils/helperFunctions";
+import {arrayToObject} from "utils/helperFunctions";
 import {Profile, Project, ProjectProfile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice} from "./slices";
@@ -27,7 +27,7 @@ const getUserProfile = createSelector(
 
 const getProjectsWithSkillsById = createSelector(
     [getProjectsWithSkills],
-    (projectsWithSkills) => projectsWithSkills.reduce(reduceToObject(), {})
+    (projectsWithSkills) => projectsWithSkills.reduce(arrayToObject(), {})
 );
 
 const getProfileForUser = createSelector(

@@ -1,5 +1,5 @@
 import uuidv4 from "uuid/v4";
-import {reduceToObject} from "utils/helperFunctions";
+import {arrayToObject} from "utils/helperFunctions";
 
 export default class Profile {
     constructor({
@@ -30,7 +30,7 @@ export default class Profile {
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(Profiles = []) {
         const processProfile = (profile) => new Profile(profile);
-        return Profiles.reduce(reduceToObject(processProfile), {});
+        return Profiles.reduce(arrayToObject(processProfile), {});
     }
 
     static findByUserId(userId, profiles = {}) {

@@ -1,5 +1,5 @@
 import uuidv4 from "uuid/v4";
-import {reduceToObject} from "utils/helperFunctions";
+import {arrayToObject} from "utils/helperFunctions";
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30 * 1000;  // Milliseconds for 30 days
 
@@ -42,7 +42,7 @@ export default class Project {
             return processedProject;
         };
 
-        return projects.reduce(reduceToObject(processProject), {});
+        return projects.reduce(arrayToObject(processProject), {});
     }
 
     static extractProjectProfiles(projects = []) {
