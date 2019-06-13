@@ -24,7 +24,7 @@ const sections = [
 
 const ProfileLayout = ({projects, userProfile, profileLoading}) => {
     return (
-        <ScrollContainer>
+        <ScrollContainer className="profile">
             <NavSidebar
                 scrollSpySelectors={sections}
                 containerClass={containerClass}

@@ -1,14 +1,15 @@
 import React from "react";
+import classNames from "classnames";
 import "./ScrollContainer.scss";
 
-const ScrollContainer = ({children}) => {
+const ScrollContainerLayout = ({children, className}) => {
     return (
         <div className="scroll-container">
-            <div className="content-area">
+            <div className={classNames("content-area", className)}>
                 {children}
             </div>
         </div>
     );
 };
 
-export default ScrollContainer;
+export default ScrollContainerLayout;
