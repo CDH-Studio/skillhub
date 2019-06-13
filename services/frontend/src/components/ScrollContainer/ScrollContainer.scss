@@ -2,7 +2,6 @@
 @import "styles/_dimens.scss";
 @import "styles/_media_queries.scss";
 
-
 .scroll-container {
     height: calc(100% - #{$navbar-height});
     overflow: auto;
@@ -25,6 +24,5 @@
                 max-width: $desktop-width;
             }
         }
-
     }
 }

@@ -2,10 +2,8 @@ import React from "react";
 import ProjectDetailsLayout from "./ProjectDetailsLayout";
 import connect from "./connect";
 
-const ProjectDetails = ({project}) => {
-    console.log(project);
-    return <ProjectDetailsLayout project={project} />;
-};
-//const {match:{params}}= this.props;
+const ProjectDetails = ({project}) => (
+    <ProjectDetailsLayout project={project} />
+);
 
 export default connect(ProjectDetails);

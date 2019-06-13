@@ -71,7 +71,7 @@ const ProjectInfo = ({project}) => {
                 </div>
                 <div className="project-info-card-content-section">
                     <h3 className="project-info-card-name">{project.name}</h3>
-                    <p className="project-info-card-description">{project.description} abc</p>
+                    <p className="project-info-card-description">{project.description}</p>
                 </div>
             </CardContent>
         </Card>
