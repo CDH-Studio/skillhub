@@ -62,6 +62,27 @@
         "array-bracket-spacing": [
             "error",
             "never"
+        ],
+        "arrow-parens": [
+            "error"
+        ],
+        "arrow-spacing": [
+            "error"
+        ],
+        "space-infix-ops": [
+            "error"
+        ],
+        "no-multi-spaces": [
+            "error",
+            {
+                "ignoreEOLComments": true
+            }
+        ],
+        "keyword-spacing": [
+            "error"
+        ],
+        "space-unary-ops": [
+            "error"
         ]
     }
 }

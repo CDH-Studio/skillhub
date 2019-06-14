@@ -5,7 +5,7 @@ module.exports = function(app) {
     }
 
     // eslint-disable-next-line no-unused-vars
-    app.on("connection", connection => {
+    app.on("connection", (connection) => {
         // On a new real-time connection, add it to the anonymous channel
         // app.channel("anonymous").join(connection);
     });

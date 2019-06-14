@@ -1,13 +1,16 @@
 import {call, fork, put} from "redux-saga/effects";
 import api from "api/";
-import {projectsSlice, projectsRequestsSlice} from "store/slices";
+import {projectsSlice, projectsRequestsSlice, projectProfilesSlice} from "store/slices";
 import {Project} from "utils/models";
 
 function* projectsFetchAll() {
     const result = yield call(api.service("projects").find);
+
+    const projectProfiles = Project.extractProjectProfiles(result);
     const normalizedProjects = Project.normalizeApiResultsForRedux(result);
 
     yield put(projectsSlice.actions.setProjects(normalizedProjects));
+    yield put(projectProfilesSlice.actions.addProjectProfiles(projectProfiles));
 }
 
 function* projectsSaga() {

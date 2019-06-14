@@ -1,4 +1,5 @@
 import uuidv4 from "uuid/v4";
+import {arrayToObject} from "utils/helperFunctions";
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30 * 1000;  // Milliseconds for 30 days
 
@@ -6,8 +7,8 @@ export default class Project {
     constructor({
         id = uuidv4(), name = "", description = "",
         lastActive = null, createdAt = new Date(), updatedAt = new Date(),
-        skills = []
-    }) {
+        skills = [], projectProfiles = []
+    } = {}) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -17,6 +18,9 @@ export default class Project {
 
         // Aggregate/derived (from store) properties
         this.skills = skills;
+
+        // Temporary related properties; might exist from API results, but aren't used past initial processing
+        this.projectProfiles = projectProfiles;
     }
 
     static get FILTER_ALL() {return "all";}
@@ -26,7 +30,7 @@ export default class Project {
     /* Normalizes the list of projects that the API returns into a map of {ID -> project},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(projects = []) {
-        return projects.reduce((acc, project) => {
+        const processProject = (project) => {
             const processedProject = new Project(project);
 
             if (processedProject.skills) {
@@ -35,9 +39,14 @@ export default class Project {
                 processedProject.skills = [];
             }
 
-            acc[processedProject.id] = processedProject;
-            return acc;
-        }, {});
+            return processedProject;
+        };
+
+        return projects.reduce(arrayToObject(processProject), {});
+    }
+
+    static extractProjectProfiles(projects = []) {
+        return projects.reduce((acc, project) => [...acc, ...project.projectProfiles], []);
     }
 
     /* An active project is (currently) defined as having been active within the last 30 days. */

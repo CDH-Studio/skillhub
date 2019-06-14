@@ -13,7 +13,21 @@ const createRootReducer = (history) => {
         [mounts.router]: connectRouter(history)}
     );
 
-    return combineReducers(reducers);
+    const appReducer = combineReducers(reducers);
+
+    const rootReducer = (state, action) => {
+        // Reset all store state (except for the router) when user logs in or out
+        if (
+            action.type === slices.authRequestsSlice.login.actions.request.toString()
+            || action.type === slices.authRequestsSlice.logout.actions.request.toString()
+        ) {
+            state = {[mounts.router]: state[mounts.router]};
+        }
+
+        return appReducer(state, action);
+    };
+
+    return rootReducer;
 };
 
 export default createRootReducer;

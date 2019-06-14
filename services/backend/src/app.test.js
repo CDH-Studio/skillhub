@@ -3,7 +3,7 @@ const url = require("url");
 const app = require("./app");
 
 const port = app.get("port") || 5000;
-const getUrl = pathname => url.format({
+const getUrl = (pathname) => url.format({
     hostname: app.get("host") || "localhost",
     protocol: "http",
     port,
@@ -11,12 +11,12 @@ const getUrl = pathname => url.format({
 });
 
 describe("Feathers application tests (with jest)", () => {
-    beforeAll(done => {
+    beforeAll((done) => {
         this.server = app.listen(port);
         this.server.once("listening", () => done());
     });
 
-    afterAll(done => {
+    afterAll((done) => {
         this.server.close(done);
     });
 
@@ -28,7 +28,7 @@ describe("Feathers application tests (with jest)", () => {
                 headers: {
                     "Accept": "text/html"
                 }
-            }).catch(res => {
+            }).catch((res) => {
                 expect(res.statusCode).toBe(404);
                 expect(res.error.indexOf("<html>")).not.toBe(-1);
             });
@@ -39,7 +39,7 @@ describe("Feathers application tests (with jest)", () => {
             return rp({
                 url: getUrl("path/to/nowhere"),
                 json: true
-            }).catch(res => {
+            }).catch((res) => {
                 expect(res.statusCode).toBe(404);
                 expect(res.error.code).toBe(404);
                 expect(res.error.message).toBe("Page not found");

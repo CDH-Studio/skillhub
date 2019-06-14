@@ -1,21 +1,30 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
+const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const {Project} = require("utils/models");
 
-const includeSkills = () => (context) => {
+const includeAssociations = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
+    const ProfilesModel = context.app.services.profiles.Model;
 
     context.params.sequelize = {
-        include: [{model: SkillsModel}],
+        // Include the Profiles model to get at the ProjectProfiles model data
+        include: [{model: SkillsModel}, {model: ProfilesModel}],
         raw: false
     };
 
     return context;
 };
 
+const processProjectProfiles = () => (context) => {
+    context.result = Project.processProjectProfiles(context.result);
+    return context;
+};
+
 module.exports = {
     before: {
         all: [authenticate("jwt")],
-        find: [includeSkills()],
-        get: [includeSkills()],
+        find: [includeAssociations()],
+        get: [includeAssociations()],
         create: [],
         update: [],
         patch: [],
@@ -24,8 +33,8 @@ module.exports = {
 
     after: {
         all: [],
-        find: [],
-        get: [],
+        find: [dehydrate(), processProjectProfiles()],
+        get: [dehydrate(), processProjectProfiles()],
         create: [],
         update: [],
         patch: [],
