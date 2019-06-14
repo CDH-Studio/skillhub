@@ -22,7 +22,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, userProfile, profileLoading}) => {
+const ProfileLayout = ({projects, profile, isLoading}) => {
     return (
         <ScrollContainer className="profile">
             <NavSidebar
@@ -32,8 +32,8 @@ const ProfileLayout = ({projects, userProfile, profileLoading}) => {
 
             <ProfileContent
                 projects={projects}
-                userProfile={userProfile}
-                profileLoading={profileLoading}
+                profile={profile}
+                isLoading={isLoading}
             />
         </ScrollContainer>
     );
@@ -64,9 +64,9 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({userProfile, profileLoading}) => {
+const PersonalDetails = ({profile, isLoading}) => {
     //if there is no userprofile or the profile is currently loading
-    if (!userProfile || profileLoading) {
+    if (!profile || isLoading) {
         return (
             <CircularProgress className="loading-button-indicator" />
         );
@@ -75,27 +75,27 @@ const PersonalDetails = ({userProfile, profileLoading}) => {
         return (
             <Paper className="profile-card">
                 <Avatar className="profile-card-picture">
-                    {userProfile.avatarInitials}
+                    {profile.avatarInitials}
                 </Avatar>
 
                 <div className="profile-card-content">
                     <h2 className="profile-card-title">
-                        {userProfile.name}
+                        {profile.name}
                     </h2>
 
                     <h3 className="profile-card-subtitle">
-                        {userProfile.primaryRole}
+                        {profile.primaryRole}
                     </h3>
 
                     <div className="profile-card-contact">
                         <p className="profile-card-text">
                             <Email />
-                            {userProfile.contactEmail}
+                            {profile.contactEmail}
                         </p>
 
                         <p className="profile-card-text">
                             <LocalPhone />
-                            {userProfile.phone}
+                            {profile.phone}
                         </p>
                     </div>
                 </div>

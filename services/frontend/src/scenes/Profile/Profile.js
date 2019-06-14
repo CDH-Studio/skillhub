@@ -12,16 +12,16 @@ const generateAvatarInitials = (name) => {
     ), []).toUpperCase();
 };
 
-const Profile = ({projects = [], userProfile = {}, profileLoadingState = false}) => {
-    if (userProfile) {
-        userProfile.avatarInitials = generateAvatarInitials(userProfile.name);
+const Profile = ({projects = [], profile = {}, isLoading = false}) => {
+    if (profile) {
+        profile.avatarInitials = generateAvatarInitials(profile.name);
     }
 
     return (
         <ProfileLayout
             projects={projects}
-            userProfile={userProfile}
-            profileLoading={profileLoadingState}
+            profile={profile}
+            profileLoading={isLoading}
         />
     );
 };
