@@ -21,6 +21,7 @@
 
 .profile-card {
     display: flex;
+    flex: 1;
     margin-bottom: $default-spacing * 2;
     margin-top: $default-spacing;
     padding: $default-spacing * 2;
@@ -30,7 +31,7 @@
     display: flex;
     justify-content: center;
 
-    .profile-card {
+    .profile-card-personal-details {
         flex: 1;
 
         .profile-card-picture {
@@ -76,6 +77,18 @@
                 }
             }
         }
+    }
+}
+
+#profile-skills {
+    display: flex;
+    flex-direction: column;
+
+    .profile-card-skills {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: $default-spacing;
     }
 }
 

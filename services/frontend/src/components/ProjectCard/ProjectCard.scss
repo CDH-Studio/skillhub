@@ -52,9 +52,6 @@ $project-card-width: $default-spacing * 34;
                 margin: 0 (-$default-spacing/2);  /* To account for the side padding of the skill-badges. */
                 margin-top: $default-spacing;     /* And yes, the brackets are needed. Otherwise, it renders as
                                                      just "margin: -8px". */
-                .skill-badge {
-                    margin: $default-spacing / 2;
-                }
             }
 
             .project-card-more-skills {
@@ -75,17 +72,5 @@ $project-card-width: $default-spacing * 34;
                 color: $color-text-secondary;
             }
         }
-    }
-}
-
-.text-badge {
-    background-color: $color-neutral-8;
-    border-radius: $default-border-radius;
-    color: $color-text-primary;
-    padding: $default-spacing/2 $default-spacing;
-
-    &.text-badge--highlighted {
-        background-color: $color-secondary;
-        color: $color-light;
     }
 }

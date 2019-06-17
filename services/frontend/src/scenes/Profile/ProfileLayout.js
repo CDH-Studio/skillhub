@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {Avatar, CircularProgress, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
-import {NavSidebar, ProjectCard, ScrollContainer} from "components/";
+import {NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
 import {Project} from "utils/models";
 import "./Profile.scss";
 
@@ -22,22 +22,26 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, isLoading}) => {
-    return (
-        <ScrollContainer className="profile">
-            <NavSidebar
-                scrollSpySelectors={sections}
-                containerClass={containerClass}
-            />
-
-            <ProfileContent
-                projects={projects}
-                profile={profile}
-                isLoading={isLoading}
-            />
-        </ScrollContainer>
-    );
-};
+const ProfileLayout = ({projects, profile, isLoading}) => (
+    <ScrollContainer className="profile">
+        {
+            (!profile || isLoading) ? (
+                <CircularProgress className="loading-button-indicator" />
+            ) : (
+                <>
+                    <NavSidebar
+                        scrollSpySelectors={sections}
+                        containerClass={containerClass}
+                    />
+                    <ProfileContent
+                        projects={projects}
+                        profile={profile}
+                    />
+                </>
+            )
+        }
+    </ScrollContainer>
+);
 
 const ProfileContent = ({...sectionProps}) => (
     <div className="profile-content">
@@ -64,100 +68,66 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile, isLoading}) => {
-    //if there is no userprofile or the profile is currently loading
-    if (!profile || isLoading) {
-        return (
-            <CircularProgress className="loading-button-indicator" />
-        );
-    }
-    else {
-        return (
-            <Paper className="profile-card">
-                <Avatar className="profile-card-picture">
-                    {profile.avatarInitials}
-                </Avatar>
+const PersonalDetails = ({profile}) => (
+    <Paper className="profile-card profile-card-personal-details">
+        <Avatar className="profile-card-picture">
+            {profile.avatarInitials}
+        </Avatar>
 
-                <div className="profile-card-content">
-                    <h2 className="profile-card-title">
-                        {profile.name}
-                    </h2>
+        <div className="profile-card-content">
+            <h2 className="profile-card-title">
+                {profile.name}
+            </h2>
 
-                    <h3 className="profile-card-subtitle">
-                        {profile.primaryRole}
-                    </h3>
+            <h3 className="profile-card-subtitle">
+                {profile.primaryRole}
+            </h3>
 
-                    <div className="profile-card-contact">
-                        <p className="profile-card-text">
-                            <Email />
-                            {profile.contactEmail}
-                        </p>
+            <div className="profile-card-contact">
+                <p className="profile-card-text">
+                    <Email />
+                    {profile.contactEmail}
+                </p>
 
-                        <p className="profile-card-text">
-                            <LocalPhone />
-                            {profile.phone}
-                        </p>
-                    </div>
-                </div>
-            </Paper>
-        );
-    }
-};
+                <p className="profile-card-text">
+                    <LocalPhone />
+                    {profile.phone}
+                </p>
+            </div>
+        </div>
+    </Paper>
+);
 
-const Skills = ({sectionName}) => (
+const Skills = ({sectionName, profile}) => (
     <>
         <h2>{sectionName}</h2>
-        <Paper className="profile-card">
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            <br /><br />
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+        <Paper className="profile-card profile-card-skills">
+            <SkillBadges
+                displayCount={profile.skills.length}
+                skills={profile.skills}
+            />
         </Paper>
     </>
 );
 
-const Projects = ({sectionName, projects}) => (
-    <>
-        <h2>{sectionName}</h2>
+const Projects = ({sectionName, projects}) => {
+    const projectCards = useMemo(() => projects.map((project) => (
+        <ProjectCard
+            className="profile-project-card"
+            key={project.id}
+            isActive={Project.isActive(project)}
+            {...project}
+        />
+    )), [projects]);
 
-        <div className="profile-card profile-card-projects">
-            {
-                projects.map((project) => (
-                    <ProjectCard
-                        className="profile-project-card"
-                        key={project.id}
-                        isActive={Project.isActive(project)}
-                        {...project}
-                    />
-                ))
-            }
-        </div>
-    </>
-);
+    return (
+        <>
+            <h2>{sectionName}</h2>
+            <div className="profile-card profile-card-projects">
+                {projectCards}
+            </div>
+        </>
+    );
+};
 
 export default ProfileLayout;

@@ -7,3 +7,5 @@ export {default as Navbar} from "./Navbar";
 export {default as NavSidebar} from "./NavSidebar";
 export {default as ProjectCard} from "./ProjectCard";
 export {default as ScrollContainer} from "./ScrollContainer";
+export {default as SkillBadges} from "./SkillsBadges";
+export {default as TextBadge} from "./TextBadge";

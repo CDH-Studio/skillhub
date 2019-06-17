@@ -8,10 +8,17 @@
 
     .content-area{
         display: flex;
+        justify-content: center;
         margin: 0 auto;
         max-width: $tablet-width;
+        min-height: 100%;
         min-width: $minimum-width;
         padding: 0 $default-spacing;
+
+        .loading-button-indicator {
+            align-self: center;
+            justify-self: center;
+        }
 
         @include laptop-width {
             & {
