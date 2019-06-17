@@ -77,7 +77,7 @@ export default class Project {
 
             project.skills = project.skills.reduce((acc, skillId) => {
                 if (skillId in skillsById) {
-                    acc = [...acc, {name: skillsById[skillId].name}];
+                    acc = [...acc, skillsById[skillId]];
                 }
 
                 return acc;

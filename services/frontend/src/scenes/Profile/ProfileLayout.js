@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {Avatar, CircularProgress, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import {NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
@@ -110,22 +110,24 @@ const Skills = ({sectionName, profile}) => (
     </>
 );
 
-const Projects = ({sectionName, projects}) => (
-    <>
-        <h2>{sectionName}</h2>
-        <div className="profile-card profile-card-projects">
-            {
-                projects.map((project) => (
-                    <ProjectCard
-                        className="profile-project-card"
-                        key={project.id}
-                        isActive={Project.isActive(project)}
-                        {...project}
-                    />
-                ))
-            }
-        </div>
-    </>
-);
+const Projects = ({sectionName, projects}) => {
+    const projectCards = useMemo(() => projects.map((project) => (
+        <ProjectCard
+            className="profile-project-card"
+            key={project.id}
+            isActive={Project.isActive(project)}
+            {...project}
+        />
+    )), [projects]);
+
+    return (
+        <>
+            <h2>{sectionName}</h2>
+            <div className="profile-card profile-card-projects">
+                {projectCards}
+            </div>
+        </>
+    );
+};
 
 export default ProfileLayout;

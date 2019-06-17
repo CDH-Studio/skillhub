@@ -117,8 +117,17 @@ describe("mergeWithSkills", () => {
     const skillB = new Skill({id: "b", name: "test2"});
     const skillC = new Skill({id: "c", name: "test3"});
 
-    const project1WithSkills = {...project1, skills: [{name: skillA.name}, {name: skillB.name}]};
-    const project2WithSkills = {...project2, skills: [{name: skillB.name}, {name: skillC.name}]};
+    /* We delete the createdAt and updatedAt then use toMatchObject instead of toEqual
+    to test versus a subset of the properties (ex. name and id) */
+    delete skillA.createdAt;
+    delete skillB.createdAt;
+    delete skillC.createdAt;
+    delete skillA.updatedAt;
+    delete skillB.updatedAt;
+    delete skillC.updatedAt;
+
+    const project1WithSkills = {...project1, skills: [skillA, skillB]};
+    const project2WithSkills = {...project2, skills: [skillB, skillC]};
 
     const projects = {[project1.id]: project1, [project2.id]: project2};
     const skills = {[skillA.id]: skillA, [skillB.id]: skillB, [skillC.id]: skillC};
@@ -126,10 +135,10 @@ describe("mergeWithSkills", () => {
     const projectsWithSkills = [project1WithSkills, project2WithSkills];
 
     it("can merge a set of projects with a set of skills (while ignoring unknown skills)", () => {
-        expect(Project.mergeWithSkills(projects, skills)).toEqual(projectsWithSkills);
+        expect(Project.mergeWithSkills(projects, skills)).toMatchObject(projectsWithSkills);
     });
 
     it("returns an empty array when given empty inputs", () => {
-        expect(Project.mergeWithSkills()).toEqual([]);
+        expect(Project.mergeWithSkills()).toMatchObject([]);
     });
 });

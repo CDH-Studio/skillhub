@@ -6,14 +6,3 @@
     margin: $default-spacing / 2;
 }
 
-.text-badge {
-    background-color: $color-neutral-8;
-    border-radius: $default-border-radius;
-    color: $color-text-primary;
-    padding: $default-spacing/2 $default-spacing;
-
-    &.text-badge--highlighted {
-        background-color: $color-secondary;
-        color: $color-light;
-    }
-}

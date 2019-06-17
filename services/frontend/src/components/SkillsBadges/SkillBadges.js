@@ -1,5 +1,5 @@
 import React, {useMemo} from "react";
-import classNames from "classnames";
+import {TextBadge} from "components/";
 import "./SkillBadges.scss";
 
 const SkillBadges = ({displayCount, skills}) => {
@@ -26,18 +26,6 @@ const SkillBadge = ({name, isHighlySkilled = false}) => (
         text={name}
         isHighlighted={isHighlySkilled}
     />
-);
-
-const TextBadge = ({className, text, isHighlighted = false}) => (
-    <div
-        className={classNames(
-            "text-badge",
-            {"text-badge--highlighted": isHighlighted},
-            className
-        )}
-    >
-        {text}
-    </div>
 );
 
 export default SkillBadges;

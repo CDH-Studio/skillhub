@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import {Link} from "react-router-dom";
-import {SkillBadges} from "components/";
+import {SkillBadges, TextBadge} from "components/";
 import {Card, CardContent, IconButton} from "@material-ui/core";
 import {ChevronRight} from "@material-ui/icons";
 import "./ProjectCard.scss";
@@ -52,18 +52,6 @@ const ActiveBadge = ({isActive = true}) => (
         text={isActive ? "Active" : "Inactive"}
         isHighlighted={isActive}
     />
-);
-
-const TextBadge = ({className, text, isHighlighted = false}) => (
-    <div
-        className={classNames(
-            "text-badge",
-            {"text-badge--highlighted": isHighlighted},
-            className
-        )}
-    >
-        {text}
-    </div>
 );
 
 export default ProjectCard;
