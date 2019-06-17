@@ -1,0 +1,26 @@
+{
+    "name": "scraper",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "DEBUG=scraper:* NODE_PATH=src nodemon src/index.js",
+        "start:prod": "NODE_PATH=src node src/index.js",
+        "lint": "eslint 'src/**/*.js'"
+    },
+    "dependencies": {
+        "auth0": "^2.14.0",
+        "body-parser": "^1.18.3",
+        "cookie-parser": "~1.4.3",
+        "cors": "^2.8.5",
+        "debug": "~2.6.9",
+        "dotenv": "^6.1.0",
+        "express": "~4.16.0",
+        "morgan": "~1.9.0",
+        "statuses": "^1.5.0"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.9.0",
+        "nodemon": "^1.18.6"
+    }
+}

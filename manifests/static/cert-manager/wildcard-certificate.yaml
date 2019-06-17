@@ -13,10 +13,12 @@ spec:
       - skillhub.ca
       - '*.skillhub.ca'
       - '*.backend.skillhub.ca'
+      - '*.scraper.skillhub.ca'
   dnsNames:
   - skillhub.ca
   - '*.skillhub.ca'
   - '*.backend.skillhub.ca'
+  - '*.scraper.skillhub.ca'
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt-production
