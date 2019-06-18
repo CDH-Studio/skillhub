@@ -16,7 +16,7 @@ const PLATFORM_CONFIGS = {
     }
 };
 
-const constructUrl = (baseUrl, platform, key) => baseUrl + PLATFORM_CONFIGS[platform][key];
+const getPath = (platform, key) => PLATFORM_CONFIGS[platform][key];
 
 class JiraScraper {
     constructor({authToken = JIRA_AUTH_TOKEN, host = JIRA_HOST, platform = JIRA_PLATFORM} = {}) {
@@ -33,15 +33,18 @@ class JiraScraper {
         this.platform = platform;
 
         this.encodedAuthToken = Buffer.from(this.authToken).toString("base64");
-
         this.baseUrl = this.host + PLATFORM_CONFIGS[this.platform].basePath;
-        this.authHeaders = {authorization: `Basic ${this.encodedAuthToken}`};
+
+        this.axios = axios.create({
+            baseURL: this.baseUrl,
+            headers: {authorization: `Basic ${this.encodedAuthToken}`}
+        });
     }
 
     async getUsers() {
         // TODO: Account for when there are more than 1000 users
-        const url = constructUrl(this.baseUrl, this.platform, "getUsers");
-        const result = await axios.get(url, {headers: this.authHeaders});
+        const path = getPath(this.platform, "getUsers");
+        const result = await this.axios.get(path);
 
         return result.data.reduce((acc, user) => {
             if (!user.name.includes("addon_")) {
