@@ -1,16 +1,44 @@
 import Profile from "./Profile";
+import ProfileSkill from "./ProfileSkill";
+import Skill from "./Skill";
 
 describe("normalizeApiResultsForRedux", () => {
     const ProfilesList = [
-        new Profile({id: "1"})
+        new Profile({id: "1", profileSkills: [{id: "a"}, {id: "b"}]}),
+        new Profile({id: "2", profileSkills: [{id: "c"}, {id: "z"}]}),
+        new Profile({id: "3", profileSkills: []}),
+        new Profile({id: "4", profileSkills: null})
     ];
 
     const ProfilesMap = {
-        [ProfilesList[0].id]: {...ProfilesList[0]}
+        [ProfilesList[0].id]: {...ProfilesList[0], profileSkills: ["a", "b"]},
+        [ProfilesList[1].id]: {...ProfilesList[1], profileSkills: ["c", "z"]},
+        [ProfilesList[2].id]: {...ProfilesList[2], profileSkills: []},
+        [ProfilesList[3].id]: {...ProfilesList[3], profileSkills: []}
     };
 
     it("normalizes a list of Profiles to a map of Profiles with just skill IDs", () => {
         expect(Profile.normalizeApiResultsForRedux(ProfilesList)).toEqual(ProfilesMap);
+    });
+});
+
+describe("extractProfileSkills", () => {
+    const profiles = [
+        new Profile({profileSkills: [{id: "1"}, {id: "2"}]}),
+        new Profile({profileSkills: [{id: "3"}]}),
+        new Profile({profileSkills: []}),
+        new Profile()
+    ];
+
+    const profileSkills = [{id: "1"}, {id: "2"}, {id: "3"}];
+
+    it("extracts the lists of each project's profileSkills into one list of profileSkills", () => {
+        expect(Profile.extractProfileSkills(profiles)).toEqual(profileSkills);
+    });
+
+    it("returns an empty array when given no input", () => {
+        expect(Profile.extractProfileSkills()).toEqual([]);
+        expect(Profile.extractProfileSkills([])).toEqual([]);
     });
 });
 
@@ -36,5 +64,50 @@ describe("getUserProfile", () => {
         expect(Profile.getUserProfile(undefined, undefined)).toEqual(null);
         expect(Profile.getUserProfile(undefined, "1")).toEqual(null);
         expect(Profile.getUserProfile(allProfiles, undefined)).toEqual(null);
+    });
+});
+
+describe("mergeProfilesWithSkills", () => {
+    const Profile1 = new Profile({id: "1", profileSkills: ["a", "b"]});
+    const Profile2 = new Profile({id: "2", profileSkills: ["c", "d", "z"]});
+
+    const profileSkill1 = new ProfileSkill({id: "a", profileId: "1", skillId: "x", isHighlySkilled: true});
+    const profileSkill2 = new ProfileSkill({id: "b", profileId: "1", skillId: "y", isHighlySkilled: false});
+    const profileSkill3 = new ProfileSkill({id: "c", profileId: "2", skillId: "y", isHighlySkilled: false});
+    const profileSkill4 = new ProfileSkill({id: "d", profileId: "2", skillId: "z", isHighlySkilled: true});
+
+    const skillA = new Skill({id: "x", name: "test"});
+    const skillB = new Skill({id: "y", name: "test2"});
+    const skillC = new Skill({id: "z", name: "test3"});
+
+    const combinedSkill1 = new Skill({id: "x", name: "test"});
+    const combinedSkill2 = new Skill({id: "y", name: "test2"});
+    const combinedSkill3 = new Skill({id: "z", name: "test3"});
+    combinedSkill1.isHighlySkilled = true;
+    combinedSkill2.isHighlySkilled = false;
+    combinedSkill3.isHighlySkilled = true;
+
+    const profiles = {[Profile1.id]: Profile1, [Profile2.id]: Profile2};
+    const profileSkills = {[profileSkill1.id]: profileSkill1, 
+        [profileSkill2.id]: profileSkill2, 
+        [profileSkill3.id]: profileSkill3,
+        [profileSkill4.id]: profileSkill4
+    };
+    const skills = {[skillA.id]: skillA, [skillB.id]: skillB, [skillC.id]: skillC};
+
+
+    const Profile1WithSkills = {...Profile1, skills: [combinedSkill1, combinedSkill2]};
+    delete Profile1WithSkills.profileSkills
+    const Profile2WithSkills = {...Profile2, skills: [combinedSkill2, combinedSkill3]};
+    delete Profile2WithSkills.profileSkills
+
+    const ProfilesWithSkills = [Profile1WithSkills, Profile2WithSkills];
+
+    it("can merge a set of Profiles with a set of skills (while ignoring unknown skills)", () => {
+        expect(Profile.mergeProfilesWithSkills(profiles, profileSkills, skills)).toEqual(ProfilesWithSkills);
+    });
+
+    it("returns an empty array when given empty inputs", () => {
+        expect(Profile.mergeProfilesWithSkills()).toEqual([]);
     });
 });
