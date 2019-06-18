@@ -1,6 +1,6 @@
 import React from "react";
 import {ScrollContainer, NavSidebar, SkillBadges} from "components/";
-import {Card, CardContent, Paper} from "@material-ui/core";
+import {Card, CardContent} from "@material-ui/core";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
 import classNames from "classnames";
@@ -14,7 +14,7 @@ const ProjectDetailsLayout = ({project}) => {
                 scrollSpySelectors={sections}
                 containerClass={containerClass}
             />
-            <ProjectContent project={project}/>
+            <ProjectContent project={project} />
         </ScrollContainer>
     );
 };
@@ -69,7 +69,7 @@ const ProjectInfo = ({project}) => {
         <Card className="project-details-card">
             <CardContent className="project-info-card-content">
                 <div className="project-info-card-active-section">
-                    <ActiveBadge isActive={Project.isActive(project)}/>
+                    <ActiveBadge isActive={Project.isActive(project)} />
                 </div>
                 <div className="project-info-card-content-section">
                     <h3 className="project-info-card-name">{project.name}</h3>
@@ -119,7 +119,7 @@ const Contributors = ({sectionName}) => (
                 cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
                 i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
 
-                <br/> <br/>
+                <br /> <br />
 
                 Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
                 sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
@@ -172,7 +172,7 @@ const Changelog = ({sectionName}) => (
                 cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
                 i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
 
-                <br/> <br/>
+                <br /> <br />
 
                 Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
                 sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
