@@ -1,7 +1,7 @@
 const tableNames = require("db/tableNames");
 
 module.exports = {
-    up: async (queryInterface, Sequelize) => {
+    up: async (queryInterface) => {
         await queryInterface.addIndex(tableNames.PROFILES, ["contactEmail"]);
     },
     down: (queryInterface) => {

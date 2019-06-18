@@ -110,6 +110,10 @@
                 {
                     "name": "JIRA_PLATFORM",
                     "value": "cloud"
+                },
+                {
+                    "name": "BACKEND_PROTOCOL",
+                    "value": "https"
                 }
             ],
             "external_port": "80",

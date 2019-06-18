@@ -7,8 +7,8 @@ const skillhubBridge = new SkillhubBridge();
 const router = express.Router();
 
 router.get("/", asyncMiddleware(async (req, res) => {
-    await skillhubBridge.scrapeToSkillhub();
-    res.send({status: "success"});
+    const result = await skillhubBridge.scrapeToSkillhub();
+    res.send({status: "success", result});
 }));
 
 module.exports = router;
