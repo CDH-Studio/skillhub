@@ -1,7 +1,6 @@
 const compress = require("compression");
-const helmet = require("helmet");
 const cors = require("cors");
-const {logger} = require("utils/");
+const helmet = require("helmet");
 
 const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
@@ -9,11 +8,12 @@ const express = require("@feathersjs/express");
 const socketio = require("@feathersjs/socketio");
 
 const {services} = require("components/");
-const {SCRAPER_API_KEY} = require("config");
 const {apiKeyAuthentication, authentication} = require("middleware/");
+const {logger} = require("utils/");
+
 const appHooks = require("./app.hooks");
 const channels = require("./channels");
-
+const {SCRAPER_API_KEY} = require("./config");
 const {sequelize} = require("./db");
 
 const app = express(feathers());
