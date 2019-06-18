@@ -31,7 +31,7 @@ class ScraperBridgeService {
 
             return {status: "success", message: "Created new users", data: usersToAdd};
         } else {
-            return {status: "success", message: "All users exist; no new ones created"};
+            return {status: "success", message: "All users already exist; no new ones created"};
         }
     }
 }

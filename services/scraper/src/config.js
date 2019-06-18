@@ -3,8 +3,8 @@ const {
     BACKEND_PORT = "5000",
     BACKEND_PROTOCOL = "http",
     JIRA_AUTH_TOKEN = null,
-    JIRA_HOST,
-    JIRA_PLATFORM,
+    JIRA_HOST = "https://skillhubca.atlassian.net",
+    JIRA_PLATFORM = "cloud",
     SKILLHUB_API_KEY = "bf3d6ab4879949d5845eb50a31e9e3fa"
 } = process.env;
 
