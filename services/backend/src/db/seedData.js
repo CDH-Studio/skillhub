@@ -390,9 +390,112 @@ const PROJECT_SKILLS = [
 
 const PROJECT_SKILL_IDS = PROJECT_SKILLS.map(getId);
 
+const PROFILE_SKILLS = [
+    {
+        id: "2e51e596-c938-434c-aabb-aac8096224b9",
+        profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
+        skillId: SKILL_IDS_BY_NAME["React"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "9549e841-5466-451c-ad3a-2c46013022f2",
+        profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
+        skillId: SKILL_IDS_BY_NAME["Docker"],
+        isHighlySkilled: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "c80fd6f5-faa0-48b2-ac21-074727900e43",
+        profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
+        skillId: SKILL_IDS_BY_NAME["Kubernetes"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "c0103776-26a9-4dc2-84ac-1b7d9d89bac0",
+        profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
+        skillId: SKILL_IDS_BY_NAME["JavaScript"],
+        isHighlySkilled: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "6cc69249-e29d-4660-9aa7-f8e2e27e2298",
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
+        skillId: SKILL_IDS_BY_NAME["JavaScript"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "37ad7d7d-e5be-400b-8e36-9d178302b952",
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
+        skillId: SKILL_IDS_BY_NAME["Feathers.js"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "a6758a2d-3f24-4116-8eb7-e06b5644766b",
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
+        skillId: SKILL_IDS_BY_NAME["React"],
+        isHighlySkilled: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "38daa54b-7c0b-40d6-abf9-c21aaff6b65e",
+        profileId: PROFILE_IDS_BY_NAME["testBro"],
+        skillId: SKILL_IDS_BY_NAME["Docker"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "af30de43-4fea-43e2-bb8d-90fd2b195f4a",
+        profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
+        skillId: SKILL_IDS_BY_NAME["Python"],
+        isHighlySkilled: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "6091e1cd-1956-409d-b68f-91bf09855d74",
+        profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
+        skillId: SKILL_IDS_BY_NAME["Django"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "b3068dc2-af53-42af-814c-d7db69966d7a",
+        profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
+        skillId: SKILL_IDS_BY_NAME["Docker"],
+        isHighlySkilled: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "9bb4be3a-36ce-4794-85db-d4a9ccd6b8f0",
+        profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
+        skillId: SKILL_IDS_BY_NAME["AWS"],
+        isHighlySkilled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    }
+];
+
+const PROFILE_SKILL_IDS = PROFILE_SKILLS.map(getId);
+
 module.exports = {
     PROFILES,
     PROFILE_IDS,
+    PROFILE_SKILLS,
+    PROFILE_SKILL_IDS,
     PROJECTS,
     PROJECT_IDS,
     PROJECT_PROFILES,
