@@ -16,6 +16,9 @@ lint-backend-locally:
 lint-frontend-locally:
 	docker-compose -f ./services/docker-compose.yaml exec frontend npm run lint
 
+lint-scraper-locally:
+	docker-compose -f ./services/docker-compose.yaml exec scraper npm run lint
+
 test-backend-locally:
 	docker-compose -f ./services/docker-compose.yaml exec backend npm run test
 
