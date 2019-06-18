@@ -1,6 +1,6 @@
 const express = require("express");
-const {asyncMiddleware} = require("middleware");
-const {SkillhubBridge} = require("scrapers");
+const {asyncMiddleware} = require("middleware/");
+const {SkillhubBridge} = require("scrapers/");
 
 const skillhubBridge = new SkillhubBridge();
 

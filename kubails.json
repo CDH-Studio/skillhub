@@ -28,7 +28,8 @@
                 "file": ".env.encrypted",
                 "name": "backend-secrets",
                 "variables": [
-                    "TOKEN_SECRET"
+                    "TOKEN_SECRET",
+                    "SCRAPER_API_KEY"
                 ]
             },
             "templates": [
@@ -124,7 +125,8 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
-                    "JIRA_AUTH_TOKEN"
+                    "JIRA_AUTH_TOKEN",
+                    "SKILLHUB_API_KEY"
                 ]
             },
             "templates": [
