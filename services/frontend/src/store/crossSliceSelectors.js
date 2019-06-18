@@ -21,7 +21,7 @@ const getProjectIdFromUrl = createSelector(
 );
 
 const getProjectFromUrlId = createSelector(
-    [projectsSlice.selectors.getProjects, getProjectIdFromUrl],
+    [getProjectsWithSkillsById, getProjectIdFromUrl],
     (projectsById, projectId) => projectsById[projectId]
 );
 

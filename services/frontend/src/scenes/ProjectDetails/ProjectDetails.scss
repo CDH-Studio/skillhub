@@ -11,43 +11,51 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    margin: 0 $default-spacing*2;
+    margin: 0 $default-spacing*4;
+    padding-top: $default-spacing;
+
 
     .project-details-content-title {
         color: $color-neutral-6;
     }
 
     .project-details-card:first-child {
-        padding-top: $default-spacing;
-    }
-
-    .project-details-card {
-        display: flex;
-        padding: $default-spacing*2;
-        margin: $default-spacing*2 0;
-        flex-direction: column;
-
-        .project-info-card-content {
-            display: flex;
-
-            .project-card-info-active-section {
-                align-self: flex-start;
-                display: flex;
-                flex: 1;
-            }
-
-            .project-info-card-content-section {
-                flex: 3;
-                padding-left: $default-spacing*2;
-
-                .project-info-card-name {
-                    margin-bottom: $default-spacing;
-                }
-
-                .project-info-card-description {
-                    color: $color-text-secondary;
-                }
-            }
-        }
+        margin-top: $default-spacing;
     }
 }
+
+.project-details-card {
+    display: flex;
+    flex: 1;
+    margin: $default-spacing*2 0;
+    padding: $default-spacing*2;
+}
+
+#project-info {
+
+    .project-card-info-active-section {
+        flex: 1;
+        align-self: flex-start;
+    }
+
+    .project-info-card-content-section {
+        flex: 3;
+        padding-left: $default-spacing*2;
+
+        .project-info-card-name {
+            margin-bottom: $default-spacing;
+        }
+
+        .project-info-card-description {
+            color: $color-text-secondary;
+        }
+    }
+
+}
+#project-used-skills{
+    .project-used-skills-content{
+        flex-wrap: wrap;
+        padding: $default-spacing*1.5 $default-spacing*1.5;
+    }
+}
+
