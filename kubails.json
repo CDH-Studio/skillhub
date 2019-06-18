@@ -101,7 +101,16 @@
         },
         "scraper": {
             "container_port": "5000",
-            "env": [],
+            "env": [
+                {
+                    "name": "JIRA_HOST",
+                    "value": "https://skillhubca.atlassian.net"
+                },
+                {
+                    "name": "JIRA_PLATFORM",
+                    "value": "cloud"
+                }
+            ],
             "external_port": "80",
             "folder": "scraper",
             "host": "scraper.skillhub.ca",
@@ -111,7 +120,13 @@
             "pre_startup_command": "",
             "production_replicas": 1,
             "replicas": 1,
-            "secrets": {},
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "scraper-secrets",
+                "variables": [
+                    "JIRA_AUTH_TOKEN"
+                ]
+            },
             "templates": [
                 "deployment",
                 "ingress",

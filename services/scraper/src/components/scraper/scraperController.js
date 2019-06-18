@@ -1,9 +1,14 @@
 const express = require("express");
-const router = express.Router();
 const {asyncMiddleware} = require("middleware");
+const {JiraScraper} = require("scrapers");
+
+const jiraScraper = new JiraScraper();
+
+const router = express.Router();
 
 router.get("/", asyncMiddleware(async (req, res) => {
-    res.send({status: "success", message: "Scraper endpoint is working!"});
+    const users = await jiraScraper.getUsers();
+    res.send({status: "success", data: users});
 }));
 
 module.exports = router;
