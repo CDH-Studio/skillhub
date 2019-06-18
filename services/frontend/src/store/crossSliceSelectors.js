@@ -3,7 +3,16 @@ import {createSelector} from "redux-starter-kit";
 import {arrayToObject} from "utils/helperFunctions";
 import {Profile, Project, ProjectProfile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
-import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice} from "./slices";
+import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice, profileSkillsSlice} from "./slices";
+
+const getProfilesWithSkills = createSelector(
+    [
+        profilesSlice.selectors.getProfiles,
+        profileSkillsSlice.selectors.getById,
+        skillsSlice.selectors.getSkills
+    ],
+    Profile.mergeProfilesWithSkills
+);
 
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
@@ -26,7 +35,7 @@ const getProjectFromUrlId = createSelector(
 );
 
 const getUserProfile = createSelector(
-    [profilesSlice.selectors.getProfiles, userSlice.selectors.getUserId],
+    [getProfilesWithSkills, userSlice.selectors.getUserId],
     Profile.getUserProfile
 );
 
@@ -41,6 +50,7 @@ const getProjectsForUser = createSelector(
 );
 
 export const crossSliceSelectors = {
+    getProfilesWithSkills,
     getProjectsWithSkills,
     getProjectsWithSkillsById,
     getProjectIdFromUrl,
