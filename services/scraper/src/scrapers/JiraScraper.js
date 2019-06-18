@@ -48,7 +48,7 @@ class JiraScraper {
 
         return result.data.reduce((acc, user) => {
             if (!user.name.includes("addon_")) {
-                acc.push(new JiraUser({name: user.name, email: user.emailAddress}));
+                acc.push(new JiraUser({name: user.displayName, email: user.emailAddress}));
             }
 
             return acc;
