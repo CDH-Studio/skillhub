@@ -1,12 +1,9 @@
 const axios = require("axios");
+const {JIRA_AUTH_TOKEN, JIRA_HOST, JIRA_PLATFORM} = require("config");
 const {JiraUser} = require("utils/models");
 
 const PLATFORM_SERVER = "server";
 const PLATFORM_CLOUD = "cloud";
-
-const jiraAuthToken = process.env.JIRA_AUTH_TOKEN;
-const jiraHost = process.env.JIRA_HOST;
-const jiraPlatform = process.env.JIRA_PLATFORM;
 
 const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
@@ -19,10 +16,16 @@ const PLATFORM_CONFIGS = {
     }
 };
 
+const constructUrl = (baseUrl, platform, key) => baseUrl + PLATFORM_CONFIGS[platform][key];
+
 class JiraScraper {
-    constructor({authToken = jiraAuthToken, host = jiraHost, platform = jiraPlatform} = {}) {
+    constructor({authToken = JIRA_AUTH_TOKEN, host = JIRA_HOST, platform = JIRA_PLATFORM} = {}) {
         if (platform !== PLATFORM_SERVER && platform !== PLATFORM_CLOUD) {
             throw Error("Invalid Jira platform configuration");
+        }
+
+        if (!authToken) {
+            throw Error("Missing Jira auth token");
         }
 
         this.authToken = authToken;
@@ -37,7 +40,7 @@ class JiraScraper {
 
     async getUsers() {
         // TODO: Account for when there are more than 1000 users
-        const url = this.baseUrl + PLATFORM_CONFIGS[this.platform].getUsers;
+        const url = constructUrl(this.baseUrl, this.platform, "getUsers");
         const result = await axios.get(url, {headers: this.authHeaders});
 
         return result.data.reduce((acc, user) => {
