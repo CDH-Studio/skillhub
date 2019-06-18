@@ -403,7 +403,7 @@ const PROFILE_SKILLS = [
         id: "9549e841-5466-451c-ad3a-2c46013022f2",
         profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
         skillId: SKILL_IDS_BY_NAME["Docker"],
-        isHighlySkilled: true,
+        isHighlySkilled: false,
         createdAt: new Date(),
         updatedAt: new Date()
     },
@@ -419,7 +419,7 @@ const PROFILE_SKILLS = [
         id: "c0103776-26a9-4dc2-84ac-1b7d9d89bac0",
         profileId: PROFILE_IDS_BY_NAME["Sam Heaton"],
         skillId: SKILL_IDS_BY_NAME["JavaScript"],
-        isHighlySkilled: true,
+        isHighlySkilled: false,
         createdAt: new Date(),
         updatedAt: new Date()
     },
@@ -443,7 +443,7 @@ const PROFILE_SKILLS = [
         id: "a6758a2d-3f24-4116-8eb7-e06b5644766b",
         profileId: PROFILE_IDS_BY_NAME["testBro"],
         skillId: SKILL_IDS_BY_NAME["React"],
-        isHighlySkilled: true,
+        isHighlySkilled: false,
         createdAt: new Date(),
         updatedAt: new Date()
     },
@@ -459,7 +459,7 @@ const PROFILE_SKILLS = [
         id: "af30de43-4fea-43e2-bb8d-90fd2b195f4a",
         profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
         skillId: SKILL_IDS_BY_NAME["Python"],
-        isHighlySkilled: true,
+        isHighlySkilled: false,
         createdAt: new Date(),
         updatedAt: new Date()
     },
@@ -475,7 +475,7 @@ const PROFILE_SKILLS = [
         id: "b3068dc2-af53-42af-814c-d7db69966d7a",
         profileId: PROFILE_IDS_BY_NAME["Joshua Gorman"],
         skillId: SKILL_IDS_BY_NAME["Docker"],
-        isHighlySkilled: true,
+        isHighlySkilled: false,
         createdAt: new Date(),
         updatedAt: new Date()
     },
