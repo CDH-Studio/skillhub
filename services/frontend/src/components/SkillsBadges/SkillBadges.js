@@ -3,6 +3,7 @@ import {TextBadge} from "components/";
 import "./SkillBadges.scss";
 
 const SkillBadges = ({displayCount, skills}) => {
+    displayCount = displayCount || skills.length;
     const mappedSkillBadges = useMemo(() => skills.slice(0, displayCount).map((skill) => {
         return (
             <SkillBadge

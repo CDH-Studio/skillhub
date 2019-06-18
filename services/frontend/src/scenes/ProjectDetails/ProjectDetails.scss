@@ -28,66 +28,34 @@
     display: flex;
     flex: 1;
     margin: $default-spacing*2 0;
-    padding: $default-spacing;
+    padding: $default-spacing*2;
 }
 
 #project-info {
-    display: flex;
-    //justify-content: center;
 
-    .project-info-card-content {
-        display: flex;
+    .project-card-info-active-section {
+        flex: 1;
+        align-self: flex-start;
+    }
 
-        .project-card-info-active-section {
-            align-self: flex-start;
-            display: flex;
-            flex: 1;
+    .project-info-card-content-section {
+        flex: 3;
+        padding-left: $default-spacing*2;
+
+        .project-info-card-name {
+            margin-bottom: $default-spacing;
         }
 
-        .project-info-card-content-section {
-            flex: 3;
-            padding-left: $default-spacing*2;
-
-            .project-info-card-name {
-                margin-bottom: $default-spacing;
-            }
-
-            .project-info-card-description {
-                color: $color-text-secondary;
-            }
+        .project-info-card-description {
+            color: $color-text-secondary;
         }
     }
+
 }
-
-#project-contributors{
-    display: flex;
-    flex-direction: column;
-
-    .project-contributors-card{
-        flex: 1;
-        display: flex;
-        padding: $default-spacing;
-    }
-}
-
-#project-used-skills {
-    display: flex;
-    flex-direction: column;
-
-    .project-used-skills-card {
-        flex: 1;
-        display: flex;
+#project-used-skills{
+    .project-used-skills-content{
         flex-wrap: wrap;
+        padding: $default-spacing*1.5 $default-spacing*1.5;
     }
 }
 
-#project-changelog{
-    display: flex;
-    flex-direction: column;
-
-    .project-changelog-card{
-        flex: 1;
-        display: flex;
-        padding: $default-spacing;
-    }
-}
