@@ -1,6 +1,6 @@
 import React from "react";
 import {ScrollContainer, NavSidebar, SkillBadges} from "components/";
-import {Paper} from "@material-ui/core";
+import {Avatar, Paper, Tooltip} from "@material-ui/core";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
 import classNames from "classnames";
@@ -101,37 +101,10 @@ const TextBadge = ({className, text, isHighlighted = false}) => (
 const Contributors = ({sectionName}) => (
     <>
         <h2>{sectionName}</h2>
-        <Paper className="project-details-card">
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            <br /> <br />
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
+        <Paper className="project-details-card project-contributors-content">
+            {dummyProfiles.map((profile) => (
+                contributorBadge(profile.name, profile.initial, profile.role)
+            ))}
         </Paper>
     </>
 );
@@ -183,5 +156,51 @@ const Changelog = ({sectionName}) => (
         </Paper>
     </>
 );
+
+const contributorBadge = (name, initial, role) => {
+    return (
+        <div className="project-contributors-badge">
+            <Tooltip title={role} placement={"top-end"}>
+                <Avatar className="project-contributors-badge-picture">
+                    {name[0]}
+                </Avatar>
+            </Tooltip>
+            <h3 className="project-contributors-badge-name">{name}</h3>
+        </div>
+    );
+};
+
+const dummyProfiles = [
+    {
+        name: "Bhalachandra Malghan",
+        //initial: name[0],
+        role: "Developer"
+    },
+    {
+        name: "Devin Sit",
+        //initial: name[0],
+        role: "Scrum Master"
+    },
+    {
+        name: "Josh Gorman",
+        //initial: name[0],
+        role: "Developer"
+    },
+    {
+        name: "Ali Nouri",
+        //initial: name[0],
+        role: "Mentor"
+    },
+    {
+        name: "Mena Machado",
+        //initial: name[0],
+        role: "Manager"
+    },
+    {
+        name: "Yunwei Li",
+        //initial: name[0],
+        role: "Developer"
+    }
+];
 
 export default ProjectDetailsLayout;

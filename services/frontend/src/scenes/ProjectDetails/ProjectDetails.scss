@@ -59,3 +59,33 @@
     }
 }
 
+#project-contributors{
+    .project-contributors-content{
+        display: grid;
+        justify-content: space-around;
+        grid-template-columns: repeat(auto-fill, 100px);
+        padding-top: 0;
+        flex-wrap: wrap;
+    }
+
+}
+
+.project-contributors-badge{
+        flex: 1;
+        flex-direction: column;
+        flex-wrap: wrap;
+        //margin: 0 $default-spacing;
+        .project-contributors-badge-picture{
+            margin: $default-spacing auto $default-spacing auto;
+            align-self: center;
+            font-size: 30px;
+            height: 48px;
+            width: 48px;
+        }
+
+        .project-contributors-badge-name{
+            text-align: center;
+            font-size: $font-size-content;
+        }
+    }
+
