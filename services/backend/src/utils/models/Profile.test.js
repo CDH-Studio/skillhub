@@ -1,7 +1,7 @@
 const Profile = require("./Profile");
 
 describe("processProfileSkills", () => {
-    it("takes just the profileSkills and removes the profile data", () => {
+    it("takes just the profileSkills and removes the skill data", () => {
         const profiles = [
             // Multiple profiles at once
             {skills: [{profileSkills: {id: "1"}}, {profileSkills: {id: "3"}}]},

@@ -69,7 +69,7 @@ export default class Profile {
     static mergeProfilesWithSkills(
         profilesById = {}, profileSkillsById = {}, profileSkillsByProfileId = {}, skillsById = {}
     ) {
-        const profileWithSkills = Object.keys(profilesById).map((profileId) => {
+        const profilesWithSkills = Object.keys(profilesById).map((profileId) => {
             /* get the profileSkills for a given profile */
             const profile = {...profilesById[profileId]};
             const profileSkills = ProfileSkill.mapProfileIdToProfileSkills(
@@ -82,9 +82,8 @@ export default class Profile {
                     const skill = new Skill({...skillsById[profileSkill.skillId]});
                     skill.isHighlySkilled = profileSkill.isHighlySkilled;
                     acc = [...acc, skill];
-
-                    return acc;
                 }
+                return acc;
             }, []);
 
             /* Delete the unneeded profileSkills and return profile */
@@ -92,6 +91,6 @@ export default class Profile {
             return profile;
         });
 
-        return profileWithSkills;
+        return profilesWithSkills;
     }
 }

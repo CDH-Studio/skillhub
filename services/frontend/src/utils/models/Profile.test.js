@@ -1,6 +1,4 @@
-import Profile from "./Profile";
-import ProfileSkill from "./ProfileSkill";
-import Skill from "./Skill";
+import {Profile, ProfileSkill, Skill} from "utils/models";
 
 describe("normalizeApiResultsForRedux", () => {
     const ProfilesList = [
@@ -17,7 +15,7 @@ describe("normalizeApiResultsForRedux", () => {
         [ProfilesList[3].id]: {...ProfilesList[3], profileSkills: []}
     };
 
-    it("normalizes a list of Profiles to a map of Profiles with just skill IDs", () => {
+    it("normalizes a list of Profiles to a map of Profiles with just profileSkill IDs", () => {
         expect(Profile.normalizeApiResultsForRedux(ProfilesList)).toEqual(ProfilesMap);
     });
 });
