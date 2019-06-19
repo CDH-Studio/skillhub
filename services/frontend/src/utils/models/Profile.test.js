@@ -88,23 +88,27 @@ describe("mergeProfilesWithSkills", () => {
     combinedSkill3.isHighlySkilled = true;
 
     const profiles = {[Profile1.id]: Profile1, [Profile2.id]: Profile2};
-    const profileSkills = {[profileSkill1.id]: profileSkill1, 
-        [profileSkill2.id]: profileSkill2, 
+    const profileSkills = {[profileSkill1.id]: profileSkill1,
+        [profileSkill2.id]: profileSkill2,
         [profileSkill3.id]: profileSkill3,
         [profileSkill4.id]: profileSkill4
     };
+    const profileSkillsByProfileId = {[Profile1.id]: [profileSkill1.id, profileSkill2.id],
+        [Profile2.id]: [profileSkill3.id, profileSkill4.id]
+    };
     const skills = {[skillA.id]: skillA, [skillB.id]: skillB, [skillC.id]: skillC};
 
-
     const Profile1WithSkills = {...Profile1, skills: [combinedSkill1, combinedSkill2]};
-    delete Profile1WithSkills.profileSkills
+    delete Profile1WithSkills.profileSkills;
     const Profile2WithSkills = {...Profile2, skills: [combinedSkill2, combinedSkill3]};
-    delete Profile2WithSkills.profileSkills
+    delete Profile2WithSkills.profileSkills;
 
     const ProfilesWithSkills = [Profile1WithSkills, Profile2WithSkills];
 
     it("can merge a set of Profiles with a set of skills (while ignoring unknown skills)", () => {
-        expect(Profile.mergeProfilesWithSkills(profiles, profileSkills, skills)).toEqual(ProfilesWithSkills);
+        expect(Profile.mergeProfilesWithSkills(
+            profiles, profileSkills, profileSkillsByProfileId, skills
+        )).toEqual(ProfilesWithSkills);
     });
 
     it("returns an empty array when given empty inputs", () => {

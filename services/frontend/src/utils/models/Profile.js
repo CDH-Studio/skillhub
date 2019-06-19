@@ -1,5 +1,6 @@
 import uuidv4 from "uuid/v4";
 import {arrayToObject} from "utils/helperFunctions";
+import {ProfileSkill, Skill} from "utils/models";
 
 export default class Profile {
     constructor({
@@ -34,7 +35,7 @@ export default class Profile {
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(profiles = []) {
         const processProfile = (profile) => {
-            const processedProfile = new Profile(profile)
+            const processedProfile = new Profile(profile);
 
             if (processedProfile.profileSkills) {
                 processedProfile.profileSkills = processedProfile.profileSkills.map(({id}) => id);
@@ -43,7 +44,7 @@ export default class Profile {
             }
 
             return processedProfile;
-        }
+        };
 
         return profiles.reduce(arrayToObject(processProfile), {});
     }
@@ -63,19 +64,30 @@ export default class Profile {
         return foundProfileIndex ? profilesById[foundProfileIndex] : null;
     }
 
-
-    /* Takes profiles, profileSkills and Skills.
+    /* Takes profiles, profileSkills, profileskillsByProfileId's and Skills.
     grabs all of the profileSkills objects from a profile and merges them with the skills objects */
-    static mergeProfilesWithSkills(profilesById = {}, profileSkillsById = {}, skillsById = {}) {
-        //console.log(profilesById)
-        //console.log(profileSkillsById)
-        //console.log(skillsById)
+    static mergeProfilesWithSkills(
+        profilesById = {}, profileSkillsById = {}, profileSkillsByProfileId = {}, skillsById = {}
+    ) {
         const profileWithSkills = Object.keys(profilesById).map((profileId) => {
+            /* get the profileSkills for a given profile */
             const profile = {...profilesById[profileId]};
+            const profileSkills = ProfileSkill.mapProfileIdToProfileSkills(
+                profileId, profileSkillsById, profileSkillsByProfileId
+            );
 
-            profile.profileSkills = getProfileSkills(profile, profileSkillsById);
-            profile.skills = mergeProfileSkillWithSkill(profile, skillsById);
+            /* Merge the profileSkills and the Skills */
+            profile.skills = profileSkills.reduce((acc, profileSkill) => {
+                if (profileSkill && profileSkill.skillId in skillsById) {
+                    const skill = new Skill({...skillsById[profileSkill.skillId]});
+                    skill.isHighlySkilled = profileSkill.isHighlySkilled;
+                    acc = [...acc, skill];
 
+                    return acc;
+                }
+            }, []);
+
+            /* Delete the unneeded profileSkills and return profile */
             delete profile.profileSkills;
             return profile;
         });
@@ -83,29 +95,3 @@ export default class Profile {
         return profileWithSkills;
     }
 }
-
-/* Take in a profile and array of profileSkills.
-Return an array of all profileSkills in the profile */
-const getProfileSkills = (profile, profileSkillsById = {}) => (
-    profile.profileSkills.reduce((acc, profileSkillId) => {
-        if (profileSkillId in profileSkillsById) {
-            acc = [...acc, profileSkillsById[profileSkillId]];
-        }
-
-        return acc;
-    }, [])
-);
-
-/* Take in a profile and an array of skills.
-return an array of combined profileSkills and skills. */
-const mergeProfileSkillWithSkill = (profile, skillsById) => (
-    profile.profileSkills.reduce((acc, profileSkill) => {
-        const skillId = profileSkill.skillId;
-
-        if (skillId in skillsById) {
-            skillsById[skillId].isHighlySkilled = profileSkill.isHighlySkilled;
-            acc = [...acc, skillsById[skillId]];
-        }
-        return acc;
-    }, [])
-);

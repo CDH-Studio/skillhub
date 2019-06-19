@@ -33,7 +33,6 @@ const generateAvatarInitials = (name) => {
 
 const Profile = ({projects = [], profile = {}, isLoading = false}) => {
     if (profile) {
-        profile.skills = dummySkills;
         profile.avatarInitials = generateAvatarInitials(profile.name);
     }
 

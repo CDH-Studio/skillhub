@@ -9,6 +9,7 @@ const getProfilesWithSkills = createSelector(
     [
         profilesSlice.selectors.getProfiles,
         profileSkillsSlice.selectors.getById,
+        profileSkillsSlice.selectors.getByProfileId,
         skillsSlice.selectors.getSkills
     ],
     Profile.mergeProfilesWithSkills
