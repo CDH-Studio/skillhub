@@ -13,8 +13,8 @@ class SkillhubBridge {
     }
 
     async scrapeToSkillhub() {
-        const usersByEmail = await this.jiraScraper.getUsers();
-        const result = await this.axios.post("/scraperBridge", {usersByEmail});
+        const users = await this.jiraScraper.getUsers();
+        const result = await this.axios.post("/scraperBridge", {users});
         return result.data;
     }
 }

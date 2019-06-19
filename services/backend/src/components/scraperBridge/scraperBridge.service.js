@@ -7,32 +7,14 @@ class ScraperBridgeService {
     }
 
     async create(data) {
-        const {usersByEmail} = data;
+        const {users} = data;
         const profilesService = this.app.service("profiles");
 
-        const emails = Object.keys(usersByEmail);
-        const existingProfiles = await profilesService.find({query: {contactEmail: {$in: emails}}});
-
-        if (emails.length !== existingProfiles.length) {
-            const profilesByEmail = existingProfiles.reduce((acc, profile) => {
-                acc[profile.contactEmail] = profile;
-                return acc;
-            }, {});
-
-            const usersToAdd = emails.reduce((acc, email) => {
-                if (!(email in profilesByEmail)) {
-                    acc.push(usersByEmail[email]);
-                }
-
-                return acc;
-            }, []);
-
-            await profilesService.create(usersToAdd);
-
-            return {status: "success", message: "Created new users", data: usersToAdd};
-        } else {
-            return {status: "success", message: "All users already exist; no new ones created"};
-        }
+        const result = await profilesService.create(users);
+        return {
+            status: "success",
+            message: `${users.length} users were scraped; ${result.length} new users were created.`
+        };
     }
 }
 

@@ -18,12 +18,51 @@ const processProfileSkills = () => (context) => {
     return context;
 };
 
+const preventBulkDuplication = () => async (context) => {
+    const {data} = context;
+
+    if (!Array.isArray(data)) {
+        return context;
+    }
+
+    const usersByEmail = data.reduce((acc, user) => {
+        acc[user.contactEmail] = user;
+        return acc;
+    }, {});
+
+    const profilesService = context.app.service("profiles");
+
+    const emails = Object.keys(usersByEmail);
+    const existingProfiles = await profilesService.find({query: {contactEmail: {$in: emails}}});
+
+    if (emails.length !== existingProfiles.length) {
+        const profilesByEmail = existingProfiles.reduce((acc, profile) => {
+            acc[profile.contactEmail] = profile;
+            return acc;
+        }, {});
+
+        const usersToAdd = emails.reduce((acc, email) => {
+            if (!(email in profilesByEmail)) {
+                acc.push(usersByEmail[email]);
+            }
+
+            return acc;
+        }, []);
+
+        context.data = usersToAdd;
+    } else {
+        context.data = [];
+    }
+
+    return context;
+};
+
 module.exports = {
     before: {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [],
+        create: [preventBulkDuplication()],
         update: [],
         patch: [],
         remove: []

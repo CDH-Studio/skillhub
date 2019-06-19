@@ -48,11 +48,11 @@ class JiraScraper {
 
         return result.data.reduce((acc, user) => {
             if (!user.name.includes("addon_")) {
-                acc[user.emailAddress] = new JiraUser(user).toSkillhubUser();
+                acc.push(new JiraUser(user).toSkillhubUser());
             }
 
             return acc;
-        }, {});
+        }, []);
     }
 }
 
