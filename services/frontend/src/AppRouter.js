@@ -9,6 +9,7 @@ const AppRouter = () => (
         <Navbar />
         <Switch>
             <Route path={ScreenUrls.PROFILE} component={Profile} />
+            <Route path={ScreenUrls.PEOPLE_DETAILS} component={Profile} />
             <Route path={ScreenUrls.PEOPLE} component={People} />
             <Route path={ScreenUrls.PROJECT_DETAILS} component={ProjectDetails} />
             <Route path={ScreenUrls.PROJECTS} component={Projects} />

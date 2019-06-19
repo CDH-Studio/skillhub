@@ -5,6 +5,7 @@ import {Profile, Project, ProjectProfile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice, profileSkillsSlice} from "./slices";
 
+/* Profile Selectors */
 const getProfilesWithSkills = createSelector(
     [
         profilesSlice.selectors.getProfiles,
@@ -15,6 +16,22 @@ const getProfilesWithSkills = createSelector(
     Profile.mergeProfilesWithSkills
 );
 
+const getProfilesWithSkillsById = createSelector(
+    [getProfilesWithSkills],
+    (profilesWithSkills) => profilesWithSkills.reduce(arrayToObject(), {})
+);
+
+const getProfileIdFromUrl = createSelector(
+    [createMatchSelector(ScreenUrls.PEOPLE_DETAILS)],
+    (match) => match.params.id
+);
+
+const getProfileFromUrlId = createSelector(
+    [getProfilesWithSkillsById, getProfileIdFromUrl],
+    (profilesById, profileId) => profilesById[profileId]
+);
+
+/* Project Selectors */
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
     Project.mergeWithSkills
@@ -35,6 +52,7 @@ const getProjectFromUrlId = createSelector(
     (projectsById, projectId) => projectsById[projectId]
 );
 
+/* Other Selectors */
 const getUserProfile = createSelector(
     [getProfilesWithSkills, userSlice.selectors.getUserId],
     Profile.getUserProfile
@@ -50,6 +68,16 @@ const getContributorsForProject = createSelector(
     Project.getContributors
 );
 
+const getProjectsFromUrlId = createSelector(
+    [
+        getProfileFromUrlId,
+        getProjectsWithSkillsById,
+        projectProfilesSlice.selectors.getById,
+        projectProfilesSlice.selectors.getByProfileId
+    ],
+    ProjectProfile.mapProfileToProjects
+);
+
 const getProjectsForUser = createSelector(
     [
         getUserProfile,
@@ -62,11 +90,15 @@ const getProjectsForUser = createSelector(
 
 export const crossSliceSelectors = {
     getProfilesWithSkills,
+    getProfilesWithSkillsById,
+    getProfileIdFromUrl,
+    getProfileFromUrlId,
     getProjectsWithSkills,
     getProjectsWithSkillsById,
     getProjectIdFromUrl,
-    getProjectFromUrlId,
+    getProjectsFromUrlId,
     getUserProfile,
-    getProjectsForUser,
-    getContributorsForProject
+    getContributorsForProject,
+    getProjectFromUrlId,
+    getProjectsForUser
 };
