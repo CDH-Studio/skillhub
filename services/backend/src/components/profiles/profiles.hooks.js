@@ -20,24 +20,24 @@ const processProfileSkills = () => (context) => {
 };
 
 const preventBulkDuplication = () => async (context) => {
-    const {data: users} = context;
+    const {data: profiles} = context;
 
     // This hook is only for handling duplication detection when doing a bulk (i.e. array) create
-    if (!Array.isArray(users)) {
+    if (!Array.isArray(profiles)) {
         return context;
     }
 
     const profilesService = context.app.service("profiles");
 
-    const emails = users.map(({contactEmail}) => contactEmail);
+    const emails = profiles.map(({contactEmail}) => contactEmail);
     const existingProfiles = await profilesService.find({query: {contactEmail: {$in: emails}}});
 
-    if (users.length !== existingProfiles.length) {
+    if (profiles.length !== existingProfiles.length) {
         // Convert the profiles to an object for constant time email lookups, as opposed to linear array searches
         const profilesByEmail = existingProfiles.reduce(arrayToObject({property: "contactEmail"}), {});
-        const usersToAdd = users.filter((user) => !(user.contactEmail in profilesByEmail));
+        const profilesToAdd = profiles.filter((profile) => !(profile.contactEmail in profilesByEmail));
 
-        context.data = usersToAdd;
+        context.data = profilesToAdd;
     } else {
         // Empty out the data so that Feathers doesn't bother actually trying to create any profiles
         context.data = [];
