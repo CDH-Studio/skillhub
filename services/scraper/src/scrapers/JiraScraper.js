@@ -57,7 +57,7 @@ class JiraScraper {
             result = await this.axios.get(pathWithIndex);
 
             users = result.data.reduce((acc, user) => {
-                if (!user.name.includes("addon_")) {
+                if (!user.key.includes("addon_")) {
                     acc.push(new JiraUser(user).toSkillhubUser());
                 }
 

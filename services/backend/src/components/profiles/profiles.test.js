@@ -34,7 +34,7 @@ describe("before create hook", () => {
         }
     });
 
-    // Setup the hook for testing against the test service
+    // Setup the hook for testing
     app.service("profiles").hooks({
         before: {
             create: hooks.before.create
