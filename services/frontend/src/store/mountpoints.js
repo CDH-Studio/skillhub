@@ -2,6 +2,7 @@ export default {
     authRequests: "authRequests",
     profiles: "profiles",
     profilesRequests: "profilesRequests",
+    profileSkills: "profileSkills",
     projects: "projects",
     projectsRequests: "projectsRequests",
     projectProfiles: "projectProfiles",
