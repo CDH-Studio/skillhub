@@ -7,14 +7,15 @@ import classNames from "classnames";
 
 const containerClass = ".scroll-container";
 
-const ProjectDetailsLayout = ({project}) => {
+const ProjectDetailsLayout = ({project, contributors}) => {
+    console.log(contributors);
     return (
         <ScrollContainer className="project">
             <NavSidebar
                 scrollSpySelectors={sections}
                 containerClass={containerClass}
             />
-            <ProjectContent project={project} />
+            <ProjectContent project={project} contributors={contributors} />
         </ScrollContainer>
     );
 };
@@ -38,12 +39,12 @@ const sections = [
     }
 ];
 
-const renderSectionComponent = (sectionName, sectionProps) => {
+const renderSectionComponent = (sectionName, sectionProps, contributors) => {
     switch (sectionName) {
         case "Project Info":
             return <ProjectInfo {...sectionProps} />;
         case "Contributors":
-            return <Contributors sectionName={sectionName} {...sectionProps} />;
+            return <Contributors sectionName={sectionName} {...sectionProps} {...contributors} />;
         case "Used Skills":
             return <UsedSkills sectionName={sectionName} {...sectionProps} />;
         case "Changelog":
@@ -98,12 +99,16 @@ const TextBadge = ({className, text, isHighlighted = false}) => (
     </div>
 );
 
-const Contributors = ({sectionName}) => (
+const Contributors = ({sectionName, contributors}) => (
     <>
         <h2>{sectionName}</h2>
         <Paper className="project-details-card project-contributors-content">
-            {dummyProfiles.map((profile) => (
-                contributorBadge(profile.name, profile.initial, profile.role)
+            {contributors.map((contributor) => (
+                <ContributorBadge
+                    key={contributor.profile.name}
+                    name={contributor.profile.name}
+                    role={contributor.role}
+                />
             ))}
         </Paper>
     </>
@@ -157,7 +162,7 @@ const Changelog = ({sectionName}) => (
     </>
 );
 
-const contributorBadge = (name, initial, role) => {
+const ContributorBadge = ({name, role}) => {
     return (
         <div className="project-contributors-badge">
             <Tooltip title={role} placement={"top-end"}>
@@ -172,31 +177,37 @@ const contributorBadge = (name, initial, role) => {
 
 const dummyProfiles = [
     {
+        key: "1",
         name: "Bhalachandra Malghan",
         //initial: name[0],
         role: "Developer"
     },
     {
+        key: "2",
         name: "Devin Sit",
         //initial: name[0],
         role: "Scrum Master"
     },
     {
+        key: "3",
         name: "Josh Gorman",
         //initial: name[0],
         role: "Developer"
     },
     {
+        key: "4",
         name: "Ali Nouri",
         //initial: name[0],
         role: "Mentor"
     },
     {
+        key: "5",
         name: "Mena Machado",
         //initial: name[0],
         role: "Manager"
     },
     {
+        key: "6",
         name: "Yunwei Li",
         //initial: name[0],
         role: "Developer"

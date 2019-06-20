@@ -74,9 +74,10 @@
         flex: 1;
         flex-direction: column;
         flex-wrap: wrap;
+        margin-top: $default-spacing;
         //margin: 0 $default-spacing;
         .project-contributors-badge-picture{
-            margin: $default-spacing auto $default-spacing auto;
+            margin: $default-spacing auto;
             align-self: center;
             font-size: 30px;
             height: 48px;

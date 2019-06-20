@@ -86,6 +86,14 @@ export default class Project {
             return project;
         });
     }
+
+    static getContributors(projectsById = {}, profilesById = {}) {
+        return projectsById.projectProfiles.map((projectProfile) => {
+            const contributorProfile = {...projectProfile};
+            contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
+            return contributorProfile;
+        });
+    }
 }
 
 const sortLastActiveFirst = (a, b) => new Date(b.lastActive) - new Date(a.lastActive);
