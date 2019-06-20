@@ -1,5 +1,6 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
 
 const includeSkills = () => (context) => {
@@ -19,38 +20,26 @@ const processProfileSkills = () => (context) => {
 };
 
 const preventBulkDuplication = () => async (context) => {
-    const {data} = context;
+    const {data: users} = context;
 
-    if (!Array.isArray(data)) {
+    // This hook is only for handling duplication detection when doing a bulk (i.e. array) create
+    if (!Array.isArray(users)) {
         return context;
     }
 
-    const usersByEmail = data.reduce((acc, user) => {
-        acc[user.contactEmail] = user;
-        return acc;
-    }, {});
-
     const profilesService = context.app.service("profiles");
 
-    const emails = Object.keys(usersByEmail);
+    const emails = users.map(({contactEmail}) => contactEmail);
     const existingProfiles = await profilesService.find({query: {contactEmail: {$in: emails}}});
 
-    if (emails.length !== existingProfiles.length) {
-        const profilesByEmail = existingProfiles.reduce((acc, profile) => {
-            acc[profile.contactEmail] = profile;
-            return acc;
-        }, {});
-
-        const usersToAdd = emails.reduce((acc, email) => {
-            if (!(email in profilesByEmail)) {
-                acc.push(usersByEmail[email]);
-            }
-
-            return acc;
-        }, []);
+    if (users.length !== existingProfiles.length) {
+        // Convert the profiles to an object for constant time email lookups, as opposed to linear array searches
+        const profilesByEmail = existingProfiles.reduce(arrayToObject({property: "contactEmail"}), {});
+        const usersToAdd = users.filter((user) => !(user.contactEmail in profilesByEmail));
 
         context.data = usersToAdd;
     } else {
+        // Empty out the data so that Feathers doesn't bother actually trying to create any profiles
         context.data = [];
     }
 

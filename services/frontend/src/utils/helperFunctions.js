@@ -1,8 +1,8 @@
 const identity = (x) => x;
 
-export const arrayToObject = (objectProcessor = identity) => (acc, obj) => {
-    if ("id" in obj) {
-        acc[obj.id] = objectProcessor(obj);
+export const arrayToObject = ({processor = identity, property = "id"} = {}) => (acc, obj) => {
+    if (property in obj) {
+        acc[obj[property]] = processor(obj);
     }
 
     return acc;

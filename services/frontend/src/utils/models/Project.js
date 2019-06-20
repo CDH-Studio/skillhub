@@ -42,7 +42,7 @@ export default class Project {
             return processedProject;
         };
 
-        return projects.reduce(arrayToObject(processProject), {});
+        return projects.reduce(arrayToObject({processor: processProject}), {});
     }
 
     static extractProjectProfiles(projects = []) {
