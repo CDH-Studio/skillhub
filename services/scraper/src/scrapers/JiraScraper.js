@@ -5,14 +5,16 @@ const {JiraUser} = require("utils/models");
 const PLATFORM_SERVER = "server";
 const PLATFORM_CLOUD = "cloud";
 
+const MAX_RESULTS_USER = 1000;
+
 const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
         basePath: "/rest/api/3",
-        getUsers: "/user/search?query=%20&maxResults=1000"
+        getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
-        getUsers: "/user/search?username=.&maxResults=1000"
+        getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`
     }
 };
 
@@ -42,17 +44,30 @@ class JiraScraper {
     }
 
     async getUsers() {
-        // TODO: Account for when there are more than 1000 users
         const path = getPath(this.platform, "getUsers");
-        const result = await this.axios.get(path);
 
-        return result.data.reduce((acc, user) => {
-            if (!user.name.includes("addon_")) {
-                acc.push(new JiraUser(user).toSkillhubUser());
-            }
+        let result = null;
+        let users = [];
+        let index = 0;
 
-            return acc;
-        }, []);
+        // Loop until all the users have been scraped; this only matters
+        // if there exists more than 1000 users on the Jira instance.
+        do {
+            const pathWithIndex = `${path}&startAt=${index}`;
+            result = await this.axios.get(pathWithIndex);
+
+            users = result.data.reduce((acc, user) => {
+                if (!user.name.includes("addon_")) {
+                    acc.push(new JiraUser(user).toSkillhubUser());
+                }
+
+                return acc;
+            }, users);
+
+            index += result.data.length;
+        } while (result.data.length !== 0);
+
+        return users;
     }
 }
 

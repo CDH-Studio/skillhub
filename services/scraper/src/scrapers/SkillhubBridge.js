@@ -15,6 +15,7 @@ class SkillhubBridge {
     async scrapeToSkillhub() {
         const users = await this.jiraScraper.getUsers();
         const result = await this.axios.post("/scraperBridge", {users});
+
         return result.data;
     }
 }

@@ -11,6 +11,7 @@ class ScraperBridgeService {
         const profilesService = this.app.service("profiles");
 
         const result = await profilesService.create(users);
+
         return {
             status: "success",
             message: `${users.length} users were scraped; ${result.length} new users were created.`
