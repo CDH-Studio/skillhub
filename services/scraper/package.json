@@ -3,9 +3,11 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
+        "test": "NODE_ENV= NODE_PATH=src npm run jest",
+        "lint": "eslint 'src/**/*.js'",
         "start": "DEBUG=scraper:* NODE_PATH=src nodemon src/index.js",
         "start:prod": "NODE_PATH=src node src/index.js",
-        "lint": "eslint 'src/**/*.js'"
+        "jest": "jest"
     },
     "dependencies": {
         "axios": "^0.19.0",
@@ -21,6 +23,7 @@
     "devDependencies": {
         "babel-eslint": "^10.0.1",
         "eslint": "^5.9.0",
+        "jest": "^24.8.0",
         "nodemon": "^1.18.6"
     }
 }

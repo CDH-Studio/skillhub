@@ -25,6 +25,9 @@ test-backend-locally:
 test-frontend-locally:
 	docker-compose -f ./services/docker-compose.yaml exec frontend npm run test
 
+test-scraper-locally:
+	docker-compose -f ./services/docker-compose.yaml exec scraper npm run test
+
 inspect-database:
 	docker-compose -f ./services/docker-compose.yaml exec backend-database psql app-database app-database-user
 
