@@ -20,6 +20,7 @@ const PLATFORM_CONFIGS = {
 
 const getPath = (platform, key) => PLATFORM_CONFIGS[platform][key];
 
+/* Scraper for Jira that primarily handles scraping users and projects. */
 class JiraScraper {
     constructor({authToken = JIRA_AUTH_TOKEN, host = JIRA_HOST, platform = JIRA_PLATFORM} = {}) {
         if (platform !== PLATFORM_SERVER && platform !== PLATFORM_CLOUD) {
@@ -51,13 +52,15 @@ class JiraScraper {
         let index = 0;
 
         // Loop until all the users have been scraped; this only matters
-        // if there exists more than 1000 users on the Jira instance.
+        // if there exists more than 1000 (MAX_RESULTS_USER) users on the Jira instance.
         do {
             const pathWithIndex = `${path}&startAt=${index}`;
             result = await this.axios.get(pathWithIndex);
 
             users = result.data.reduce((acc, user) => {
                 if (!user.key.includes("addon_")) {
+                    // Convert the user data to a format that Skillhub will understand, so that
+                    // Skillhub can ingest the data more easily
                     acc.push(new JiraUser(user).toSkillhubUser());
                 }
 

@@ -2,6 +2,9 @@ const axios = require("axios");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
 const JiraScraper = require("./JiraScraper");
 
+/* Handles running all of the scrapers to get their data and acts as the bridge
+ * to Skillhub by passing all of that scraped data to the backend.
+ */
 class SkillhubBridge {
     constructor() {
         this.axios = axios.create({
