@@ -1,40 +1,35 @@
 import {connect} from "react-redux";
 import {matchPath} from "react-router";
 import {crossSliceSelectors} from "store/";
-import {profilesRequestsSlice} from "store/slices";
+import {reduceLoadingStates} from "utils/helperFunctions";
+import {profilesRequestsSlice, projectsRequestsSlice, skillsRequestsSlice} from "store/slices";
 import ScreenUrls from "utils/screenUrls";
 
 const mapStateToProps = (state, props) => {
+    const mappedState = {};
+    mappedState.isLoading = reduceLoadingStates([
+        profilesRequestsSlice,
+        projectsRequestsSlice,
+        skillsRequestsSlice
+    ], state);
+
     if (matchPath(props.match.path, ScreenUrls.PROFILE)) {
-        return {
-            projects: crossSliceSelectors.getProjectsForUser(state),
-            profile: crossSliceSelectors.getUserProfile(state)
-        };
+        mappedState.projects = crossSliceSelectors.getProjectsForUser(state);
+        mappedState.profile = crossSliceSelectors.getUserProfile(state);
+
+    } else {
+        const loadedProfile = crossSliceSelectors.getProfileFromUrlId(state);
+
+        if (loadedProfile) {
+            mappedState.profile = loadedProfile;
+            mappedState.projects = crossSliceSelectors.getProjectsFromUrlId(state);
+
+        } else {
+            mappedState.profile = {};
+            mappedState.projects = [];
+        }
     }
-    else {
-        const personProfile = crossSliceSelectors.getProfileFromUrlId(state);
-
-        return personProfile ? {
-            isLoading: profilesRequestsSlice.fetchAll.selectors.getLoading(state),
-            projects: crossSliceSelectors.getProjectsFromUrlId(state),
-            profile: personProfile
-        } : (
-            props.history.push("/404")
-        );
-    }
-
-    /*
-    return {
-    isLoading: profilesRequestsSlice.fetchAll.selectors.getLoading(state),
-
-    ...(matchPath(props.match.pathName, ScreenUrls.PROFILE) ? ({
-        projects: crossSliceSelectors.getProjectsForUser(state),
-        profile: crossSliceSelectors.getUserProfile(state)
-    }) : ({
-        projects: crossSliceSelectors.getProjectsForUser(state),
-        profile: crossSliceSelectors.getProfileFromUrlId(state)
-    }))
-    */
+    return mappedState;
 };
 
 export default connect(mapStateToProps, null);

@@ -1,5 +1,20 @@
 import {Profile, ProfileSkill, Skill} from "utils/models";
 
+/* Mock the date so "createdAt" and "updatedAt" properties will not be invalid if created at different times */
+const realDate = Date;
+const constantDate = new Date("2019-01-01T12:00:00");
+
+global.Date = class extends Date {
+    constructor () {
+        return constantDate;
+    }
+};
+
+/* Set the date object back to it's normal value */
+afterAll(() => {
+    global.Date = realDate;
+});
+
 describe("normalizeApiResultsForRedux", () => {
     const ProfilesList = [
         new Profile({id: "1", profileSkills: [{id: "a"}, {id: "b"}]}),

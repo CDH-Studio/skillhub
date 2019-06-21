@@ -31,6 +31,11 @@ const getProfileFromUrlId = createSelector(
     (profilesById, profileId) => profilesById[profileId]
 );
 
+const getUserProfile = createSelector(
+    [getProfilesWithSkills, userSlice.selectors.getUserId],
+    Profile.getUserProfile
+);
+
 /* Project Selectors */
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
@@ -53,11 +58,6 @@ const getProjectFromUrlId = createSelector(
 );
 
 /* Other Selectors */
-const getUserProfile = createSelector(
-    [getProfilesWithSkills, userSlice.selectors.getUserId],
-    Profile.getUserProfile
-);
-
 const getContributorsForProject = createSelector(
     [
         getProjectIdFromUrl,
@@ -93,11 +93,11 @@ export const crossSliceSelectors = {
     getProfilesWithSkillsById,
     getProfileIdFromUrl,
     getProfileFromUrlId,
+    getUserProfile,
     getProjectsWithSkills,
     getProjectsWithSkillsById,
     getProjectIdFromUrl,
     getProjectsFromUrlId,
-    getUserProfile,
     getContributorsForProject,
     getProjectFromUrlId,
     getProjectsForUser

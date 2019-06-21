@@ -1,8 +1,10 @@
 import React, {useMemo} from "react";
-import {Avatar, CircularProgress, Paper} from "@material-ui/core";
+import {Link} from "react-router-dom";
+import {Avatar, Button, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
-import {AvatarIcon, NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
+import {AvatarIcon, LoadingValidator, NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
 import {Project} from "utils/models";
+import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
 const containerClass = ".scroll-container";
@@ -24,23 +26,34 @@ const sections = [
 
 const ProfileLayout = ({projects, profile, isLoading}) => (
     <ScrollContainer className="profile">
-        {
-            (!profile || isLoading) ? (
-                <CircularProgress className="loading-button-indicator" />
-            ) : (
-                <>
-                    <NavSidebar
-                        scrollSpySelectors={sections}
-                        containerClass={containerClass}
-                    />
-                    <ProfileContent
-                        projects={projects}
-                        profile={profile}
-                    />
-                </>
-            )
-        }
+        <LoadingValidator
+            dependencies={[profile]}
+            renderOnFailedLoad={InvalidProfile()}
+            isLoading={isLoading}
+        >
+            <NavSidebar
+                scrollSpySelectors={sections}
+                containerClass={containerClass}
+            />
+            <ProfileContent
+                projects={projects}
+                profile={profile}
+            />
+        </LoadingValidator>
     </ScrollContainer>
+);
+
+const InvalidProfile = () => (
+    <Paper className="invalid-profile">
+        <h2 className="invalid-profile-heading">
+            Content Not Found
+        </h2>
+        <Link to={ScreenUrls.PEOPLE}>
+            <Button color="primary">
+                Back to People
+            </Button>
+        </Link>
+    </Paper>
 );
 
 const ProfileContent = ({...sectionProps}) => (
@@ -70,7 +83,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
 
 const PersonalDetails = ({profile}) => (
     <Paper className="profile-card profile-card-personal-details">
-        <AvatarIcon name={profile.name} className="avatar-icon" />
+        <AvatarIcon name={profile.name} className="profile-avatar-icon" />
         <div className="profile-card-content">
             <h2 className="profile-card-title">
                 {profile.name}
