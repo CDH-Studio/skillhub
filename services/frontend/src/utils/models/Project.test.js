@@ -133,3 +133,27 @@ describe("mergeWithSkills", () => {
         expect(Project.mergeWithSkills()).toEqual([]);
     });
 });
+
+describe("getContributors", () => {
+    const projectProfile1 = {role: "tester", profileId: "p1"};
+    const projectProfile2 = {role: "tester", profileId: ""}; //profileId not found
+    const projectProfile3 = {role: "", profileId: "p3"};
+    const projectProfile4 = {role: "tester", profileId: "p4"}; //profileId doesnt exist
+
+    const person1 = {id: "p1", name: "Person 1"};
+    const person3 = {id: "p3", name: "Person 3"};
+
+    const profiles = {[person1.id]: person1, [person3.id]: person3};
+
+    const project1 = new Project({
+        id: "1",
+        projectProfiles: [projectProfile1, projectProfile2, projectProfile3, projectProfile4]
+    });
+
+    const contributors = [{...projectProfile1, profile: person1},{...projectProfile3, profile: person3}];
+
+    it("can merge a set of projectProfiles with corresponding profile", () => {
+        expect(Project.getContributors(profiles, project1.projectProfiles)).toEqual(contributors);
+    });
+
+});

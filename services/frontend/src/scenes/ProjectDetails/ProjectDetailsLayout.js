@@ -8,7 +8,6 @@ import classNames from "classnames";
 const containerClass = ".scroll-container";
 
 const ProjectDetailsLayout = ({project, contributors}) => {
-    console.log(contributors);
     return (
         <ScrollContainer className="project">
             <NavSidebar
@@ -165,7 +164,7 @@ const Changelog = ({sectionName}) => (
 const ContributorBadge = ({name, role}) => {
     return (
         <div className="project-contributors-badge">
-            <Tooltip title={role} placement={"top-end"}>
+            <Tooltip title={role} placement={"top"}>
                 <Avatar className="project-contributors-badge-picture">
                     {name[0]}
                 </Avatar>
@@ -174,44 +173,5 @@ const ContributorBadge = ({name, role}) => {
         </div>
     );
 };
-
-const dummyProfiles = [
-    {
-        key: "1",
-        name: "Bhalachandra Malghan",
-        //initial: name[0],
-        role: "Developer"
-    },
-    {
-        key: "2",
-        name: "Devin Sit",
-        //initial: name[0],
-        role: "Scrum Master"
-    },
-    {
-        key: "3",
-        name: "Josh Gorman",
-        //initial: name[0],
-        role: "Developer"
-    },
-    {
-        key: "4",
-        name: "Ali Nouri",
-        //initial: name[0],
-        role: "Mentor"
-    },
-    {
-        key: "5",
-        name: "Mena Machado",
-        //initial: name[0],
-        role: "Manager"
-    },
-    {
-        key: "6",
-        name: "Yunwei Li",
-        //initial: name[0],
-        role: "Developer"
-    }
-];
 
 export default ProjectDetailsLayout;

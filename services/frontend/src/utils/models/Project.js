@@ -88,11 +88,14 @@ export default class Project {
     }
 
     static getContributors(profilesById = {}, projectProfilesForProject = {}) {
-        return projectProfilesForProject.map((projectProfile) => {
+        return projectProfilesForProject.reduce((acc, projectProfile) => {
             const contributorProfile = {...projectProfile};
-            contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
-            return contributorProfile;
-        });
+            if ((contributorProfile.profileId in profilesById)) {
+                contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
+                acc = [...acc, contributorProfile];
+            }
+            return acc;
+        }, []);
     }
 }
 
