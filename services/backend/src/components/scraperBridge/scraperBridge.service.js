@@ -6,7 +6,7 @@ const hooks = require("./scraperBridge.hooks");
  * Since the Scraper has potential computing constraints in its theoretical production environment
  * (i.e., it might have limited time to do its work, and probably isn't going to be running constantly),
  * then the Skillhub backend will have to do the heavy-lifting of parsing and processing anything
- * complex that the Scraper might not have time to do. 
+ * complex that the Scraper might not have time to do.
  */
 class ScraperBridgeService {
     setup(app) {

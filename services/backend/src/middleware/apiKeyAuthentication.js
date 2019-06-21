@@ -1,10 +1,10 @@
 const Strategy = require("passport-custom");
 
-/* Custom authentication middleware for adding the ability to authenticate other 
- * users/services using custom API keys. 
+/* Custom authentication middleware for adding the ability to authenticate other
+ * users/services using custom API keys.
  *
  * @params {string} header              The header to look for the API key in the request.
- * @params {string[]} allowedApiKeys    The set list of API keys that are authenticatable. 
+ * @params {string[]} allowedApiKeys    The set list of API keys that are authenticatable.
  */
 const apiKeyAuthentication = ({header = "", allowedApiKeys = []}) => {
     // NOTE: This has to return a regular function (as opposed to an arrow function),
