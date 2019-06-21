@@ -32,6 +32,7 @@ export default class ProjectProfile {
     static mapProfileToProjects(
         profile = {}, projectsById = {}, projectProfilesById = {}, projectProfilesByProfileId = {}
     ) {
+        console.log(projectProfilesById);
         if (!profile || !(profile.id in projectProfilesByProfileId)) {
             return [];
         }
@@ -39,7 +40,6 @@ export default class ProjectProfile {
         const projectProfiles = ProjectProfile.mapProfileIdToProjectProfiles(
             profile.id, projectProfilesById, projectProfilesByProfileId
         );
-
         return ProjectProfile.mapProjectProfilesToProjects(projectProfiles, projectsById);
     }
 }

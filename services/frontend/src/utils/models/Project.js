@@ -87,8 +87,8 @@ export default class Project {
         });
     }
 
-    static getContributors(projectsById = {}, profilesById = {}) {
-        return projectsById.projectProfiles.map((projectProfile) => {
+    static getContributors(profilesById = {}, projectProfilesForProject = {}) {
+        return projectProfilesForProject.map((projectProfile) => {
             const contributorProfile = {...projectProfile};
             contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
             return contributorProfile;
