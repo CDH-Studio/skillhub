@@ -39,9 +39,19 @@ services:
         volumes:
         - ./frontend/:/frontend
         - frontend-deps:/frontend/node_modules
+    scraper:
+        build:
+            context: ./scraper
+        command: npm start
+        ports:
+        - 5001:5000
+        volumes:
+        - ./scraper/:/backend
+        - scraper-deps:/backend/node_modules
 version: '2'
 volumes:
     backend-database-data:
         driver: local
     backend-deps:
     frontend-deps:
+    scraper-deps:

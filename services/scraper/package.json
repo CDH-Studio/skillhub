@@ -1,0 +1,29 @@
+{
+    "name": "scraper",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "NODE_ENV= NODE_PATH=src npm run jest",
+        "lint": "eslint 'src/**/*.js'",
+        "start": "DEBUG=scraper:* NODE_PATH=src nodemon src/index.js",
+        "start:prod": "NODE_PATH=src node src/index.js",
+        "jest": "jest"
+    },
+    "dependencies": {
+        "axios": "^0.19.0",
+        "body-parser": "^1.18.3",
+        "cookie-parser": "~1.4.3",
+        "cors": "^2.8.5",
+        "debug": "~2.6.9",
+        "dotenv": "^6.1.0",
+        "express": "~4.16.0",
+        "morgan": "~1.9.0",
+        "statuses": "^1.5.0"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.9.0",
+        "jest": "^24.8.0",
+        "nodemon": "^1.18.6"
+    }
+}

@@ -46,7 +46,7 @@ export default class Profile {
             return processedProfile;
         };
 
-        return profiles.reduce(arrayToObject(processProfile), {});
+        return profiles.reduce(arrayToObject({processor: processProfile}), {});
     }
 
     static extractProfileSkills(profiles = []) {

@@ -25,9 +25,12 @@
             "production_replicas": 1,
             "replicas": 1,
             "secrets": {
-                "name": "backend-secrets",
                 "file": ".env.encrypted",
-                "variables": ["TOKEN_SECRET"]
+                "name": "backend-secrets",
+                "variables": [
+                    "TOKEN_SECRET",
+                    "SCRAPER_API_KEY"
+                ]
             },
             "templates": [
                 "deployment",
@@ -89,6 +92,47 @@
             "production_replicas": 1,
             "replicas": 1,
             "secrets": {},
+            "templates": [
+                "deployment",
+                "ingress",
+                "service"
+            ],
+            "type": "NodePort",
+            "wait_for_service": null
+        },
+        "scraper": {
+            "container_port": "5000",
+            "env": [
+                {
+                    "name": "JIRA_HOST",
+                    "value": "https://skillhubca.atlassian.net"
+                },
+                {
+                    "name": "JIRA_PLATFORM",
+                    "value": "cloud"
+                },
+                {
+                    "name": "BACKEND_PROTOCOL",
+                    "value": "https"
+                }
+            ],
+            "external_port": "80",
+            "folder": "scraper",
+            "host": "scraper.skillhub.ca",
+            "image": "scraper",
+            "image_in_project": true,
+            "persistent_volume": {},
+            "pre_startup_command": "",
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "scraper-secrets",
+                "variables": [
+                    "JIRA_AUTH_TOKEN",
+                    "SKILLHUB_API_KEY"
+                ]
+            },
             "templates": [
                 "deployment",
                 "ingress",
