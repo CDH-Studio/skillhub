@@ -35,7 +35,7 @@ class JiraScraper {
         this.host = host;
         this.platform = platform;
 
-        this.baseUrl = this.host + PLATFORM_CONFIGS[this.platform].basePath;
+        this.baseUrl = this.host + getPath(this.platform, "basePath");
         this.encodedAuthToken = Buffer.from(this.authToken).toString("base64");
 
         this.axios = axios.create({
