@@ -1,4 +1,4 @@
-import {arrayToObject} from "./helperFunctions";
+const {arrayToObject} = require("./helperFunctions");
 
 describe("arrayToObject", () => {
     const arbitraryObjectGenerator = (key, value) => ({[key]: value, other: "prop"});

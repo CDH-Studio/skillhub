@@ -1,35 +1,23 @@
-.PHONY: start down
+.PHONY: lint ci
+
+
+#################################################################################
+# GLOBALS
+#################################################################################
+
+CACHE = 
+DOCKER_NPM = docker run $$(docker build -q $(CACHE) .) npm run
 
 #################################################################################
 # COMMANDS
 #################################################################################
 
-start:
-	docker-compose -f ./services/docker-compose.yaml up --build
+## Runs the flake8 linter and static type checker
+lint:
+	$(DOCKER_NPM) lint
 
-down:
-	docker-compose -f ./services/docker-compose.yaml down -v
-
-lint-backend-locally:
-	docker-compose -f ./services/docker-compose.yaml exec backend npm run lint
-
-lint-frontend-locally:
-	docker-compose -f ./services/docker-compose.yaml exec frontend npm run lint
-
-lint-scraper-locally:
-	docker-compose -f ./services/docker-compose.yaml exec scraper npm run lint
-
-test-backend-locally:
-	docker-compose -f ./services/docker-compose.yaml exec backend npm run test
-
-test-frontend-locally:
-	docker-compose -f ./services/docker-compose.yaml exec frontend npm run test
-
-test-scraper-locally:
-	docker-compose -f ./services/docker-compose.yaml exec scraper npm run test
-
-inspect-database:
-	docker-compose -f ./services/docker-compose.yaml exec backend-database psql app-database app-database-user
+## Runs the linter and the test suite
+ci: lint
 
 #################################################################################
 # SELF DOCUMENTING COMMANDS
