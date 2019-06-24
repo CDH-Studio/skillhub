@@ -7,64 +7,26 @@
     flex-direction: column;
 
     .people-header {
-        align-items: center;
+        border-bottom: 1px solid $color-text-secondary;
+        display: flex;
+        flex-shrink: 0;
+        justify-content: center;
+        padding: $default-spacing;
+    }
+
+    .filter-button {
+    background-color: transparent;
+    border: none;
+    border-radius: $default-border-radius;
+    box-shadow: none;
+    color: $color-text-secondary;
+    margin: 0 16px;
+    padding: $default-spacing/2 $default-spacing*1.5;
+    text-transform: none;
+
+    &.filter-button--active {
         background-color: $color-primary;
-        display: flex;
-        justify-content: space-between;
-        padding: $default-spacing $default-spacing*2;
-
-        .logo-icon {
-            height: 32px;
-            width: 32px;
-        }
-
-        .people-auth {
-            display: flex;
-
-            button {
-                background: none;
-                border: none;
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            .people-login {
-                color: $color-light;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-
-            .people-signup {
-                @include hover-background($color-light, darken($color-light, 5%));
-
-                border-radius: $default-border-radius;
-                color: $color-primary;
-                margin-left: $default-spacing * 2;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-        }
+        color: $color-light;
     }
-
-    .people-jumbotron {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: 25vh;
-
-        .people-tagline {
-            color: $color-text-secondary;
-            font-weight: bold;
-            margin-bottom: $default-spacing * 2;
-        }
-
-        .people-create-people {
-            @include hover-background($color-primary, $color-primary-hover);
-            @include fab-dropshadow();
-
-            border: none;
-            border-radius: $default-border-radius;
-            color: $color-light;
-            font-weight: bold;
-            padding: $default-spacing $default-spacing*4;
-        }
-    }
+}
 }
