@@ -1,4 +1,6 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
+const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const {Profile} = require("utils/models");
 
 const includeSkills = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
@@ -8,6 +10,11 @@ const includeSkills = () => (context) => {
         raw: false
     };
 
+    return context;
+};
+
+const processProfileSkills = () => (context) => {
+    context.result = Profile.processProfileSkills(context.result);
     return context;
 };
 
@@ -24,8 +31,8 @@ module.exports = {
 
     after: {
         all: [],
-        find: [],
-        get: [],
+        find: [dehydrate(), processProfileSkills()],
+        get: [dehydrate(), processProfileSkills()],
         create: [],
         update: [],
         patch: [],
