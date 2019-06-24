@@ -32,7 +32,6 @@ export default class ProjectProfile {
     static mapProfileToProjects(
         profile = {}, projectsById = {}, projectProfilesById = {}, projectProfilesByProfileId = {}
     ) {
-        console.log(projectProfilesById);
         if (!profile || !(profile.id in projectProfilesByProfileId)) {
             return [];
         }

@@ -1,6 +1,6 @@
 import React from "react";
-import {ScrollContainer, NavSidebar, SkillBadges} from "components/";
-import {Avatar, Paper, Tooltip} from "@material-ui/core";
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges} from "components/";
+import {Paper, Tooltip} from "@material-ui/core";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
 import classNames from "classnames";
@@ -98,17 +98,19 @@ const TextBadge = ({className, text, isHighlighted = false}) => (
     </div>
 );
 
-const Contributors = ({sectionName, contributors}) => (
+const Contributors = ({sectionName}) => (
     <>
         <h2>{sectionName}</h2>
         <Paper className="project-details-card project-contributors-content">
-            {contributors.map((contributor) => (
-                <ContributorBadge
-                    key={contributor.profile.name}
-                    name={contributor.profile.name}
-                    role={contributor.role}
-                />
-            ))}
+            {dummyProfiles.map((contributor) => {
+                return (
+                    <div className="project-contributors-badge" key={contributor.key}>
+                        <AvatarIcon name={contributor.name} role={contributor.role} />
+                        <h3 className="project-contributors-badge-name">{contributor.name}</h3>
+                    </div>
+                );
+            }
+            )}
         </Paper>
     </>
 );
@@ -161,17 +163,43 @@ const Changelog = ({sectionName}) => (
     </>
 );
 
-const ContributorBadge = ({name, role}) => {
-    return (
-        <div className="project-contributors-badge">
-            <Tooltip title={role} placement={"top"}>
-                <Avatar className="project-contributors-badge-picture">
-                    {name[0]}
-                </Avatar>
-            </Tooltip>
-            <h3 className="project-contributors-badge-name">{name}</h3>
-        </div>
-    );
-};
+const dummyProfiles = [
+    {
+        key: "1",
+        name: "Bhalachandra Malghan",
+        //initial: name[0],
+        role: "Developer"
+    },
+    {
+        key: "2",
+        name: "Devin Sit",
+        //initial: name[0],
+        role: "Scrum Master"
+    },
+    {
+        key: "3",
+        name: "Josh Gorman",
+        //initial: name[0],
+        role: "Developer"
+    },
+    {
+        key: "4",
+        name: "Ali Nouri",
+        //initial: name[0],
+        role: "Mentor"
+    },
+    {
+        key: "5",
+        name: "Mena Machado",
+        //initial: name[0],
+        role: "Manager"
+    },
+    {
+        key: "6",
+        name: "Yunwei Li",
+        //initial: name[0],
+        role: "Developer"
+    }
+];
 
 export default ProjectDetailsLayout;

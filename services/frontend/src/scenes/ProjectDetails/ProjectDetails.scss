@@ -33,34 +33,35 @@
 
 #project-info {
 
-    .project-card-info-active-section {
-        flex: 1;
+    .project-info-card-active-section {
         align-self: flex-start;
+        display: flex;
+        flex: 1;
     }
 
     .project-info-card-content-section {
-        flex: 3;
-        padding-left: $default-spacing*2;
+        flex: 4;
+
+        .project-info-card-description {
+            color: $color-text-secondary;
+        }
 
         .project-info-card-name {
             margin-bottom: $default-spacing;
         }
 
-        .project-info-card-description {
-            color: $color-text-secondary;
-        }
     }
 
 }
-#project-used-skills{
-    .project-used-skills-content{
+#project-used-skills {
+    .project-used-skills-content {
         flex-wrap: wrap;
         padding: $default-spacing*1.5 $default-spacing*1.5;
     }
 }
 
-#project-contributors{
-    .project-contributors-content{
+#project-contributors {
+    .project-contributors-content {
         display: grid;
         justify-content: space-around;
         grid-template-columns: repeat(auto-fill, 100px);
@@ -70,21 +71,13 @@
 
 }
 
-.project-contributors-badge{
+.project-contributors-badge {
         flex: 1;
         flex-direction: column;
         flex-wrap: wrap;
         margin-top: $default-spacing;
-        //margin: 0 $default-spacing;
-        .project-contributors-badge-picture{
-            margin: $default-spacing auto;
-            align-self: center;
-            font-size: 30px;
-            height: 48px;
-            width: 48px;
-        }
 
-        .project-contributors-badge-name{
+        .project-contributors-badge-name {
             text-align: center;
             font-size: $font-size-content;
         }
