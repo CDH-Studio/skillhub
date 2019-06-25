@@ -113,9 +113,9 @@ const Contributors = ({sectionName, contributors}) => {
             <Paper className="project-details-card project-contributors-content">
                 {contributors.map((contributor) => {
                     return (
-                        <div className="project-contributors-badge" key={contributor.profile.name}>
-                            <AvatarIcon name={contributor.profile.name} role={contributor.role} />
-                            <h3 className="project-contributors-badge-name">{contributor.profile.name}</h3>
+                        <div className="project-contributors-badge" key={contributor.name}>
+                            <AvatarIcon name={contributor.name} role={contributor.role} />
+                            <h3 className="project-contributors-badge-name">{contributor.name}</h3>
                         </div>
                     );
                 }

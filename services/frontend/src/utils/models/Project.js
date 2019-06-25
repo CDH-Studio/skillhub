@@ -1,5 +1,6 @@
 import uuidv4 from "uuid/v4";
 import {arrayToObject} from "utils/helperFunctions";
+import Contributor from "./Contributor";
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30 * 1000;  // Milliseconds for 30 days
 
@@ -88,10 +89,6 @@ export default class Project {
     }
 
     static getContributors(projectId, projectProfilesById = {}, projectProfilesByProfileId = {}, profilesById = {}) {
-        console.log(projectId);
-        console.log(projectProfilesById);
-        console.log(projectProfilesByProfileId);
-        console.log(profilesById);
         if (projectId in projectProfilesById){
             const projectProfileIds = projectProfilesById[projectId];
             const projectProfiles =
@@ -113,10 +110,14 @@ const getProjectProfilesFromProjectProfileIds = (projectProfileIds, projectProfi
 
 const mergeProjectProfilesWithProfiles = (projectProfiles, profilesById) => {
     return projectProfiles.reduce((acc, projectProfile) => {
-        const contributorProfile = {...projectProfile};
-        if ((contributorProfile.profileId in profilesById)) {
-            contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
-            acc = [...acc, contributorProfile];
+        const contributor = new Contributor({
+            projectId: projectProfile.projectId,
+            profileId: projectProfile.profileId,
+            role: projectProfile.role
+        });
+        if ((contributor.profileId in profilesById)) {
+            contributor.name = profilesById[contributor.profileId].name;
+            acc = [...acc, contributor];
         }
         return acc;
     }, []);

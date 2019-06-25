@@ -1,3 +1,4 @@
+export {default as Contributor} from "./Contributor";
 export {default as Profile} from "./Profile";
 export {default as ProfileSkill} from "./ProfileSkill";
 export {default as Project} from "./Project";
