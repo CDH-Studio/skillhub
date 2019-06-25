@@ -39,6 +39,7 @@ export default class ProjectProfile {
         const projectProfiles = ProjectProfile.mapProfileIdToProjectProfiles(
             profile.id, projectProfilesById, projectProfilesByProfileId
         );
+
         return ProjectProfile.mapProjectProfilesToProjects(projectProfiles, projectsById);
     }
 }

@@ -1,5 +1,4 @@
 export default class Contributor {
-
     constructor({
         name = "", role = "", profileId = "", projectId = ""
     } = {}) {
