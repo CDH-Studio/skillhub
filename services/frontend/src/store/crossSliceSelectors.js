@@ -40,22 +40,13 @@ const getUserProfile = createSelector(
     Profile.getUserProfile
 );
 
-const getProjectProfileIdsFromProjectId = createSelector(
-    [projectProfilesSlice.selectors.getByProjectId, getProjectIdFromUrl],
-    (projectProfilesByProjectId, projectId) => {
-        return projectProfilesByProjectId[projectId];
-    }
-);
-
-const getProjectProfilesFromProjectProfileIds = createSelector(
-    [getProjectProfileIdsFromProjectId, projectProfilesSlice.selectors.getById],
-    (projectProfileIds, projectProfilesById) => (Object.keys(projectProfileIds).map((projectProfileId) => {
-        return (projectProfilesById[projectProfileId]);
-    }))
-);
-
 const getContributorsForProject = createSelector(
-    [profilesSlice.selectors.getProfiles, getProjectProfilesFromProjectProfileIds],
+    [
+        getProjectIdFromUrl,
+        projectProfilesSlice.selectors.getByProjectId,
+        projectProfilesSlice.selectors.getById,
+        profilesSlice.selectors.getProfiles
+    ],
     Project.getContributors
 );
 

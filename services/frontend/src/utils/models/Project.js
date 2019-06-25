@@ -87,16 +87,35 @@ export default class Project {
         });
     }
 
-    static getContributors(profilesById = {}, projectProfilesForProject = {}) {
-        return projectProfilesForProject.reduce((acc, projectProfile) => {
-            const contributorProfile = {...projectProfile};
-            if ((contributorProfile.profileId in profilesById)) {
-                contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
-                acc = [...acc, contributorProfile];
-            }
-            return acc;
-        }, []);
+    static getContributors(projectId, projectProfilesById = {}, projectProfilesByProfileId = {}, profilesById = {}) {
+        if (projectId in projectProfilesById){
+            const projectProfileIds = projectProfilesById[projectId];
+            const projectProfiles =
+                getProjectProfilesFromProjectProfileIds(projectProfileIds, projectProfilesByProfileId);
+            return mergeProjectProfilesWithProfiles(projectProfiles, profilesById);
+        }
+        return [];
     }
 }
+
+const getProjectProfilesFromProjectProfileIds = (projectProfileIds, projectProfilesByProfileId) => {
+    return projectProfileIds.reduce((acc, projectProfileId) => {
+        if (projectProfileId in projectProfilesByProfileId){
+            acc = [...acc, projectProfilesByProfileId[projectProfileId]];
+        }
+        return acc;
+    },[]);
+};
+
+const mergeProjectProfilesWithProfiles = (projectProfiles, profilesById) => {
+    return projectProfiles.reduce((acc, projectProfile) => {
+        const contributorProfile = {...projectProfile};
+        if ((contributorProfile.profileId in profilesById)) {
+            contributorProfile.profile = {...profilesById[contributorProfile.profileId]};
+            acc = [...acc, contributorProfile];
+        }
+        return acc;
+    }, []);
+};
 
 const sortLastActiveFirst = (a, b) => new Date(b.lastActive) - new Date(a.lastActive);
