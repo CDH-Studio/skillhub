@@ -14,7 +14,6 @@
         justify-content: space-around;
         grid-template-columns: repeat(auto-fill, 100px);
         padding: $default-spacing*1.5 0;
-
         flex-wrap: wrap;
     }
 }
@@ -23,7 +22,6 @@
     flex: 1;
     flex-direction: column;
     flex-wrap: wrap;
-
 
     .project-contributors-badge-name {
         text-align: center;

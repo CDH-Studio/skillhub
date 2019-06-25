@@ -2,10 +2,12 @@
 @import "styles/_dimens.scss";
 @import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
+.avatar-icon-content {
 
-.avatar-icon {
-    margin: $default-spacing auto;
-    font-size: 30px;
-    height: 48px;
-    width: 48px;
+    .avatar-icon {
+        margin: $default-spacing auto;
+        font-size: 24px;
+        height: 48px;
+        width: 48px;
+    }
 }
