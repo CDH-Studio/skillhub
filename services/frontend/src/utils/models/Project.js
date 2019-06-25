@@ -88,6 +88,10 @@ export default class Project {
     }
 
     static getContributors(projectId, projectProfilesById = {}, projectProfilesByProfileId = {}, profilesById = {}) {
+        console.log(projectId);
+        console.log(projectProfilesById);
+        console.log(projectProfilesByProfileId);
+        console.log(profilesById);
         if (projectId in projectProfilesById){
             const projectProfileIds = projectProfilesById[projectId];
             const projectProfiles =
