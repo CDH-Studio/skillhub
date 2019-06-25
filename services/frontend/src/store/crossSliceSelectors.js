@@ -40,6 +40,16 @@ const getUserProfile = createSelector(
     Profile.getUserProfile
 );
 
+const getContributorsForProject = createSelector(
+    [
+        getProjectIdFromUrl,
+        projectProfilesSlice.selectors.getByProjectId,
+        projectProfilesSlice.selectors.getById,
+        profilesSlice.selectors.getProfiles
+    ],
+    Project.getContributors
+);
+
 const getProjectsForUser = createSelector(
     [
         getUserProfile,
@@ -57,5 +67,6 @@ export const crossSliceSelectors = {
     getProjectIdFromUrl,
     getProjectFromUrlId,
     getUserProfile,
-    getProjectsForUser
+    getProjectsForUser,
+    getContributorsForProject
 };

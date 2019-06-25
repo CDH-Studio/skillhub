@@ -1,3 +1,4 @@
+export {default as AvatarIcon} from "./AvatarIcon";
 export {default as AuthBranding} from "./AuthBranding";
 export {default as AuthForm} from "./AuthForm";
 export {default as EmailInput} from "./EmailInput";

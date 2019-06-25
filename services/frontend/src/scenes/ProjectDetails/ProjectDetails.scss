@@ -7,20 +7,25 @@
     margin-top: $default-spacing*1.5;
 }
 
-.project-details-content {
-    display: flex;
+#project-contributors {
+
+    .project-contributors-content {
+        display: grid;
+        justify-content: space-around;
+        grid-template-columns: repeat(auto-fill, 100px);
+        padding: $default-spacing*1.5 0;
+        flex-wrap: wrap;
+    }
+}
+
+.project-contributors-badge {
     flex: 1;
     flex-direction: column;
-    margin: 0 $default-spacing*4;
-    padding-top: $default-spacing;
+    flex-wrap: wrap;
 
-
-    .project-details-content-title {
-        color: $color-neutral-6;
-    }
-
-    .project-details-card:first-child {
-        margin-top: $default-spacing;
+    .project-contributors-badge-name {
+        text-align: center;
+        font-size: $font-size-content;
     }
 }
 
@@ -31,31 +36,49 @@
     padding: $default-spacing*2;
 }
 
+.project-details-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin: 0 $default-spacing*4;
+    padding-top: $default-spacing;
+
+    .project-details-content-title {
+        color: $color-neutral-6;
+    }
+
+    .project-details-card:first-child {
+        margin-top: $default-spacing;
+    }
+}
+
 #project-info {
 
-    .project-card-info-active-section {
-        flex: 1;
+    .project-info-card-active-section {
         align-self: flex-start;
+        display: flex;
+        flex: 1;
     }
 
     .project-info-card-content-section {
-        flex: 3;
-        padding-left: $default-spacing*2;
-
-        .project-info-card-name {
-            margin-bottom: $default-spacing;
-        }
+        flex: 4;
 
         .project-info-card-description {
             color: $color-text-secondary;
         }
-    }
 
+        .project-info-card-name {
+            margin-bottom: $default-spacing;
+        }
+    }
 }
-#project-used-skills{
-    .project-used-skills-content{
+#project-used-skills {
+
+    .project-used-skills-content {
         flex-wrap: wrap;
         padding: $default-spacing*1.5 $default-spacing*1.5;
     }
 }
+
+
 

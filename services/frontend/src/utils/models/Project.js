@@ -1,5 +1,6 @@
 import uuidv4 from "uuid/v4";
 import {arrayToObject} from "utils/helperFunctions";
+import Contributor from "./Contributor";
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30 * 1000;  // Milliseconds for 30 days
 
@@ -86,6 +87,40 @@ export default class Project {
             return project;
         });
     }
+
+    static getContributors(projectId, projectProfilesById = {}, projectProfilesByProfileId = {}, profilesById = {}) {
+        if (projectId in projectProfilesById){
+            const projectProfileIds = projectProfilesById[projectId];
+            const projectProfiles =
+                getProjectProfilesFromProjectProfileIds(projectProfileIds, projectProfilesByProfileId);
+            return mergeProjectProfilesWithProfiles(projectProfiles, profilesById);
+        }
+        return [];
+    }
 }
+
+const getProjectProfilesFromProjectProfileIds = (projectProfileIds, projectProfilesByProfileId) => {
+    return projectProfileIds.reduce((acc, projectProfileId) => {
+        if (projectProfileId in projectProfilesByProfileId){
+            acc = [...acc, projectProfilesByProfileId[projectProfileId]];
+        }
+        return acc;
+    },[]);
+};
+
+const mergeProjectProfilesWithProfiles = (projectProfiles, profilesById) => {
+    return projectProfiles.reduce((acc, projectProfile) => {
+        const contributor = new Contributor({
+            projectId: projectProfile.projectId,
+            profileId: projectProfile.profileId,
+            role: projectProfile.role
+        });
+        if ((contributor.profileId in profilesById)) {
+            contributor.name = profilesById[contributor.profileId].name;
+            acc = [...acc, contributor];
+        }
+        return acc;
+    }, []);
+};
 
 const sortLastActiveFirst = (a, b) => new Date(b.lastActive) - new Date(a.lastActive);

@@ -1,20 +1,28 @@
 import React from "react";
-import {ScrollContainer, NavSidebar, SkillBadges} from "components/";
-import {Paper} from "@material-ui/core";
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges} from "components/";
+import {CircularProgress, Paper} from "@material-ui/core";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
 import classNames from "classnames";
 
 const containerClass = ".scroll-container";
 
-const ProjectDetailsLayout = ({project}) => {
+const ProjectDetailsLayout = ({project, contributors, isLoading}) => {
     return (
         <ScrollContainer className="project">
-            <NavSidebar
-                scrollSpySelectors={sections}
-                containerClass={containerClass}
-            />
-            <ProjectContent project={project} />
+            {
+                (!contributors || isLoading) ? (
+                    <CircularProgress className="loading-button-indicator" />
+                ) : (
+                    <>
+                        <NavSidebar
+                            scrollSpySelectors={sections}
+                            containerClass={containerClass}
+                        />
+                        <ProjectContent project={project} contributors={contributors} />
+                    </>
+                )
+            }
         </ScrollContainer>
     );
 };
@@ -98,43 +106,24 @@ const TextBadge = ({className, text, isHighlighted = false}) => (
     </div>
 );
 
-const Contributors = ({sectionName}) => (
-    <>
-        <h2>{sectionName}</h2>
-        <Paper className="project-details-card">
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            <br /> <br />
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-        </Paper>
-    </>
-);
+const Contributors = ({sectionName, contributors}) => {
+    return (
+        <>
+            <h2>{sectionName}</h2>
+            <Paper className="project-details-card project-contributors-content">
+                {contributors.map((contributor) => {
+                    return (
+                        <div className="project-contributors-badge" key={contributor.name}>
+                            <AvatarIcon name={contributor.name} role={contributor.role} />
+                            <h3 className="project-contributors-badge-name">{contributor.name}</h3>
+                        </div>
+                    );
+                }
+                )}
+            </Paper>
+        </>
+    );
+};
 
 const UsedSkills = ({sectionName, project}) => (
     <>

@@ -1,5 +1,6 @@
 import Project from "./Project";
 import Skill from "./Skill";
+import Contributor from "./Contributor";
 
 const lastMonth = (() => {
     const date = new Date();
@@ -132,4 +133,66 @@ describe("mergeWithSkills", () => {
     it("returns an empty array when given empty inputs", () => {
         expect(Project.mergeWithSkills()).toEqual([]);
     });
+});
+
+describe("getContributors", () => {
+    const projectId1 = "real";
+    const projectId2 = "not-real";
+
+    const projectProfile1 = {id: "projectProfile1", role: "tester", profileId: "p1", projectId: "pro1"};
+    const projectProfile2 = {id: "projectProfile2", role: "tester", profileId: ""}; //profileId not found
+    const projectProfile3 = {id: "projectProfile3", role: "", profileId: "p3",};
+    const projectProfile4 = {id: "projectProfile4", role: "tester", profileId: "p4"}; //profileId doesnt exist
+
+    const projectProfilesById = {
+        [projectId1]: ["projectProfile1","projectProfile2", "projectProfile3", "projectProfile4"]
+    };
+
+    const projectProfilesByProfile = {
+        [projectProfile1.id]: projectProfile1,
+        [projectProfile2.id]: projectProfile2,
+        [projectProfile3.id]: projectProfile3,
+        [projectProfile4.id]: projectProfile4
+    };
+    const person1 = {id: "p1", name: "Person 1"};
+    const person3 = {id: "p3", name: "Person 3"};
+
+    const profiles = {[person1.id]: person1, [person3.id]: person3};
+
+    const contributor1 = new Contributor({
+        name: person1.name,
+        projectId: projectProfile1.projectId,
+        profileId: projectProfile1.profileId,
+        role: projectProfile1.role
+    });
+
+    const contributor3 = new Contributor({
+        name: person3.name,
+        projectId: projectProfile3.projectId,
+        profileId: projectProfile3.profileId,
+        role: projectProfile3.role
+    });
+
+    const contributors = [contributor1, contributor3];
+
+    it("can merge a set of projectProfiles with corresponding profile", () => {
+        expect(Project.getContributors(projectId1, projectProfilesById, projectProfilesByProfile, profiles))
+            .toEqual(contributors);
+    });
+
+    it("can error handle when projectId is incorrect/missing", () => {
+        expect(Project.getContributors(projectId2, projectProfilesById, projectProfilesByProfile, profiles))
+            .toEqual([]);
+    });
+
+    it("can error handle when projectProfilesById is incorrect/missing", () => {
+        expect(Project.getContributors(projectId1, [], projectProfilesByProfile, profiles))
+            .toEqual([]);
+    });
+
+    it("can error handle when projectProfilesByProfile is incorrect/missing", () => {
+        expect(Project.getContributors(projectId1, projectProfilesById, [], profiles))
+            .toEqual([]);
+    });
+
 });

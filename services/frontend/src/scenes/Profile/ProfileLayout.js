@@ -1,7 +1,7 @@
 import React, {useMemo} from "react";
 import {Avatar, CircularProgress, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
-import {NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
+import {AvatarIcon, NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
 import {Project} from "utils/models";
 import "./Profile.scss";
 
@@ -70,10 +70,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
 
 const PersonalDetails = ({profile}) => (
     <Paper className="profile-card profile-card-personal-details">
-        <Avatar className="profile-card-picture">
-            {profile.avatarInitials}
-        </Avatar>
-
+        <AvatarIcon name={profile.name} className="avatar-icon" />
         <div className="profile-card-content">
             <h2 className="profile-card-title">
                 {profile.name}
