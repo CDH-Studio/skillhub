@@ -52,6 +52,7 @@
         }
         
         .profile-card-content {
+            flex: 1;
             margin: 0 $default-spacing*2;
 
             .profile-card-title {
@@ -86,6 +87,13 @@
                 .profile-card-text:last-child {
                     margin-bottom: 0;
                 }
+            }
+        }
+        .profile-card-edit-button {
+            padding: 3px;
+
+            svg {
+                font-size: $font-size-subtitle;
             }
         }
     }

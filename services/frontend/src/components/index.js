@@ -7,6 +7,8 @@ export {default as LoadingButton} from "./LoadingButton";
 export {default as LoadingValidator} from "./LoadingValidator";
 export {default as Navbar} from "./Navbar";
 export {default as NavSidebar} from "./NavSidebar";
+export {default as PersonalDetailsDialog} from "./PersonalDetailsDialog";
+export {default as PersonalDetailsForm} from "./PersonalDetailsForm";
 export {default as ProjectCard} from "./ProjectCard";
 export {default as ScrollContainer} from "./ScrollContainer";
 export {default as SkillBadges} from "./SkillsBadges";
