@@ -2,10 +2,10 @@ import React from "react";
 import {Avatar, Tooltip} from "@material-ui/core";
 import "./AvatarIcon.scss";
 
-const AvatarIcon = ({name, role}) => (
+const AvatarIcon = ({name, personsRole, className}) => (
     <div className="avatar-icon-content">
-        <Tooltip title={role} placement={"top"} disableHoverListener={(role === undefined)}>
-            <Avatar className="avatar-icon">
+        <Tooltip title={personsRole} placement={"top"} disableHoverListener={(personsRole === undefined)}>
+            <Avatar className={className}>
                 {generateAvatarInitials(name)}
             </Avatar>
         </Tooltip>

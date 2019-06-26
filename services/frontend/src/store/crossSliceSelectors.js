@@ -5,6 +5,9 @@ import {Profile, Project, ProjectProfile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice, profileSkillsSlice} from "./slices";
 
+const isMatchingRoute = createMatchSelector;
+
+/* Profile Selectors */
 const getProfilesWithSkills = createSelector(
     [
         profilesSlice.selectors.getProfiles,
@@ -15,6 +18,27 @@ const getProfilesWithSkills = createSelector(
     Profile.mergeProfilesWithSkills
 );
 
+const getProfilesWithSkillsById = createSelector(
+    [getProfilesWithSkills],
+    (profilesWithSkills) => profilesWithSkills.reduce(arrayToObject(), {})
+);
+
+const getProfileIdFromUrl = createSelector(
+    [createMatchSelector(ScreenUrls.PEOPLE_DETAILS)],
+    (match) => match.params.id
+);
+
+const getProfileFromUrlId = createSelector(
+    [getProfilesWithSkillsById, getProfileIdFromUrl],
+    (profilesById, profileId) => profilesById[profileId]
+);
+
+const getUserProfile = createSelector(
+    [getProfilesWithSkills, userSlice.selectors.getUserId],
+    Profile.getUserProfile
+);
+
+/* Project Selectors */
 const getProjectsWithSkills = createSelector(
     [projectsSlice.selectors.getProjects, skillsSlice.selectors.getSkills],
     Project.mergeWithSkills
@@ -35,11 +59,7 @@ const getProjectFromUrlId = createSelector(
     (projectsById, projectId) => projectsById[projectId]
 );
 
-const getUserProfile = createSelector(
-    [getProfilesWithSkills, userSlice.selectors.getUserId],
-    Profile.getUserProfile
-);
-
+/* Other Selectors */
 const getContributorsForProject = createSelector(
     [
         getProjectIdFromUrl,
@@ -48,6 +68,16 @@ const getContributorsForProject = createSelector(
         profilesSlice.selectors.getProfiles
     ],
     Project.getContributors
+);
+
+const getProjectsFromProfileUrlId = createSelector(
+    [
+        getProfileFromUrlId,
+        getProjectsWithSkillsById,
+        projectProfilesSlice.selectors.getById,
+        projectProfilesSlice.selectors.getByProfileId
+    ],
+    ProjectProfile.mapProfileToProjects
 );
 
 const getProjectsForUser = createSelector(
@@ -61,12 +91,17 @@ const getProjectsForUser = createSelector(
 );
 
 export const crossSliceSelectors = {
+    isMatchingRoute,
     getProfilesWithSkills,
+    getProfilesWithSkillsById,
+    getProfileIdFromUrl,
+    getProfileFromUrlId,
+    getUserProfile,
     getProjectsWithSkills,
     getProjectsWithSkillsById,
     getProjectIdFromUrl,
     getProjectFromUrlId,
-    getUserProfile,
-    getProjectsForUser,
-    getContributorsForProject
+    getContributorsForProject,
+    getProjectsFromProfileUrlId,
+    getProjectsForUser
 };

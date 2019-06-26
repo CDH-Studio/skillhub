@@ -7,3 +7,9 @@ export const arrayToObject = ({processor = identity, property = "id"} = {}) => (
 
     return acc;
 };
+
+export const reduceLoadingStates = (slices, state) => (
+    slices.reduce((acc, slice) => (
+        acc || slice.fetchAll.selectors.getLoading(state)
+    ), false)
+);

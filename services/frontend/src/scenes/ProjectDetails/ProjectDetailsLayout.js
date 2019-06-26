@@ -114,7 +114,11 @@ const Contributors = ({sectionName, contributors}) => {
                 {contributors.map((contributor) => {
                     return (
                         <div className="project-contributors-badge" key={contributor.name}>
-                            <AvatarIcon name={contributor.name} role={contributor.role} />
+                            <AvatarIcon
+                                name={contributor.name}
+                                personsRole={contributor.role}
+                                className="avatar-icon"
+                            />
                             <h3 className="project-contributors-badge-name">{contributor.name}</h3>
                         </div>
                     );
