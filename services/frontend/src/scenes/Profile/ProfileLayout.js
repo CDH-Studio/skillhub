@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 import {Link} from "react-router-dom";
-import {Avatar, Button, Paper} from "@material-ui/core";
+import {Button, Paper} from "@material-ui/core";
 import {Email, LocalPhone} from "@material-ui/icons";
 import {AvatarIcon, LoadingValidator, NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
 import {Project} from "utils/models";
@@ -88,7 +88,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
 
 const PersonalDetails = ({profile}) => (
     <Paper className="profile-card profile-card-personal-details">
-        <AvatarIcon name={profile.name} className="profile-avatar-icon" />
+        <AvatarIcon name={profile.name} personsRole="" className="profile-avatar-icon" />
         <div className="profile-card-content">
             <h2 className="profile-card-title">
                 {profile.name}

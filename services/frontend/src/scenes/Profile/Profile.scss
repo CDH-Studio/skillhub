@@ -112,6 +112,12 @@
             margin: $default-spacing 0;
             width: auto;
 
+            @include max-laptop-width {
+                .project-card-content-section{
+                    margin-left: $default-spacing;
+                }
+            }
+
             &:first-child {
                 margin-top: 0;
             }

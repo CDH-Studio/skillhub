@@ -5,10 +5,7 @@ import {Profile, Project, ProjectProfile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice, profileSkillsSlice} from "./slices";
 
-const isMatchingRoute = (route) => createSelector(
-    [createMatchSelector(route)],
-    (match) => match
-);
+const isMatchingRoute = createMatchSelector;
 
 /* Profile Selectors */
 const getProfilesWithSkills = createSelector(
