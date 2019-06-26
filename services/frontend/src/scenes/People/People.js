@@ -8,17 +8,15 @@ const People = (profiles) => {
     const onFilterClick = useCallback((filter) => () => setActiveFilter(filter), [setActiveFilter]);
 
     const filteredProfiles = useMemo(() =>
-        Profile.filterProfiles(profiles.profiles, activeFilter),
-    [profiles, activeFilter]
+        Profile.filterProfiles(profiles.profiles, activeFilter),[profiles, activeFilter]
     );
-    console.log(filteredProfiles);
     return (
         <PeopleLayout
             profiles={filteredProfiles}
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
         />
-);
+    );
 };
 
 export default connect(People);

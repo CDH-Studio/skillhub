@@ -4,18 +4,15 @@ import {ProfileCard} from "components/";
 import classNames from "classnames";
 import {ProjectCard} from "../Projects/ProjectsLayout";
 
-const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => {
-    console.log(profiles);
-    return (
-        <div className={"people"}>
-            <PeopleHeader
-                activeFilter={activeFilter}
-                onFilterClick={onFilterClick}
-            />
-            <PeopleList people={sortProfiles(profiles)} />
-        </div>
-    );
-};
+const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => (
+    <div className={"people"}>
+        <PeopleHeader
+            activeFilter={activeFilter}
+            onFilterClick={onFilterClick}
+        />
+        <PeopleList people={sortProfiles(profiles)} />
+    </div>
+);
 
 const sortProfiles = (profiles) => profiles.sort((a, b) => a.name.localeCompare(b.name));
 
