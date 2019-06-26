@@ -1,12 +1,7 @@
 @import "styles/_colors.scss";
 @import "styles/_dimens.scss";
 
-.loading-button {
-    .loading-button-indicator {
-        color: $color-light;
-
-        /* Need to override Material-UI's inline styles */
-        height: 24px !important;  
-        width: 24px !important;
-    }
+.loading-indicator {
+    align-self: center;
+    justify-self: center;
 }

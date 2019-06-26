@@ -1,11 +1,10 @@
 import {connect} from "react-redux";
-import {matchPath} from "react-router";
 import {crossSliceSelectors} from "store/";
 import {reduceLoadingStates} from "utils/helperFunctions";
 import {profilesRequestsSlice, projectsRequestsSlice, skillsRequestsSlice} from "store/slices";
 import ScreenUrls from "utils/screenUrls";
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     const mappedState = {};
     mappedState.isLoading = reduceLoadingStates([
         profilesRequestsSlice,
@@ -13,7 +12,7 @@ const mapStateToProps = (state, props) => {
         skillsRequestsSlice
     ], state);
 
-    if (matchPath(props.match.path, ScreenUrls.PROFILE)) {
+    if (crossSliceSelectors.isMatchingRoute(ScreenUrls.PROFILE)(state)) {
         mappedState.projects = crossSliceSelectors.getProjectsForUser(state);
         mappedState.profile = crossSliceSelectors.getUserProfile(state);
 
@@ -22,7 +21,7 @@ const mapStateToProps = (state, props) => {
 
         if (loadedProfile) {
             mappedState.profile = loadedProfile;
-            mappedState.projects = crossSliceSelectors.getProjectsFromUrlId(state);
+            mappedState.projects = crossSliceSelectors.getProjectsFromProfileUrlId(state);
 
         } else {
             mappedState.profile = {};

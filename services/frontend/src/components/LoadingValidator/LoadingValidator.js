@@ -20,15 +20,17 @@ const emptyDependency = (dependencies) => dependencies.reduce((acc, currentDepen
 
 /* Shows a circular progress loader if the component is currently loading,
 renders an inputted component (componentOnFailedLoad) if one of the dependencies is empty */
-const LoadingValidator = ({isLoading, children, renderOnFailedLoad, dependencies}) => (
-    (isLoading || missingDependency(dependencies)) ? (
-        <CircularProgress className="loading-button-indicator" />
-    ) : (
-        emptyDependency(dependencies) ? (
+const LoadingValidator = ({isLoading, renderOnLoad, renderOnFailedLoad, dependencies}) => {
+    if (isLoading || missingDependency(dependencies)) {
+        return <CircularProgress className="loading-indicator" />;
+    }
+    else {
+        return (emptyDependency(dependencies)) ? (
             renderOnFailedLoad
         ) : (
-            children
-        )
-    )
-);
+            renderOnLoad
+        );
+    }
+};
+
 export default LoadingValidator;

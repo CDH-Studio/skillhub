@@ -28,18 +28,23 @@ const ProfileLayout = ({projects, profile, isLoading}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
-            renderOnFailedLoad={InvalidProfile()}
             isLoading={isLoading}
-        >
-            <NavSidebar
-                scrollSpySelectors={sections}
-                containerClass={containerClass}
-            />
-            <ProfileContent
-                projects={projects}
-                profile={profile}
-            />
-        </LoadingValidator>
+            renderOnLoad={
+                <>
+                    <NavSidebar
+                        scrollSpySelectors={sections}
+                        containerClass={containerClass}
+                    />
+                    <ProfileContent
+                        projects={projects}
+                        profile={profile}
+                    />
+                </>
+            }
+            renderOnFailedLoad={
+                <InvalidProfile />
+            }
+        />
     </ScrollContainer>
 );
 

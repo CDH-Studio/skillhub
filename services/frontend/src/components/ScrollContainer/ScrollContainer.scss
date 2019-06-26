@@ -15,11 +15,6 @@
         min-width: $minimum-width;
         padding: 0 $default-spacing;
 
-        .loading-button-indicator {
-            align-self: center;
-            justify-self: center;
-        }
-
         @include laptop-width {
             & {
                 max-width: $laptop-width;

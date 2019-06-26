@@ -5,6 +5,11 @@ import {Profile, Project, ProjectProfile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice, profileSkillsSlice} from "./slices";
 
+const isMatchingRoute = (route) => createSelector(
+    [createMatchSelector(route)],
+    (match) => match
+);
+
 /* Profile Selectors */
 const getProfilesWithSkills = createSelector(
     [
@@ -68,7 +73,7 @@ const getContributorsForProject = createSelector(
     Project.getContributors
 );
 
-const getProjectsFromUrlId = createSelector(
+const getProjectsFromProfileUrlId = createSelector(
     [
         getProfileFromUrlId,
         getProjectsWithSkillsById,
@@ -89,6 +94,7 @@ const getProjectsForUser = createSelector(
 );
 
 export const crossSliceSelectors = {
+    isMatchingRoute,
     getProfilesWithSkills,
     getProfilesWithSkillsById,
     getProfileIdFromUrl,
@@ -97,8 +103,8 @@ export const crossSliceSelectors = {
     getProjectsWithSkills,
     getProjectsWithSkillsById,
     getProjectIdFromUrl,
-    getProjectsFromUrlId,
-    getContributorsForProject,
     getProjectFromUrlId,
+    getContributorsForProject,
+    getProjectsFromProfileUrlId,
     getProjectsForUser
 };
