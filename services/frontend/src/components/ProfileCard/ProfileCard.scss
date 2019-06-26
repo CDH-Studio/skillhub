@@ -3,6 +3,14 @@
 @import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
 
+$project-card-width: $default-spacing * 45;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
 .people-header{
     border-bottom: 1px solid $color-text-secondary;
     display: flex;
@@ -11,55 +19,84 @@
     padding: $default-spacing;
 }
 
-#profile-personal-details{
+.people-profile-card{
+    align-self: center;
     display: flex;
-    justify-content: center;
+    flex-shrink: 0;
+    margin: $default-spacing*1 0;
+    padding: $default-spacing*2;
+    width: $project-card-width;
 
-    .profile-card-personal-details {
-        flex: 1;
+    @include query-project-card-width {
+        width: auto;
+    }
 
-        .profile-card-picture {
-            font-size: 30px;
-            height: 64px;
-            width: 64px;
+    .avatar-icon {
+        font-size: 30px;
+        height: 64px;
+        width: 64px;
+        margin-right: $default-spacing*2;
+    }
+
+    .people-profile-card-details-section {
+        margin: 0 auto;
+        flex: 2;
+
+        .people-profile-card-title {
+            font-size: $font-size-title;
+            font-weight: bold;
+            margin-bottom: $default-spacing * 0.75;
         }
 
-        .profile-card-content {
-            margin: 0 $default-spacing*2;
+        .people-profile-card-subtitle {
+            color: $color-primary;
+            font-size: $font-size-subtitle;
+            margin-bottom: $default-spacing;
+            margin-top: $default-spacing * 0.75;
+        }
 
-            .profile-card-title {
-                font-size: $font-size-title;
-                font-weight: bold;
-                margin-bottom: $default-spacing * 0.75;
-            }
+        .people-profile-card-contact {
+            margin-top: $default-spacing * 0.5;
 
-            .profile-card-subtitle {
-                color: $color-primary;
-                font-size: $font-size-subtitle;
-                margin-bottom: $default-spacing;
-                margin-top: $default-spacing * 0.75;
-            }
+            .people-profile-card-text {
+                align-items: center;
+                color: $color-neutral-6;
+                display: flex;
+                font-size: $font-size-content;
+                margin: $default-spacing*0.75 0;
 
-            .profile-card-contact {
-                margin-top: $default-spacing * 0.5;
-
-                .profile-card-text {
-                    align-items: center;
-                    color: $color-neutral-6;
-                    display: flex;
+                svg {
                     font-size: $font-size-content;
-                    margin: $default-spacing*0.75 0;
-
-                    svg {
-                        font-size: $font-size-content;
-                        margin-right: $default-spacing * 0.25;
-                    }
+                    margin-right: $default-spacing * 0.25;
                 }
+            }
 
-                .profile-card-text:last-child {
-                    margin-bottom: 0;
-                }
+            .people-profile-card-text:last-child {
+                margin-bottom: 0;
             }
         }
     }
+
+    .people-profile-card-skills-section {
+        display: flex;
+        flex: 3;
+        .people-profile-card-skills-content {
+            align-content: flex-start;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: auto $default-spacing;
+        }
+    }
+
+    .people-profile-card-nav-section {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        margin-right: -$default-spacing;
+        .people-profile-card-nav {
+            color: $color-text-secondary;
+        }
+    }
 }
+
