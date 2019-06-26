@@ -1,13 +1,24 @@
 import React, {useCallback, useMemo, useState} from "react";
+import {Profile} from "utils/models";
 import PeopleLayout from "./PeopleLayout";
 import connect from "./connect";
 
-// const [activeFilter, setActiveFilter] = useState("all");
-// const onFilterClick = useCallback((filter) => () => setActiveFilter(filter), [setActiveFilter]);
-
-//const filteredProjects = useMemo(() => Project.filterProjects(projects, activeFilter), [projects, activeFilter]);
 const People = (profiles) => {
-    return <PeopleLayout profiles={profiles.profiles} />;
+    const [activeFilter, setActiveFilter] = useState(Profile.FILTER_ALL);
+    const onFilterClick = useCallback((filter) => () => setActiveFilter(filter), [setActiveFilter]);
+
+    const filteredProfiles = useMemo(() =>
+        Profile.filterProfiles(profiles.profiles, activeFilter),
+    [profiles, activeFilter]
+    );
+    console.log(filteredProfiles);
+    return (
+        <PeopleLayout
+            profiles={filteredProfiles}
+            activeFilter={activeFilter}
+            onFilterClick={onFilterClick}
+        />
+);
 };
 
 export default connect(People);

@@ -31,6 +31,8 @@ export default class Profile {
         this.profileSkills = profileSkills;
     }
 
+    static get FILTER_ALL() {return "all";}
+
     /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(profiles = []) {
@@ -51,6 +53,14 @@ export default class Profile {
 
     static extractProfileSkills(profiles = []) {
         return profiles.reduce((acc, profile) => [...acc, ...profile.profileSkills], []);
+    }
+
+    static filterProfiles(profiles, filter = Profile.FILTER_ALL) {
+        if (filter === Profile.FILTER_ALL) {
+            return profiles;
+        } else {
+            return profiles;
+        }
     }
 
     /* Iterate over profiles checking for the current user's id, then return that user's entire profile. */

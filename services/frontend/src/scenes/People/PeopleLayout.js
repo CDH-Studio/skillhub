@@ -4,23 +4,27 @@ import {ProfileCard} from "components/";
 import classNames from "classnames";
 import {ProjectCard} from "../Projects/ProjectsLayout";
 
-const PeopleLayout = ({profiles}) => {
+const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => {
     console.log(profiles);
     return (
         <div className={"people"}>
-            <PeopleHeader />
+            <PeopleHeader
+                activeFilter={activeFilter}
+                onFilterClick={onFilterClick}
+            />
             <PeopleList people={sortProfiles(profiles)} />
         </div>
     );
 };
 
 const sortProfiles = (profiles) => profiles.sort((a, b) => a.name.localeCompare(b.name));
-const PeopleHeader = () => (
+
+const PeopleHeader = ({activeFilter, onFilterClick}) => (
     <div className="people-header">
         <FilterButton
             label="All"
-            isActive={true}
-            onClick={true}
+            isActive={activeFilter}
+            onClick={onFilterClick}
         />
     </div>
 );
@@ -47,66 +51,5 @@ const PeopleList = ({people}) => {
     ));
     return peopleCards;
 };
-
-const dummypeople = [
-    {
-        id: "f293a510-7477-4f48-857d-a59bcd16c9c4",
-        name: "Abc",
-        primaryRole: "software",
-        contactEmail:"asvsdc@asdads.com",
-        phone: "890890890",
-        skills: [
-            {name: "abc"},
-            {name: "def"}
-        ]
-    },
-    {
-        id: "f293a510-7477-4f48-857d-a59bcd16c9c4",
-        name: "Abc",
-        primaryRole: "software",
-        contactEmail:"asvsdc@asdads.com",
-        phone: "890890890",
-        skills: [
-            {name: "abc"},
-            {name: "dsef"},
-            {name: "ddef"},
-            {name: "deff"},
-            {name: "defg"},
-            {name: "dehf"},
-            {name: "detf"}
-        ]
-    },
-    {
-        id: "f293a510-7477-4f48-857d-a59bcd16c9c4",
-        name: "Abc",
-        primaryRole: "software",
-        contactEmail:"asvsdc@asdads.com",
-        phone: "890890890",
-        skills: [
-            {name: "abc"},
-            {name: "def"}
-        ]
-    },
-    {
-        name: "Abc",
-        primaryRole: "software",
-        contactEmail:"asvsdc@asdads.com",
-        phone: "890890890",
-        skills: [
-            {name: "abc"},
-            {name: "def"}
-        ]
-    },
-    {
-        name: "Abc",
-        primaryRole: "software",
-        contactEmail:"asvsdc@asdads.com",
-        phone: "890890890",
-        skills: [
-            {name: "abc"},
-            {name: "def"}
-        ]
-    }
-];
 
 export default PeopleLayout;
