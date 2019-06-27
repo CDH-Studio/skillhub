@@ -34,4 +34,14 @@ const mapStateToProps = (state) => {
     return mappedState;
 };
 
-export default connect(mapStateToProps, null);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSubmit: (id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle) => dispatch(
+            profilesRequestsSlice.patchPersonalDetails.actions.request({
+                id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle
+            })
+        )
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps);

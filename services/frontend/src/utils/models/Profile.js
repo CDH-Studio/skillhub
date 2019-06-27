@@ -35,22 +35,22 @@ export default class Profile {
         return "all";
     }
 
+    static normalizeProfile = (profile) => {
+        const processedProfile = new Profile(profile);
+
+        if (processedProfile.profileSkills) {
+            processedProfile.profileSkills = processedProfile.profileSkills.map(({id}) => id);
+        } else {
+            processedProfile.profileSkills = [];
+        }
+
+        return processedProfile;
+    };
+
     /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(profiles = []) {
-        const processProfile = (profile) => {
-            const processedProfile = new Profile(profile);
-
-            if (processedProfile.profileSkills) {
-                processedProfile.profileSkills = processedProfile.profileSkills.map(({id}) => id);
-            } else {
-                processedProfile.profileSkills = [];
-            }
-
-            return processedProfile;
-        };
-
-        return profiles.reduce(arrayToObject({processor: processProfile}), {});
+        return profiles.reduce(arrayToObject({processor: this.normalizeProfile}), {});
     }
 
     static extractProfileSkills(profiles = []) {

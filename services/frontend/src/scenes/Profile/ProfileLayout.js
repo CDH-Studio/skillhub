@@ -91,7 +91,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile}) => {
+const PersonalDetails = ({profile, onSubmit}) => {
     const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
 
     const openDialog = () => {

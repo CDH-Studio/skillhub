@@ -17,6 +17,15 @@ class Profile {
             return processedProfile;
         });
     }
+
+    static processProfilesSkills(profiles = []) {
+        if (!Array.isArray(profiles)) {
+            return this.processProfileSkills(profiles);
+        }
+        return profiles.map((profile) => (
+            this.processProfileSkills(profile)
+        ));
+    }
 }
 
 module.exports = Profile;

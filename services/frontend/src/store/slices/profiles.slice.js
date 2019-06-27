@@ -7,6 +7,9 @@ export const profilesSlice = createSlice({
     initialState: {},
     reducers: {
         setProfiles: (state, action) => action.payload,
+        setProfile: (state, action) => {
+            state[action.payload.id] = action.payload;
+        },
         addProfile: (state, action) => {
             // Expects a Profile object as payload
             state[action.payload.id] = action.payload;
@@ -14,4 +17,7 @@ export const profilesSlice = createSlice({
     }
 });
 
-export const profilesRequestsSlice = createRequestSlices(mounts.profilesRequests, ["fetchAll"]);
+export const profilesRequestsSlice = createRequestSlices(
+    mounts.profilesRequests,
+    ["fetchAll", "patchPersonalDetails"]
+);

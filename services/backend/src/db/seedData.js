@@ -24,6 +24,13 @@ const USERS = [
         password: "$2a$13$ou.iRf4nlSfcXp0lRewliuxbp8wD9M8/CIy6pomcbL.EB5CrZMZze",  // Password = 'test'
         createdAt: new Date(),
         updatedAt: new Date()
+    },
+    {
+        id: "07a4d430-7f9e-466a-b671-8076468d84e6",
+        email: "Devin.Sit@canada.ca",
+        password: "$2a$13$ou.iRf4nlSfcXp0lRewliuxbp8wD9M8/CIy6pomcbL.EB5CrZMZze",  // Password = 'test'
+        createdAt: new Date(),
+        updatedAt: new Date()
     }
 ];
 
@@ -51,7 +58,7 @@ const TEST_PROFILE_ID = TEST_PROFILE.map(getId);
 const PROFILES = [
     {
         id: "7835a29d-b447-4812-b263-36ac30b9a053",
-        userId: null,
+        userId: "07a4d430-7f9e-466a-b671-8076468d84e6",
         name: "Devin Sit",
         primaryRole: "Software Developer",
         contactEmail: "Devin.Sit@canada.ca",

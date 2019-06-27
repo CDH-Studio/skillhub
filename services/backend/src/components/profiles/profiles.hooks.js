@@ -1,7 +1,11 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
+const {restrictToOwner} = require("feathers-authentication-hooks");
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
+const errors = require("@feathersjs/errors");
+
+const EMAIL_REGEX = /^\S+@\S+$/;
 
 const includeSkills = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
@@ -14,9 +18,28 @@ const includeSkills = () => (context) => {
     return context;
 };
 
-const processProfileSkills = () => (context) => {
-    context.result = Profile.processProfileSkills(context.result);
+const processProfilesSkills = () => (context) => {
+    context.result = Profile.processProfilesSkills(context.result);
     return context;
+};
+
+const validatePersonalDetails = () => (context) => {
+    const failures = {};
+    Object.keys(context.data).map((field) => {
+        if (!context.data[field]) {
+            const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ");
+            failures[field] = "Invalid " + errorMessageSpecifier.toLowerCase();
+        }
+    }, {});
+
+    //If any of the fields are empty
+    if (Object.entries(failures).length !== 0) {
+        throw new errors.BadRequest("Missing Data", failures);
+    }
+
+    if (!EMAIL_REGEX.test(context.data.contactEmail)) {
+        throw new errors.BadRequest("Invalid email");
+    }
 };
 
 const preventBulkDuplication = () => async (context) => {
@@ -48,22 +71,26 @@ const preventBulkDuplication = () => async (context) => {
 
 module.exports = {
     before: {
-        all: [authenticate("jwt")],
+        all: [],
         find: [includeSkills()],
         get: [includeSkills()],
         create: [preventBulkDuplication()],
         update: [],
-        patch: [],
+        patch: [
+            restrictToOwner({idField: "id", ownerField: "userId"}),
+            validatePersonalDetails(),
+            includeSkills()
+        ],
         remove: []
     },
 
     after: {
         all: [],
-        find: [dehydrate(), processProfileSkills()],
-        get: [dehydrate(), processProfileSkills()],
+        find: [dehydrate(), processProfilesSkills()],
+        get: [dehydrate(), processProfilesSkills()],
         create: [],
         update: [],
-        patch: [],
+        patch: [dehydrate(), processProfilesSkills()],
         remove: []
     },
 
