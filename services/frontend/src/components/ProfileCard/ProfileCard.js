@@ -11,7 +11,11 @@ const ProfileCard = ({id, name, primaryRole, contactEmail, phone, skills}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     return (
         <Paper className="people-profile-card">
-            <AvatarIcon name={name} className="avatar-icon" />
+            <AvatarIcon
+                name={name}
+                personsRole=""
+                className="avatar-icon"
+            />
 
             <div className="people-profile-card-details-section">
                 <h2 className="people-profile-card-title">
