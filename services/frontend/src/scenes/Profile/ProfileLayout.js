@@ -124,8 +124,13 @@ const PersonalDetails = ({profile}) => {
 
 const Skills = ({sectionName, profile}) => (
     <>
-        <h2>{sectionName}</h2>
-        <Paper className="profile-page-card profile-card-skills">
+        <div className="profile-card-skills-header-section">
+            <h2>{sectionName}</h2>
+            <IconButton className="profile-card-edit-skills-button" color="primary">
+                <Create />
+            </IconButton>
+        </div>
+        <Paper className="profile-card profile-card-skills">
             <SkillBadges
                 displayCount={profile.skills.length}
                 skills={profile.skills}
@@ -147,7 +152,7 @@ const Projects = ({sectionName, projects}) => {
     return (
         <>
             <h2>{sectionName}</h2>
-            <div className="profile-page-card profile-card-projects">
+            <div className="profile-card profile-card-projects">
                 {projectCards}
             </div>
         </>

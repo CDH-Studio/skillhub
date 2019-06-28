@@ -86,6 +86,21 @@ $project-card-width: $default-spacing * 45;
         display: flex;
         flex-wrap: wrap;
     }
+
+    .profile-card-edit-skills-button {
+            padding: 3px;
+
+            svg {
+                font-size: $font-size-subtitle;
+            }
+        }
+
+    .profile-card-skills-header-section {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+    }
+
 }
 
 #profile-projects {
