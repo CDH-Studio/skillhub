@@ -5,7 +5,7 @@ import classNames from "classnames";
 import {ProjectCard} from "../Projects/ProjectsLayout";
 
 const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => (
-    <div className={"people"}>
+    <div className="people">
         <PeopleHeader
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}

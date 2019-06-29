@@ -5,6 +5,8 @@
 .people {
     display: flex;
     flex-direction: column;
+    height: calc(100% - #{$navbar-height});
+    overflow: auto;
 
     .people-header {
         border-bottom: 1px solid $color-text-secondary;
