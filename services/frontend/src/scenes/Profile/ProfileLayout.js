@@ -3,7 +3,8 @@ import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {
-    LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard, ScrollContainer, SkillBadges
+    AvatarIcon, EditSkillsDialog, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard,
+    ScrollContainer, SkillBadges
 } from "components/";
 import {Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
@@ -122,23 +123,38 @@ const PersonalDetails = ({profile}) => {
     );
 };
 
-const Skills = ({sectionName, profile}) => (
-    <>
-        <div className="profile-card-skills-header-section">
-            <h2>{sectionName}</h2>
-            <IconButton className="profile-card-edit-skills-button" color="primary">
-                <Create />
-            </IconButton>
-        </div>
-        <Paper className="profile-card profile-card-skills">
-            <SkillBadges
-                displayCount={profile.skills.length}
-                skills={profile.skills}
-            />
-        </Paper>
-    </>
-);
+const Skills = ({sectionName, profile}) => {
+    const [editSkillsDialogOpen, setEditSkillsDialogOpen] = React.useState(false);
 
+    function openDialog() {
+        setEditSkillsDialogOpen(true);
+    }
+
+    function closeDialog() {
+        setEditSkillsDialogOpen(false);
+    }
+    return (
+        <>
+            <EditSkillsDialog
+                skills={profile.skills}
+                open={editSkillsDialogOpen}
+                handleClose={closeDialog}
+            />
+            <div className="profile-card-skills-header-section">
+                <h2>{sectionName}</h2>
+                <IconButton className="profile-card-edit-skills-button" onClick={openDialog} color="primary">
+                    <Create />
+                </IconButton>
+            </div>
+            <Paper className="profile-card profile-card-skills">
+                <SkillBadges
+                    displayCount={profile.skills.length}
+                    skills={profile.skills}
+                />
+            </Paper>
+        </>
+    );
+};
 const Projects = ({sectionName, projects}) => {
     const projectCards = useMemo(() => projects.map((project) => (
         <ProjectCard
