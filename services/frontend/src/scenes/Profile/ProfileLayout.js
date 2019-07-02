@@ -1,8 +1,10 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
-import {Button, Paper} from "@material-ui/core";
-import {Email, LocalPhone} from "@material-ui/icons";
-import {AvatarIcon, LoadingValidator, NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
+import {Button, IconButton, Paper} from "@material-ui/core";
+import {Create, Email, LocalPhone} from "@material-ui/icons";
+import {
+    AvatarIcon, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProjectCard, ScrollContainer, SkillBadges
+} from "components/";
 import {Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
@@ -86,32 +88,58 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile}) => (
-    <Paper className="profile-card profile-card-personal-details">
-        <AvatarIcon name={profile.name} personsRole="" className="profile-avatar-icon" />
-        <div className="profile-card-content">
-            <h2 className="profile-card-title">
-                {profile.name}
-            </h2>
+const PersonalDetails = ({profile}) => {
+    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
 
-            <h3 className="profile-card-subtitle">
-                {profile.primaryRole}
-            </h3>
+    const openDialog = () => {
+        setPersonalDetailsDialogOpen(true);
+    };
 
-            <div className="profile-card-contact">
-                <p className="profile-card-text">
-                    <Email />
-                    {profile.contactEmail}
-                </p>
+    const closeDialog = () => {
+        setPersonalDetailsDialogOpen(false);
+    };
 
-                <p className="profile-card-text">
-                    <LocalPhone />
-                    {profile.phone}
-                </p>
-            </div>
-        </div>
-    </Paper>
-);
+    return (
+        <>
+            <PersonalDetailsDialog
+                profile={profile}
+                open={personalDetailsDialogOpen}
+                handleClose={closeDialog}
+            />
+            <Paper className="profile-card profile-card-personal-details">
+                <AvatarIcon name={profile.name} personsRole="" className="profile-avatar-icon" />
+
+                <div className="profile-card-content">
+                    <h2 className="profile-card-title">
+                        {profile.name}
+                    </h2>
+
+                    <h3 className="profile-card-subtitle">
+                        {profile.primaryRole}
+                    </h3>
+
+                    <div className="profile-card-contact">
+                        <p className="profile-card-text">
+                            <Email />
+                            {profile.contactEmail}
+                        </p>
+
+                        <p className="profile-card-text">
+                            <LocalPhone />
+                            {profile.phone}
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <IconButton className="profile-card-edit-button" onClick={openDialog} color="primary">
+                        <Create />
+                    </IconButton>
+                </div>
+            </Paper>
+        </>
+    );
+};
 
 const Skills = ({sectionName, profile}) => (
     <>
