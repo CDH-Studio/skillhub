@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create, Email, LocalPhone} from "@material-ui/icons";
@@ -89,15 +89,15 @@ const renderSectionComponent = (sectionName, sectionProps) => {
 };
 
 const PersonalDetails = ({profile}) => {
-    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = React.useState(false);
+    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
 
-    function openDialog() {
+    const openDialog = () => {
         setPersonalDetailsDialogOpen(true);
-    }
+    };
 
-    function closeDialog() {
+    const closeDialog = () => {
         setPersonalDetailsDialogOpen(false);
-    }
+    };
 
     return (
         <>
