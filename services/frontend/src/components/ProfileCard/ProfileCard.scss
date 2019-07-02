@@ -11,15 +11,7 @@ $project-card-width: $default-spacing * 45;
     }
 }
 
-.people-header{
-    border-bottom: 1px solid $color-text-secondary;
-    display: flex;
-    flex-shrink: 0;
-    justify-content: center;
-    padding: $default-spacing;
-}
-
-.people-profile-card{
+.profile-card {
     align-self: center;
     display: flex;
     flex-shrink: 0;
@@ -39,27 +31,27 @@ $project-card-width: $default-spacing * 45;
 
     }
 
-    .people-profile-card-details-section {
+    .profile-card-details-section {
         margin: 0 auto;
         flex: 2;
 
-        .people-profile-card-title {
+        .profile-card-title {
             font-size: $font-size-title;
             font-weight: bold;
             margin-bottom: $default-spacing * 0.75;
         }
 
-        .people-profile-card-subtitle {
+        .profile-card-subtitle {
             color: $color-primary;
             font-size: $font-size-subtitle;
             margin-bottom: $default-spacing;
             margin-top: $default-spacing * 0.75;
         }
 
-        .people-profile-card-contact {
+        .profile-card-contact {
             margin-top: $default-spacing * 0.5;
 
-            .people-profile-card-text {
+            .profile-card-text {
                 align-items: center;
                 color: $color-neutral-6;
                 display: flex;
@@ -72,32 +64,50 @@ $project-card-width: $default-spacing * 45;
                 }
             }
 
-            .people-profile-card-text:last-child {
+            .profile-card-text:last-child {
                 margin-bottom: 0;
             }
         }
     }
 
-    .people-profile-card-skills-section {
-        display: flex;
-        flex: 3;
-        .people-profile-card-skills-content {
-            align-content: flex-start;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            margin: auto $default-spacing;
-        }
+    &.filter-button--active {
+        background-color: $color-primary;
+        color: $color-light;
     }
 
-    .people-profile-card-nav-section {
-        align-items: center;
-        display: flex;
-        flex: 1;
-        margin-right: -$default-spacing;
-        .people-profile-card-nav {
-            color: $color-text-secondary;
+    .profile-card-extras {
+        visibility: hidden;
+
+        &.profile-card-extras--people {
+            flex: 3;
+            visibility: visible;
+            display: flex;
         }
+
+        .profile-card-extras-skills-section {
+            display: flex;
+            flex: 3;
+
+            .profile-card-extras-skills-content {
+                align-content: flex-start;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                margin: auto $default-spacing;
+            }
+        }
+
+        .profile-card-extras-nav-section {
+            align-items: center;
+            display: flex;
+            flex: 1;
+            margin-right: -$default-spacing*4;
+
+            .profile-card-extras-nav {
+                color: $color-text-secondary;
+            }
+        }
+
     }
 }
 

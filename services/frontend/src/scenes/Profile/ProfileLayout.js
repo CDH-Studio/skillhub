@@ -1,8 +1,7 @@
 import React, {useMemo} from "react";
 import {Link} from "react-router-dom";
 import {Button, Paper} from "@material-ui/core";
-import {Email, LocalPhone} from "@material-ui/icons";
-import {AvatarIcon, LoadingValidator, NavSidebar, ProjectCard, ScrollContainer, SkillBadges} from "components/";
+import {LoadingValidator, NavSidebar, ProfileCard, ProjectCard, ScrollContainer, SkillBadges} from "components/";
 import {Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
@@ -87,30 +86,11 @@ const renderSectionComponent = (sectionName, sectionProps) => {
 };
 
 const PersonalDetails = ({profile}) => (
-    <Paper className="profile-card profile-card-personal-details">
-        <AvatarIcon name={profile.name} personsRole="" className="profile-avatar-icon" />
-        <div className="profile-card-content">
-            <h2 className="profile-card-title">
-                {profile.name}
-            </h2>
-
-            <h3 className="profile-card-subtitle">
-                {profile.primaryRole}
-            </h3>
-
-            <div className="profile-card-contact">
-                <p className="profile-card-text">
-                    <Email />
-                    {profile.contactEmail}
-                </p>
-
-                <p className="profile-card-text">
-                    <LocalPhone />
-                    {profile.phone}
-                </p>
-            </div>
-        </div>
-    </Paper>
+    <ProfileCard
+        key={profile.name}
+        page="profile"
+        {...profile}
+    />
 );
 
 const Skills = ({sectionName, profile}) => (

@@ -1,5 +1,4 @@
 import React, {useMemo} from "react";
-import classNames from "classnames";
 import {FilterHeader, ProjectCard} from "components/";
 import {Project} from "utils/models";
 import "./Projects.scss";

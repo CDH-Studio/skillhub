@@ -18,12 +18,16 @@ const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => (
 const PeopleList = ({people}) => {
     const peopleCards = people.map((person) => (
         <ProfileCard
-            className="people-list-card"
             key={person.name}
+            page="people"
             {...person}
         />
     ));
-    return peopleCards;
+    return (
+        <div className={"people-list"}>
+            {peopleCards}
+        </div>
+    );
 };
 
 export default PeopleLayout;

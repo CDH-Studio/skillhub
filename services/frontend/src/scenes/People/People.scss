@@ -8,27 +8,9 @@
     height: calc(100% - #{$navbar-height});
     overflow: auto;
 
-    .people-header {
-        border-bottom: 1px solid $color-text-secondary;
-        display: flex;
-        flex-shrink: 0;
-        justify-content: center;
-        padding: $default-spacing;
+    .people-list{
+        align-self: center;
+        padding: $default-spacing * 2;
     }
 
-    .filter-button {
-        background-color: transparent;
-        border: none;
-        border-radius: $default-border-radius;
-        box-shadow: none;
-        color: $color-text-secondary;
-        margin: 0 16px;
-        padding: $default-spacing/2 $default-spacing*1.5;
-        text-transform: none;
-
-        &.filter-button--active {
-            background-color: $color-primary;
-            color: $color-light;
-        }
-    }
 }
