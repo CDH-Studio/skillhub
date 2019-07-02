@@ -9,7 +9,7 @@ const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => (
         <FilterHeader
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
-            labels={["All"]}
+            labels={["all"]}
         />
         <PeopleList people={sortProfiles(profiles)} />
     </div>
