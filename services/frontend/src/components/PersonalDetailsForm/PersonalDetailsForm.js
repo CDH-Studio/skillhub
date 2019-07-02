@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import "./PersonalDetailsForm.scss";
 
 const PersonalDetailsForm = ({
-    nameInput, emailInput, roleInput, phoneInput, slackInput, rocketChatInput, keyVal
+    nameInput, emailInput, roleInput, phoneInput, slackInput, rocketChatInput
 }) => {
     return (
         <form className="personal-details-form">

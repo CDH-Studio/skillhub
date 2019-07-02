@@ -71,7 +71,7 @@ const preventBulkDuplication = () => async (context) => {
 
 module.exports = {
     before: {
-        all: [],
+        all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
         create: [preventBulkDuplication()],

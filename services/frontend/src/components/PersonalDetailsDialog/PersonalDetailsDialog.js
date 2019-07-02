@@ -25,12 +25,12 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit}) => {
             ...useInput(profile.rocketChatHandle)
         }
     };
-    const {value: name} = formFieldData.nameInput
-    const {value: email} = formFieldData.emailInput
-    const {value: role} = formFieldData.roleInput
-    const {value: phone} = formFieldData.phoneInput
-    const {value: slack} = formFieldData.slackInput
-    const {value: rocketChat} = formFieldData.rocketChatInput
+    const {value: name} = formFieldData.nameInput;
+    const {value: email} = formFieldData.emailInput;
+    const {value: role} = formFieldData.roleInput;
+    const {value: phone} = formFieldData.phoneInput;
+    const {value: slack} = formFieldData.slackInput;
+    const {value: rocketChat} = formFieldData.rocketChatInput;
 
     const onSubmitClick = useCallback(() => onSubmit(
         profile.id, name, email, role, phone, slack, rocketChat

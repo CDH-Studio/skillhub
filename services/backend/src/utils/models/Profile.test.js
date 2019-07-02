@@ -1,6 +1,6 @@
 const Profile = require("./Profile");
 
-describe("processProfileSkills", () => {
+describe("processProfilesSkills", () => {
     it("takes just the profileSkills and removes the skill data", () => {
         const profiles = [
             // Multiple profiles at once
@@ -20,11 +20,11 @@ describe("processProfileSkills", () => {
             {profileSkills: []}
         ];
 
-        expect(Profile.processProfileSkills(profiles)).toEqual(processedProfiles);
+        expect(Profile.processProfilesSkills(profiles)).toEqual(processedProfiles);
     });
 
     it("returns an empty array when there are no projects to process", () => {
-        expect(Profile.processProfileSkills()).toEqual([]);
-        expect(Profile.processProfileSkills([])).toEqual([]);
+        expect(Profile.processProfilesSkills()).toEqual([]);
+        expect(Profile.processProfilesSkills([])).toEqual([]);
     });
 });

@@ -15,26 +15,10 @@ function* profilesFetchAll() {
 
 function* profilesPatchPersonalDetails({payload}, success) {
     const result = yield call(api.service("profiles").patch, payload.id, payload);
-    console.log(result);
-
-<<<<<<< HEAD
     const normalizedProfiles = Profile.normalizeApiResultsForRedux([result]);
-    console.log(normalizedProfiles);
 
     yield put(profilesSlice.actions.setProfiles(normalizedProfiles));
 
-    console.log(result);
-=======
-    const profileSkills = result.profileSkills;
-    console.log(profileSkills)
-
-    const normalizedProfile = Profile.normalizeProfile(result);
-    console.log(normalizedProfile);
-
-    yield put(profilesSlice.actions.setProfile(normalizedProfile));
-    console.log("hello")
-
->>>>>>> f67e667... CDHSH-89 Created rough functionality to update the database and store
     yield call(success);  // Mark success before continuing with other actions
 
 }
