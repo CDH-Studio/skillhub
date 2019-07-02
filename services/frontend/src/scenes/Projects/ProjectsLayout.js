@@ -1,14 +1,15 @@
 import React, {useMemo} from "react";
 import classNames from "classnames";
-import {ProjectCard} from "components/";
+import {FilterHeader, ProjectCard} from "components/";
 import {Project} from "utils/models";
 import "./Projects.scss";
 
 const ProjectsLayout = ({projects, activeFilter, onFilterClick}) => (
     <div className="projects">
-        <ProjectsHeader
+        <FilterHeader
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
+            labels={[Project.FILTER_ALL, Project.FILTER_ACTIVE, Project.FILTER_ALL]}
         />
 
         <ProjectsList

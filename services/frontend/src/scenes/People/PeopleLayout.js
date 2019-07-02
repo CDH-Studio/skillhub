@@ -1,20 +1,20 @@
 import React from "react";
 import "./People.scss";
-import {ProfileCard} from "components/";
+import {FilterHeader, ProfileCard} from "components/";
 import classNames from "classnames";
-import {ProjectCard} from "../Projects/ProjectsLayout";
+
+const sortProfiles = (profiles) => profiles.sort((a, b) => a.name.localeCompare(b.name));
 
 const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => (
     <div className="people">
-        <PeopleHeader
+        <FilterHeader
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
+            labels={["All"]}
         />
         <PeopleList people={sortProfiles(profiles)} />
     </div>
 );
-
-const sortProfiles = (profiles) => profiles.sort((a, b) => a.name.localeCompare(b.name));
 
 const PeopleHeader = ({activeFilter, onFilterClick}) => (
     <div className="people-header">

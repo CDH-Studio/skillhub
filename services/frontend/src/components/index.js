@@ -2,6 +2,7 @@ export {default as AvatarIcon} from "./AvatarIcon";
 export {default as AuthBranding} from "./AuthBranding";
 export {default as AuthForm} from "./AuthForm";
 export {default as EmailInput} from "./EmailInput";
+export {default as FilterHeader} from "./FilterHeader";
 export {default as FormError} from "./FormError";
 export {default as LoadingButton} from "./LoadingButton";
 export {default as LoadingValidator} from "./LoadingValidator";

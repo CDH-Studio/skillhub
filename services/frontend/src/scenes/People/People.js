@@ -11,6 +11,7 @@ const People = (profiles) => {
         Profile.filterProfiles(profiles.profiles, activeFilter),[profiles, activeFilter]
     );
     return (
+
         <PeopleLayout
             profiles={filteredProfiles}
             activeFilter={activeFilter}
