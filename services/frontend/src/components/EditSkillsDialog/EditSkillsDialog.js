@@ -4,7 +4,6 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import "./EditSkillsDialog.scss";
 
-
 const EditSkillsDialog = ({skills, handleClose, open}) => {
     return (
         <Dialog className="personal-details-dialog"
