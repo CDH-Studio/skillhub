@@ -1,4 +1,4 @@
-import {IconButton, Paper} from "@material-ui/core";
+import {IconButton} from "@material-ui/core";
 import {ChevronRight, Email, LocalPhone} from "@material-ui/icons";
 import React from "react";
 import {AvatarIcon, SkillBadges} from "components/";
@@ -6,12 +6,12 @@ import "./ProfileCard.scss";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
 
-const DISPLAY_SKILL_COUNT = 3;
+const DISPLAY_SKILL_COUNT = 4;
 
 const ProfileCard = ({id, page, name, primaryRole, contactEmail, phone, skills}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     return (
-        <Paper className="profile-card">
+        <div className="profile-card">
             <AvatarIcon
                 name={name}
                 personsRole=""
@@ -61,7 +61,7 @@ const ProfileCard = ({id, page, name, primaryRole, contactEmail, phone, skills})
                     </Link>
                 </div>
             </div>
-        </Paper>
+        </div>
     );
 };
 

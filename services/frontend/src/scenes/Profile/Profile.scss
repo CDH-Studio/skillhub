@@ -3,6 +3,14 @@
 @import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
 
+$project-card-width: $default-spacing * 45;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
 .profile-content {
     align-items: flex-start;
     display: flex;
@@ -15,7 +23,7 @@
         color: $color-neutral-6;
     }
 
-    .profile-card:first-child {
+    .profile-page-card:first-child {
         margin-top: $default-spacing;
     }
 }
@@ -31,12 +39,42 @@
     }
 }
 
-.profile-card {
+.profile-page-card{
     display: flex;
     flex: 1;
     margin-bottom: $default-spacing * 2;
-    margin-top: $default-spacing;
+    margin-top: $default-spacing * 2;
     padding: $default-spacing * 2;
+    width: $project-card-width;
+
+    @include query-project-card-width {
+        width: auto;
+    }
+}
+
+#profile-personal-details {
+    .profile-card-details-content {
+        display: flex;
+        justify-content: space-between;
+
+        width: 100%;
+
+        .profile-card-details {
+            width: 90%;
+            padding-right: 0;
+        }
+
+        .profile-card-details-edit-button {
+            align-self: baseline;
+            padding: 3px;
+
+            svg {
+                font-size: $font-size-subtitle;
+            }
+        }
+    }
+
+
 }
 
 #profile-skills {
@@ -47,7 +85,6 @@
         flex: 1;
         display: flex;
         flex-wrap: wrap;
-        margin-top: $default-spacing;
     }
 }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import {Paper} from "@material-ui/core";
 import "./People.scss";
 import {FilterHeader, ProfileCard} from "components/";
 
@@ -17,11 +18,12 @@ const PeopleLayout = ({profiles, activeFilter, onFilterClick}) => (
 
 const PeopleList = ({people}) => {
     const peopleCards = people.map((person) => (
-        <ProfileCard
-            key={person.name}
-            page="people"
-            {...person}
-        />
+        <Paper className="people-page-card" key={person.name}>
+            <ProfileCard
+                page="people"
+                {...person}
+            />
+        </Paper>
     ));
     return (
         <div className={"people-list"}>

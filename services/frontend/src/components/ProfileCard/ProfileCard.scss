@@ -5,23 +5,11 @@
 
 $project-card-width: $default-spacing * 45;
 
-@mixin query-project-card-width {
-    @media (max-width: #{$project-card-width}) {
-        @content
-    }
-}
-
 .profile-card {
     align-self: center;
     display: flex;
     flex-shrink: 0;
-    margin: $default-spacing*1 0;
-    padding: $default-spacing*2;
-    width: $project-card-width;
-
-    @include query-project-card-width {
-        width: auto;
-    }
+    width: $project-card-width*0.8;
 
     .avatar-icon {
         font-size: 30px;
@@ -76,11 +64,10 @@ $project-card-width: $default-spacing * 45;
     }
 
     .profile-card-extras {
-        visibility: hidden;
+        display: none;
 
         &.profile-card-extras--people {
             flex: 3;
-            visibility: visible;
             display: flex;
         }
 
@@ -101,7 +88,7 @@ $project-card-width: $default-spacing * 45;
             align-items: center;
             display: flex;
             flex: 1;
-            margin-right: -$default-spacing*4;
+            margin-right: -$default-spacing*10;
 
             .profile-card-extras-nav {
                 color: $color-text-secondary;

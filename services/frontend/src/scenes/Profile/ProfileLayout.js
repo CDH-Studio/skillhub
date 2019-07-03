@@ -1,7 +1,11 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
-import {Button, Paper} from "@material-ui/core";
-import {LoadingValidator, NavSidebar, ProfileCard, ProjectCard, ScrollContainer, SkillBadges} from "components/";
+import {Button, IconButton, Paper} from "@material-ui/core";
+import {Create} from "@material-ui/icons";
+import {
+    AvatarIcon, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard, ScrollContainer,
+    SkillBadges
+} from "components/";
 import {Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
@@ -85,18 +89,44 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile}) => (
-    <ProfileCard
-        key={profile.name}
-        page="profile"
-        {...profile}
-    />
-);
+const PersonalDetails = ({profile}) => {
+    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
+
+    const openDialog = () => {
+        setPersonalDetailsDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setPersonalDetailsDialogOpen(false);
+    };
+
+    return (
+        <>
+            <PersonalDetailsDialog
+                profile={profile}
+                open={personalDetailsDialogOpen}
+                handleClose={closeDialog}
+            />
+            <Paper className="profile-page-card profile-card-details">
+                <div className="profile-card-details-content">
+                    <ProfileCard
+                        key={profile.name}
+                        page="profile"
+                        {...profile}
+                    />
+                    <IconButton className="profile-card-details-edit-button" onClick={openDialog} color="primary">
+                        <Create />
+                    </IconButton>
+                </div>
+            </Paper>
+        </>
+    );
+};
 
 const Skills = ({sectionName, profile}) => (
     <>
         <h2>{sectionName}</h2>
-        <Paper className="profile-card profile-card-skills">
+        <Paper className="profile-page-card profile-card-skills">
             <SkillBadges
                 displayCount={profile.skills.length}
                 skills={profile.skills}
@@ -118,7 +148,7 @@ const Projects = ({sectionName, projects}) => {
     return (
         <>
             <h2>{sectionName}</h2>
-            <div className="profile-card profile-card-projects">
+            <div className="profile-page-card profile-card-projects">
                 {projectCards}
             </div>
         </>

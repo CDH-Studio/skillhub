@@ -2,15 +2,36 @@
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
 
+$project-card-width: $default-spacing * 45;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
 .people {
     display: flex;
     flex-direction: column;
     height: calc(100% - #{$navbar-height});
     overflow: auto;
 
-    .people-list{
+    .people-list {
         align-self: center;
         padding: $default-spacing * 2;
     }
 
+    .people-page-card {
+        display: flex;
+        flex: 1;
+        margin-bottom: $default-spacing * 2;
+        margin-top: $default-spacing;
+        padding: $default-spacing * 2;
+        width: $project-card-width;
+
+        @include query-project-card-width {
+            width: auto;
+        }
+
+    }
 }
