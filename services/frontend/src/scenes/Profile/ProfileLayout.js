@@ -3,8 +3,7 @@ import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {
-    AvatarIcon, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard, ScrollContainer,
-    SkillBadges
+    LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard, ScrollContainer, SkillBadges
 } from "components/";
 import {Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
