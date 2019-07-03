@@ -1,9 +1,9 @@
 import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
-import {Create, Email, LocalPhone} from "@material-ui/icons";
+import {Create} from "@material-ui/icons";
 import {
-    AvatarIcon, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProjectCard, ScrollContainer, SkillBadges
+    LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard, ScrollContainer, SkillBadges
 } from "components/";
 import {Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
@@ -106,33 +106,14 @@ const PersonalDetails = ({profile}) => {
                 open={personalDetailsDialogOpen}
                 handleClose={closeDialog}
             />
-            <Paper className="profile-card profile-card-personal-details">
-                <AvatarIcon name={profile.name} personsRole="" className="profile-avatar-icon" />
-
-                <div className="profile-card-content">
-                    <h2 className="profile-card-title">
-                        {profile.name}
-                    </h2>
-
-                    <h3 className="profile-card-subtitle">
-                        {profile.primaryRole}
-                    </h3>
-
-                    <div className="profile-card-contact">
-                        <p className="profile-card-text">
-                            <Email />
-                            {profile.contactEmail}
-                        </p>
-
-                        <p className="profile-card-text">
-                            <LocalPhone />
-                            {profile.phone}
-                        </p>
-                    </div>
-                </div>
-
-                <div>
-                    <IconButton className="profile-card-edit-button" onClick={openDialog} color="primary">
+            <Paper className="profile-page-card profile-card-details">
+                <div className="profile-card-details-content">
+                    <ProfileCard
+                        key={profile.name}
+                        page="profile"
+                        {...profile}
+                    />
+                    <IconButton className="profile-card-details-edit-button" onClick={openDialog} color="primary">
                         <Create />
                     </IconButton>
                 </div>
@@ -144,7 +125,7 @@ const PersonalDetails = ({profile}) => {
 const Skills = ({sectionName, profile}) => (
     <>
         <h2>{sectionName}</h2>
-        <Paper className="profile-card profile-card-skills">
+        <Paper className="profile-page-card profile-card-skills">
             <SkillBadges
                 displayCount={profile.skills.length}
                 skills={profile.skills}
@@ -166,7 +147,7 @@ const Projects = ({sectionName, projects}) => {
     return (
         <>
             <h2>{sectionName}</h2>
-            <div className="profile-card profile-card-projects">
+            <div className="profile-page-card profile-card-projects">
                 {projectCards}
             </div>
         </>

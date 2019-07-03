@@ -3,7 +3,16 @@
 @import "styles/_media_queries.scss";
 @import "styles/_mixins.scss";
 
+$project-card-width: $default-spacing * 45;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
 .profile-content {
+    align-items: flex-start;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -14,7 +23,7 @@
         color: $color-neutral-6;
     }
 
-    .profile-card:first-child {
+    .profile-page-card:first-child {
         margin-top: $default-spacing;
     }
 }
@@ -30,66 +39,33 @@
     }
 }
 
-.profile-card {
+.profile-page-card{
     display: flex;
     flex: 1;
     margin-bottom: $default-spacing * 2;
     margin-top: $default-spacing;
     padding: $default-spacing * 2;
+    width: $project-card-width;
+
+    @include query-project-card-width {
+        width: auto;
+    }
 }
 
-#profile-personal-details{
-    display: flex;
-    justify-content: center;
+#profile-personal-details {
+    .profile-card-details-content {
+        display: flex;
+        justify-content: space-between;
 
-    .profile-card-personal-details {
-        flex: 1;
+        width: 100%;
 
-        .profile-avatar-icon {
-            font-size: 30px;
-            height: 64px;
-            width: 64px;
+        .profile-card-details {
+            width: 90%;
+            padding-right: 0;
         }
-        
-        .profile-card-content {
-            flex: 1;
-            margin: 0 $default-spacing*2;
 
-            .profile-card-title {
-                font-size: $font-size-title;
-                font-weight: bold;
-                margin-bottom: $default-spacing * 0.75;
-            }
-
-            .profile-card-subtitle {
-                color: $color-primary;
-                font-size: $font-size-subtitle;
-                margin-bottom: $default-spacing;
-                margin-top: $default-spacing * 0.75;
-            }
-
-            .profile-card-contact {
-                margin-top: $default-spacing * 0.5;
-                
-                .profile-card-text {
-                    align-items: center;
-                    color: $color-neutral-6;
-                    display: flex;
-                    font-size: $font-size-content;
-                    margin: $default-spacing*0.75 0;
-
-                    svg {
-                        font-size: $font-size-content;
-                        margin-right: $default-spacing * 0.25;
-                    }
-                }
-
-                .profile-card-text:last-child {
-                    margin-bottom: 0;
-                }
-            }
-        }
-        .profile-card-edit-button {
+        .profile-card-details-edit-button {
+            align-self: baseline;
             padding: 3px;
 
             svg {
@@ -97,6 +73,8 @@
             }
         }
     }
+
+
 }
 
 #profile-skills {
@@ -107,7 +85,6 @@
         flex: 1;
         display: flex;
         flex-wrap: wrap;
-        margin-top: $default-spacing;
     }
 }
 

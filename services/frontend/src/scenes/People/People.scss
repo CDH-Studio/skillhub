@@ -2,69 +2,36 @@
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
 
+$project-card-width: $default-spacing * 45;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
 .people {
     display: flex;
     flex-direction: column;
+    height: calc(100% - #{$navbar-height});
+    overflow: auto;
 
-    .people-header {
-        align-items: center;
-        background-color: $color-primary;
-        display: flex;
-        justify-content: space-between;
-        padding: $default-spacing $default-spacing*2;
-
-        .logo-icon {
-            height: 32px;
-            width: 32px;
-        }
-
-        .people-auth {
-            display: flex;
-
-            button {
-                background: none;
-                border: none;
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            .people-login {
-                color: $color-light;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-
-            .people-signup {
-                @include hover-background($color-light, darken($color-light, 5%));
-
-                border-radius: $default-border-radius;
-                color: $color-primary;
-                margin-left: $default-spacing * 2;
-                padding: $default-spacing/2 $default-spacing*1.5;
-            }
-        }
+    .people-list {
+        align-self: center;
+        padding: $default-spacing * 2;
     }
 
-    .people-jumbotron {
-        align-items: center;
+    .people-page-card {
         display: flex;
-        flex-direction: column;
-        margin-top: 25vh;
+        flex: 1;
+        margin-bottom: $default-spacing * 2;
+        margin-top: $default-spacing;
+        padding: $default-spacing * 2;
+        width: $project-card-width;
 
-        .people-tagline {
-            color: $color-text-secondary;
-            font-weight: bold;
-            margin-bottom: $default-spacing * 2;
+        @include query-project-card-width {
+            width: auto;
         }
 
-        .people-create-people {
-            @include hover-background($color-primary, $color-primary-hover);
-            @include fab-dropshadow();
-
-            border: none;
-            border-radius: $default-border-radius;
-            color: $color-light;
-            font-weight: bold;
-            padding: $default-spacing $default-spacing*4;
-        }
     }
 }

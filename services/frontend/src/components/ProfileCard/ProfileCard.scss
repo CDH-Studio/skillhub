@@ -1,0 +1,100 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
+@import "styles/_mixins.scss";
+
+$project-card-width: $default-spacing * 45;
+
+.profile-card {
+    align-self: center;
+    display: flex;
+    flex-shrink: 0;
+    width: $project-card-width*0.8;
+
+    .avatar-icon {
+        font-size: 30px;
+        height: 64px;
+        width: 64px;
+        margin-right: $default-spacing*2;
+
+    }
+
+    .profile-card-details-section {
+        margin: 0 auto;
+        flex: 2;
+
+        .profile-card-title {
+            font-size: $font-size-title;
+            font-weight: bold;
+            margin-bottom: $default-spacing * 0.75;
+        }
+
+        .profile-card-subtitle {
+            color: $color-primary;
+            font-size: $font-size-subtitle;
+            margin-bottom: $default-spacing;
+            margin-top: $default-spacing * 0.75;
+        }
+
+        .profile-card-contact {
+            margin-top: $default-spacing * 0.5;
+
+            .profile-card-text {
+                align-items: center;
+                color: $color-neutral-6;
+                display: flex;
+                font-size: $font-size-content;
+                margin: $default-spacing*0.75 0;
+
+                svg {
+                    font-size: $font-size-content;
+                    margin-right: $default-spacing * 0.25;
+                }
+            }
+
+            .profile-card-text:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &.filter-button--active {
+        background-color: $color-primary;
+        color: $color-light;
+    }
+
+    .profile-card-extras {
+        display: none;
+
+        &.profile-card-extras--people {
+            flex: 3;
+            display: flex;
+        }
+
+        .profile-card-extras-skills-section {
+            display: flex;
+            flex: 3;
+
+            .profile-card-extras-skills-content {
+                align-content: flex-start;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                margin: auto $default-spacing;
+            }
+        }
+
+        .profile-card-extras-nav-section {
+            align-items: center;
+            display: flex;
+            flex: 1;
+            margin-right: -$default-spacing*10;
+
+            .profile-card-extras-nav {
+                color: $color-text-secondary;
+            }
+        }
+
+    }
+}
+
