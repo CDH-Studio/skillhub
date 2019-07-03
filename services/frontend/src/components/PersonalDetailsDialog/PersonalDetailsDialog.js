@@ -4,7 +4,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@materi
 import {PersonalDetailsForm} from "components/";
 import "./PersonalDetailsDialog.scss";
 
-const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit}) => {
+const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) => {
     const formFieldData = {
         "nameInput": {
             ...useInput(profile.name)
@@ -48,6 +48,7 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit}) => {
                 Edit Personal Details
             </DialogTitle>
             <DialogContent>
+                {error ? <h1>{error}</h1> : null}
                 <PersonalDetailsForm
                     {...formFieldData}
                 />
@@ -56,7 +57,7 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit}) => {
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={onSubmitClick} color="primary">
+                <Button onClick={() => {onSubmitClick();}} color="primary">
                     Submit
                 </Button>
             </DialogActions>

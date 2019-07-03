@@ -17,6 +17,7 @@ const mapStateToProps = (state) => {
         mappedState.projects = crossSliceSelectors.getProjectsForUser(state);
         mappedState.profile = crossSliceSelectors.getUserProfile(state);
         mappedState.skills = skillsSlice.selectors.getSkills(state);
+        mappedState.error = profilesRequestsSlice.patchPersonalDetails.selectors.getError(state);
 
     } else {
         const loadedProfile = crossSliceSelectors.getProfileFromUrlId(state);

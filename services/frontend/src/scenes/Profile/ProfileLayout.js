@@ -33,6 +33,7 @@ const ProfileLayout = ({projects, profile, skills, isLoading}) => (
         <LoadingValidator
             dependencies={[profile]}
             isLoading={isLoading}
+            error={error}
             renderOnLoad={
                 <>
                     <NavSidebar
@@ -91,7 +92,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile, onSubmit}) => {
+const PersonalDetails = ({profile, onSubmit, error}) => {
     const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
 
     const openDialog = () => {
@@ -108,6 +109,8 @@ const PersonalDetails = ({profile, onSubmit}) => {
                 profile={profile}
                 open={personalDetailsDialogOpen}
                 closeDialog={closeDialog}
+                onSubmit={onSubmit}
+                error={error}
             />
             <Paper className="profile-page-card profile-card-details">
                 <div className="profile-card-details-content">
