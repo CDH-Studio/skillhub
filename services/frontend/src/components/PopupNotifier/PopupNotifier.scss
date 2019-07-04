@@ -1,0 +1,22 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
+@import "styles/_mixins.scss";
+
+.error-popup {
+    .error-popup-content {
+        background-color: $color-attention-5;
+        font-size: $font-size-content;
+
+        .error-popup-content-message {
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .error-popup-content-icon {
+            font-size: $font-size-content * 1.25;
+            margin-right: $default-spacing * 0.75;
+        }
+    }
+}

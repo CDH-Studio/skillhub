@@ -24,17 +24,16 @@ const processProfilesSkills = () => (context) => {
 };
 
 const validatePersonalDetails = () => (context) => {
-    const failures = {};
+    const emptyFields = {};
     Object.keys(context.data).map((field) => {
         if (!context.data[field]) {
             const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ");
-            failures[field] = "Invalid " + errorMessageSpecifier.toLowerCase();
+            emptyFields[field] = "Invalid " + errorMessageSpecifier.toLowerCase();
         }
     }, {});
 
-    //If any of the fields are empty
-    if (Object.entries(failures).length !== 0) {
-        throw new errors.BadRequest("Missing Data", failures);
+    if (Object.entries(emptyFields).length !== 0) {
+        throw new errors.BadRequest("Missing Data", emptyFields);
     }
 
     if (!EMAIL_REGEX.test(context.data.contactEmail)) {

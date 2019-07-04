@@ -1,8 +1,7 @@
-import React, {useMemo, useState} from "react";
+import React, {useMemo, useState, useEffect} from "react";
 import {useInput} from "utils/hooks";
 import {Link} from "react-router-dom";
-import {Button, IconButton, Paper} from "@material-ui/core";
-import {Create} from "@material-ui/icons";
+import {Button, Paper} from "@material-ui/core";
 import {
     EditSkillsDialog, LoadingValidator, NavSidebar, DetailsDialog, ProfileCard, ProjectCard,
     ScrollContainer, SkillBadges
@@ -28,12 +27,12 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, skills, isLoading}) => (
+const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, personalDetailsRequestData}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
             isLoading={isLoading}
-            error={error}
+            dataRequests={[personalDetailsRequestData]}
             renderOnLoad={
                 <>
                     <NavSidebar
@@ -44,6 +43,8 @@ const ProfileLayout = ({projects, profile, skills, isLoading}) => (
                         projects={projects}
                         profile={profile}
                         skills={skills}
+                        isUserProfile={isUserProfile}
+                        personalDetailsRequestData={personalDetailsRequestData}
                     />
                 </>
             }
@@ -92,7 +93,11 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile, onSubmit, error}) => {
+const PersonalDetails = ({profile, personalDetailsRequestData, isUserProfile}) => {
+    const error = personalDetailsRequestData.error;
+    const isPatching = personalDetailsRequestData.isLoading;
+    const onSubmit = personalDetailsRequestData.onSubmit;
+
     const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
 
     const openDialog = () => {
@@ -102,6 +107,8 @@ const PersonalDetails = ({profile, onSubmit, error}) => {
     const closeDialog = () => {
         setPersonalDetailsDialogOpen(false);
     };
+
+    useEffect(() => {if (!isPatching && !error) closeDialog();}, [error, isPatching]);
 
     return (
         <>
@@ -116,12 +123,10 @@ const PersonalDetails = ({profile, onSubmit, error}) => {
                 <div className="profile-card-details-content">
                     <ProfileCard
                         key={profile.name}
-                        page="profile"
+                        page={isUserProfile ? "userProfile" : "peopleProfile"}
+                        openDialog={openDialog}
                         {...profile}
                     />
-                    <IconButton className="profile-card-details-edit-button" onClick={openDialog} color="primary">
-                        <Create />
-                    </IconButton>
                 </div>
             </Paper>
         </>

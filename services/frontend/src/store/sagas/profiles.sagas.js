@@ -15,9 +15,9 @@ function* profilesFetchAll() {
 
 function* profilesPatchPersonalDetails({payload}, success) {
     const result = yield call(api.service("profiles").patch, payload.id, payload);
-    const normalizedProfiles = Profile.normalizeApiResultsForRedux([result]);
+    const normalizedProfile = Profile.normalizeProfile(result);
 
-    yield put(profilesSlice.actions.setProfiles(normalizedProfiles));
+    yield put(profilesSlice.actions.setProfile(normalizedProfile));
 
     yield call(success);  // Mark success before continuing with other actions
 

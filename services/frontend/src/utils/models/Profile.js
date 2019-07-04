@@ -49,7 +49,7 @@ export default class Profile {
 
     /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
-    static normalizeApiResultsForRedux(profiles = []) {
+    static normalizeApiResultsForRedux(profiles) {
         return profiles.reduce(arrayToObject({processor: this.normalizeProfile}), {});
     }
 

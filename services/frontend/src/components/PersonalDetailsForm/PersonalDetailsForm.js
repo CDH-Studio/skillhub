@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import "./PersonalDetailsForm.scss";
 
 const PersonalDetailsForm = ({
-    nameInput, emailInput, roleInput, phoneInput, slackInput, rocketChatInput
+    name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle
 }) => {
     return (
         <form className="personal-details-form">
@@ -12,39 +12,39 @@ const PersonalDetailsForm = ({
                 margin="dense"
                 id="name"
                 label="Name"
-                {...nameInput}
+                {...name}
             />
             <TextField
                 margin="dense"
                 id="contactEmail"
                 label="Contact E-mail"
                 type="email"
-                {...emailInput}
+                {...contactEmail}
             />
             <TextField
                 margin="dense"
                 id="primaryRole"
                 label="Primary Role"
-                {...roleInput}
+                {...primaryRole}
             />
             <TextField
                 margin="dense"
                 id="phone"
                 label="Phone Number"
                 type="tel"
-                {...phoneInput}
+                {...phone}
             />
             <TextField
                 margin="dense"
                 id="slackHandle"
                 label="Slack Handle"
-                {...slackInput}
+                {...slackHandle}
             />
             <TextField
                 margin="dense"
                 id="rocketChatHandle"
                 label="Rocket Chat Handle"
-                {...rocketChatInput}
+                {...rocketChatHandle}
             />
         </form>
     );

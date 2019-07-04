@@ -5,38 +5,48 @@ import {PersonalDetailsForm} from "components/";
 import "./PersonalDetailsDialog.scss";
 
 const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) => {
+    /* setup controlled fields with react hooks */
     const formFieldData = {
-        "nameInput": {
-            ...useInput(profile.name)
+        "name": {
+            ...useInput(profile.name),
         },
-        "emailInput": {
+        "contactEmail": {
             ...useInput(profile.contactEmail)
         },
-        "roleInput": {
+        "primaryRole": {
             ...useInput(profile.primaryRole)
         },
-        "phoneInput": {
+        "phone": {
             ...useInput(profile.phone)
         },
-        "slackInput": {
+        "slackHandle": {
             ...useInput(profile.slackHandle)
         },
-        "rocketChatInput": {
+        "rocketChatHandle": {
             ...useInput(profile.rocketChatHandle)
         }
     };
-    const {value: name} = formFieldData.nameInput;
-    const {value: email} = formFieldData.emailInput;
-    const {value: role} = formFieldData.roleInput;
-    const {value: phone} = formFieldData.phoneInput;
-    const {value: slack} = formFieldData.slackInput;
-    const {value: rocketChat} = formFieldData.rocketChatInput;
+
+    const {value: name} = formFieldData.name;
+    const {value: email} = formFieldData.contactEmail;
+    const {value: role} = formFieldData.primaryRole;
+    const {value: phone} = formFieldData.phone;
+    const {value: slack} = formFieldData.slackHandle;
+    const {value: rocketChat} = formFieldData.rocketChatHandle;
 
     const onSubmitClick = useCallback(() => onSubmit(
         profile.id, name, email, role, phone, slack, rocketChat
     ), [
         profile.id, name, email, role, phone, slack, rocketChat, onSubmit
     ]);
+
+    /* Set the error property for incorrectly filled in fields */
+    if (error && error.message === "Missing Data") {
+        for (const invalidFieldIndex of Object.keys(error.data)) {
+            formFieldData[invalidFieldIndex].error = true;
+            formFieldData[invalidFieldIndex].helperText = error.data[invalidFieldIndex];
+        }
+    }
 
     return (
         <Dialog className="personal-details-dialog"
@@ -48,7 +58,6 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) =>
                 Edit Personal Details
             </DialogTitle>
             <DialogContent>
-                {error ? <h1>{error}</h1> : null}
                 <PersonalDetailsForm
                     {...formFieldData}
                 />
@@ -57,7 +66,9 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) =>
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => {onSubmitClick();}} color="primary">
+                <Button onClick={onSubmitClick}
+                    color="primary"
+                >
                     Submit
                 </Button>
             </DialogActions>

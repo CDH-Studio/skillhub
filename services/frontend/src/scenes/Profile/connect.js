@@ -7,17 +7,27 @@ import ScreenUrls from "utils/screenUrls";
 
 const mapStateToProps = (state) => {
     const mappedState = {};
+    const personalDetailsRequestData = {};
+    const isUserProfile = crossSliceSelectors.isMatchingRoute(ScreenUrls.PROFILE)(state);
+
+    mappedState.isUserProfile = isUserProfile;
+
+    /* Determine if any parts of the page are still loading */
     mappedState.isLoading = reduceLoadingStates([
         profilesRequestsSlice,
         projectsRequestsSlice,
         skillsRequestsSlice
     ], state);
 
-    if (crossSliceSelectors.isMatchingRoute(ScreenUrls.PROFILE)(state)) {
+    /* Map required data for the personal details request */
+    personalDetailsRequestData.isLoading = profilesRequestsSlice.patchPersonalDetails.selectors.getLoading(state);
+    personalDetailsRequestData.error = profilesRequestsSlice.patchPersonalDetails.selectors.getError(state);
+    mappedState.personalDetailsRequestData = personalDetailsRequestData;
+
+    if (isUserProfile) {
         mappedState.projects = crossSliceSelectors.getProjectsForUser(state);
         mappedState.profile = crossSliceSelectors.getUserProfile(state);
         mappedState.skills = skillsSlice.selectors.getSkills(state);
-        mappedState.error = profilesRequestsSlice.patchPersonalDetails.selectors.getError(state);
 
     } else {
         const loadedProfile = crossSliceSelectors.getProfileFromUrlId(state);

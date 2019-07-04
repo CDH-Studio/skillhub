@@ -6,17 +6,15 @@
 $project-card-width: $default-spacing * 45;
 
 .profile-card {
+    width: 100%;
     align-self: center;
     display: flex;
-    flex-shrink: 0;
-    width: $project-card-width*0.8;
 
     .avatar-icon {
         font-size: 30px;
         height: 64px;
         width: 64px;
         margin-right: $default-spacing*2;
-
     }
 
     .profile-card-details-section {
@@ -65,15 +63,17 @@ $project-card-width: $default-spacing * 45;
 
     .profile-card-extras {
         display: none;
+        width: 100%;
 
         &.profile-card-extras--people {
             flex: 3;
             display: flex;
+            width: 100%;
+            justify-content: space-between;
         }
 
         .profile-card-extras-skills-section {
             display: flex;
-            flex: 3;
 
             .profile-card-extras-skills-content {
                 align-content: flex-start;
@@ -87,14 +87,34 @@ $project-card-width: $default-spacing * 45;
         .profile-card-extras-nav-section {
             align-items: center;
             display: flex;
-            flex: 1;
-            margin-right: -$default-spacing*10;
 
             .profile-card-extras-nav {
                 color: $color-text-secondary;
             }
         }
+        .profile-card-details-edit-button {
+            align-self: baseline;
+            padding: 3px;
 
+            svg {
+                font-size: $font-size-subtitle;
+            }
+        }
+
+        &.profile-card-extras--profile {
+            flex: 3;
+            display: flex;
+            justify-content: flex-end;
+
+            .profile-card-extras-edit-button {
+                align-self: baseline;
+                padding: 3px;
+
+                svg {
+                    font-size: $font-size-subtitle;
+                }
+            }
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 class Profile {
-    /* Extracts the projectProfiles from the associated profile objects
-     * and replaces the profiles as a top-level attribute of the project objects. */
+    /* Extracts the profileSkills from the associated profile object
+     * and replaces the skills as a top-level attribute of the profile object. */
     static processProfileSkills(profile) {
         const processedProfile = {...profile};
         delete processedProfile.skills;
@@ -20,9 +20,11 @@ class Profile {
         if (!Array.isArray(profiles)) {
             return this.processProfileSkills(profiles);
         }
-        return profiles.map((profile) => (
-            this.processProfileSkills(profile)
-        ));
+        else {
+            return profiles.map((profile) => (
+                this.processProfileSkills(profile)
+            ));
+        }
     }
 }
 
