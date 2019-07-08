@@ -6,26 +6,27 @@ import "./EditSkillsDialog.scss";
 
 const EditSkillsDialog = ({skills, handleClose, open}) => {
     return (
-        <Dialog className="personal-details-dialog"
-            aria-labelledby="personal-details-dialog-title"
+        <Dialog className="edit-skills-dialog"
+            aria-labelledby="edit-skills-dialog-title"
             open={open}
-            onClose={handleClose}
+            onClose={handleCancel}
         >
-            <DialogTitle id="personal-details-dialog-title">
+            <DialogTitle id="edit-skills-dialog-title">
                 Edit Personal Details
             </DialogTitle>
             <DialogContent>
                 <MuiThemeProvider>
                     <ChipInput
                         defaultValue={skills}
+                        onChange={(chips) => handleChange(chips)}
                     />
                 </MuiThemeProvider>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleCancel} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={() => handleSubmit(currentChips)} color="primary">
                     Submit
                 </Button>
             </DialogActions>

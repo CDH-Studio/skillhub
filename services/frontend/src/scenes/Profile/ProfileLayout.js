@@ -6,7 +6,7 @@ import {
     AvatarIcon, EditSkillsDialog, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard,
     ScrollContainer, SkillBadges
 } from "components/";
-import {Project} from "utils/models";
+import {Project, Skill} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
@@ -27,7 +27,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, isLoading}) => (
+const ProfileLayout = ({projects, profile, skills, isLoading}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -41,6 +41,7 @@ const ProfileLayout = ({projects, profile, isLoading}) => (
                     <ProfileContent
                         projects={projects}
                         profile={profile}
+                        skills={skills}
                     />
                 </>
             }
@@ -123,22 +124,69 @@ const PersonalDetails = ({profile}) => {
     );
 };
 
-const Skills = ({sectionName, profile}) => {
+const Skills = ({sectionName, profile, skills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = React.useState(false);
+    const [profileUpdated, updateProfile] = useState(profile);
 
-    function openDialog() {
+    const openDialog = () => {
         setEditSkillsDialogOpen(true);
-    }
+    };
 
-    function closeDialog() {
+    const closeDialog = () => {
         setEditSkillsDialogOpen(false);
-    }
+    };
+
+    const handleSubmit = (updatedSkills) => {
+        removeSkills(updatedSkills);
+        addSkills(updatedSkills);
+        closeDialog();
+    };
+
+    const handleCancel = () => {
+        closeDialog();
+    };
+
+    const addSkills = (updatedSkills) => {
+        const tempProfile = profileUpdated;
+        updatedSkills.map((skillName) => {
+            const skillNameLC = skillName.toLowerCase();
+            if (!profileUpdated.skills.map((skill) => skill.name.toLowerCase()).includes(skillNameLC)) {
+                if (Object.values(skills).map((skill) => skill.name.toLowerCase()).includes(skillNameLC)) {
+                    /* Adds from Existing Skills List*/
+                    Object.values(skills).map((skill) => {
+                        if (skill.name.toLowerCase() === skillNameLC) {
+                            tempProfile.skills.push(skills[skill.id]);
+                        }
+                    });
+
+                } else {
+                    /*Adds new Skill Object */
+                    const newSkill = new Skill({name: skillName});
+                    tempProfile.skills.push(newSkill);
+                }
+            }
+        });
+        updateProfile(tempProfile);
+    };
+
+    const removeSkills = (updatedSkills) => {
+        const tempProfile = profileUpdated;
+        tempProfile.skills.map((skill, index) => {
+            if (!updatedSkills.includes(skill.name)){
+                tempProfile.skills.splice(index, 1);
+            }
+
+        });
+        updateProfile(tempProfile);
+    };
+
     return (
         <>
             <EditSkillsDialog
-                skills={profile.skills}
+                skills={profileUpdated.skills.map((skill) => skill.name)}
                 open={editSkillsDialogOpen}
-                handleClose={closeDialog}
+                handleCancel={handleCancel}
+                handleSubmit={(updatedSkills) => handleSubmit(updatedSkills)}
             />
             <div className="profile-card-skills-header-section">
                 <h2>{sectionName}</h2>
@@ -146,10 +194,10 @@ const Skills = ({sectionName, profile}) => {
                     <Create />
                 </IconButton>
             </div>
-            <Paper className="profile-card profile-card-skills">
+            <Paper className="profile-page-card profile-card-skills">
                 <SkillBadges
-                    displayCount={profile.skills.length}
-                    skills={profile.skills}
+                    displayCount={profileUpdated.skills.length}
+                    skills={profileUpdated.skills}
                 />
             </Paper>
         </>
@@ -168,7 +216,7 @@ const Projects = ({sectionName, projects}) => {
     return (
         <>
             <h2>{sectionName}</h2>
-            <div className="profile-card profile-card-projects">
+            <div className="profile-page-card profile-card-projects">
                 {projectCards}
             </div>
         </>
