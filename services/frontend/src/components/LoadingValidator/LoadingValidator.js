@@ -1,6 +1,5 @@
 import React from "react";
 import {CircularProgress} from "@material-ui/core";
-import {PopupNotifier} from "components/";
 import "./LoadingValidator.scss";
 
 /* Check if any of our dependencies haven't been loaded up yet */
@@ -21,30 +20,16 @@ const emptyDependency = (dependencies) => dependencies.reduce((acc, currentDepen
 
 /* Shows a circular progress loader if the component is currently loading,
 renders an inputted component (componentOnFailedLoad) if one of the dependencies is empty */
-const LoadingValidator = ({isLoading, renderOnLoad, renderOnFailedLoad, dependencies, dataRequests}) => {
+const LoadingValidator = ({isLoading, renderOnLoad, renderOnFailedLoad, dependencies}) => {
     if (isLoading || missingDependency(dependencies)) {
         return <CircularProgress className="loading-indicator" />;
     }
     else {
-        const popupNotifiers = dataRequests.map((requestData, index) => (
-            <PopupNotifier
-                key={index}
-                isLoading={requestData.isLoading}
-                errorMessage={requestData.error ? requestData.error.message : null}
-                successMessage="success"
-            />
-        ));
-
-        if (emptyDependency(dependencies)) {
-            return renderOnFailedLoad;
-        } else {
-            return (
-                <>
-                    {popupNotifiers}
-                    {renderOnLoad}
-                </>
-            );
-        }
+        return (emptyDependency(dependencies)) ? (
+            renderOnFailedLoad
+        ) : (
+            renderOnLoad
+        );
     }
 };
 

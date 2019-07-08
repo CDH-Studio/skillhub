@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import React, {useMemo, useState, useEffect} from "react";
 import {useInput} from "utils/hooks";
+=======
+import React, {useEffect, useMemo, useState} from "react";
+>>>>>>> CDHSH-89 refactored notifications to be global using redux store
 import {Link} from "react-router-dom";
 import {Button, Paper} from "@material-ui/core";
 import {
@@ -27,12 +31,11 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, personalDetailsRequestData}) => (
+const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, personalDetailsRequest}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
             isLoading={isLoading}
-            dataRequests={[personalDetailsRequestData]}
             renderOnLoad={
                 <>
                     <NavSidebar
@@ -40,11 +43,13 @@ const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, per
                         containerClass={containerClass}
                     />
                     <ProfileContent
+                        isUserProfile={isUserProfile}
+                        personalDetailsRequest={personalDetailsRequest}
                         projects={projects}
                         profile={profile}
                         skills={skills}
                         isUserProfile={isUserProfile}
-                        personalDetailsRequestData={personalDetailsRequestData}
+                        personalDetailsRequest={personalDetailsRequest}
                     />
                 </>
             }
@@ -93,10 +98,10 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile, personalDetailsRequestData, isUserProfile}) => {
-    const error = personalDetailsRequestData.error;
-    const isPatching = personalDetailsRequestData.isLoading;
-    const onSubmit = personalDetailsRequestData.onSubmit;
+const PersonalDetails = ({profile, personalDetailsRequest, isUserProfile}) => {
+    const error = personalDetailsRequest.error;
+    const isLoading = personalDetailsRequest.isLoading;
+    const onSubmit = personalDetailsRequest.submitPersonalDetails;
 
     const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
 
@@ -108,21 +113,22 @@ const PersonalDetails = ({profile, personalDetailsRequestData, isUserProfile}) =
         setPersonalDetailsDialogOpen(false);
     };
 
-    useEffect(() => {if (!isPatching && !error) closeDialog();}, [error, isPatching]);
+    useEffect(() => {if (!isLoading && !error) closeDialog();}, [error, isLoading]);
 
     return (
         <>
             <PersonalDetailsDialog
-                profile={profile}
-                open={personalDetailsDialogOpen}
                 closeDialog={closeDialog}
-                onSubmit={onSubmit}
                 error={error}
+                key={profile.id}
+                onSubmit={onSubmit}
+                open={personalDetailsDialogOpen}
+                profile={profile}
             />
             <Paper className="profile-page-card profile-card-details">
                 <div className="profile-card-details-content">
                     <ProfileCard
-                        key={profile.name}
+                        key={profile.id}
                         page={isUserProfile ? "userProfile" : "peopleProfile"}
                         openDialog={openDialog}
                         {...profile}

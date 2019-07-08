@@ -1,6 +1,6 @@
 import {call, fork, put} from "redux-saga/effects";
 import api from "api/";
-import {profilesSlice, profilesRequestsSlice, profileSkillsSlice} from "store/slices";
+import {profilesSlice, profilesRequestsSlice, profileSkillsSlice, notificationRequestsSlice} from "store/slices";
 import {Profile} from "utils/models";
 
 function* profilesFetchAll() {
@@ -14,11 +14,22 @@ function* profilesFetchAll() {
 }
 
 function* profilesPatchPersonalDetails({payload}, success) {
-    const result = yield call(api.service("profiles").patch, payload.id, payload);
-    const normalizedProfile = Profile.normalizeProfile(result);
+    try {
+        const result = yield call(api.service("profiles").patch, payload.id, payload);
+        const normalizedProfile = Profile.normalizeProfile(result);
 
-    yield put(profilesSlice.actions.setProfile(normalizedProfile));
+        yield put(profilesSlice.actions.setProfile(normalizedProfile));
+    }
+    catch (error) {
+        yield put(notificationRequestsSlice.pushNotification.actions.request(
+            {type: "error", message: error.message}
+        ));
+        throw error;
+    }
 
+    yield put(notificationRequestsSlice.pushNotification.actions.request(
+        {type: "success", message: "Updated successfully"}
+    ));
     yield call(success);  // Mark success before continuing with other actions
 
 }

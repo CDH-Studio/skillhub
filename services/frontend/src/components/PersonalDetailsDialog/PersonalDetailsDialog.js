@@ -66,9 +66,7 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) =>
                 <Button onClick={handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={onSubmitClick}
-                    color="primary"
-                >
+                <Button onClick={onSubmitClick} color="primary">
                     Submit
                 </Button>
             </DialogActions>

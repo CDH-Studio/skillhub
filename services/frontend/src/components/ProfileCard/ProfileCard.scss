@@ -6,15 +6,15 @@
 $project-card-width: $default-spacing * 45;
 
 .profile-card {
-    width: 100%;
     align-self: center;
     display: flex;
+    width: 100%;
 
     .avatar-icon {
         font-size: 30px;
         height: 64px;
-        width: 64px;
         margin-right: $default-spacing*2;
+        width: 64px;
     }
 
     .profile-card-details-section {
@@ -66,10 +66,10 @@ $project-card-width: $default-spacing * 45;
         width: 100%;
 
         &.profile-card-extras--people {
-            flex: 3;
             display: flex;
-            width: 100%;
+            flex: 3;
             justify-content: space-between;
+            width: 100%;
         }
 
         .profile-card-extras-skills-section {
@@ -102,8 +102,8 @@ $project-card-width: $default-spacing * 45;
         }
 
         &.profile-card-extras--profile {
-            flex: 3;
             display: flex;
+            flex: 3;
             justify-content: flex-end;
 
             .profile-card-extras-edit-button {

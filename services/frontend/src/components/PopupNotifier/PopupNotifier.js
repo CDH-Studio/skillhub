@@ -1,52 +1,36 @@
 import React, {useState, useEffect} from "react";
-import {IconButton, Snackbar, SnackbarContent} from "@material-ui/core";
-import {Error, Close} from "@material-ui/icons";
+import connect from "./connect";
+import PopupNotifierLayout from "./PopupNotifierLayout";
 import "./PopupNotifier.scss";
 
-const PopupNotifier = ({isLoading, errorMessage}) => {
+const PopupNotifier = ({isLoading, notification}) => {
+    const notificationMessage = notification ? notification.message : null;
+    const notificationType = notification ? notification.type : null;
+
     const [open, setOpen] = useState(false);
 
-    const handleClick = () => {
+    const openPopup = () => {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const closePopup = () => {
         setOpen(false);
     };
 
     useEffect(() => {
-        if (!isLoading && errorMessage) {
-            handleClick();
+        if (!isLoading && notification) {
+            openPopup();
         }
-    }, [isLoading, errorMessage]);
+    }, [isLoading, notification]);
 
     return (
-        <Snackbar
-            className="error-popup"
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-            }}
+        <PopupNotifierLayout
             open={open}
-            autoHideDuration={6000}
-            onClose={handleClose}
-        >
-            <SnackbarContent
-                className="error-popup-content"
-                message={
-                    <span className="error-popup-content-message">
-                        <Error className="error-popup-content-icon" />
-                        {errorMessage}
-                    </span>
-                }
-                action={[
-                    <IconButton key="close" aria-label="Close" onClick={handleClose}>
-                        <Close />
-                    </IconButton>,
-                ]}
-            />
-        </Snackbar>
+            notificationMessage={notificationMessage}
+            notificationType={notificationType}
+            closePopup={closePopup}
+        />
     );
 };
 
-export default PopupNotifier;
+export default connect(PopupNotifier);
