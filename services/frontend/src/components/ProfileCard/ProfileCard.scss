@@ -108,7 +108,7 @@ $project-card-width: $default-spacing * 45;
 
             .profile-card-extras-edit-button {
                 align-self: baseline;
-                padding: 3px;
+                margin: -9px 0;
 
                 svg {
                     font-size: $font-size-subtitle;

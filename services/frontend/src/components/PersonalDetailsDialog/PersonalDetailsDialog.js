@@ -4,7 +4,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@materi
 import {PersonalDetailsForm} from "components/";
 import "./PersonalDetailsDialog.scss";
 
-const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) => {
+const PersonalDetailsDialog = ({profile, closeDialog, open, onSubmit, error}) => {
     /* setup controlled fields with react hooks */
     const formFieldData = {
         "name": {
@@ -50,20 +50,17 @@ const PersonalDetailsDialog = ({profile, handleClose, open, onSubmit, error}) =>
 
     return (
         <Dialog className="personal-details-dialog"
-            aria-labelledby="personal-details-dialog-title"
             open={open}
-            onClose={handleClose}
+            onclose={closeDialog}
         >
-            <DialogTitle id="personal-details-dialog-title">
+            <DialogTitle className="personal-details-dialog-title">
                 Edit Personal Details
             </DialogTitle>
             <DialogContent>
-                <PersonalDetailsForm
-                    {...formFieldData}
-                />
+                <PersonalDetailsForm {...formFieldData} />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={closeDialog} color="primary">
                     Cancel
                 </Button>
                 <Button onClick={onSubmitClick} color="primary">

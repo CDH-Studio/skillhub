@@ -3,8 +3,7 @@ import {notificationSlice, notificationRequestsSlice} from "store/slices";
 
 const mapStateToProps = (state) => {
     return {
-
-        isLoading: (notificationRequestsSlice.pushNotification.selectors.getLoading(state)),
+        isLoading: (notificationRequestsSlice.setNotification.selectors.getLoading(state)),
         notification: (notificationSlice.selectors.getNotification(state))
     };
 };

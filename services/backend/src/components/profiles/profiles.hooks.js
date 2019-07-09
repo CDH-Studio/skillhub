@@ -1,9 +1,9 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
+const errors = require("@feathersjs/errors");
 const {restrictToOwner} = require("feathers-authentication-hooks");
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
-const errors = require("@feathersjs/errors");
 
 const EMAIL_REGEX = /^\S+@\S+$/;
 
@@ -24,12 +24,13 @@ const processProfilesSkills = () => (context) => {
 };
 
 const validatePersonalDetails = () => (context) => {
-    const emptyFields = {};
-    Object.keys(context.data).map((field) => {
+    const emptyFields = Object.keys(context.data).reduce((acc, field) => {
         if (!context.data[field]) {
-            const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ");
-            emptyFields[field] = "Invalid " + errorMessageSpecifier.toLowerCase();
+            // ex. Converts "contactEmail" to "contact email"
+            const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ").toLowerCase();
+            acc[field] = "Invalid " + errorMessageSpecifier;
         }
+        return acc;
     }, {});
 
     if (Object.entries(emptyFields).length !== 0) {

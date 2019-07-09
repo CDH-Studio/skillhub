@@ -6,11 +6,11 @@ export const notificationSlice = createSlice({
     slice: mounts.notification,
     initialState: null,
     reducers: {
-        pushNotification: (state, action) => action.payload,
+        setNotification: (state, action) => action.payload,
     }
 });
 
 export const notificationRequestsSlice = createRequestSlices(
     mounts.notificationRequests,
-    ["pushNotification"]
+    ["setNotification"]
 );

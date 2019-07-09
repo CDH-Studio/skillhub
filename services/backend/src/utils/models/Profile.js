@@ -16,6 +16,8 @@ class Profile {
         return processedProfile;
     }
 
+    /* Takes in an array of profiles or a single profile and returns an array of processed
+     * profiles or a single processed profile object */
     static processProfilesSkills(profiles = []) {
         if (!Array.isArray(profiles)) {
             return this.processProfileSkills(profiles);

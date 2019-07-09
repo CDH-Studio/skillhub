@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import React, {useMemo, useState, useEffect} from "react";
+import React, {useCallback, useMemo, useState, useEffect} from "react";
 import {useInput} from "utils/hooks";
-=======
-import React, {useEffect, useMemo, useState} from "react";
->>>>>>> CDHSH-89 refactored notifications to be global using redux store
 import {Link} from "react-router-dom";
 import {Button, Paper} from "@material-ui/core";
 import {
@@ -48,8 +44,6 @@ const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, per
                         projects={projects}
                         profile={profile}
                         skills={skills}
-                        isUserProfile={isUserProfile}
-                        personalDetailsRequest={personalDetailsRequest}
                     />
                 </>
             }
@@ -98,7 +92,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile, personalDetailsRequest, isUserProfile}) => {
+const PersonalDetails = ({isUserProfile, personalDetailsRequest, profile}) => {
     const error = personalDetailsRequest.error;
     const isLoading = personalDetailsRequest.isLoading;
     const onSubmit = personalDetailsRequest.submitPersonalDetails;
