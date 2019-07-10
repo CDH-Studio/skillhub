@@ -5,6 +5,7 @@ import {Project} from "utils/models";
 import "./ProjectDetails.scss";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
+import ScreenUrls from "utils/screenUrls";
 
 const containerClass = ".scroll-container";
 
@@ -115,7 +116,7 @@ const Contributors = ({sectionName, contributors}) => {
                 {contributors.map((contributor) => {
                     return (
                         <div className="project-contributors-badge" key={contributor.name}>
-                            <Link to={`/app/people/${contributor.profileId}`}>
+                            <Link to={ScreenUrls.PEOPLE + `/${contributor.profileId}`}>
                                 <AvatarIcon
                                     name={contributor.name}
                                     personsRole={contributor.role}
