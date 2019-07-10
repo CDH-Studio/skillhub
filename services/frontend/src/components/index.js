@@ -13,6 +13,8 @@ export {default as ProfileCard} from "./ProfileCard";
 export {default as PersonalDetailsDialog} from "./PersonalDetailsDialog";
 export {default as PersonalDetailsForm} from "./PersonalDetailsForm";
 export {default as ProjectCard} from "./ProjectCard";
+export {default as ProjectInfoDialog} from "./ProjectInfoDialog";
+export {default as ProjectInfoForm} from "./ProjectInfoForm";
 export {default as ScrollContainer} from "./ScrollContainer";
 export {default as SkillBadges} from "./SkillsBadges";
 export {default as TextBadge} from "./TextBadge";

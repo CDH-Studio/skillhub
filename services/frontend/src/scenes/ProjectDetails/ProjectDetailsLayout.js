@@ -1,6 +1,7 @@
-import React from "react";
-import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges} from "components/";
-import {CircularProgress, Paper} from "@material-ui/core";
+import React, {useState} from "react";
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, ProjectInfoDialog} from "components/";
+import {CircularProgress, IconButton, Paper} from "@material-ui/core";
+import {Create} from "@material-ui/icons";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
 import {Link} from "react-router-dom";
@@ -75,16 +76,38 @@ const ProjectContent = ({...sectionProps}) => (
 );
 
 const ProjectInfo = ({project}) => {
+    const [projectInfoDialogOpen, setProjectInfoDialogOpen] = useState(false);
+
+    const openDialog = () => {
+        setProjectInfoDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setProjectInfoDialogOpen(false);
+    };
+
     return (
-        <Paper className="project-details-card">
-            <div className="project-info-card-active-section">
-                <ActiveBadge isActive={Project.isActive(project)} />
-            </div>
-            <div className="project-info-card-content-section">
-                <h3 className="project-info-card-name">{project.name}</h3>
-                <p className="project-info-card-description">{project.description}</p>
-            </div>
-        </Paper>
+        <>
+            <ProjectInfoDialog
+                closeDialog={closeDialog}
+                open={projectInfoDialogOpen}
+                project={project}
+            />
+            <Paper className="project-details-card">
+                <div className="project-info-card-active-section">
+                    <ActiveBadge isActive={Project.isActive(project)} />
+                </div>
+                <div className="project-info-card-content-section">
+                    <h3 className="project-info-card-name">{project.name}</h3>
+                    <p className="project-info-card-description">{project.description}</p>
+                </div>
+                <div className="project-info-card-edit-section">
+                    <IconButton className="project-info-card-edit-button" onClick={openDialog} color="primary">
+                        <Create />
+                    </IconButton>
+                </div>
+            </Paper>
+        </>
     );
 };
 
