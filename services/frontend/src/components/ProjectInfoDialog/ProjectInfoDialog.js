@@ -17,7 +17,7 @@ const ProjectInfoDialog = ({project, closeDialog, open}) => {
     return (
         <Dialog className="project-info-dialog"
             open={open}
-            onClick={closeDialog}
+            onClose={closeDialog}
         >
             <DialogTitle className="project-info-dialog-title">
                 Edit Project Info
