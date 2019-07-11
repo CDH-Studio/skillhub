@@ -4,6 +4,8 @@
 @import "styles/_mixins.scss";
 
 .popup {
+    display: flex;
+
     .popup-content--error {
         background-color: $color-attention-5;
         font-size: $font-size-content;
@@ -23,5 +25,8 @@
     .popup-content-icon {
         font-size: $font-size-content * 1.25;
         margin-right: $default-spacing * 0.75;
+    }
+    .popup-edit-icon {
+        color: $color-light;
     }
 }

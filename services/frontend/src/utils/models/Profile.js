@@ -31,16 +31,9 @@ export default class Profile {
         this.profileSkills = profileSkills;
     }
 
-<<<<<<< HEAD
-    static get FILTER_ALL() {
-        return "all";
-    }
-
-=======
     static get FILTER_ALL() {return "all";}
 
     /* Normalize a single profile to {ID -> Profile} */
->>>>>>> 88169a6... CDHSH-89 refactored notifications to be global using redux store
     static normalizeProfile = (profile) => {
         const processedProfile = new Profile(profile);
 

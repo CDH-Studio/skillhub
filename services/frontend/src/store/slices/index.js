@@ -1,5 +1,5 @@
 export {authRequestsSlice} from "./auth.slice";
-export {notificationSlice, notificationRequestsSlice} from "./notification.slice";
+export {notificationSlice} from "./notification.slice";
 export {profilesSlice, profilesRequestsSlice} from "./profiles.slice";
 export {profileSkillsSlice} from "./profileSkills.slice";
 export {projectsSlice, projectsRequestsSlice} from "./projects.slice";

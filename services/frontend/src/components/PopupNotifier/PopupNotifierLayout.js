@@ -3,35 +3,24 @@ import {IconButton, Snackbar, SnackbarContent} from "@material-ui/core";
 import {Close, Error, CheckCircle} from "@material-ui/icons";
 import "./PopupNotifier.scss";
 
-const SuccessPopup = ({notificationMessage, closePopup}) => (
+const MessagePopup = ({onClose, closePopup, notificationMessage, notificationType}) => (
     <SnackbarContent
-        className="popup-content--success"
+        className={"popup-content--" + notificationType}
         message={
             <span className="popup-content-message">
-                <CheckCircle className="popup-content-icon" />
+                {
+                    notificationType === "success" ? (
+                        <CheckCircle className="popup-content-icon" />
+                    ) : (
+                        <Error className="popup-content-icon" />
+                    )
+                }
                 {notificationMessage}
             </span>
         }
         action={[
             <IconButton key="close" aria-label="Close" onClick={closePopup}>
-                <Close />
-            </IconButton>,
-        ]}
-    />
-);
-
-const ErrorPopup = ({notificationMessage, closePopup}) => (
-    <SnackbarContent
-        className="popup-content--error"
-        message={
-            <span className="popup-content-message">
-                <Error className="popup-content-icon" />
-                {notificationMessage}
-            </span>
-        }
-        action={[
-            <IconButton key="close" aria-label="Close" onClick={closePopup}>
-                <Close />
+                <Close className="popup-edit-icon" />
             </IconButton>,
         ]}
     />
@@ -45,22 +34,13 @@ const PopupNotifierLayout = ({closePopup, notificationMessage, notificationType,
             horizontal: "left",
         }}
         open={open}
-        autoHideDuration={6000}
         onClose={closePopup}
     >
-        {
-            (notificationType === "success") ? (
-                <SuccessPopup
-                    notificationMessage={notificationMessage}
-                    closePopup={closePopup}
-                />
-            ) : (
-                <ErrorPopup
-                    notificationMessage={notificationMessage}
-                    closePopup={closePopup}
-                />
-            )
-        }
+        <MessagePopup
+            notificationType={notificationType}
+            notificationMessage={notificationMessage}
+            closePopup={closePopup}
+        />
     </Snackbar>
 );
 

@@ -1,9 +1,10 @@
-import React, {useCallback, useMemo, useState, useEffect} from "react";
-import {useInput} from "utils/hooks";
+import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
-import {Button, Paper} from "@material-ui/core";
+import {IconButton, Button, Paper} from "@material-ui/core";
+import {Create} from "@material-ui/icons";
+import PersonalDetails from "./components";
 import {
-    EditSkillsDialog, LoadingValidator, NavSidebar, DetailsDialog, ProfileCard, ProjectCard,
+    EditSkillsDialog, LoadingValidator, NavSidebar, ProjectCard,
     ScrollContainer, SkillBadges
 } from "components/";
 import {Profile, Project} from "utils/models";
@@ -27,7 +28,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, personalDetailsRequest}) => (
+const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -40,7 +41,6 @@ const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile, per
                     />
                     <ProfileContent
                         isUserProfile={isUserProfile}
-                        personalDetailsRequest={personalDetailsRequest}
                         projects={projects}
                         profile={profile}
                         skills={skills}
@@ -90,92 +90,6 @@ const renderSectionComponent = (sectionName, sectionProps) => {
         default:
             return null;
     }
-};
-
-const PersonalDetails = ({isUserProfile, personalDetailsRequest, profile}) => {
-    const error = personalDetailsRequest.error;
-    const isLoading = personalDetailsRequest.isLoading;
-    const onSubmit = personalDetailsRequest.submitPersonalDetails;
-
-    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
-
-    const openDialog = () => {
-        setPersonalDetailsDialogOpen(true);
-    };
-
-    const closeDialog = () => {
-        setPersonalDetailsDialogOpen(false);
-    };
-
-    useEffect(() => {if (!isLoading && !error) closeDialog();}, [error, isLoading]);
-
-    return (
-        <>
-            <PersonalDetailsDialog
-                closeDialog={closeDialog}
-                error={error}
-                key={profile.id}
-                onSubmit={onSubmit}
-                open={personalDetailsDialogOpen}
-                profile={profile}
-            />
-            <Paper className="profile-page-card profile-card-details">
-                <div className="profile-card-details-content">
-                    <ProfileCard
-                        key={profile.id}
-                        page={isUserProfile ? "userProfile" : "peopleProfile"}
-                        openDialog={openDialog}
-                        {...profile}
-                    />
-                </div>
-            </Paper>
-        </>
-    );
-};
-
-const PersonalDetailsDialog = ({closeDialog, open, profile}) => {
-    const formFieldData = {
-        "nameInput": {
-            ...useInput(profile.name),
-            id: "name",
-            label: "Name",
-            autoFocus: true
-        },
-        "emailInput": {
-            ...useInput(profile.contactEmail),
-            id: "contactEmail",
-            label: "Contact Email"
-        },
-        "roleInput": {
-            ...useInput(profile.primaryRole),
-            id: "role",
-            label: "Primary Role"
-        },
-        "phoneInput": {
-            ...useInput(profile.phone),
-            id: "phone",
-            label: "Phone Number"
-        },
-        "slackInput": {
-            ...useInput(profile.slackHandle),
-            id: "slackHandle",
-            label: "Slack Handle"
-        },
-        "rocketChatInput": {
-            ...useInput(profile.rocketChatHandle),
-            id: "rocketChatHandle",
-            label: "Rocket Chat Handle"
-        }
-    };
-
-    return (
-        <DetailsDialog
-            dialogTitle="Edit Personal Details"
-            open={open}
-            closeDialog={closeDialog}
-            formFieldData={formFieldData}
-        />
-    );
 };
 
 const Skills = ({sectionName, profile, skills}) => {

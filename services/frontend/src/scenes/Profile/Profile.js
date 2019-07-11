@@ -4,16 +4,14 @@ import connect from "./connect";
 
 const Profile = ({
     projects = [], profile = {}, skills = {}, isLoading = false,
-    isUserProfile, personalDetailsRequest, submitPersonalDetails
+    isUserProfile
 }) => {
-    personalDetailsRequest.submitPersonalDetails = submitPersonalDetails;
     return (
         <ProfileLayout
             projects={projects}
             profile={profile}
             skills={skills}
             isUserProfile={isUserProfile}
-            personalDetailsRequest={personalDetailsRequest}
             isLoading={isLoading}
         />
     );

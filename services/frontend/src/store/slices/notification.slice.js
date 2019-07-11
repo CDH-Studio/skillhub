@@ -1,5 +1,4 @@
 import {createSlice} from "redux-starter-kit";
-import {createRequestSlices} from "store/utils";
 import mounts from "store/mountpoints";
 
 export const notificationSlice = createSlice({
@@ -9,8 +8,3 @@ export const notificationSlice = createSlice({
         setNotification: (state, action) => action.payload,
     }
 });
-
-export const notificationRequestsSlice = createRequestSlices(
-    mounts.notificationRequests,
-    ["setNotification"]
-);

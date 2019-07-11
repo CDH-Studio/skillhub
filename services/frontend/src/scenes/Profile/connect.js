@@ -55,6 +55,9 @@ const mapDispatchToProps = (dispatch) => {
             profilesRequestsSlice.patchPersonalDetails.actions.request({
                 id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle
             })
+        ),
+        clearPatchError: () => dispatch(
+            profilesRequestsSlice.patchPersonalDetails.actions.clear()
         )
     };
 };
