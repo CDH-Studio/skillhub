@@ -1,17 +1,15 @@
 import joblib
-import os
 import pandas as pd
-import sklearn
 from config import CONTRIBUTORS_MODEL
 from typing import Any, Dict, List, Union
 
 RawIssueType = Dict[str, Any]
 RawFieldType = Dict[str, Any]
 
-IssueType = Dict[str, Union[str, int]]
-ChangelogType = Dict[str, str]
-CommentType = Dict[str, str]
-WorklogType = Dict[str, Union[str, float]]
+IssueType = Dict[str, Any]
+ChangelogType = Dict[str, Any]
+CommentType = Dict[str, Any]
+WorklogType = Dict[str, Any]
 
 status_map = {
     "Prototyping (Discovery)": "In Progress",
@@ -198,6 +196,7 @@ def worklog_features(worklogs: pd.DataFrame = pd.DataFrame()) -> pd.DataFrame:
             "time_spent": 0
         }
 
+
 ISSUE_COLUMNS = list(issue_fields_map().keys())
 CHANGELOG_COLUMNS = list(changelog_fields_map().keys())
 COMMENT_COLUMNS = list(comment_fields_map().keys())
@@ -218,15 +217,9 @@ class ContributorsPredictor:
 
         results = results[["prediction"]]
 
-        # Convert the multi-index of (projectKey, name) to a dict of {projectKey: {name: {prediction: bool}}}
+        # Convert the multi-index DataFrame of (projectKey, name) to a dict of {projectKey: {name: {prediction: bool}}}
         results_dict = {level: results.xs(level).to_dict("index") for level in results.index.levels[0]}
         return results_dict
-
-    def raw_predict(self, feature_vectors: List[List[float]]) -> List[bool]:
-        features_df = pd.DataFrame(feature_vectors)
-        predictions = self.model.predict(features_df)
-
-        return predictions.astype(bool).tolist()
 
 
 class ProcessedJiraData:
@@ -377,7 +370,7 @@ class ProcessedJiraData:
         return df
 
     def _duplicate_issues_for_all_assignees(self, issues_df: pd.DataFrame, changelogs_df: pd.DataFrame) -> pd.DataFrame:
-        # TODO: Modify to use emails instead of names since we use emails as identifiers 
+        # TODO: Modify to use emails instead of names since we use emails as identifiers
 
         assignee_changelogs = changelogs_df[changelogs_df["field"] == "assignee"]
 

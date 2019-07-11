@@ -1,5 +1,6 @@
 from threading import Lock
 from flask import Blueprint
+from typing import Callable
 
 
 # Idea borrowed from 'teozkr' at https://github.com/pallets/flask/issues/593
@@ -30,7 +31,7 @@ class NestableBlueprint(Blueprint):
 
         self.record(deferred)
 
-    def before_first_blueprint_request(self) -> "function":
+    def before_first_blueprint_request(self) -> Callable[[Callable], Callable]:
         """
         A decorator that runs a function the first time any routes in a Blueprint
         gets called. Mimics 'before_app_first_request' but at the Blueprint level.
@@ -39,7 +40,7 @@ class NestableBlueprint(Blueprint):
         self._before_request_lock = Lock()
         self._got_first_request = False
 
-        def decorator(function_being_decorated: "function") -> "function":
+        def decorator(function_being_decorated: Callable) -> Callable:
             @self.before_request
             def wrapper():
                 if self._got_first_request:
