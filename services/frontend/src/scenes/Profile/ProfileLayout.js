@@ -151,7 +151,7 @@ const Skills = ({sectionName, profile, skills}) => {
             <EditSkillsDialog
                 skills={profileUpdated.skills.map((skill) => skill.name)}
                 open={editSkillsDialogOpen}
-                closeDialog={handleCancel}
+                handleCancel={handleCancel}
                 handleSubmit={(updatedSkills) => handleSubmit(updatedSkills)}
             />
             <div className="profile-card-skills-header-section">
