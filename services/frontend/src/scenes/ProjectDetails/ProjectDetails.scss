@@ -7,6 +7,17 @@
     margin-top: $default-spacing*1.5;
 }
 
+.invalid-project{
+    justify-self: center;
+    align-self: center;
+    padding: $default-spacing * 1.5;
+    text-align: center;
+
+    .invalid-project-heading {
+        font-size: $font-size-title;
+    }
+}
+
 #project-contributors {
 
     .project-contributors-content {

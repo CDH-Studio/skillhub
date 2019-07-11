@@ -13,8 +13,23 @@ function* projectsFetchAll() {
     yield put(projectProfilesSlice.actions.addProjectProfiles(projectProfiles));
 }
 
+function* projectsPatchProjectDetails({payload}, success) {
+    const result = yield call(api.service("projects").patch, payload.id, payload);
+    const normalizedProfile = Project.normalizeProfile(result);
+
+    yield put(projectsSlice.actions.setProfile(normalizedProfile));
+
+    yield call(success);  // Mark success before continuing with other actions
+}
+
 function* projectsSaga() {
-    yield fork(projectsRequestsSlice.fetchAll.watchRequestSaga(projectsFetchAll));
+    yield fork(projectsRequestsSlice.fetchAll.watchRequestSaga(
+        projectsFetchAll
+    ));
+
+    yield fork(projectsRequestsSlice.patchProjectDetails.watchRequestSaga(
+        projectsPatchProjectDetails
+    ));
 }
 
 export default projectsSaga;

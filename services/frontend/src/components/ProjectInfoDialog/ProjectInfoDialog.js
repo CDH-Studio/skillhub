@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {useInput} from "utils/hooks";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import {DetailsForm} from "components/";
 import "./ProjectInfoDialog.scss";
 
-const ProjectInfoDialog = ({project, closeDialog, open}) => {
+const ProjectInfoDialog = ({project, closeDialog, open, onSubmit}) => {
     const formFieldData = {
         "nameInput": {
             ...useInput(project.name),
@@ -19,6 +19,15 @@ const ProjectInfoDialog = ({project, closeDialog, open}) => {
             multiline: true
         },
     };
+
+    const {value: name} = formFieldData.name;
+    const {value: description} = formFieldData.description;
+
+    const onSubmitClick = useCallback(() => onSubmit(
+        project.id, name, description
+    ), [
+        project.id, name, description, onSubmit
+    ]);
 
     return (
         <Dialog className="project-info-dialog"
@@ -35,7 +44,7 @@ const ProjectInfoDialog = ({project, closeDialog, open}) => {
                 <Button onClick={closeDialog} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={closeDialog} color="primary">
+                <Button onClick={onSubmitClick} color="primary">
                     Submit
                 </Button>
             </DialogActions>

@@ -1,35 +1,60 @@
 import React, {useState} from "react";
+<<<<<<< HEAD
+import {Link} from "react-router-dom";
 import {useInput} from "utils/hooks";
-import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, DetailsDialog} from "components/";
-import {CircularProgress, IconButton, Paper} from "@material-ui/core";
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, DetailsDialog, LoadingValidator} from "components/";
+import {Button, IconButton, Paper} from "@material-ui/core";
+=======
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, ProjectInfoDialog, LoadingValidator} from "components/";
+import {Button, IconButton, Paper} from "@material-ui/core";
+>>>>>>> b2908fd... CDHSH-99 Added frontend code to patch database and redux store
 import {Create} from "@material-ui/icons";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
-import {Link} from "react-router-dom";
 import classNames from "classnames";
 import ScreenUrls from "utils/screenUrls";
 
 const containerClass = ".scroll-container";
 
-const ProjectDetailsLayout = ({project, contributors, isLoading}) => {
+const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequest}) => {
     return (
         <ScrollContainer className="project">
-            {
-                (!contributors || isLoading) ? (
-                    <CircularProgress className="loading-button-indicator" />
-                ) : (
+            <LoadingValidator
+                dependencies={[project]}
+                isLoading={isLoading}
+                renderOnLoad={
                     <>
                         <NavSidebar
                             scrollSpySelectors={sections}
                             containerClass={containerClass}
                         />
-                        <ProjectContent project={project} contributors={contributors} />
+                        <ProjectContent
+                            contributors={contributors}
+                            project={project}
+                            projectInfoRequest={projectInfoRequest}
+                        />
                     </>
-                )
-            }
+                }
+                renderOnFailedLoad={
+                    <InvalidProject />
+                }
+            />
         </ScrollContainer>
     );
 };
+
+const InvalidProject = () => (
+    <Paper className="invalid-project">
+        <h2 className="invalid-project-heading">
+            Content Not Found
+        </h2>
+        <Link to={ScreenUrls.PEOPLE}>
+            <Button color="primary">
+                Back to People
+            </Button>
+        </Link>
+    </Paper>
+);
 
 const sections = [
     {
@@ -76,7 +101,9 @@ const ProjectContent = ({...sectionProps}) => (
     </div>
 );
 
-const ProjectInfo = ({project}) => {
+const ProjectInfo = ({project, projectInfoRequest}) => {
+    const onSubmit = projectInfoRequest.submitProjectInfo;
+
     const [projectInfoDialogOpen, setProjectInfoDialogOpen] = useState(false);
 
     const openDialog = () => {
@@ -91,6 +118,7 @@ const ProjectInfo = ({project}) => {
         <>
             <ProjectInfoDialog
                 closeDialog={closeDialog}
+                onSubmit={onSubmit}
                 open={projectInfoDialogOpen}
                 project={project}
             />
