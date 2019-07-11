@@ -4,7 +4,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import "./EditSkillsDialog.scss";
 
-const EditSkillsDialog = ({skills, handleCancel, handleSubmit, open}) => {
+const EditSkillsDialog = ({skills, closeDialog, handleSubmit, open}) => {
 
     let currentChips = skills;
 
@@ -16,7 +16,7 @@ const EditSkillsDialog = ({skills, handleCancel, handleSubmit, open}) => {
         <Dialog className="edit-skills-dialog"
             aria-labelledby="edit-skills-title"
             open={open}
-            onClose={handleCancel}
+            onClose={closeDialog}
         >
             <DialogTitle id="edit-skills-dialog-title">
                 Edit Skills
@@ -30,7 +30,7 @@ const EditSkillsDialog = ({skills, handleCancel, handleSubmit, open}) => {
                 </MuiThemeProvider>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCancel} color="primary">
+                <Button onClick={closeDialog} color="primary">
                     Cancel
                 </Button>
                 <Button onClick={() => handleSubmit(currentChips)} color="primary">
