@@ -21,6 +21,12 @@ class SkillhubBridge {
 
         return result.data;
     }
+
+    async testIssues() {
+        const result = await this.jiraScraper.getIssues();
+
+        return result;
+    }
 }
 
 module.exports = SkillhubBridge;

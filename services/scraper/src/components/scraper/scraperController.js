@@ -7,7 +7,18 @@ const skillhubBridge = new SkillhubBridge();
 const router = express.Router();
 
 router.get("/", asyncMiddleware(async (req, res) => {
+    // Remove timeout for long running operations
+    req.setTimeout(0);
+
     const result = await skillhubBridge.scrapeToSkillhub();
+    res.send({status: "success", result});
+}));
+
+router.get("/issues", asyncMiddleware(async (req, res) => {
+    // Remove timeout for long running operations
+    req.setTimeout(0);
+
+    const result = await skillhubBridge.testIssues();
     res.send({status: "success", result});
 }));
 

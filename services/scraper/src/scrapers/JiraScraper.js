@@ -5,16 +5,21 @@ const {JiraUser} = require("utils/models");
 const PLATFORM_SERVER = "server";
 const PLATFORM_CLOUD = "cloud";
 
+const MAX_RESULTS_ISSUES = 250;
 const MAX_RESULTS_USER = 1000;
 
 const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
         basePath: "/rest/api/3",
-        getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`
+        getIssues: `/search?fields=*all&expand=changelog&maxResults=${MAX_RESULTS_ISSUES}`,
+        getProjects: `/project`,
+        getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`,
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
-        getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`
+        getIssues: `/search?fields=*all&expand=changelog&maxResults=${MAX_RESULTS_ISSUES}`,
+        getProjects: `/project`,
+        getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`,
     }
 };
 
@@ -71,6 +76,40 @@ class JiraScraper {
         } while (result.data.length !== 0);
 
         return users;
+    }
+
+    async getProjectKeys() {
+        const path = getPath(this.platform, "getProjects");
+
+        const result = await this.axios.get(path);
+        const projectKeys = result.data.map((project) => project.key);
+
+        return projectKeys;
+    }
+
+    async getIssues() {
+        const path = getPath(this.platform, "getIssues");
+        const projectKeys = await this.getProjectKeys();
+
+        let issues = [];
+
+        for (let key of projectKeys) {
+            let result = null;
+            let index = 0;
+
+            // Loop until all the users have been scraped; this only matters if there 
+            // exists more than 250 (MAX_RESULTS_ISSUES) issues for the given project.
+            do {
+                const pathWithIndex = `${path}&startAt=${index}&jql=project=${key}`;
+
+                result = await this.axios.get(pathWithIndex);
+                issues = issues.concat(result.data.issues);
+
+                index += result.data.issues.length;
+            } while (result.data.issues.length !== 0);
+        }
+
+        return issues;
     }
 }
 
