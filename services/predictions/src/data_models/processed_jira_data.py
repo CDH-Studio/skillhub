@@ -217,7 +217,8 @@ WORKLOG_COLUMNS = list(worklog_fields_map().keys())
 
 class ProcessedJiraData:
     def __init__(self, raw_issues: List[RawIssueType]) -> None:
-        self.process_data(raw_issues)
+        if len(raw_issues) != 0:
+            self.process_data(raw_issues)
 
     def process_data(self, raw_issues: List[RawIssueType]) -> None:
         issues = []
