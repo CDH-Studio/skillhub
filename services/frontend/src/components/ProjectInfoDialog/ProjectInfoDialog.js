@@ -20,8 +20,8 @@ const ProjectInfoDialog = ({project, closeDialog, open, onSubmit}) => {
         },
     };
 
-    const {value: name} = formFieldData.name;
-    const {value: description} = formFieldData.description;
+    const {value: name} = formFieldData.nameInput;
+    const {value: description} = formFieldData.descriptionInput;
 
     const onSubmitClick = useCallback(() => onSubmit(
         project.id, name, description

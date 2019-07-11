@@ -1,4 +1,5 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
+const errors = require ("@feathersjs/errors");
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const hydrate = require("feathers-sequelize/hooks/hydrate");
 const {findOrCreate, preventBulkDuplication} = require("hooks/");
@@ -17,8 +18,23 @@ const includeAssociations = () => (context) => {
     return context;
 };
 
-const liftProjectProfiles = () => (context) => {
-    context.result = Project.liftProjectProfiles(context.result);
+const validateProjectInfo = () => (context) => {
+    const emptyFields = Object.keys(context.data).reduce((acc, field) => {
+        if (!context.data[field]) {
+            // ex. Converts "contactEmail" to "contact email"
+            const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ").toLowerCase();
+            acc[field] = "Invalid " + errorMessageSpecifier;
+        }
+        return acc;
+    }, {});
+
+    if (Object.entries(emptyFields).length !== 0) {
+        throw new errors.BadRequest("Missing Data", emptyFields);
+    }
+};
+
+const liftProjectsProfiles = () => (context) => {
+    context.result = Project.liftProjectsProfiles(context.result);
     return context;
 };
 
@@ -64,17 +80,19 @@ module.exports = {
         get: [includeAssociations()],
         create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
-        patch: [],
+        patch: [
+            validateProjectInfo(),
+            includeAssociations()],
         remove: []
     },
 
     after: {
         all: [],
-        find: [dehydrate(), liftProjectProfiles()],
-        get: [dehydrate(), liftProjectProfiles()],
+        find: [dehydrate(), liftProjectsProfiles()],
+        get: [dehydrate(), liftProjectsProfiles()],
         create: [hydrate(), addProfiles(), dehydrate()],
         update: [],
-        patch: [],
+        patch: [dehydrate(), liftProjectsProfiles()],
         remove: []
     },
 

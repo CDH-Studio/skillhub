@@ -15,9 +15,9 @@ function* projectsFetchAll() {
 
 function* projectsPatchProjectDetails({payload}, success) {
     const result = yield call(api.service("projects").patch, payload.id, payload);
-    const normalizedProfile = Project.normalizeProfile(result);
+    const normalizedProject = Project.normalizeProject(result);
 
-    yield put(projectsSlice.actions.setProfile(normalizedProfile));
+    yield put(projectsSlice.actions.setProject(normalizedProject));
 
     yield call(success);  // Mark success before continuing with other actions
 }

@@ -1,13 +1,8 @@
 import React, {useState} from "react";
-<<<<<<< HEAD
 import {Link} from "react-router-dom";
 import {useInput} from "utils/hooks";
 import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, DetailsDialog, LoadingValidator} from "components/";
 import {Button, IconButton, Paper} from "@material-ui/core";
-=======
-import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, ProjectInfoDialog, LoadingValidator} from "components/";
-import {Button, IconButton, Paper} from "@material-ui/core";
->>>>>>> b2908fd... CDHSH-99 Added frontend code to patch database and redux store
 import {Create} from "@material-ui/icons";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
