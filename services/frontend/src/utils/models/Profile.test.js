@@ -128,3 +128,39 @@ describe("mergeProfilesWithSkills", () => {
         expect(Profile.mergeProfilesWithSkills()).toEqual([]);
     });
 });
+
+describe ("addSkills", () => {
+    const skillA = new Skill({id: "x", name: "Test1"});
+    const skillB = new Skill({id: "y", name: "Test2"});
+    const skillC = new Skill({id: "z", name: "Test3"});
+
+    const dbSkills = {[skillA.id]: skillA, [skillB.id]: skillB, [skillC.id]: skillC};
+
+    const profile1 = new Profile({id: "profile1"});
+    profile1.skills = [skillA, skillB];
+    const updatedSkills1 = [];
+
+    const profile2 = new Profile({id: "profile2"});
+    profile2.skills = [skillA, skillB, skillC];
+    const updatedSkills2 = ["Test1", "Test2", "Test3"];
+
+    const profile3 = new Profile({id: "profile3"});
+    profile3.skills = [skillA, skillB, skillC];
+    const updatedSkills3 = ["Test1", "Test2", "Test3", "test3"];
+
+    it("can add when no skills are provided", () => {
+        expect(Profile.addSkills(profile1, updatedSkills1, dbSkills)
+        ).toEqual(profile1);
+    });
+
+    it("can add a new skill that is not in database", () => {
+        expect(Profile.addSkills(profile1, updatedSkills2, dbSkills).skills
+        ).toEqual(profile2.skills);
+    });
+
+    it("can ignore duplicates", () => {
+        expect(Profile.addSkills(profile1, updatedSkills3, dbSkills).skills
+        ).toEqual(profile3.skills);
+    });
+
+});

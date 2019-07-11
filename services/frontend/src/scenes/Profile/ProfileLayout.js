@@ -3,9 +3,10 @@ import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {
-    LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard, ScrollContainer, SkillBadges
+    EditSkillsDialog, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard,
+    ScrollContainer, SkillBadges
 } from "components/";
-import {Project} from "utils/models";
+import {Profile, Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
@@ -26,7 +27,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, isLoading}) => (
+const ProfileLayout = ({projects, profile, skills, isLoading}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -40,6 +41,7 @@ const ProfileLayout = ({projects, profile, isLoading}) => (
                     <ProfileContent
                         projects={projects}
                         profile={profile}
+                        skills={skills}
                     />
                 </>
             }
@@ -122,18 +124,51 @@ const PersonalDetails = ({profile}) => {
     );
 };
 
-const Skills = ({sectionName, profile}) => (
-    <>
-        <h2>{sectionName}</h2>
-        <Paper className="profile-page-card profile-card-skills">
-            <SkillBadges
-                displayCount={profile.skills.length}
-                skills={profile.skills}
-            />
-        </Paper>
-    </>
-);
+const Skills = ({sectionName, profile, skills}) => {
+    const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
+    const [profileUpdated, updateProfile] = useState(profile);
 
+    const openDialog = () => {
+        setEditSkillsDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setEditSkillsDialogOpen(false);
+    };
+
+    const handleSubmit = (updatedSkills) => {
+        updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
+        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, skills));
+        closeDialog();
+    };
+
+    const handleCancel = () => {
+        closeDialog();
+    };
+
+    return (
+        <>
+            <EditSkillsDialog
+                skills={profileUpdated.skills.map((skill) => skill.name)}
+                open={editSkillsDialogOpen}
+                handleCancel={handleCancel}
+                handleSubmit={(updatedSkills) => handleSubmit(updatedSkills)}
+            />
+            <div className="profile-card-skills-header-section">
+                <h2>{sectionName}</h2>
+                <IconButton className="profile-card-edit-skills-button" onClick={openDialog} color="primary">
+                    <Create />
+                </IconButton>
+            </div>
+            <Paper className="profile-page-card profile-card-skills">
+                <SkillBadges
+                    displayCount={profileUpdated.skills.length}
+                    skills={profileUpdated.skills}
+                />
+            </Paper>
+        </>
+    );
+};
 const Projects = ({sectionName, projects}) => {
     const projectCards = useMemo(() => projects.map((project) => (
         <ProjectCard
