@@ -3,7 +3,9 @@ import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges} from "components/"
 import {CircularProgress, Paper} from "@material-ui/core";
 import {Project} from "utils/models";
 import "./ProjectDetails.scss";
+import {Link} from "react-router-dom";
 import classNames from "classnames";
+import ScreenUrls from "utils/screenUrls";
 
 const containerClass = ".scroll-container";
 
@@ -114,12 +116,14 @@ const Contributors = ({sectionName, contributors}) => {
                 {contributors.map((contributor) => {
                     return (
                         <div className="project-contributors-badge" key={contributor.name}>
-                            <AvatarIcon
-                                name={contributor.name}
-                                personsRole={contributor.role}
-                                className="avatar-icon"
-                            />
-                            <h3 className="project-contributors-badge-name">{contributor.name}</h3>
+                            <Link to={ScreenUrls.PEOPLE + `/${contributor.profileId}`}>
+                                <AvatarIcon
+                                    name={contributor.name}
+                                    personsRole={contributor.role}
+                                    className="avatar-icon"
+                                />
+                                <h3 className="project-contributors-badge-name">{contributor.name}</h3>
+                            </Link>
                         </div>
                     );
                 }
