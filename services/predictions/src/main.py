@@ -1,7 +1,7 @@
 import logging
 import os
 import sys
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from typing import Tuple
 
@@ -39,15 +39,17 @@ app = create_app()
 app.register_blueprint(api_controller)
 
 
-@app.errorhandler(500)
+@app.errorhandler(Exception)
 def server_error(exception: Exception) -> Tuple[str, int]:
     """Handle any exceptions that get through the sub controllers."""
     logging.exception("An error occurred during a request.")
 
-    return """
-    An internal error occurred: <pre>{}</pre>
-    See logs for full stacktrace.
-    """.format(exception), 500
+    response = jsonify({
+        "message": "An internal error occurred: '{}'. See logs for full stacktrace.".format(str(exception)),
+        "status": "error"
+    })
+
+    return response, 500
 
 
 if __name__ == "__main__":

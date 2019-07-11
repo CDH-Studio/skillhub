@@ -51,7 +51,7 @@ services:
         build:
             context: ./scraper
         environment:
-            - "PYTHONUNBUFFERED=1"
+            - "PYTHONUNBUFFERED=0"
         command: npm start
         ports:
         - 5001:5000
