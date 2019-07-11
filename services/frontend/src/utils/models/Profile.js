@@ -31,7 +31,9 @@ export default class Profile {
         this.profileSkills = profileSkills;
     }
 
-    static get FILTER_ALL() {return "all";}
+    static get FILTER_ALL() {
+        return "all";
+    }
 
     /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
@@ -103,4 +105,58 @@ export default class Profile {
 
         return profilesWithSkills;
     }
+
+    static addSkills = (profile, updatedSkills, skills) => {
+        const currentSkillsLC = profile.skills.map((skill) => skill.name.toLowerCase());
+
+        /* Returns a list of the new skills entered */
+        const newSkills = removeDuplicate(updatedSkills.reduce((acc, skillName) => {
+            if (!currentSkillsLC.includes(skillName.toLowerCase())) {
+                return [...acc, skillName];
+            }
+            return acc;
+        }, []));
+
+        /* Adds skill from database or Create new Skill */
+        if (newSkills.length > 0) {
+            for (const skill of Object.values(skills)) {
+                const skillName = skill.name;
+                const skillNameLC = skill.name.toLowerCase();
+                if (newSkills.includes(skillNameLC)) {
+                    profile.skills.push(skill);
+                    newSkills.splice(newSkills.indexOf(skillName), 1);
+                }
+            }
+        }
+
+        /* Adds new Skill */
+        if (newSkills.length > 0) {
+            for (const skillName of newSkills) {
+                const newSkill = new Skill({name: skillName});
+                profile.skills.push(newSkill);
+            }
+        }
+        return profile;
+    };
+
+    static removeSkills = (profile, updatedSkills) => {
+        for (const skill of profile.skills) {
+            if (!updatedSkills.includes(skill.name)) {
+                profile.skills.splice(profile.skills.indexOf(skill), 1);
+            }
+        }
+        return profile;
+    };
 }
+
+const removeDuplicate = (arr) => {
+    const arrUnique = arr.reduce((acc, value) => {
+        if (!acc.includes(value.toLowerCase())) {
+            return [...acc, value.toLowerCase()];
+        }
+        return acc;
+    }, []);
+
+    return arrUnique;
+};
+

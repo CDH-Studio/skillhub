@@ -8,18 +8,18 @@ const EditSkillsDialog = ({skills, handleCancel, handleSubmit, open}) => {
 
     let currentChips = skills;
 
-    function handleChange(chips) {
+    const handleChange = (chips) => {
         currentChips = chips;
-    }
+    };
 
     return (
         <Dialog className="edit-skills-dialog"
-            aria-labelledby="edit-skills-dialog-title"
+            aria-labelledby="edit-skills-title"
             open={open}
             onClose={handleCancel}
         >
             <DialogTitle id="edit-skills-dialog-title">
-                Edit Personal Details
+                Edit Skills
             </DialogTitle>
             <DialogContent>
                 <MuiThemeProvider>

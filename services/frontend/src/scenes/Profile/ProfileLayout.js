@@ -3,10 +3,10 @@ import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {
-    AvatarIcon, EditSkillsDialog, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard,
+    EditSkillsDialog, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard,
     ScrollContainer, SkillBadges
 } from "components/";
-import {Project, Skill} from "utils/models";
+import {Profile, Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
@@ -125,7 +125,7 @@ const PersonalDetails = ({profile}) => {
 };
 
 const Skills = ({sectionName, profile, skills}) => {
-    const [editSkillsDialogOpen, setEditSkillsDialogOpen] = React.useState(false);
+    const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
     const openDialog = () => {
@@ -137,47 +137,13 @@ const Skills = ({sectionName, profile, skills}) => {
     };
 
     const handleSubmit = (updatedSkills) => {
-        removeSkills(updatedSkills);
-        addSkills(updatedSkills);
+        updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
+        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, skills));
         closeDialog();
     };
 
     const handleCancel = () => {
         closeDialog();
-    };
-
-    const addSkills = (updatedSkills) => {
-        const tempProfile = profileUpdated;
-        updatedSkills.map((skillName) => {
-            const skillNameLC = skillName.toLowerCase();
-            if (!profileUpdated.skills.map((skill) => skill.name.toLowerCase()).includes(skillNameLC)) {
-                if (Object.values(skills).map((skill) => skill.name.toLowerCase()).includes(skillNameLC)) {
-                    /* Adds from Existing Skills List*/
-                    Object.values(skills).map((skill) => {
-                        if (skill.name.toLowerCase() === skillNameLC) {
-                            tempProfile.skills.push(skills[skill.id]);
-                        }
-                    });
-
-                } else {
-                    /*Adds new Skill Object */
-                    const newSkill = new Skill({name: skillName});
-                    tempProfile.skills.push(newSkill);
-                }
-            }
-        });
-        updateProfile(tempProfile);
-    };
-
-    const removeSkills = (updatedSkills) => {
-        const tempProfile = profileUpdated;
-        tempProfile.skills.map((skill, index) => {
-            if (!updatedSkills.includes(skill.name)){
-                tempProfile.skills.splice(index, 1);
-            }
-
-        });
-        updateProfile(tempProfile);
     };
 
     return (
