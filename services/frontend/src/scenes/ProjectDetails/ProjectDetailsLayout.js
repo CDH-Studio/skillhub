@@ -1,10 +1,6 @@
 import React, {useState} from "react";
-<<<<<<< HEAD
 import {useInput} from "utils/hooks";
 import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, DetailsDialog} from "components/";
-=======
-import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, ProjectInfoDialog} from "components/";
->>>>>>> 71c39ba... CDHSH-97 Created edit modal dialog for project details
 import {CircularProgress, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {Project} from "utils/models";
@@ -113,7 +109,6 @@ const ProjectInfo = ({project}) => {
                 </div>
             </Paper>
         </>
-<<<<<<< HEAD
     );
 };
 
@@ -140,8 +135,6 @@ const ProjectInfoDialog = ({closeDialog, open , project}) => {
             closeDialog={closeDialog}
             formFieldData={formFieldData}
         />
-=======
->>>>>>> 71c39ba... CDHSH-97 Created edit modal dialog for project details
     );
 };
 
