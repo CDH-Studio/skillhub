@@ -130,11 +130,11 @@
             "env": [
                 {
                     "name": "JIRA_HOST",
-                    "value": "https://skillhubca.atlassian.net"
+                    "value": "https://jira.ised-isde.canada.ca"
                 },
                 {
                     "name": "JIRA_PLATFORM",
-                    "value": "cloud"
+                    "value": "server"
                 },
                 {
                     "name": "BACKEND_PROTOCOL",
