@@ -12,13 +12,13 @@ const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
         basePath: "/rest/api/3",
         getIssues: `/search?fields=*all&expand=changelog&maxResults=${MAX_RESULTS_ISSUES}`,
-        getProjects: `/project`,
+        getProjects: "/project",
         getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`,
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
         getIssues: `/search?fields=*all&expand=changelog&maxResults=${MAX_RESULTS_ISSUES}`,
-        getProjects: `/project`,
+        getProjects: "/project",
         getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`,
     }
 };
@@ -78,26 +78,28 @@ class JiraScraper {
         return users;
     }
 
-    async getProjectKeys() {
+    async getProjects() {
         const path = getPath(this.platform, "getProjects");
 
         const result = await this.axios.get(path);
-        const projectKeys = result.data.map((project) => project.key);
+        const projects = result.data.map(({key, name}) => ({key, name}));
 
-        return projectKeys;
+        return projects;
     }
 
-    async getIssues() {
+    async getIssues(projects = []) {
         const path = getPath(this.platform, "getIssues");
-        const projectKeys = await this.getProjectKeys();
 
         let issues = [];
 
-        for (let key of projectKeys) {
+        for (const project of projects) {
+            const {key} = project;
+            console.log(key);
+
             let result = null;
             let index = 0;
 
-            // Loop until all the users have been scraped; this only matters if there 
+            // Loop until all the users have been scraped; this only matters if there
             // exists more than 250 (MAX_RESULTS_ISSUES) issues for the given project.
             do {
                 const pathWithIndex = `${path}&startAt=${index}&jql=project=${key}`;

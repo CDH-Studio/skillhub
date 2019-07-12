@@ -1,5 +1,6 @@
 const axios = require("axios");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
+const {JiraProject} = require("utils/models");
 const JiraScraper = require("./JiraScraper");
 
 /* Handles running all of the scrapers to get their data and acts as the bridge
@@ -16,8 +17,13 @@ class SkillhubBridge {
     }
 
     async scrapeToSkillhub() {
+        const projects = await this.jiraScraper.getProjects();
         const users = await this.jiraScraper.getUsers();
-        const result = await this.axios.post("/scraperBridge", {users});
+        const issues = await this.jiraScraper.getIssues(projects.slice(0, 4));
+
+        const skillhubProjects = projects.map((project) => new JiraProject(project).toSkillhubProject());
+
+        const result = await this.axios.post("/scraperBridge", {issues, projects: skillhubProjects, users});
 
         return result.data;
     }

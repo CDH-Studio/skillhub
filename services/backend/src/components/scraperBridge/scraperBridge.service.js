@@ -1,5 +1,7 @@
 // Initializes the `scraperBridge` service on path `/scraperBridge`
 const hooks = require("./scraperBridge.hooks");
+const axios = require("axios");
+const {PREDICTIONS_URL} = require("../../config");
 
 /* This service acts as the bridge from the Scraper to Skillhub's backend.
  *
@@ -14,15 +16,59 @@ class ScraperBridgeService {
     }
 
     async create(data) {
-        const {users} = data;
-        const profilesService = this.app.service("profiles");
+        const {issues, projects, users} = data;
 
-        const result = await profilesService.create(users);
+        const profilesService = this.app.service("profiles");
+        const projectsService = this.app.service("projects");
+        const projectProfilesService = this.app.service("projectProfiles");
+
+        const projectsResult = await projectsService.create(projects);
+        const profilesResult = await profilesService.create(users);
+
+        console.log(projectsResult, "projects");
+        console.log(profilesResult, "profiles");
+
+        const result = await axios.post(`${PREDICTIONS_URL}/api/v1/contributors/predict`, issues);
+        const predictions = result.data.predictions;
+
+        const projectProfiles = Object.keys(predictions).reduce((acc, key) => {
+            const people = predictions[key];
+
+            const things = Object.keys(people).reduce((acc, name) => {
+                const person = people[name];
+
+                if (person.prediction) {
+                    const project = projectsResult.filter((p) => p.description === key)[0];
+                    const profile = profilesResult.filter((p) => p.name === name)[0];
+
+                    acc.push({
+                        projectId: project.id,
+                        profileId: profile.id,
+                        role: "Person"
+                    });
+                }
+
+                return acc;
+            }, []);
+
+            acc = [...acc, ...things];
+            return acc;
+        }, []);
+
+        await projectProfilesService.create(projectProfiles);
 
         return {
             status: "success",
-            message: `${users.length} users were scraped; ${result.length} new users were created.`
+            message: "It worked!"
         };
+
+        // return {
+        //     status: "success",
+        //     message: `
+        //         ${projects.length} projects were scraped; ${projectsResult.length} new projects were created.\n
+        //         ${users.length} users were scraped; ${usersResult.length} new users were created.
+        //     `
+        // };
     }
 }
 

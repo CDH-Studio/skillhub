@@ -50,6 +50,10 @@
                 {
                     "name": "POSTGRES_USER",
                     "value": "app-database-user"
+                },
+                {
+                    "name": "PREDICTIONS_PROTOCOL",
+                    "value": "https"
                 }
             ],
             "external_port": "5432",
