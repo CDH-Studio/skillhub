@@ -1,28 +1,41 @@
 import React from "react";
 import {useInput} from "utils/hooks";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
-import {PersonalDetailsForm} from "components/";
+import {DetailsForm} from "components/";
 import "./PersonalDetailsDialog.scss";
 
 const PersonalDetailsDialog = ({profile, handleClose, open}) => {
     const formFieldData = {
         "nameInput": {
-            ...useInput(profile.name)
+            ...useInput(profile.name),
+            id: "name",
+            label: "Name",
+            autoFocus: true
         },
         "emailInput": {
-            ...useInput(profile.contactEmail)
+            ...useInput(profile.contactEmail),
+            id: "contactEmail",
+            label: "Contact Email"
         },
         "roleInput": {
-            ...useInput(profile.primaryRole)
+            ...useInput(profile.primaryRole),
+            id: "role",
+            label: "Primary Role"
         },
         "phoneInput": {
-            ...useInput(profile.phone)
+            ...useInput(profile.phone),
+            id: "phone",
+            label: "Phone Number"
         },
         "slackInput": {
-            ...useInput(profile.slackHandle)
+            ...useInput(profile.slackHandle),
+            id: "slackHandle",
+            label: "Slack Handle"
         },
         "rocketChatInput": {
-            ...useInput(profile.rocketChatHandle)
+            ...useInput(profile.rocketChatHandle),
+            id: "rocketChatHandle",
+            label: "Rocket Chat Handle"
         }
     };
 
@@ -36,7 +49,7 @@ const PersonalDetailsDialog = ({profile, handleClose, open}) => {
                 Edit Personal Details
             </DialogTitle>
             <DialogContent>
-                <PersonalDetailsForm {...formFieldData} />
+                <DetailsForm {...formFieldData} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

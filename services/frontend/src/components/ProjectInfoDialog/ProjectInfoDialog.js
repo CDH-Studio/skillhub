@@ -1,16 +1,22 @@
 import React from "react";
 import {useInput} from "utils/hooks";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
-import {ProjectInfoForm} from "components/";
+import {DetailsForm} from "components/";
 import "./ProjectInfoDialog.scss";
 
 const ProjectInfoDialog = ({project, closeDialog, open}) => {
     const formFieldData = {
-        "name": {
-            ...useInput(project.name)
+        "nameInput": {
+            ...useInput(project.name),
+            id: "name",
+            label: "Name",
+            autoFocus: true
         },
-        "description": {
-            ...useInput(project.description)
+        "descriptionInput": {
+            ...useInput(project.description),
+            id: "description",
+            label: "Description",
+            multiline: true
         },
     };
 
@@ -23,7 +29,7 @@ const ProjectInfoDialog = ({project, closeDialog, open}) => {
                 Edit Project Info
             </DialogTitle>
             <DialogContent>
-                <ProjectInfoForm {...formFieldData} />
+                <DetailsForm {...formFieldData} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={closeDialog} color="primary">
