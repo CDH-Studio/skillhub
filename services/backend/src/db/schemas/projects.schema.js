@@ -17,6 +17,6 @@ module.exports = (DataTypes) => ({
         type: DataTypes.DATE
     },
     jiraKey: {
-        type: DataType.STRING
+        type: DataTypes.STRING
     }
 });

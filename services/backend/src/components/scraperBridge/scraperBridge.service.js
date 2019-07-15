@@ -1,7 +1,8 @@
 // Initializes the `scraperBridge` service on path `/scraperBridge`
-const hooks = require("./scraperBridge.hooks");
 const axios = require("axios");
+const tableNames = require("db/tableNames");
 const {PREDICTIONS_URL} = require("../../config");
+const hooks = require("./scraperBridge.hooks");
 
 /* This service acts as the bridge from the Scraper to Skillhub's backend.
  *
@@ -18,44 +19,19 @@ class ScraperBridgeService {
     async create(data) {
         const {issues, projects, users} = data;
 
-        const profilesService = this.app.service("profiles");
-        const projectsService = this.app.service("projects");
-        const projectProfilesService = this.app.service("projectProfiles");
+        if (users) {
+            await this.processUsers(users);
+        }
 
-        const projectsResult = await projectsService.create(projects);
-        const profilesResult = await profilesService.create(users);
+        if (projects) {
+            await this.processProjects(projects);
+        }
 
-        console.log(projectsResult, "projects");
-        console.log(profilesResult, "profiles");
+        console.log("YOLO");
 
-        const result = await axios.post(`${PREDICTIONS_URL}/api/v1/contributors/predict`, issues);
-        const predictions = result.data.predictions;
-
-        const projectProfiles = Object.keys(predictions).reduce((acc, key) => {
-            const people = predictions[key];
-
-            const things = Object.keys(people).reduce((acc, name) => {
-                const person = people[name];
-
-                if (person.prediction) {
-                    const project = projectsResult.filter((p) => p.description === key)[0];
-                    const profile = profilesResult.filter((p) => p.name === name)[0];
-
-                    acc.push({
-                        projectId: project.id,
-                        profileId: profile.id,
-                        role: "Person"
-                    });
-                }
-
-                return acc;
-            }, []);
-
-            acc = [...acc, ...things];
-            return acc;
-        }, []);
-
-        await projectProfilesService.create(projectProfiles);
+        if (issues) {
+            await this.processIssues(issues);
+        }
 
         return {
             status: "success",
@@ -69,6 +45,74 @@ class ScraperBridgeService {
         //         ${users.length} users were scraped; ${usersResult.length} new users were created.
         //     `
         // };
+    }
+
+    async processUsers(users = []) {
+        const profilesService = this.app.service("profiles");
+        const profilesResult = await profilesService.create(users);
+    }
+
+    async processProjects(projects = []) {
+        const projectsService = this.app.service("projects");
+        const projectsResult = await projectsService.create(projects);
+    }
+
+    async processIssues(issues = []) {
+        const sequelizeClient = this.app.get("sequelizeClient");
+        const ProjectsModel = sequelizeClient.models[tableNames.PROJECTS];
+        const ProfilesModel = sequelizeClient.models[tableNames.PROFILES];
+
+        const projectProfilesService = this.app.service("projectProfiles");
+
+        console.log("here 1");
+        const predictionsResult = await axios.post(
+            `${PREDICTIONS_URL}/api/v1/contributors/predict`, issues, {maxContentLength: 100000000}
+        );
+
+        const predictions = predictionsResult.data.predictions;
+
+        let projectProfiles = [];
+
+        for (const projectKey in predictions) {
+            console.log("here 2");
+            const trueProjectProfiles = [];
+            const names = predictions[projectKey];
+
+            // TODO: Modify the 'create' method on the service to be a 'findOrCreate'.
+            // For reference: https://gist.github.com/marshallswain/9fa3b1e855633af00998
+            const project = (await ProjectsModel.findOrCreate({
+                where: {jiraKey: projectKey},
+                defaults: {name: projectKey, description: projectKey}
+            }))[0];
+
+            console.log("here 3");
+
+            for (const name in names) {
+                const {prediction} = names[name];
+
+                console.log("here 4");
+
+                if (prediction) {
+                    console.log("here 5");
+
+                    const profile = (await ProfilesModel.findOrCreate({where: {name}}))[0];
+
+                    trueProjectProfiles.push({
+                        projectId: project.id,
+                        profileId: profile.id,
+                        role: "Person"
+                    });
+                }
+            }
+
+            console.log(trueProjectProfiles, "trueProjectProfiles");
+            projectProfiles = projectProfiles.concat(trueProjectProfiles);
+        }
+
+        console.log("here 6");
+        console.log(projectProfiles, "projectProfiles");
+
+        await projectProfilesService.create(projectProfiles);
     }
 }
 

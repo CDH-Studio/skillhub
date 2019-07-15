@@ -8,6 +8,7 @@ class JiraProject {
         return {
             name: this.name,
             description: this.key,
+            jiraKey: this.key,
             lastActive: new Date()
         };
     }

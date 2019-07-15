@@ -1,5 +1,6 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const {arrayToObject} = require("utils/helperFunctions");
 const {Project} = require("utils/models");
 
 const includeAssociations = () => (context) => {
@@ -20,12 +21,38 @@ const processProjectProfiles = () => (context) => {
     return context;
 };
 
+const preventBulkDuplication = () => async (context) => {
+    const {data: projects} = context;
+
+    // This hook is only for handling duplication detection when doing a bulk (i.e. array) create
+    if (!Array.isArray(projects)) {
+        return context;
+    }
+
+    const projectsService = context.app.service("projects");
+
+    const jiraKeys = projects.map(({jiraKey}) => jiraKey);
+    const existingProjects = await projectsService.find({query: {jiraKey: {$in: jiraKeys}}});
+
+    if (projects.length !== existingProjects.length) {
+        const projectsByJiraKey = existingProjects.reduce(arrayToObject({property: "jiraKey"}), {});
+        const projectsToAdd = projects.filter((project) => !(project.jiraKey in projectsByJiraKey));
+
+        context.data = projectsToAdd;
+    } else {
+        // Empty out the data so that Feathers doesn't bother actually trying to create any projects
+        context.data = [];
+    }
+
+    return context;
+};
+
 module.exports = {
     before: {
         all: [authenticate("jwt")],
         find: [includeAssociations()],
         get: [includeAssociations()],
-        create: [],
+        create: [preventBulkDuplication()],
         update: [],
         patch: [],
         remove: []

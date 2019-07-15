@@ -1,6 +1,6 @@
 const axios = require("axios");
 const {JIRA_AUTH_TOKEN, JIRA_HOST, JIRA_PLATFORM} = require("config");
-const {JiraUser} = require("utils/models");
+const {JiraProject, JiraUser} = require("utils/models");
 
 const PLATFORM_SERVER = "server";
 const PLATFORM_CLOUD = "cloud";
@@ -82,7 +82,7 @@ class JiraScraper {
         const path = getPath(this.platform, "getProjects");
 
         const result = await this.axios.get(path);
-        const projects = result.data.map(({key, name}) => ({key, name}));
+        const projects = result.data.map(({key, name}) => new JiraProject({key, name}));
 
         return projects;
     }
