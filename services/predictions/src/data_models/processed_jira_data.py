@@ -1,9 +1,6 @@
-import logging
 import pandas as pd
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Any, Callable, Dict, List
 
-
-logger = logging.getLogger(__name__)
 
 RawIssueType = Dict[str, Any]
 RawFieldType = Dict[str, Any]
@@ -217,6 +214,12 @@ CHANGELOG_COLUMNS = list(changelog_fields_map().keys())
 COMMENT_COLUMNS = list(comment_fields_map().keys())
 WORKLOG_COLUMNS = list(worklog_fields_map().keys())
 
+ISSUE_FEATURE_COLUMNS = list(issue_features().keys())
+ISSUE_CREATOR_FEATURE_COLUMNS = list(issue_creator_features().keys())
+CHANGELOG_FEATURE_COLUMNS = list(changelog_features().keys())
+COMMENT_FEATURE_COLUMNS = list(comment_features().keys())
+WORKLOG_FEATURE_COLUMNS = list(worklog_features().keys())
+
 
 class ProcessedJiraData:
     def __init__(self, raw_issues: List[RawIssueType]) -> None:
@@ -262,7 +265,7 @@ class ProcessedJiraData:
         feature_columns = []
 
         for feature_mapping in feature_mappings:
-            features, columns = self._map_features(
+            features = self._map_features(
                 feature_mapping["data"],
                 feature_mapping["groupby"],
                 feature_mapping["features_transform"]
@@ -272,7 +275,7 @@ class ProcessedJiraData:
 
             # Aggregate all of the column names together so that the final features DataFrame
             # can have all of the columns even if one of the raw_features is empty.
-            feature_columns.extend(columns)
+            feature_columns.extend(feature_mapping["columns"])
 
         # Join all of the features together to create a single DataFrame with all of the columns.
         feature_vectors_df = raw_features[0].join(raw_features[1:-1], how="outer").fillna(0)
@@ -282,34 +285,44 @@ class ProcessedJiraData:
             if column not in feature_vectors_df.columns:
                 feature_vectors_df[column] = 0
 
-        return self._calculate_contribution_ratios(feature_vectors_df)
+        feature_vectors_df = self._calculate_contribution_ratios(feature_vectors_df)
+
+        # Sort the columns so that the features are always in a consistent order
+        feature_vectors_df = feature_vectors_df.reindex(sorted(feature_vectors_df.columns), axis=1)
+
+        return feature_vectors_df
 
     def _get_feature_mappings(self) -> List[Dict[str, Any]]:
         return [
             {
                 "data": self.issues_with_all_assignees_df,
                 "groupby": ["projectKey", "assigneeName"],
-                "features_transform": issue_features
+                "features_transform": issue_features,
+                "columns": ISSUE_FEATURE_COLUMNS
             },
             {
                 "data": self.issues_df,
                 "groupby": ["projectKey", "creatorName"],
-                "features_transform": issue_creator_features
+                "features_transform": issue_creator_features,
+                "columns": ISSUE_CREATOR_FEATURE_COLUMNS
             },
             {
                 "data": self.changelogs_df,
                 "groupby": ["projectKey", "authorName"],
-                "features_transform": changelog_features
+                "features_transform": changelog_features,
+                "columns": CHANGELOG_FEATURE_COLUMNS
             },
             {
                 "data": self.comments_df,
                 "groupby": ["projectKey", "authorName"],
-                "features_transform": comment_features
+                "features_transform": comment_features,
+                "columns": COMMENT_FEATURE_COLUMNS
             },
             {
                 "data": self.worklogs_df,
                 "groupby": ["projectKey", "authorName"],
-                "features_transform": worklog_features
+                "features_transform": worklog_features,
+                "columns": WORKLOG_FEATURE_COLUMNS
             }
         ]
 
@@ -318,11 +331,7 @@ class ProcessedJiraData:
         data: pd.DataFrame,
         groupby: List[str],
         features_transform: Callable[[pd.DataFrame], FeaturesType]
-    ) -> Tuple[pd.DataFrame, List[str]]:
-        # Get the list of columns from the features_transform so that they can be used later
-        # to fill out the feature vectors with any missing columns
-        columns = list(features_transform().keys())
-
+    ) -> pd.DataFrame:
         # Perform the transformation of raw data to features
         features = data.groupby(groupby).apply(lambda df: pd.DataFrame(features_transform(df), index=[0]))
 
@@ -333,7 +342,7 @@ class ProcessedJiraData:
             # Rename the second index so that it's consistent between all of the DataFrames
             features.index.levels[1].name = "name"
 
-        return (features, columns)
+        return features
 
     def _calculate_contribution_ratios(self, feature_vectors_df: pd.DataFrame) -> pd.DataFrame:
         for column in feature_vectors_df:
@@ -411,7 +420,7 @@ class ProcessedJiraData:
                 .apply(lambda x: pd.unique(x.values.ravel()).tolist())
         )
 
-		# Can't do anything with an empty set of assignee changelogs; will cause the next operation to fail
+        # Can't do anything with an empty set of assignee changelogs; will cause the next operation to fail
         if len(assignees_per_ticket) == 0:
             return issues_df
 
