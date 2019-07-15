@@ -11,6 +11,8 @@ import ScreenUrls from "utils/screenUrls";
 
 const containerClass = ".scroll-container";
 
+const sortContributors = (contributors) => contributors.sort((a, b) => a.name.localeCompare(b.name));
+
 const ProjectDetailsLayout = ({project, contributors, isLoading}) => {
     return (
         <ScrollContainer className="project">
@@ -163,7 +165,7 @@ const Contributors = ({sectionName, contributors}) => {
         <>
             <h2>{sectionName}</h2>
             <Paper className="project-details-card project-contributors-content">
-                {contributors.map((contributor) => {
+                {sortContributors(contributors).map((contributor) => {
                     return (
                         <div className="project-contributors-badge" key={contributor.name}>
                             <Link to={ScreenUrls.PEOPLE + `/${contributor.profileId}`}>
