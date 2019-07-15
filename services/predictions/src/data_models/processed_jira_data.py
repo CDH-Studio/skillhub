@@ -1,6 +1,9 @@
+import logging
 import pandas as pd
 from typing import Any, Callable, Dict, List, Tuple
 
+
+logger = logging.getLogger(__name__)
 
 RawIssueType = Dict[str, Any]
 RawFieldType = Dict[str, Any]
@@ -407,6 +410,10 @@ class ProcessedJiraData:
                 .groupby("issueKey")["from", "to"]
                 .apply(lambda x: pd.unique(x.values.ravel()).tolist())
         )
+
+		# Can't do anything with an empty set of assignee changelogs; will cause the next operation to fail
+        if len(assignees_per_ticket) == 0:
+            return issues_df
 
         # Convert the series of assignee names to a DataFrame that can be merged with the issues_df
         assignees_per_ticket_df = (
