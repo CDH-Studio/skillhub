@@ -6,6 +6,7 @@ export default {
     profileSkills: "profileSkills",
     projects: "projects",
     projectsRequests: "projectsRequests",
+    projectChangeRecords: "projectChangeRecords",
     projectProfiles: "projectProfiles",
     skills: "skills",
     skillsRequests: "skillsRequests",

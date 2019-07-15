@@ -8,10 +8,11 @@ const {Project} = require("utils/models");
 const includeAssociations = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
     const ProfilesModel = context.app.services.profiles.Model;
+    const ProjectChangeRecords = context.app.services.projectChangeRecords.Model;
 
     context.params.sequelize = {
         // Include the Profiles model to get at the ProjectProfiles model data
-        include: [{model: SkillsModel}, {model: ProfilesModel}],
+        include: [{model: SkillsModel}, {model: ProfilesModel}, {model: ProjectChangeRecords}],
         raw: false
     };
 

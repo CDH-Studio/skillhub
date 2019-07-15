@@ -28,6 +28,7 @@ const USERS = [
 ];
 
 const USER_IDS = USERS.map((user) => user.id);
+const USER_IDS_BY_NAME = [...USERS].reduce(keyIdByName, {});
 
 // In order to maintain seeder order integrity, this profile is created separately,
 // because the seeder for it came first.
@@ -489,6 +490,19 @@ const PROFILE_SKILLS = [
     }
 ];
 
+const PROJECT_CHANGE_RECORDS = [
+    {
+        id: "29101849-1c13-4e19-8abe-9f6945d3f8ab",
+        projectId: PROJECT_IDS_BY_NAME["skillhub"],
+        userId: USER_IDS_BY_NAME["testBro"],
+        changedAttribute: "something",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+];
+
+const PROJECT_CHANGE_RECORD_IDS = PROJECT_CHANGE_RECORDS.map(getId);
+
 const PROFILE_SKILL_IDS = PROFILE_SKILLS.map(getId);
 
 module.exports = {
@@ -498,6 +512,8 @@ module.exports = {
     PROFILE_SKILL_IDS,
     PROJECTS,
     PROJECT_IDS,
+    PROJECT_CHANGE_RECORDS,
+    PROJECT_CHANGE_RECORD_IDS,
     PROJECT_PROFILES,
     PROJECT_PROFILE_IDS,
     PROJECT_SKILLS,
