@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, ProjectInfoDialog} from "components/";
+import {useInput} from "utils/hooks";
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, DetailsDialog} from "components/";
 import {CircularProgress, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {Project} from "utils/models";
@@ -108,6 +109,32 @@ const ProjectInfo = ({project}) => {
                 </div>
             </Paper>
         </>
+    );
+};
+
+const ProjectInfoDialog = ({closeDialog, open , project}) => {
+    const formFieldData = {
+        "nameInput": {
+            ...useInput(project.name),
+            id: "name",
+            label: "Name",
+            autoFocus: true
+        },
+        "descriptionInput": {
+            ...useInput(project.description),
+            id: "description",
+            label: "Description",
+            multiline: true
+        },
+    };
+
+    return (
+        <DetailsDialog
+            dialogTitle="Edit Project Info"
+            open={open}
+            closeDialog={closeDialog}
+            formFieldData={formFieldData}
+        />
     );
 };
 

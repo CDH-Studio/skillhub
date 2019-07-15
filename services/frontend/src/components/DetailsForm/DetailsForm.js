@@ -2,7 +2,7 @@ import React from "react";
 import {TextField} from "@material-ui/core";
 import "./DetailsForm.scss";
 
-const DetailsForm = (formFieldData) => (
+const DetailsForm = ({formFieldData}) => (
     <form className="details-form">
         {
             Object.keys(formFieldData).map((fieldKey) => (
