@@ -1,9 +1,10 @@
 import React, {useMemo, useState} from "react";
+import {useInput} from "utils/hooks";
 import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {
-    EditSkillsDialog, LoadingValidator, NavSidebar, PersonalDetailsDialog, ProfileCard, ProjectCard,
+    EditSkillsDialog, LoadingValidator, NavSidebar, DetailsDialog, ProfileCard, ProjectCard,
     ScrollContainer, SkillBadges
 } from "components/";
 import {Profile, Project} from "utils/models";
@@ -106,7 +107,7 @@ const PersonalDetails = ({profile}) => {
             <PersonalDetailsDialog
                 profile={profile}
                 open={personalDetailsDialogOpen}
-                handleClose={closeDialog}
+                closeDialog={closeDialog}
             />
             <Paper className="profile-page-card profile-card-details">
                 <div className="profile-card-details-content">
@@ -121,6 +122,51 @@ const PersonalDetails = ({profile}) => {
                 </div>
             </Paper>
         </>
+    );
+};
+
+const PersonalDetailsDialog = ({closeDialog, open, profile}) => {
+    const formFieldData = {
+        "nameInput": {
+            ...useInput(profile.name),
+            id: "name",
+            label: "Name",
+            autoFocus: true
+        },
+        "emailInput": {
+            ...useInput(profile.contactEmail),
+            id: "contactEmail",
+            label: "Contact Email"
+        },
+        "roleInput": {
+            ...useInput(profile.primaryRole),
+            id: "role",
+            label: "Primary Role"
+        },
+        "phoneInput": {
+            ...useInput(profile.phone),
+            id: "phone",
+            label: "Phone Number"
+        },
+        "slackInput": {
+            ...useInput(profile.slackHandle),
+            id: "slackHandle",
+            label: "Slack Handle"
+        },
+        "rocketChatInput": {
+            ...useInput(profile.rocketChatHandle),
+            id: "rocketChatHandle",
+            label: "Rocket Chat Handle"
+        }
+    };
+
+    return (
+        <DetailsDialog
+            dialogTitle="Edit Personal Details"
+            open={open}
+            closeDialog={closeDialog}
+            formFieldData={formFieldData}
+        />
     );
 };
 
