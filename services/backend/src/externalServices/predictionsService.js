@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {PREDICTIONS_URL} = require("utils/config");
+const {PREDICTIONS_API_KEY, PREDICTIONS_URL} = require("../config");
 
 class PredictionsService {
     constructor({host = PREDICTIONS_URL} = {}) {
@@ -7,6 +7,7 @@ class PredictionsService {
 
         this.axios = axios.create({
             baseURL: this.baseUrl,
+            headers: {"x-api-key": PREDICTIONS_API_KEY},
             maxContentLength: 100000000
         });
     }

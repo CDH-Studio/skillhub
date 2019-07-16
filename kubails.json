@@ -28,8 +28,9 @@
                 "file": ".env.encrypted",
                 "name": "backend-secrets",
                 "variables": [
-                    "TOKEN_SECRET",
-                    "SCRAPER_API_KEY"
+                    "PREDICTIONS_API_KEY",
+                    "SCRAPER_API_KEY",
+                    "TOKEN_SECRET"
                 ]
             },
             "templates": [
@@ -116,7 +117,13 @@
             "pre_startup_command": null,
             "production_replicas": 1,
             "replicas": 1,
-            "secrets": {},
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "predictions-secrets",
+                "variables": [
+                    "SKILLHUB_API_KEY"
+                ]
+            },
             "templates": [
                 "deployment",
                 "ingress",
