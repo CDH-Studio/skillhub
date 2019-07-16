@@ -18,8 +18,8 @@ const includeSkills = () => (context) => {
     return context;
 };
 
-const processProfilesSkills = () => (context) => {
-    context.result = Profile.processProfilesSkills(context.result);
+const liftProfilesSkills = () => (context) => {
+    context.result = Profile.liftProfilesSkills(context.result);
     return context;
 };
 
@@ -59,11 +59,11 @@ module.exports = {
 
     after: {
         all: [],
-        find: [dehydrate(), processProfileSkills()],
-        get: [dehydrate(), processProfileSkills()],
+        find: [dehydrate(), liftProfilesSkills()],
+        get: [dehydrate(), liftProfilesSkills()],
         create: [parameterizedHydrate()],
         update: [],
-        patch: [dehydrate(), processProfilesSkills()],
+        patch: [dehydrate(), liftProfilesSkills()],
         remove: []
     },
 
