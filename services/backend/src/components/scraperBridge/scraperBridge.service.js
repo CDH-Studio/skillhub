@@ -1,7 +1,5 @@
 // Initializes the `scraperBridge` service on path `/scraperBridge`
-const axios = require("axios");
-const tableNames = require("db/tableNames");
-const {PREDICTIONS_URL} = require("../../config");
+const {PredictionsService} = require("externalServices/");
 const hooks = require("./scraperBridge.hooks");
 
 /* This service acts as the bridge from the Scraper to Skillhub's backend.
@@ -14,6 +12,8 @@ const hooks = require("./scraperBridge.hooks");
 class ScraperBridgeService {
     setup(app) {
         this.app = app;
+
+        this.predictionsService = new PredictionsService();
     }
 
     async create(data) {
@@ -63,10 +63,7 @@ class ScraperBridgeService {
         const projectsService = this.app.service("projects");
         const profilesService = this.app.service("profiles");
 
-        const predictionsResult = await axios.post(
-            `${PREDICTIONS_URL}/api/v1/contributors/predict`, issues, {maxContentLength: 100000000}
-        );
-
+        const predictionsResult = this.predictionsService.predictContributors(issues);
         const {predictions = {}} = predictionsResult.data;
 
         for (const projectKey in predictions) {

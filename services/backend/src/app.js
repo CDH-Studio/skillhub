@@ -10,10 +10,10 @@ const socketio = require("@feathersjs/socketio");
 const {services} = require("components/");
 const {apiKeyAuthentication, authentication} = require("middleware/");
 const {logger} = require("utils/");
+const {SCRAPER_API_KEY} = require("utils/config");
 
 const appHooks = require("./app.hooks");
 const channels = require("./channels");
-const {SCRAPER_API_KEY} = require("./config");
 const {sequelize} = require("./db");
 
 const app = express(feathers());
