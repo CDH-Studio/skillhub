@@ -1,5 +1,9 @@
+const findOrCreate = require("./findOrCreate");
 const log = require("./log");
+const parameterizedHydrate = require("./parameterizedHydrate");
 
 module.exports = {
-    log
+    findOrCreate,
+    log,
+    parameterizedHydrate
 };

@@ -2,6 +2,7 @@ const {authenticate} = require("@feathersjs/authentication").hooks;
 const errors = require("@feathersjs/errors");
 const {restrictToOwner} = require("feathers-authentication-hooks");
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const {findOrCreate, parameterizedHydrate} = require("hooks/");
 const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
 
@@ -74,7 +75,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication()],
+        create: [preventBulkDuplication(), findOrCreate()],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),
@@ -86,9 +87,9 @@ module.exports = {
 
     after: {
         all: [],
-        find: [dehydrate(), processProfilesSkills()],
-        get: [dehydrate(), processProfilesSkills()],
-        create: [],
+        find: [dehydrate(), processProfileSkills()],
+        get: [dehydrate(), processProfileSkills()],
+        create: [parameterizedHydrate()],
         update: [],
         patch: [dehydrate(), processProfilesSkills()],
         remove: []
