@@ -3,6 +3,7 @@ from functools import wraps
 from typing import List
 from config import SKILLHUB_API_KEY
 
+
 def api_key_authentication(api_keys: List[str] = [SKILLHUB_API_KEY], header: str = "x-api-key"):
     def wrapper(func):
         @wraps(func)

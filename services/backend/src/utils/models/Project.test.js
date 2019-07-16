@@ -1,6 +1,6 @@
 const Project = require("./Project");
 
-describe("processProjectProfiles", () => {
+describe("liftProjectProfiles", () => {
     it("takes just the projectProfiles and removes the profile data", () => {
         const projects = [
             // Multiple profiles at once
@@ -20,11 +20,11 @@ describe("processProjectProfiles", () => {
             {projectProfiles: []}
         ];
 
-        expect(Project.processProjectProfiles(projects)).toEqual(processedProjects);
+        expect(Project.liftProjectProfiles(projects)).toEqual(processedProjects);
     });
 
-    it("returns an empty array when there are no projects to process", () => {
-        expect(Project.processProjectProfiles()).toEqual([]);
-        expect(Project.processProjectProfiles([])).toEqual([]);
+    it("returns an empty array when there are no projects to lift", () => {
+        expect(Project.liftProjectProfiles()).toEqual([]);
+        expect(Project.liftProjectProfiles([])).toEqual([]);
     });
 });
