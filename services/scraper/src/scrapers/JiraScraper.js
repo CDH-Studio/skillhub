@@ -1,5 +1,6 @@
 const axios = require("axios");
 const {JIRA_AUTH_TOKEN, JIRA_HOST, JIRA_PLATFORM} = require("config");
+const {chainingPromisePool} = require("utils/");
 const {JiraProject, JiraUser} = require("utils/models");
 
 const PLATFORM_SERVER = "server";
@@ -11,13 +12,13 @@ const MAX_RESULTS_USER = 1000;
 const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
         basePath: "/rest/api/3",
-        getIssues: `/search?fields=*all&expand=changelog&maxResults=${MAX_RESULTS_ISSUES}`,
+        getIssues: `/search?fields=*all&expand=changelog`,
         getProjects: "/project",
         getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`,
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
-        getIssues: `/search?fields=*all&expand=changelog&maxResults=${MAX_RESULTS_ISSUES}`,
+        getIssues: `/search?fields=*all&expand=changelog`,
         getProjects: "/project",
         getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`,
     }
@@ -87,30 +88,38 @@ class JiraScraper {
         return projects;
     }
 
-    async getIssues(projects = []) {
-        const path = getPath(this.platform, "getIssues");
+    async getIssues(project = {}) {
+        const {key: projectKey} = project;
 
-        let issues = [];
+        const issuesCount = await this._getIssuesCount(projectKey);
+        const partiallyAppliedGetIssues = async (index) => await this._getIssues(projectKey, index, MAX_RESULTS_ISSUES);
 
-        for (const project of projects) {
-            const {key} = project;
+        const indexChunkCount = Math.ceil(issuesCount / MAX_RESULTS_ISSUES);
+        const indexes = new Array(indexChunkCount).fill(MAX_RESULTS_ISSUES).map((value, index) => value * index);
 
-            let result = null;
-            let index = 0;
+        const listsOfIssues = await chainingPromisePool(indexes, partiallyAppliedGetIssues);
+        const issues = [].concat(...listsOfIssues);  // Flatten
 
-            // Loop until all the users have been scraped; this only matters if there
-            // exists more than 250 (MAX_RESULTS_ISSUES) issues for the given project.
-            do {
-                const pathWithIndex = `${path}&startAt=${index}&jql=project=${key}`;
-
-                result = await this.axios.get(pathWithIndex);
-                issues = issues.concat(result.data.issues);
-
-                index += result.data.issues.length;
-            } while (result.data.issues.length !== 0);
-        }
+        console.log(projectKey);
+        console.log(issues.length);
 
         return issues;
+    }
+
+    async _getIssuesCount(projectKey = "") {
+        const path = getPath(this.platform, "getIssues");
+        const pathWithIndex = `${path}&jql=project=${projectKey}&maxResults=0&startAt=0`;
+
+        const response = await this.axios.get(pathWithIndex);
+        return response.data.total;
+    }
+
+    async _getIssues(projectKey = "", index, maxResults) {
+        const path = getPath(this.platform, "getIssues");
+        const pathWithIndex = `${path}&jql=project=${projectKey}&maxResults=${maxResults}&startAt=${index}`;
+
+        const response = await this.axios.get(pathWithIndex);
+        return response.data.issues;
     }
 }
 

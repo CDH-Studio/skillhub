@@ -1,5 +1,6 @@
 const axios = require("axios");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
+const {chainingPromisePool} = require("utils/");
 const JiraScraper = require("./JiraScraper");
 
 /* Handles running all of the scrapers to get their data and acts as the bridge
@@ -23,19 +24,16 @@ class SkillhubBridge {
 
         await this.axios.post("/scraperBridge", {projects: skillhubProjects, users});
 
-        await Promise.all(projects.map(async (project) => {
-            const issues = await this.jiraScraper.getIssues([project]);
-            await this.axios.post("/scraperBridge", {issues});
-        }));
+        const scrapeProjectIssues = async (project = "") => {
+            const issues = await this.jiraScraper.getIssues(project);
+            return await this.axios.post("/scraperBridge", {issues});
+        };
+
+        await chainingPromisePool(projects, scrapeProjectIssues);
 
         return {yahaha: "You found me!"};
     }
 
-    async testIssues() {
-        const result = await this.jiraScraper.getIssues();
-
-        return result;
-    }
 }
 
 module.exports = SkillhubBridge;
