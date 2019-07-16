@@ -19,100 +19,78 @@ class ScraperBridgeService {
     async create(data) {
         const {issues, projects, users} = data;
 
+        const responseData = {};
+
         if (users) {
-            await this.processUsers(users);
+            const usersResult = await this.createUsers(users);
+
+            responseData.users = {
+                scraped: users.length,
+                created: usersResult.length
+            };
         }
 
         if (projects) {
-            await this.processProjects(projects);
+            const projectsResult = await this.createProjects(projects);
+
+            responseData.projects = {
+                scraped: projects.length,
+                created: projectsResult.length
+            };
         }
 
-        console.log("YOLO");
-
         if (issues) {
-            await this.processIssues(issues);
+            await this.createIssues(issues);
         }
 
         return {
             status: "success",
-            message: "It worked!"
+            data: responseData
         };
-
-        // return {
-        //     status: "success",
-        //     message: `
-        //         ${projects.length} projects were scraped; ${projectsResult.length} new projects were created.\n
-        //         ${users.length} users were scraped; ${usersResult.length} new users were created.
-        //     `
-        // };
     }
 
-    async processUsers(users = []) {
+    async createUsers(users = []) {
         const profilesService = this.app.service("profiles");
-        const profilesResult = await profilesService.create(users);
+        return await profilesService.create(users);
     }
 
-    async processProjects(projects = []) {
+    async createProjects(projects = []) {
         const projectsService = this.app.service("projects");
-        const projectsResult = await projectsService.create(projects);
+        return await projectsService.create(projects);
     }
 
-    async processIssues(issues = []) {
-        const sequelizeClient = this.app.get("sequelizeClient");
-        const ProjectsModel = sequelizeClient.models[tableNames.PROJECTS];
-        const ProfilesModel = sequelizeClient.models[tableNames.PROFILES];
+    async createIssues(issues = []) {
+        const projectsService = this.app.service("projects");
+        const profilesService = this.app.service("profiles");
 
-        const projectProfilesService = this.app.service("projectProfiles");
-
-        console.log("here 1");
         const predictionsResult = await axios.post(
             `${PREDICTIONS_URL}/api/v1/contributors/predict`, issues, {maxContentLength: 100000000}
         );
 
-        const predictions = predictionsResult.data.predictions;
-
-        let projectProfiles = [];
+        const {predictions = {}} = predictionsResult.data;
 
         for (const projectKey in predictions) {
-            console.log("here 2");
-            const trueProjectProfiles = [];
+            const profiles = [];
             const names = predictions[projectKey];
-
-            // TODO: Modify the 'create' method on the service to be a 'findOrCreate'.
-            // For reference: https://gist.github.com/marshallswain/9fa3b1e855633af00998
-            const project = (await ProjectsModel.findOrCreate({
-                where: {jiraKey: projectKey},
-                defaults: {name: projectKey, description: projectKey}
-            }))[0];
-
-            console.log("here 3");
 
             for (const name in names) {
                 const {prediction} = names[name];
 
-                console.log("here 4");
-
                 if (prediction) {
-                    console.log("here 5");
-
-                    const profile = (await ProfilesModel.findOrCreate({where: {name}}))[0];
-
-                    trueProjectProfiles.push({
-                        projectId: project.id,
-                        profileId: profile.id,
-                        role: "Person"
-                    });
+                    const profile = await profilesService.create({name}, {raw: true});
+                    profiles.push(profile);
                 }
             }
 
-            console.log(trueProjectProfiles, "trueProjectProfiles");
-            projectProfiles = projectProfiles.concat(trueProjectProfiles);
+            if (profiles.length) {
+                await projectsService.create({
+                    jiraKey: projectKey,
+                    name: projectKey,
+                    description: projectKey,
+                    profiles
+                });
+            }
         }
-
-        console.log("here 6");
-        console.log(projectProfiles, "projectProfiles");
-
-        await projectProfilesService.create(projectProfiles);
     }
 }
 
