@@ -23,12 +23,10 @@ class SkillhubBridge {
 
         await this.axios.post("/scraperBridge", {projects: skillhubProjects, users});
 
-        for (const project of projects) {
-            console.log("looping");
+        await Promise.all(projects.map(async (project) => {
             const issues = await this.jiraScraper.getIssues([project]);
-            const response = await this.axios.post("/scraperBridge", {issues});
-            console.log(response.data, "looping end");
-        }
+            await this.axios.post("/scraperBridge", {issues});
+        }));
 
         return {yahaha: "You found me!"};
     }

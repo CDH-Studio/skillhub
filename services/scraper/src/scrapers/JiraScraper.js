@@ -94,7 +94,6 @@ class JiraScraper {
 
         for (const project of projects) {
             const {key} = project;
-            console.log(key);
 
             let result = null;
             let index = 0;
