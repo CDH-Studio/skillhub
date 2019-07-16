@@ -40,7 +40,7 @@ class ScraperBridgeService {
         }
 
         if (issues) {
-            await this.createIssues(issues);
+            await this.createContributors(issues);
         }
 
         return {
@@ -59,7 +59,7 @@ class ScraperBridgeService {
         return await projectsService.create(projects);
     }
 
-    async createIssues(issues = []) {
+    async createContributors(issues = []) {
         const projectsService = this.app.service("projects");
         const profilesService = this.app.service("profiles");
 
