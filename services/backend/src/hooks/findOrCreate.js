@@ -1,3 +1,9 @@
+/* Hook that tries to first find an object before creating one.
+ *
+ * @param queryCustomizer   Function that transforms the creation data into a query for the lookup.
+ *
+ * @return The existing object if found, otherwise continues with creating and returning the new object.
+ */
 const findOrCreate = (queryCustomizer = (data) => data) => async (context) => {
     const {data, service} = context;
 

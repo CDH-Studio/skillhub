@@ -1,8 +1,7 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const hydrate = require("feathers-sequelize/hooks/hydrate");
-const {findOrCreate} = require("hooks/");
-const {arrayToObject} = require("utils/helperFunctions");
+const {findOrCreate, preventBulkDuplication} = require("hooks/");
 const {Project} = require("utils/models");
 
 const includeAssociations = () => (context) => {
@@ -20,32 +19,6 @@ const includeAssociations = () => (context) => {
 
 const processProjectProfiles = () => (context) => {
     context.result = Project.processProjectProfiles(context.result);
-    return context;
-};
-
-const preventBulkDuplication = () => async (context) => {
-    const {data: projects} = context;
-
-    // This hook is only for handling duplication detection when doing a bulk (i.e. array) create
-    if (!Array.isArray(projects)) {
-        return context;
-    }
-
-    const projectsService = context.app.service("projects");
-
-    const jiraKeys = projects.map(({jiraKey}) => jiraKey);
-    const existingProjects = await projectsService.find({query: {jiraKey: {$in: jiraKeys}}});
-
-    if (projects.length !== existingProjects.length) {
-        const projectsByJiraKey = existingProjects.reduce(arrayToObject({property: "jiraKey"}), {});
-        const projectsToAdd = projects.filter((project) => !(project.jiraKey in projectsByJiraKey));
-
-        context.data = projectsToAdd;
-    } else {
-        // Empty out the data so that Feathers doesn't bother actually trying to create any projects
-        context.data = [];
-    }
-
     return context;
 };
 
@@ -79,7 +52,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeAssociations()],
         get: [includeAssociations()],
-        create: [preventBulkDuplication(), findOrCreate(findOrCreateQueryCustomizer)],
+        create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [],
         remove: []
