@@ -13,7 +13,7 @@
         display: grid;
         justify-content: space-around;
         grid-template-columns: repeat(auto-fill, 100px);
-        padding: $default-spacing*1.5 $default-spacing $default-spacing*0.5 $default-spacing*1.5;
+        padding: $default-spacing*1.5;
         flex-wrap: wrap;
     }
 }
@@ -24,7 +24,7 @@
     flex-wrap: wrap;
 
     .project-contributors-badge-name {
-        margin: $default-spacing 0;
+        margin: $default-spacing;
         text-align: center;
         font-size: $font-size-content;
     }
@@ -43,7 +43,6 @@
     flex-direction: column;
     margin: 0 $default-spacing*4;
     padding-top: $default-spacing;
-
 
     .project-details-content-title {
         color: $color-neutral-6;
