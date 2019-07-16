@@ -63,7 +63,7 @@ class ScraperBridgeService {
         const projectsService = this.app.service("projects");
         const profilesService = this.app.service("profiles");
 
-        const predictionsResult = this.predictionsService.predictContributors(issues);
+        const predictionsResult = await this.predictionsService.predictContributors(issues);
         const {predictions = {}} = predictionsResult.data;
 
         for (const projectKey in predictions) {
