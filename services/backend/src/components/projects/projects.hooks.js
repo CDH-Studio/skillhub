@@ -1,5 +1,7 @@
 const {authenticate} = require("@feathersjs/authentication").hooks;
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
+const hydrate = require("feathers-sequelize/hooks/hydrate");
+const {findOrCreate} = require("hooks/");
 const {arrayToObject} = require("utils/helperFunctions");
 const {Project} = require("utils/models");
 
@@ -47,12 +49,37 @@ const preventBulkDuplication = () => async (context) => {
     return context;
 };
 
+const addProfiles = () => async (context) => {
+    const {profiles} = context.data;
+
+    if (profiles) {
+        const project = context.result;
+        await project.addProfiles(profiles);
+    }
+
+    return context;
+};
+
+const findOrCreateQueryCustomizer = (data) => {
+    let query = {};
+
+    if ("id" in data) {
+        query.id = data.id;
+    } else if ("jiraKey" in data) {
+        query.jiraKey = data.jiraKey;
+    } else {
+        query = data;
+    }
+
+    return query;
+};
+
 module.exports = {
     before: {
         all: [authenticate("jwt")],
         find: [includeAssociations()],
         get: [includeAssociations()],
-        create: [preventBulkDuplication()],
+        create: [preventBulkDuplication(), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [],
         remove: []
@@ -62,7 +89,7 @@ module.exports = {
         all: [],
         find: [dehydrate(), processProjectProfiles()],
         get: [dehydrate(), processProjectProfiles()],
-        create: [],
+        create: [hydrate(), addProfiles(), dehydrate()],
         update: [],
         patch: [],
         remove: []
