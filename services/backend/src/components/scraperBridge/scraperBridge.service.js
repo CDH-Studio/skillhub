@@ -77,7 +77,7 @@ class ScraperBridgeService {
                 const {prediction} = names[name];
 
                 if (prediction) {
-                    const profile = await profilesService.create({name}, {raw: true});
+                    const profile = await profilesService.create({name}, {hydrate: true});
                     profiles.push(profile);
                 }
             }

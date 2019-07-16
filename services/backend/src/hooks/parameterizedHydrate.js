@@ -1,9 +1,9 @@
 const hydrate = require("feathers-sequelize/hooks/hydrate");
 
 const parameterizedHydrate = () => (context) => {
-    const {raw} = context.params;
+    const {hydrate} = context.params;
 
-    if (raw) {
+    if (hydrate) {
         return hydrate().call(context.service, context);
     } else {
         return context;
