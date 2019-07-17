@@ -22,16 +22,25 @@ class SkillhubBridge {
         const skillhubProjects = projects.map((project) => project.toSkillhubProject());
         const users = await this.jiraScraper.getUsers();
 
-        await this.axios.post("/scraperBridge", {projects: skillhubProjects, users});
+        const projectsAndUsersResponse = await this.axios.post("/scraperBridge", {projects: skillhubProjects, users});
+        const projectsAndUsersResult = projectsAndUsersResponse.data.result;
 
         const scrapeProjectIssues = async (project = "") => {
             const issues = await this.jiraScraper.getIssues(project);
             return await this.axios.post("/scraperBridge", {issues});
         };
 
-        await chainingPromisePool(projects, scrapeProjectIssues);
+        const contributorsResponse = await chainingPromisePool(projects, scrapeProjectIssues);
 
-        return {yahaha: "You found me!"};
+        const contributorsResult = contributorsResponse.reduce((acc, {data}) => {
+            const {contributors} = data.result;
+            return {...acc, ...contributors};
+        }, {});
+
+        return {
+            ...projectsAndUsersResult,
+            contributors: contributorsResult
+        };
     }
 
 }

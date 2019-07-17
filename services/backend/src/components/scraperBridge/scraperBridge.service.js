@@ -23,71 +23,124 @@ class ScraperBridgeService {
 
         if (users) {
             const usersResult = await this.createUsers(users);
-
-            responseData.users = {
-                scraped: users.length,
-                created: usersResult.length
-            };
+            responseData.users = usersResult;
         }
 
         if (projects) {
             const projectsResult = await this.createProjects(projects);
-
-            responseData.projects = {
-                scraped: projects.length,
-                created: projectsResult.length
-            };
+            responseData.projects = projectsResult;
         }
 
         if (issues) {
-            await this.createContributors(issues);
+            const contributorsResult = await this.createContributors(issues);
+            responseData.contributors = contributorsResult;
         }
 
         return {
             status: "success",
-            data: responseData
+            result: responseData
         };
     }
 
     async createUsers(users = []) {
         const profilesService = this.app.service("profiles");
-        return await profilesService.create(users);
+        const result = await profilesService.create(users);
+
+        return {
+            scraped: users.length,
+            created: result.length
+        };
     }
 
     async createProjects(projects = []) {
         const projectsService = this.app.service("projects");
-        return await projectsService.create(projects);
+        const result = await projectsService.create(projects);
+
+        return {
+            scraped: projects.length,
+            created: result.length
+        };
     }
 
     async createContributors(issues = []) {
-        const projectsService = this.app.service("projects");
-        const profilesService = this.app.service("profiles");
+        const responseData = {};
 
         const predictionsResult = await this.predictionsService.predictContributors(issues);
         const {predictions = {}} = predictionsResult.data;
 
-        for (const projectKey in predictions) {
-            const profiles = [];
-            const names = predictions[projectKey];
+        const projectKeys = Object.keys(predictions);
 
-            for (const name in names) {
-                const {prediction} = names[name];
+        const existingCountsByProject = await this._getContributorsCountByProject(projectKeys);
 
-                if (prediction) {
-                    const profile = await profilesService.create({name}, {hydrate: true});
-                    profiles.push(profile);
-                }
-            }
+        for (const projectKey of projectKeys) {
+            const scrapedContributors = await this._createContributorsForProject(projectKey, predictions[projectKey]);
 
-            if (profiles.length) {
-                await projectsService.create({
-                    jiraKey: projectKey,
-                    name: projectKey,
-                    description: projectKey,
-                    profiles
-                });
+            responseData[projectKey] = {
+                scraped: scrapedContributors.length
+            };
+        }
+
+        const updatedCountsByProject = await this._getContributorsCountByProject(projectKeys);
+
+        return this._calculateCreatedContributorsCount(
+            projectKeys, existingCountsByProject, updatedCountsByProject, responseData
+        );
+    }
+
+    async _createContributorsForProject(projectKey = "", projectPredictions = {}) {
+        const projectsService = this.app.service("projects");
+        const profilesService = this.app.service("profiles");
+
+        const profiles = [];
+
+        for (const name in projectPredictions) {
+            const {prediction} = projectPredictions[name];
+
+            if (prediction) {
+                const profile = await profilesService.create({name}, {hydrate: true});
+                profiles.push(profile);
             }
         }
+
+        if (profiles.length) {
+            await projectsService.create({
+                jiraKey: projectKey,
+                name: projectKey,
+                description: projectKey,
+                profiles
+            }, {hydrate: true});
+        }
+
+        return profiles;
+    }
+
+    async _getContributorsCountByProject(projectKeys = []) {
+        const projectsService = this.app.service("projects");
+        const projects = await projectsService.find({query: {jiraKey: {$in: projectKeys}}});
+
+        return projects.reduce((acc, project) => {
+            acc[project.jiraKey] = project.projectProfiles.length;
+            return acc;
+        }, {});
+    }
+
+    _calculateCreatedContributorsCount(projectKeys, existingCounts, updatedCounts, responseData) {
+        return projectKeys.reduce((acc, key) => {
+            const initialCount = existingCounts[key] || 0;
+            const finalCount = updatedCounts[key] || 0;
+            const createdCount = finalCount - initialCount;
+
+            if (key in acc) {
+                acc[key].created = createdCount;
+            } else {
+                acc[key] = {
+                    scraped: null,
+                    created: createdCount
+                };
+            }
+
+            return acc;
+        }, responseData);
     }
 }
 

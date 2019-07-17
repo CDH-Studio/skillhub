@@ -21,11 +21,11 @@ const chainingPromisePool = async (iterable, asyncOperation, {concurrencyLimit =
         }
 
         return promise;
-    }
+    };
 
     await Promise.all(promises.map(chainNext));
 
     return results;
-}
+};
 
 module.exports = chainingPromisePool;
