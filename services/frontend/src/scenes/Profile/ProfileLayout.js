@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
-import {IconButton, Button, Paper} from "@material-ui/core";
+import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import PersonalDetails from "./components";
 import {
@@ -28,7 +28,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, skills, isLoading, isUserProfile}) => (
+const ProfileLayout = ({isLoading, isUserProfile, profile, projects, skills}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}

@@ -3,11 +3,10 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@materi
 import {DetailsForm} from "components/";
 import "./DetailsDialog.scss";
 
-const DetailsDialog = ({closeDialog, dialogTitle, formFieldData, open, onClose, onSubmit}) => (
+const DetailsDialog = ({closeDialog, dialogTitle, formFieldData, open, onSubmit}) => (
     <Dialog className="details-dialog"
         open={open}
         onClose={closeDialog}
-        onExiting={onClose}
     >
         <DialogTitle className="details-dialog-title">
             {dialogTitle}

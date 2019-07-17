@@ -24,13 +24,6 @@ const USERS = [
         password: "$2a$13$ou.iRf4nlSfcXp0lRewliuxbp8wD9M8/CIy6pomcbL.EB5CrZMZze",  // Password = 'test'
         createdAt: new Date(),
         updatedAt: new Date()
-    },
-    {
-        id: "07a4d430-7f9e-466a-b671-8076468d84e6",
-        email: "Devin.Sit@canada.ca",
-        password: "$2a$13$ou.iRf4nlSfcXp0lRewliuxbp8wD9M8/CIy6pomcbL.EB5CrZMZze",  // Password = 'test'
-        createdAt: new Date(),
-        updatedAt: new Date()
     }
 ];
 

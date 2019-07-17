@@ -11,7 +11,6 @@ import ScreenUrls from "utils/screenUrls";
 
 const mapStateToProps = (state) => {
     const mappedState = {};
-    const personalDetailsRequest = {};
     const isUserProfile = crossSliceSelectors.isMatchingRoute(ScreenUrls.PROFILE)(state);
 
     mappedState.isUserProfile = isUserProfile;
@@ -24,9 +23,6 @@ const mapStateToProps = (state) => {
     ], state);
 
     /* Map required data for the personal details request */
-    personalDetailsRequest.isLoading = profilesRequestsSlice.patchPersonalDetails.selectors.getLoading(state);
-    personalDetailsRequest.error = profilesRequestsSlice.patchPersonalDetails.selectors.getError(state);
-    mappedState.personalDetailsRequest = personalDetailsRequest;
 
     if (isUserProfile) {
         mappedState.projects = crossSliceSelectors.getProjectsForUser(state);
@@ -49,17 +45,4 @@ const mapStateToProps = (state) => {
     return mappedState;
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        submitPersonalDetails: (id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle) => dispatch(
-            profilesRequestsSlice.patchPersonalDetails.actions.request({
-                id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle
-            })
-        ),
-        clearPatchError: () => dispatch(
-            profilesRequestsSlice.patchPersonalDetails.actions.clear()
-        )
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps);
+export default connect(mapStateToProps, null);

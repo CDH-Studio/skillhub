@@ -3,16 +3,15 @@ import ProfileLayout from "./ProfileLayout";
 import connect from "./connect";
 
 const Profile = ({
-    projects = [], profile = {}, skills = {}, isLoading = false,
-    isUserProfile
+    isLoading = false, isUserProfile, profile = {}, projects = [], skills = {}
 }) => {
     return (
         <ProfileLayout
-            projects={projects}
-            profile={profile}
-            skills={skills}
-            isUserProfile={isUserProfile}
             isLoading={isLoading}
+            isUserProfile={isUserProfile}
+            profile={profile}
+            projects={projects}
+            skills={skills}
         />
     );
 };

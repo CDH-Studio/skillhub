@@ -1,36 +1,29 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import connect from "./connect";
-import PopupNotifierLayout from "./PopupNotifierLayout";
+import {useSnackbar} from "notistack";
+import {IconButton} from "@material-ui/core";
+import {Close} from "@material-ui/icons";
 import "./PopupNotifier.scss";
 
-const PopupNotifier = ({isLoading, notification}) => {
-    const notificationMessage = notification ? notification.message : null;
-    const notificationType = notification ? notification.type : null;
-
-    const [open, setOpen] = useState(false);
-
-    const openPopup = () => {
-        setOpen(true);
-    };
-
-    const closePopup = () => {
-        setOpen(false);
-    };
+const PopupNotifier = ({notification}) => {
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     useEffect(() => {
-        if (!isLoading && notification) {
-            openPopup();
-        }
-    }, [isLoading, notification]);
+        if (notification) {
+            const action = (key) => (
+                <IconButton onClick={() => closeSnackbar(key)}>
+                    <Close className="popup-edit-icon" />
+                </IconButton>
+            );
 
-    return (
-        <PopupNotifierLayout
-            open={open}
-            notificationMessage={notificationMessage}
-            notificationType={notificationType}
-            closePopup={closePopup}
-        />
-    );
+            enqueueSnackbar(notification.message, {
+                variant: notification.type,
+                action
+            });
+        }
+    }, [notification, enqueueSnackbar, closeSnackbar]);
+
+    return null;
 };
 
 export default connect(PopupNotifier);

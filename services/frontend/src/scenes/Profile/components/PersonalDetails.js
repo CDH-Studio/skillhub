@@ -1,41 +1,38 @@
 
-import React, {useCallback, useState, useEffect} from "react";
+import React, {useState, useCallback, useLayoutEffect} from "react";
 import connect from "./connect";
 import {useInput} from "utils/hooks";
 import {DetailsDialog, ProfileCard} from "components/";
 import {Paper} from "@material-ui/core";
 
-const PersonalDetails = ({notif, clearPatchError, error, isLoading, isUserProfile, profile, submitPersonalDetails}) => {
-    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
+const PersonalDetails = ({
+    clearPatchError, error, isPatching, isUserProfile, profile, submitPersonalDetails
+}) => {
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const openDialog = () => {
-        setPersonalDetailsDialogOpen(true);
+        setDialogOpen(true);
     };
 
     const closeDialog = useCallback(() => {
-        setPersonalDetailsDialogOpen(false);
-    }, []);
-
-    const onClose = () => {
-        console.log("hello");
         clearPatchError();
-    };
+        setDialogOpen(false);
+    }, [setDialogOpen, clearPatchError]);
 
-    useEffect(() => {
-        if (!isLoading && !error) {
+    useLayoutEffect(() => {
+        if (!isPatching && !error) {
             closeDialog();
         }
-    }, [error, isLoading, closeDialog]);
+    }, [error, isPatching, clearPatchError, closeDialog]);
 
     return (
         <>
             <PersonalDetailsDialog
                 closeDialog={closeDialog}
                 error={error}
-                key={personalDetailsDialogOpen ? profile : error}
-                onClose={onClose}
+                key={dialogOpen ? profile : error}
                 onSubmit={submitPersonalDetails}
-                open={personalDetailsDialogOpen}
+                open={dialogOpen}
                 profile={profile}
             />
             <Paper className="profile-page-card profile-card-details">
@@ -52,7 +49,7 @@ const PersonalDetails = ({notif, clearPatchError, error, isLoading, isUserProfil
     );
 };
 
-const PersonalDetailsDialog = ({onClose, closeDialog, error, open, profile, onSubmit}) => {
+const PersonalDetailsDialog = ({closeDialog, error, open, profile, onSubmit}) => {
     const formFieldData = {
         "nameInput": {
             ...useInput(profile.name),
@@ -115,7 +112,6 @@ const PersonalDetailsDialog = ({onClose, closeDialog, error, open, profile, onSu
 
     return (
         <DetailsDialog
-            onClose={onClose}
             closeDialog={closeDialog}
             dialogTitle="Edit Personal Details"
             formFieldData={formFieldData}

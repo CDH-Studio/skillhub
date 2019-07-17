@@ -9,10 +9,6 @@ export const profilesSlice = createSlice({
         setProfiles: (state, action) => action.payload,
         setProfile: (state, action) => {
             state[action.payload.id] = action.payload;
-        },
-        addProfile: (state, action) => {
-            // Expects a Profile object as payload
-            state[action.payload.id] = action.payload;
         }
     }
 });
