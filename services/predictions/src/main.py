@@ -1,7 +1,7 @@
 import logging
 import os
 import sys
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from typing import Tuple
 
@@ -37,6 +37,15 @@ app = create_app()
 # Register the base API controller that funnels out application logic
 # to all of the sub controllers for all the rub routes.
 app.register_blueprint(api_controller)
+
+
+@app.after_request
+def after_request(response):
+    logging.info("{} - \"{} {} {}\" {}".format(
+        request.remote_addr, request.method, request.full_path, request.scheme, response.status
+    ))
+
+    return response
 
 
 @app.errorhandler(Exception)
