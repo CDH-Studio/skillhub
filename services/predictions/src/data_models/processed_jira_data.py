@@ -242,7 +242,6 @@ class ProcessedJiraData:
             fields["creator"] = fields["creator"] if fields["creator"] else {}
             fields["priority"] = fields["priority"] if fields["priority"] else {}
             fields["assignee"] = fields["assignee"] if fields["assignee"] else {}
-            fields["resolution"] = fields["resolution"] if fields["resolution"] else {}
 
             issues.append(self._format_issue(issue))
             changelogs.extend(self._format_changelogs(issue))

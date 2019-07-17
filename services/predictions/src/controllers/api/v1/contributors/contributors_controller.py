@@ -18,13 +18,13 @@ predictor = ContributorsPredictor()
 def predict_contributors() -> Response:
     issues = request.get_json()
 
-    if type(issues) != list or len(issues) == 0:
-        raise BadRequest("Invalid data; data should be a non-empty list of Jira issues.")
+    if type(issues) != list:
+        raise BadRequest("'issues' must be a list of Jira issues.")
 
     try:
         predictions = predictor.predict(issues)
     except:
-        raise InternalServerError("Failed to make predictions; is data a non-empty list of Jira issues?")
+        raise InternalServerError("Failed to make predictions; see logs for more details.")
 
     return jsonify({
         "status": "success",

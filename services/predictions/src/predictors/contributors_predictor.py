@@ -9,6 +9,9 @@ class ContributorsPredictor:
         self.model = joblib.load(CONTRIBUTORS_MODEL)
 
     def predict(self, raw_issues: List[RawIssueType]) -> Dict[str, bool]:
+        if len(raw_issues) == 0:
+            return {}
+
         processed_data = ProcessedJiraData(raw_issues)
         feature_vectors = processed_data.generate_feature_vectors()
 
@@ -22,7 +25,7 @@ class ContributorsPredictor:
         # Keep just the predictions, along with the index.
         results = results[["prediction"]]
 
-        # Convert the multi-index DataFrame of (projectKey, name)
-        # to a dict of {projectKey: {name: {prediction: bool}}}.
+        # Convert the multi-index DataFrame of (projectKey, name) to a dict of
+        # {projectKey: {name: {prediction: bool}}}.
         # Code taken from https://stackoverflow.com/a/47920702.
         return {level: results.xs(level).to_dict("index") for level in results.index.levels[0]}
