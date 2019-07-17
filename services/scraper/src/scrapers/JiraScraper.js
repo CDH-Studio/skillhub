@@ -18,13 +18,17 @@ const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
         basePath: "/rest/api/3",
         getIssues: `/search?fields=${ISSUE_FIELDS}&expand=changelog`,
+        getIssuesCount: "/search?maxResults=0",
         getProjects: "/project",
+        getProjectsLastUpdated: "/search?maxResults=1&fields=updated",
         getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`,
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
         getIssues: `/search?fields=${ISSUE_FIELDS}&expand=changelog`,
+        getIssuesCount: "/search?maxResults=0",
         getProjects: "/project",
+        getProjectsLastUpdated: "/search?maxResults=1&fields=updated",
         getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`,
     }
 };
@@ -90,20 +94,34 @@ class JiraScraper {
         const result = await this.axios.get(path);
         const projects = result.data.map(({key, name}) => new JiraProject({key, name}));
 
+        const lastUpdatedDates = await chainingPromisePool(projects, this._getProjectLastUpdated.bind(this));
+        projects.forEach((project, i) => project.updated = lastUpdatedDates[i]);
+
         return projects;
     }
 
     async getIssues(project = {}) {
         const {key: projectKey} = project;
 
+        const partiallyAppliedGetIssues = async (index) => await this._getIssues(
+            projectKey, index, MAX_RESULTS_ISSUES
+        );
+
         const issuesCount = await this._getIssuesCount(projectKey);
-        const partiallyAppliedGetIssues = async (index) => await this._getIssues(projectKey, index, MAX_RESULTS_ISSUES);
-
         const indexChunkCount = Math.ceil(issuesCount / MAX_RESULTS_ISSUES);
-        const indexes = new Array(indexChunkCount).fill(MAX_RESULTS_ISSUES).map((value, index) => value * index);
 
-        const listsOfIssues = await chainingPromisePool(indexes, partiallyAppliedGetIssues, {concurrencyLimit: 3});
-        const issues = [].concat(...listsOfIssues);  // Flatten
+        const indexes = (
+            new Array(indexChunkCount)
+                .fill(MAX_RESULTS_ISSUES)
+                .map((value, i) => value * i)
+        );
+
+        const listsOfIssues = await chainingPromisePool(
+            indexes, partiallyAppliedGetIssues, {concurrencyLimit: 3}
+        );
+
+        // Flatten the list of lists of issues into just a list of issues
+        const issues = [].concat(...listsOfIssues);
 
         console.log(projectKey);
         console.log(issues.length);
@@ -111,19 +129,35 @@ class JiraScraper {
         return issues;
     }
 
-    async _getIssuesCount(projectKey = "") {
-        const path = getPath(this.platform, "getIssues");
-        const pathWithIndex = `${path}&jql=project=${projectKey}&maxResults=0&startAt=0`;
+    async _getProjectLastUpdated(project = {}) {
+        const {key: projectKey} = project;
 
-        const response = await this.axios.get(pathWithIndex);
+        const path = getPath(this.platform, "getProjectsLastUpdated");
+        const fullPath = `${path}&jql=project=${projectKey}+order+by+updated+desc`;
+
+        const response = await this.axios.get(path);
+        const issues = response.data.issues;
+
+        if (issues.length) {
+            return new Date(issues[0].fields.updated);
+        } else {
+            return new Date("1970-01-01");
+        }
+    }
+
+    async _getIssuesCount(projectKey = "") {
+        const path = getPath(this.platform, "getIssuesCount");
+        const fullPath = `${path}&jql=project=${projectKey}`;
+
+        const response = await this.axios.get(fullPath);
         return response.data.total;
     }
 
     async _getIssues(projectKey = "", index, maxResults) {
         const path = getPath(this.platform, "getIssues");
-        const pathWithIndex = `${path}&jql=project=${projectKey}&maxResults=${maxResults}&startAt=${index}`;
+        const fullPath = `${path}&jql=project=${projectKey}&maxResults=${maxResults}&startAt=${index}`;
 
-        const response = await this.axios.get(pathWithIndex);
+        const response = await this.axios.get(fullPath);
         return response.data.issues;
     }
 }

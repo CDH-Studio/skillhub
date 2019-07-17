@@ -1,7 +1,8 @@
 class JiraProject {
-    constructor({key, name}) {
+    constructor({key = "", name = "", updated = new Date()}) {
         this.key = key;
         this.name = name;
+        this.updated = updated;
     }
 
     toSkillhubProject() {
@@ -9,7 +10,7 @@ class JiraProject {
             name: this.name,
             description: this.key,
             jiraKey: this.key,
-            lastActive: new Date()
+            lastActive: this.updated
         };
     }
 }

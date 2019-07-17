@@ -25,12 +25,7 @@ class SkillhubBridge {
         const projectsAndUsersResponse = await this.axios.post("/scraperBridge", {projects: skillhubProjects, users});
         const projectsAndUsersResult = projectsAndUsersResponse.data.result;
 
-        const scrapeProjectIssues = async (project = "") => {
-            const issues = await this.jiraScraper.getIssues(project);
-            return await this.axios.post("/scraperBridge", {issues});
-        };
-
-        const contributorsResponse = await chainingPromisePool(projects, scrapeProjectIssues);
+        const contributorsResponse = await chainingPromisePool(projects, this._scrapeProjectIssues.bind(this));
 
         const contributorsResult = contributorsResponse.reduce((acc, {data}) => {
             const {contributors} = data.result;
@@ -43,6 +38,10 @@ class SkillhubBridge {
         };
     }
 
+    async _scrapeProjectIssues(project = "") {
+        const issues = await this.jiraScraper.getIssues(project);
+        return await this.axios.post("/scraperBridge", {issues});
+    }
 }
 
 module.exports = SkillhubBridge;

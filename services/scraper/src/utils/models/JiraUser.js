@@ -1,6 +1,5 @@
 class JiraUser {
-    constructor({key, displayName, emailAddress}) {
-        this.key = key;
+    constructor({displayName = "", emailAddress = ""}) {
         this.displayName = displayName;
         this.emailAddress = emailAddress;
     }
