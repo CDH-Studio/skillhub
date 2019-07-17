@@ -16,6 +16,8 @@ class ScraperBridgeService {
         this.predictionsService = new PredictionsService();
     }
 
+    /* The master entrypoint to the service. Handles taking data from the Scraping service,
+     * potentially processing it some more, and then storing it in the database. */
     async create(data) {
         const {issues, projects, users} = data;
 
@@ -62,28 +64,42 @@ class ScraperBridgeService {
         };
     }
 
+    /* Handles taking the issues, sending them off to the predictions service, and
+     * saving the resulting project contributors back to the database. */
     async createContributors(issues = []) {
         const responseData = {};
 
+        // Perform contribution predictions. `predictions` is of the following form:
+        // {
+        //     [project key]: {
+        //         [person name]: {
+        //             prediction: true/false
+        //         }
+        //     }
+        // }
         const predictionsResult = await this.predictionsService.predictContributors(issues);
         const {predictions = {}} = predictionsResult.data;
 
         const projectKeys = Object.keys(predictions);
 
+        // Get the baseline counts for how many contributors each project has;
+        // used later to calculate how many new ones are created.
         const existingCountsByProject = await this._getContributorsCountByProject(projectKeys);
 
+        // Save all of the actual contributors (i.e. the ones who were predicted as 'true') to the database
+        // and tally up how many contributors were scraped for each project
         for (const projectKey of projectKeys) {
             const scrapedContributors = await this._createContributorsForProject(projectKey, predictions[projectKey]);
 
-            responseData[projectKey] = {
-                scraped: scrapedContributors.length
-            };
+            responseData[projectKey] = {scraped: scrapedContributors.length};
         }
 
+        // Get the updated per-project contributor counts
         const updatedCountsByProject = await this._getContributorsCountByProject(projectKeys);
 
+        // Calculate the number of new contributors that were created and add them to the `responseData`
         return this._calculateCreatedContributorsCount(
-            projectKeys, existingCountsByProject, updatedCountsByProject, responseData
+            responseData, projectKeys, existingCountsByProject, updatedCountsByProject
         );
     }
 
@@ -103,12 +119,15 @@ class ScraperBridgeService {
         }
 
         if (profiles.length) {
+            // NOTE: The 'create' method has been setup as a 'findOrCreate', so this won't
+            // create duplicate projects. It will, however, catch the case where somehow the project
+            // wasn't created first.
             await projectsService.create({
                 jiraKey: projectKey,
                 name: projectKey,
                 description: projectKey,
                 profiles
-            }, {hydrate: true});
+            });
         }
 
         return profiles;
@@ -124,7 +143,7 @@ class ScraperBridgeService {
         }, {});
     }
 
-    _calculateCreatedContributorsCount(projectKeys, existingCounts, updatedCounts, responseData) {
+    _calculateCreatedContributorsCount(responseData, projectKeys, existingCounts, updatedCounts) {
         return projectKeys.reduce((acc, key) => {
             const initialCount = existingCounts[key] || 0;
             const finalCount = updatedCounts[key] || 0;
@@ -147,7 +166,6 @@ class ScraperBridgeService {
 module.exports = (app) => {
     app.use("/scraperBridge", new ScraperBridgeService());
 
-    // Get our initialized service so that we can register hooks
     const service = app.service("scraperBridge");
     service.hooks(hooks);
 };

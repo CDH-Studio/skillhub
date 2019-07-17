@@ -6,9 +6,14 @@ const {JiraProject, JiraUser} = require("utils/models");
 const PLATFORM_SERVER = "server";
 const PLATFORM_CLOUD = "cloud";
 
+// 250 was the maximum we could scrape at once when doing all fields through manual IE 11 downloads.
+// It can probably be upped now, but it's been performing well, so we're leaving it as is.
 const MAX_RESULTS_ISSUES = 250;
+
+// 1000 is the actual (Jira enforced) maximum for # of users for a single call; seems to work well.
 const MAX_RESULTS_USER = 1000;
 
+// The list of fields to grab when fetching issues; these are explicit to cut down on fetch time.
 const ISSUE_FIELDS = [
     "issuetype", "project", "created", "priority", "assignee", "updated",
     "status", "creator", "reporter", "comment", "worklog"
@@ -35,7 +40,7 @@ const PLATFORM_CONFIGS = {
 
 const getPath = (platform, key) => PLATFORM_CONFIGS[platform][key];
 
-/* Scraper for Jira that primarily handles scraping users and projects. */
+/* Scraper for Jira that primarily handles scraping users, projects, and issues. */
 class JiraScraper {
     constructor({authToken = JIRA_AUTH_TOKEN, host = JIRA_HOST, platform = JIRA_PLATFORM} = {}) {
         if (platform !== PLATFORM_SERVER && platform !== PLATFORM_CLOUD) {
@@ -51,14 +56,18 @@ class JiraScraper {
         this.platform = platform;
 
         this.baseUrl = this.host + getPath(this.platform, "basePath");
+
+        // Jira expects the authentication credentials to be base64 encoded
         this.encodedAuthToken = Buffer.from(this.authToken).toString("base64");
 
+        // Setup an axios instance that's prepopulated with some options
         this.axios = axios.create({
             baseURL: this.baseUrl,
             headers: {authorization: `Basic ${this.encodedAuthToken}`}
         });
     }
 
+    /* Handles fetching all of the user names/email addresses. */
     async getUsers() {
         const path = getPath(this.platform, "getUsers");
 
@@ -76,7 +85,7 @@ class JiraScraper {
                 if (!user.key.includes("addon_")) {
                     // Convert the user data to a format that Skillhub will understand, so that
                     // Skillhub can ingest the data more easily
-                    acc.push(new JiraUser(user).toSkillhubUser());
+                    acc.push(new JiraUser(user));
                 }
 
                 return acc;
@@ -88,39 +97,51 @@ class JiraScraper {
         return users;
     }
 
+    /* Handles fetching all of the project names, Jira keys, and last active dates. */
     async getProjects() {
         const path = getPath(this.platform, "getProjects");
 
+        // Fetch up all of the projects and convert them to JiraProject objects
         const result = await this.axios.get(path);
         const projects = result.data.map(({key, name}) => new JiraProject({key, name}));
 
-        const lastUpdatedDates = await chainingPromisePool(projects, this._getProjectLastUpdated.bind(this));
+        // Fetch up the most recently updated issue for each project and use 'updated' timestamp
+        // as the 'lastActive' period for the project.
+        const lastUpdatedDates = await chainingPromisePool(projects, this._fetchProjectLastUpdated.bind(this));
         projects.forEach((project, i) => project.updated = lastUpdatedDates[i]);
 
         return projects;
     }
 
+    /* Handles fetching all of the issues for a given project along with their
+     * associated comments, worklogs, and changelogs. */
     async getIssues(project = {}) {
         const {key: projectKey} = project;
 
-        const partiallyAppliedGetIssues = async (index) => await this._getIssues(
+        // Need to partially apply `this._fetchIssues` because `chainingPromisePool` only
+        // takes async operations that accept a single argument.
+        const partiallyAppliedGetIssues = async (index) => await this._fetchIssues(
             projectKey, index, MAX_RESULTS_ISSUES
         );
 
-        const issuesCount = await this._getIssuesCount(projectKey);
+        // Need to get the total number of issues for the project so that we can figure
+        // out how many chunks of `MAX_RESULTS_ISSUES` we need to fetch all of the issues
+        const issuesCount = await this._fetchIssuesCount(projectKey);
         const indexChunkCount = Math.ceil(issuesCount / MAX_RESULTS_ISSUES);
 
+        // Fill an array with increments of `MAX_RESULTS_ISSUES` from 0 to `issuesCount`
         const indexes = (
             new Array(indexChunkCount)
                 .fill(MAX_RESULTS_ISSUES)
                 .map((value, i) => value * i)
         );
 
+        // Fetch the list of issues for each index chunk and...
         const listsOfIssues = await chainingPromisePool(
             indexes, partiallyAppliedGetIssues, {concurrencyLimit: 3}
         );
 
-        // Flatten the list of lists of issues into just a list of issues
+        // ...flatten the lists of issues into a single list of all the issues
         const issues = [].concat(...listsOfIssues);
 
         console.log(projectKey);
@@ -129,7 +150,9 @@ class JiraScraper {
         return issues;
     }
 
-    async _getProjectLastUpdated(project = {}) {
+    /* Fetches up the 'updated' field of the last updated issue for a given project.
+     * We use this as an indicator for when the project was 'last active'. */
+    async _fetchProjectLastUpdated(project = {}) {
         const {key: projectKey} = project;
 
         const path = getPath(this.platform, "getProjectsLastUpdated");
@@ -141,11 +164,13 @@ class JiraScraper {
         if (issues.length) {
             return new Date(issues[0].fields.updated);
         } else {
+            // If the project has no issues, just assign it some totally arbitrary old date.
             return new Date("1970-01-01");
         }
     }
 
-    async _getIssuesCount(projectKey = "") {
+    /* Fetches up the total number of issues for a given project. */
+    async _fetchIssuesCount(projectKey = "") {
         const path = getPath(this.platform, "getIssuesCount");
         const fullPath = `${path}&jql=project=${projectKey}`;
 
@@ -153,7 +178,15 @@ class JiraScraper {
         return response.data.total;
     }
 
-    async _getIssues(projectKey = "", index, maxResults) {
+    /* Fetches up a chunk of the issues for a given project.
+     *
+     * @param projectKey    The Jira key for the project.
+     * @param index         The 'startAt' point to grab issues from.
+     * @param maxResults    The max number of issues to fetch at once.
+     *
+     * @return The chunk of issues starting at `index` and ending at `maxResults`.
+     */
+    async _fetchIssues(projectKey = "", index, maxResults) {
         const path = getPath(this.platform, "getIssues");
         const fullPath = `${path}&jql=project=${projectKey}&maxResults=${maxResults}&startAt=${index}`;
 

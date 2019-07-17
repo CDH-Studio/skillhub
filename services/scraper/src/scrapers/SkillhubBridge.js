@@ -18,14 +18,26 @@ class SkillhubBridge {
     }
 
     async scrapeToSkillhub() {
+        // Scrape projects and convert them to Skillhub format
         const projects = await this.jiraScraper.getProjects();
         const skillhubProjects = projects.map((project) => project.toSkillhubProject());
-        const users = await this.jiraScraper.getUsers();
 
-        const projectsAndUsersResponse = await this.axios.post("/scraperBridge", {projects: skillhubProjects, users});
+        // Scrape users and convert them to Skillhub format
+        const users = await this.jiraScraper.getUsers();
+        const skillhubUsers = users.map((user) => user.toSkillhubUser());
+
+        // Send the projects and users to the Skillhub backend first, so that they already exist
+        // before the issues are sent over to generate the contributors.
+        const projectsAndUsersResponse = await this.axios.post(
+            "/scraperBridge", {projects: skillhubProjects, users: skillhubUsers}
+        );
+
         const projectsAndUsersResult = projectsAndUsersResponse.data.result;
 
-        const contributorsResponse = await chainingPromisePool(projects, this._scrapeProjectIssues.bind(this));
+        // Concurrently scrape and send the issues to the Skillhub backend to populate the contributors.
+        const contributorsResponse = await chainingPromisePool(
+            projects, this._scrapeProjectIssues.bind(this)
+        );
 
         const contributorsResult = contributorsResponse.reduce((acc, {data}) => {
             const {contributors} = data.result;

@@ -1,3 +1,4 @@
+/* Representation of a Jira user that can be converted to a Skillhub 'user' (profile). */
 class JiraUser {
     constructor({displayName = "", emailAddress = ""}) {
         this.displayName = displayName;

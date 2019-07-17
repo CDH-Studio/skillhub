@@ -1,3 +1,4 @@
+/* Representation of a Jira project that can be converted to a Skillhub project. */
 class JiraProject {
     constructor({key = "", name = "", updated = new Date()}) {
         this.key = key;
