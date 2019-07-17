@@ -14,9 +14,6 @@ const chainingPromisePool = async (iterable, asyncOperation, {concurrencyLimit =
                 // Store the result into the array upon Promise completion
                 const operationPromise = asyncOperation(argument.value).then((result) => {
                     results[argument.index] = result;
-                }).catch((error) => {
-                    console.log(error);
-                    results[argument.index] = null;
                 });
 
                 return chainNext(operationPromise);

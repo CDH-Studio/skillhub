@@ -9,16 +9,21 @@ const PLATFORM_CLOUD = "cloud";
 const MAX_RESULTS_ISSUES = 250;
 const MAX_RESULTS_USER = 1000;
 
+const ISSUE_FIELDS = [
+    "issuetype", "project", "created", "priority", "assignee", "updated",
+    "status", "creator", "reporter", "comment", "worklog"
+].join(",");
+
 const PLATFORM_CONFIGS = {
     [PLATFORM_CLOUD]: {
         basePath: "/rest/api/3",
-        getIssues: `/search?fields=*all&expand=changelog`,
+        getIssues: `/search?fields=${ISSUE_FIELDS}&expand=changelog`,
         getProjects: "/project",
         getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`,
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
-        getIssues: `/search?fields=*all&expand=changelog`,
+        getIssues: `/search?fields=${ISSUE_FIELDS}&expand=changelog`,
         getProjects: "/project",
         getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`,
     }
@@ -97,7 +102,7 @@ class JiraScraper {
         const indexChunkCount = Math.ceil(issuesCount / MAX_RESULTS_ISSUES);
         const indexes = new Array(indexChunkCount).fill(MAX_RESULTS_ISSUES).map((value, index) => value * index);
 
-        const listsOfIssues = await chainingPromisePool(indexes, partiallyAppliedGetIssues);
+        const listsOfIssues = await chainingPromisePool(indexes, partiallyAppliedGetIssues, {concurrencyLimit: 3});
         const issues = [].concat(...listsOfIssues);  // Flatten
 
         console.log(projectKey);
