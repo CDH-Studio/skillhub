@@ -23,6 +23,14 @@ const liftProjectProfiles = () => (context) => {
 };
 
 const addProfiles = () => async (context) => {
+    // This hook only works with profile objects that are Sequelize instances
+    // (e.g. they've been retrieved from a route that supports hydration, or have been
+    // queried directly using the Sequelize client).
+    //
+    // Passing regular (i.e. raw) objects in the 'profiles' key will result in an error.
+    //
+    // Also, the hook needs to be used after a `hydrate` hook, since the 'project' object
+    // also has to be a Sequelize instance.
     const {profiles} = context.data;
 
     if (profiles) {
@@ -34,6 +42,8 @@ const addProfiles = () => async (context) => {
 };
 
 const findOrCreateQueryCustomizer = (data) => {
+    // Allows the `findOrCreate` hook to use a more specific query than
+    // just the whole data blob when trying to find an existing project.
     let query = {};
 
     if ("id" in data) {
