@@ -1,6 +1,10 @@
+import logging
 import pandas as pd
 from typing import Any, Callable, Dict, List
+from utils import LoggingUtils
 
+
+logger = logging.getLogger(__name__)
 
 RawIssueType = Dict[str, Any]
 RawFieldType = Dict[str, Any]
@@ -12,6 +16,8 @@ WorklogType = Dict[str, Any]
 
 FeaturesType = Dict[str, float]
 
+# Map of all known statuses down to just a specific set that is useful for our purposes:
+# To Do, In Progress, Review, Done
 status_map = {
     "Abandoned": "Done",
     "Client Reviewed": "Review",
@@ -62,6 +68,7 @@ status_map = {
 
 
 def filter_high_priority_issues(df: pd.DataFrame) -> pd.Series:
+    """Helper function for filtering issues down to just high priority ones"""
     return df[
         (df["priority"] == "High")
         | (df["priority"] == "Blocker")
@@ -72,6 +79,7 @@ def filter_high_priority_issues(df: pd.DataFrame) -> pd.Series:
 
 
 def filter_status_change_changelogs(df: pd.DataFrame, status: str = "Done") -> pd.Series:
+    """Helper function for filtering changelogs down to just a particular type of status change"""
     changelogs_status_df = df[df["field"] == "status"]
 
     changelogs_status_df["from"] = changelogs_status_df["from"].replace(status_map)
@@ -84,6 +92,7 @@ def filter_status_change_changelogs(df: pd.DataFrame, status: str = "Done") -> p
 
 
 def issue_fields_map(issue: RawIssueType = {}, fields: RawFieldType = {}) -> IssueType:
+    """The map of Jira Issue schema -> Processed Jira Data (issues_df)"""
     return {
         "id": issue.get("id"),
         "key": issue.get("key"),
@@ -112,6 +121,7 @@ def changelog_fields_map(
     change: RawFieldType = {},
     item: RawFieldType = {}
 ) -> ChangelogType:
+    """The map of Jira Changelog schema -> Processed Jira Data (changelogs_df)"""
     return {
         "created": change.get("created"),
         "issueId": issue.get("id"),
@@ -135,6 +145,7 @@ def comment_fields_map(
     author: RawFieldType = {},
     comment: RawFieldType = {}
 ) -> CommentType:
+    """The map of Jira Comment schema -> Processed Jira Data (comments_df)"""
     return {
         "id": comment.get("id"),
         "created": comment.get("created"),
@@ -154,6 +165,7 @@ def worklog_fields_map(
     author: RawFieldType = {},
     worklog: RawFieldType = {}
 ) -> WorklogType:
+    """The map of Jira Worklog schema -> Processed Jira Data (worklogs_df)"""
     return {
         "id": worklog.get("id"),
         "created": worklog.get("created"),
@@ -168,6 +180,10 @@ def worklog_fields_map(
 
 
 def issue_features(issues: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
+    """
+    The map of Processed Jira Data (issues_with_all_assignees_df) -> Issue Features
+    This gets used with `issues_with_all_assignees_df`
+    """
     bug_ticket_count = len(issues[issues["type"].str.contains("bug", case=False)]) if len(issues) > 0 else 0
     done_ticket_count = len(issues[issues["status"].str.contains("done", case=False)]) if len(issues) > 0 else 0
     high_priority_ticket_count = len(filter_high_priority_issues(issues)) if len(issues) > 0 else 0
@@ -181,12 +197,18 @@ def issue_features(issues: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
 
 
 def issue_creator_features(issues: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
+    """
+    The map of Processed Jira Data (issues_df) -> Issue Features (for creator tickets)
+    This gets used with `issues_df` (unlike `issues_with_all_assignees_df`), since we don't
+    want duplicate creator issue counts.
+    """
     return {
         "creator_ticket_count": len(issues)
     }
 
 
 def changelog_features(changelogs: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
+    """The map of Processed Jira Data (changelogs_df) -> Changelog Features"""
     status_change_changelog_count = len(filter_status_change_changelogs(changelogs)) if len(changelogs) > 0 else 0
 
     return {
@@ -196,12 +218,14 @@ def changelog_features(changelogs: pd.DataFrame = pd.DataFrame()) -> FeaturesTyp
 
 
 def comment_features(comments: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
+    """The map of Processed Jira Data (comments_df) -> Comment Features"""
     return {
         "comment_count": len(comments)
     }
 
 
 def worklog_features(worklogs: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
+    """The map of Processed Jira Data (worklogs_df) -> Worklog Features"""
     time_spent = worklogs["timeSpent"].sum() if len(worklogs) > 0 else 0
 
     return {
@@ -209,11 +233,17 @@ def worklog_features(worklogs: pd.DataFrame = pd.DataFrame()) -> FeaturesType:
     }
 
 
+# The predefined sets of columns for each Processed Jira Data schema.
+# These are used when defining the various processed dataframes to ensure they
+# have a specific format, even if they are missing data.
 ISSUE_COLUMNS = list(issue_fields_map().keys())
 CHANGELOG_COLUMNS = list(changelog_fields_map().keys())
 COMMENT_COLUMNS = list(comment_fields_map().keys())
 WORKLOG_COLUMNS = list(worklog_fields_map().keys())
 
+# The predefined sets of feature columns for each part of the feature vectors.
+# Like above, these are used when defining the various feature vector dataframes to
+# ensure they have a specific format, even if they are missing data.
 ISSUE_FEATURE_COLUMNS = list(issue_features().keys())
 ISSUE_CREATOR_FEATURE_COLUMNS = list(issue_creator_features().keys())
 CHANGELOG_FEATURE_COLUMNS = list(changelog_features().keys())
@@ -222,11 +252,24 @@ WORKLOG_FEATURE_COLUMNS = list(worklog_features().keys())
 
 
 class ProcessedJiraData:
+    """
+    Handles taking in raw issue data straight from Jira and processing it into a more clean
+    and usable format for analysis.
+    Also handles converting that processed format into a set of feature vectors that can be
+    used to train or predict on a machine learning model.
+    """
+
     def __init__(self, raw_issues: List[RawIssueType]) -> None:
         if len(raw_issues) != 0:
             self.process_data(raw_issues)
+        else:
+            logger.warn("Received an empty list of raw issues; not processing anything")
 
+    @LoggingUtils.log_execution_time("Jira data processing finished")
     def process_data(self, raw_issues: List[RawIssueType]) -> None:
+        """Performs the processing to transform the raw Jira issues into our processed Jira data format."""
+        logger.info("Starting jira data processing...")
+
         issues = []
         changelogs = []
         comments = []
@@ -257,7 +300,17 @@ class ProcessedJiraData:
 
         self.issues_with_all_assignees_df = self._duplicate_issues_for_all_assignees(self.issues_df, self.changelogs_df)
 
+        logger.info("issues count: {}".format(len(self.issues_df)))
+        logger.info("changelogs count: {}".format(len(self.changelogs_df)))
+        logger.info("comments count: {}".format(len(self.comments_df)))
+        logger.info("worklogs count: {}".format(len(self.worklogs_df)))
+        logger.info("issues_with_all_assignees count: {}".format(len(self.issues_with_all_assignees_df)))
+
+    @LoggingUtils.log_execution_time("Feature vector generation finished")
     def generate_feature_vectors(self) -> pd.DataFrame:
+        """Converts the processed Jira data into a set of feature vectors for a model to train/predict on."""
+        logger.info("Starting feature vector generation...")
+
         feature_mappings = self._get_feature_mappings()
 
         raw_features = []
@@ -282,16 +335,20 @@ class ProcessedJiraData:
         # Fill out any columns that are missing with just zeros.
         for column in feature_columns:
             if column not in feature_vectors_df.columns:
+                logging.info("'{}' was a missing column".format(column))
                 feature_vectors_df[column] = 0
 
         feature_vectors_df = self._calculate_contribution_ratios(feature_vectors_df)
 
         # Sort the columns so that the features are always in a consistent order
         feature_vectors_df = feature_vectors_df.reindex(sorted(feature_vectors_df.columns), axis=1)
+        logger.info("Feature vectors count: {}".format(len(feature_vectors_df)))
+        logger.info("Feature vectors columns: {}".format(feature_vectors_df.columns))
 
         return feature_vectors_df
 
     def _get_feature_mappings(self) -> List[Dict[str, Any]]:
+        """Generates the set of mappings used to convert processed data into features."""
         return [
             {
                 "data": self.issues_with_all_assignees_df,
@@ -331,6 +388,7 @@ class ProcessedJiraData:
         groupby: List[str],
         features_transform: Callable[[pd.DataFrame], FeaturesType]
     ) -> pd.DataFrame:
+        """Takes the configuration from a feature mapping and applies it to convert processed data into features."""
         # Perform the transformation of raw data to features
         features = data.groupby(groupby).apply(lambda df: pd.DataFrame(features_transform(df), index=[0]))
 
@@ -344,6 +402,15 @@ class ProcessedJiraData:
         return features
 
     def _calculate_contribution_ratios(self, feature_vectors_df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Calculates, for each feature, for each person, the percentage of the total that
+        the person contributed towards that feature.
+        For example, "time_spent_ratio" would be the derived contribution ratio column for the
+        "time_spent" feature, where it is calculated as "time_spent" / "total time_spent for project".
+
+        @param feature_vectors_df: The dataframe of features, where each row is a person, and each column is a feature
+        @return: The feature_vectors_df enhanced with all of the contribution ratio columns
+        """
         for column in feature_vectors_df:
             ratio_column = column + "_ratio"
 
@@ -358,10 +425,12 @@ class ProcessedJiraData:
         return feature_vectors_df.fillna(0)
 
     def _format_issue(self, issue: RawIssueType) -> IssueType:
+        """Formats a single issue from raw Jira schema to Processed Jira data schema."""
         fields = issue.get("fields", {})
         return issue_fields_map(issue, fields)
 
     def _format_changelogs(self, issue: RawIssueType) -> List[ChangelogType]:
+        """Formats an issue's changelogs from raw Jira schema to Processed Jira data schema."""
         processed_changelogs = []
 
         fields = issue.get("fields", {})
@@ -378,6 +447,7 @@ class ProcessedJiraData:
         return processed_changelogs
 
     def _format_comments(self, issue: RawIssueType) -> List[CommentType]:
+        """Formats an issue's comments from raw Jira schema to Processed Jira data schema."""
         processed_comments = []
 
         fields = issue.get("fields", {})
@@ -392,6 +462,7 @@ class ProcessedJiraData:
         return processed_comments
 
     def _format_worklogs(self, issue: RawIssueType) -> List[WorklogType]:
+        """Formats an issue's worklogs from raw Jira schema to Processed Jira data schema."""
         processed_worklogs = []
 
         fields = issue.get("fields", {})
@@ -406,10 +477,17 @@ class ProcessedJiraData:
         return processed_worklogs
 
     def _replace_statuses(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Applies the status map to convert all of the statuses to a single common set."""
         df["status"] = df["status"].replace(status_map)
         return df
 
     def _duplicate_issues_for_all_assignees(self, issues_df: pd.DataFrame, changelogs_df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Takes the set of issues and creates a new set where each issue is duplicated for each assignee
+        that was ever assigned to the issue, just with the 'assigneeName' field updated.
+        This is used to more accurately assess statistics about the types of tickets that people worked on,
+        since it isn't always useful to rely on an issue's most recently assigned assignee.
+        """
         assignee_changelogs = changelogs_df[changelogs_df["field"] == "assignee"]
 
         # Create a Series where the indices are the issue keys and the values are lists of assignee names

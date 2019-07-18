@@ -49,7 +49,9 @@ def server_error(exception: Exception) -> Tuple[str, int]:
         "status": "error"
     })
 
-    return response, 500
+    status_code = getattr(exception, "code", 500)
+
+    return response, status_code
 
 
 if __name__ == "__main__":

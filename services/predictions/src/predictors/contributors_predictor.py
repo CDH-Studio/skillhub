@@ -1,15 +1,40 @@
 import joblib
+import logging
 from config import CONTRIBUTORS_MODEL
 from data_models.processed_jira_data import ProcessedJiraData, RawIssueType
 from typing import Dict, List
 
 
+logger = logging.getLogger(__name__)
+
+
 class ContributorsPredictor:
+    """
+    Handles doing predictions from a set of issues for a Jira project to determine
+    which people are actual contributors to the project.
+    """
+
     def __init__(self):
         self.model = joblib.load(CONTRIBUTORS_MODEL)
+        logger.info("Loaded contributors model {}".format(CONTRIBUTORS_MODEL))
 
     def predict(self, raw_issues: List[RawIssueType]) -> Dict[str, bool]:
+        """
+        Perform the contributor predictions against a set of raw issue data from Jira.
+
+        @param raw_issues: A list of raw issue data from Jira
+        @return: A dictionary containing the predictions of each person, per project, i.e.:
+
+        {
+            [projectKey]: {
+                [contributorName]: {
+                    "prediction": True/False
+                }
+            }
+        }
+        """
         if len(raw_issues) == 0:
+            logger.warn("Received an empty list of issues; returning an empty result")
             return {}
 
         processed_data = ProcessedJiraData(raw_issues)
