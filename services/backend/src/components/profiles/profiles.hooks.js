@@ -72,7 +72,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication("contactEmail"), findOrCreate((data) => ({id: data.id}))],
+        create: [preventBulkDuplication("contactEmail"), findOrCreate()],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),

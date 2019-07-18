@@ -189,6 +189,14 @@ const SKILL_IDS_BY_NAME = SKILLS.reduce(keyIdByName, {});
 
 const PROJECTS = [
     {
+        id: "0951bb93-a04f-4f66-9e37-d10b6288b1f4",
+        name: "Cloud Operations Services",
+        description: "A service for operating on clouds",
+        lastActive: lastWeek,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
         id: "4b028cf2-2801-4294-9ab7-e471b28be51b",
         name: "Dank Meme Classifier",
         description: "A service for taking memes and determining if they are dank",

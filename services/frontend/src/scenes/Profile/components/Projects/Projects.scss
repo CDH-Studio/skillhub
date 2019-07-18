@@ -1,0 +1,85 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
+@import "styles/_mixins.scss";
+
+$project-card-width: $default-spacing * 45;
+
+@mixin query-project-card-width {
+    @media (max-width: #{$project-card-width}) {
+        @content
+    }
+}
+
+#profile-projects {
+    .profile-card-projects {
+        flex-direction: column;
+        padding: 0;
+
+        .profile-project-card {
+            margin: $default-spacing 0;
+            width: auto;
+
+            @include max-laptop-width {
+                .project-card-content-section{
+                    margin-left: $default-spacing;
+                }
+            }
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+    .profile-card-edit-projects-button {
+        margin: -9px 0;
+        padding: 9px;
+
+        svg {
+            font-size: $font-size-title;
+        }
+    }
+
+    .profile-card-projects-header-section {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+    }
+}
+
+.add-projects-dialog-card {
+    margin: $default-spacing*0.5 0;
+}
+
+.search-dialog {
+    .search-dialog-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 $default-spacing * 0.5;
+
+        .search-dialog-search {
+            padding: 0 24px;
+            align-self: center;
+        }
+
+    }
+    .search-dialog-content {
+        background-color: #F0F4F8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+.role-input-dialog {
+    .role-input-dialog-content {
+        background-color: #F0F4F8;
+        flex: 1 1 100px;  
+        padding: $default-spacing*0.75 $default-spacing*5;
+
+        .role-input-dialog-field {
+            display: flex;
+        }
+    }
+}

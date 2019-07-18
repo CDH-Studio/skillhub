@@ -71,6 +71,19 @@ export default class Project {
         }
     }
 
+    static searchProjects(projects, searchTerm) {
+        if (searchTerm) {
+            const searchTermLC = searchTerm.toLowerCase();
+            return projects.filter ((project) => {
+                const projectLC = project.name.toLowerCase();
+                return projectLC.includes(searchTermLC);
+            });
+        }
+        else {
+            return projects;
+        }
+    }
+
     /* Denormalize a set of projects that have skill IDs with the corresponding set of skills. */
     static mergeWithSkills(projectsById = {}, skillsById = {}) {
         return Object.keys(projectsById).map((projectId) => {

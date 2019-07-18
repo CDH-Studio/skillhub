@@ -65,7 +65,18 @@ $project-card-width: $default-spacing * 45;
             width: 90%;
             padding-right: 0;
         }
+
+        .profile-card-details-edit-button {
+            align-self: baseline;
+            padding: 3px;
+
+            svg {
+                font-size: $font-size-subtitle;
+            }
+        }
     }
+
+
 }
 
 #profile-skills {
@@ -93,30 +104,9 @@ $project-card-width: $default-spacing * 45;
         justify-content: space-between;
         align-content: center;
     }
-
 }
 
 #profile-projects {
     max-width: $tablet-width;
     width: 100%;
-
-    .profile-card-projects {
-        flex-direction: column;
-        padding: 0;
-
-        .profile-project-card {
-            margin: $default-spacing 0;
-            width: auto;
-
-            @include max-laptop-width {
-                .project-card-content-section{
-                    margin-left: $default-spacing;
-                }
-            }
-
-            &:first-child {
-                margin-top: 0;
-            }
-        }
-    }
 }
