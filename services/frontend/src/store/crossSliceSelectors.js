@@ -90,6 +90,14 @@ const getProjectsForUser = createSelector(
     ProjectProfile.mapProfileToProjects
 );
 
+const getUnrelatedProjectsForUser = createSelector(
+    [
+        getProjectsWithSkills,
+        getProjectsForUser
+    ],
+    ProjectProfile.mapProfileToUnrelatedProjects
+);
+
 export const crossSliceSelectors = {
     isMatchingRoute,
     getProfilesWithSkills,
@@ -103,5 +111,6 @@ export const crossSliceSelectors = {
     getProjectFromUrlId,
     getContributorsForProject,
     getProjectsFromProfileUrlId,
-    getProjectsForUser
+    getProjectsForUser,
+    getUnrelatedProjectsForUser
 };
