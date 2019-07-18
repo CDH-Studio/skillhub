@@ -10,7 +10,7 @@ const logger = createLogger({
         format.json(),
         format.simple()
     ),
-    defaultMeta: {service: "skillhub-backend"},
+    defaultMeta: {service: "skillhub-scraper"},
     transports: [
         new transports.Console()
     ],

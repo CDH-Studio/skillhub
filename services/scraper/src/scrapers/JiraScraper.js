@@ -1,7 +1,9 @@
 const axios = require("axios");
 const {JIRA_AUTH_TOKEN, JIRA_HOST, JIRA_PLATFORM} = require("config");
-const {chainingPromisePool} = require("utils/");
+const {chainingPromisePool, logger: baseLogger} = require("utils/");
 const {JiraProject, JiraUser} = require("utils/models");
+
+const logger = baseLogger.child({module: "JiraScraper"});
 
 const PLATFORM_SERVER = "server";
 const PLATFORM_CLOUD = "cloud";
@@ -55,6 +57,8 @@ class JiraScraper {
         this.host = host;
         this.platform = platform;
 
+        logger.info({message: "Jira Scraper configuration", host: this.host, platform: this.platform});
+
         this.baseUrl = this.host + getPath(this.platform, "basePath");
 
         // Jira expects the authentication credentials to be base64 encoded
@@ -70,6 +74,7 @@ class JiraScraper {
     /* Handles fetching all of the user names/email addresses. */
     async getUsers() {
         const path = getPath(this.platform, "getUsers");
+        logger.info({message: "Starting users scraping", path});
 
         let result = null;
         let users = [];
@@ -78,6 +83,8 @@ class JiraScraper {
         // Loop until all the users have been scraped; this only matters
         // if there exists more than 1000 (MAX_RESULTS_USER) users on the Jira instance.
         do {
+            logger.info({message: "Looping through users", index});
+
             const pathWithIndex = `${path}&startAt=${index}`;
             result = await this.axios.get(pathWithIndex);
 
@@ -91,25 +98,33 @@ class JiraScraper {
                 return acc;
             }, users);
 
+            logger.info({message: "Scraped users", usersCount: users.length});
+
             index += result.data.length;
         } while (result.data.length !== 0);
 
+        logger.info("Finished users scraping");
         return users;
     }
 
     /* Handles fetching all of the project names, Jira keys, and last active dates. */
     async getProjects() {
         const path = getPath(this.platform, "getProjects");
+        logger.info({message: "Starting projects scraping", path});
 
         // Fetch up all of the projects and convert them to JiraProject objects
         const result = await this.axios.get(path);
         const projects = result.data.map(({key, name}) => new JiraProject({key, name}));
 
+        logger.info({message: "Scraped projects", projectsCount: projects.length});
+
         // Fetch up the most recently updated issue for each project and use 'updated' timestamp
         // as the 'lastActive' period for the project.
+        logger.info("Getting last updated times for projects");
         const lastUpdatedDates = await chainingPromisePool(projects, this._fetchProjectLastUpdated.bind(this));
         projects.forEach((project, i) => project.updated = lastUpdatedDates[i]);
 
+        logger.info("Finished projects scraping");
         return projects;
     }
 
@@ -117,6 +132,11 @@ class JiraScraper {
      * associated comments, worklogs, and changelogs. */
     async getIssues(project = {}) {
         const {key: projectKey} = project;
+
+        // Associate each of these log statements with the project key, since
+        // this function gets run multiple times in parallel.
+        const issuesLogger = logger.child({projectKey});
+        issuesLogger.info("Starting issues scraping");
 
         // Need to partially apply `this._fetchIssues` because `chainingPromisePool` only
         // takes async operations that accept a single argument.
@@ -128,6 +148,8 @@ class JiraScraper {
         // out how many chunks of `MAX_RESULTS_ISSUES` we need to fetch all of the issues
         const issuesCount = await this._fetchIssuesCount(projectKey);
         const indexChunkCount = Math.ceil(issuesCount / MAX_RESULTS_ISSUES);
+
+        issuesLogger.info({message: `Will scrape ${issuesCount} issues`, issuesCount});
 
         // Fill an array with increments of `MAX_RESULTS_ISSUES` from 0 to `issuesCount`
         const indexes = (
@@ -143,9 +165,7 @@ class JiraScraper {
 
         // ...flatten the lists of issues into a single list of all the issues
         const issues = [].concat(...listsOfIssues);
-
-        console.log(projectKey);
-        console.log(issues.length);
+        issuesLogger.info({message: "Scraped issues", issuesCount: issues.length});
 
         return issues;
     }

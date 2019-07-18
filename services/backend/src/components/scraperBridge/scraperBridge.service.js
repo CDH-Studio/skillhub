@@ -1,4 +1,5 @@
 // Initializes the `scraperBridge` service on path `/scraperBridge`
+const uuidv4 = require("uuid/v4");
 const {PredictionsService} = require("externalServices/");
 const {logger: baseLogger} = require("utils/");
 const hooks = require("./scraperBridge.hooks");
@@ -90,7 +91,11 @@ class ScraperBridgeService {
     /* Handles taking the issues, sending them off to the predictions service, and
      * saving the resulting project contributors back to the database. */
     async _createContributors(issues = []) {
-        logger.info({
+        // Create a unique logger for each instance of this function,
+        // since it can/will be called in parallel.
+        const contributorsLogger = logger.child({processId: uuidv4()});
+
+        contributorsLogger.info({
             message: "Starting to create contributors",
             issuesCount: issues.length
         });
@@ -105,9 +110,9 @@ class ScraperBridgeService {
         //         }
         //     }
         // }
-        logger.info("Querying predictions service...");
+        contributorsLogger.info("Querying predictions service...");
         const predictions = await this.predictionsService.predictContributors(issues);
-        logger.info({message: "Finished querying predictions service", result: predictions});
+        contributorsLogger.info({message: "Finished querying predictions service", result: predictions});
 
         const projectKeys = Object.keys(predictions);
 
@@ -131,7 +136,7 @@ class ScraperBridgeService {
             result, projectKeys, existingCountsByProject, updatedCountsByProject
         );
 
-        logger.info({message: "Finished creating contributors", result});
+        contributorsLogger.info({message: "Finished creating contributors", result});
         return result;
     }
 
