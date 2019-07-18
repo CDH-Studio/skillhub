@@ -15,7 +15,8 @@ class PredictionsService {
     }
 
     async predictContributors(issues = []) {
-        return await this.axios.post("/contributors/predict", issues);
+        const response = await this.axios.post("/contributors/predict", issues);
+        return response.data.predictions;
     }
 }
 

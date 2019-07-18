@@ -14,7 +14,12 @@
     "__services": {
         "backend": {
             "container_port": "5000",
-            "env": [],
+            "env": [
+                {
+                    "name": "PREDICTIONS_PROTOCOL",
+                    "value": "https"
+                }
+            ],
             "external_port": "80",
             "folder": "backend",
             "host": "backend.skillhub.ca",
@@ -51,10 +56,6 @@
                 {
                     "name": "POSTGRES_USER",
                     "value": "app-database-user"
-                },
-                {
-                    "name": "PREDICTIONS_PROTOCOL",
-                    "value": "https"
                 }
             ],
             "external_port": "5432",
