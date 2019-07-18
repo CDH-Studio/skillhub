@@ -43,6 +43,8 @@ services:
         build: ./predictions
         command: python src/main.py
         image: predictions
+        environment:
+            - "PYTHONUNBUFFERED=1"
         ports:
         - 5002:5000
         volumes:
@@ -50,8 +52,6 @@ services:
     scraper:
         build:
             context: ./scraper
-        environment:
-            - "PYTHONUNBUFFERED=0"
         command: npm start
         ports:
         - 5001:5000
