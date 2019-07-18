@@ -5,9 +5,12 @@ const logger = createLogger({
     // To see more detailed errors, change this to "debug"
     level: "info",
     format: format.combine(
+        format.timestamp({format: "YYYY-MM-DD HH:mm:ss"}),
         format.splat(),
+        format.json(),
         format.simple()
     ),
+    defaultMeta: {service: "skillhub-backend"},
     transports: [
         new transports.Console()
     ],

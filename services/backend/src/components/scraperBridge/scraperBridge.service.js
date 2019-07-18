@@ -1,6 +1,9 @@
 // Initializes the `scraperBridge` service on path `/scraperBridge`
 const {PredictionsService} = require("externalServices/");
+const {logger: baseLogger} = require("utils/");
 const hooks = require("./scraperBridge.hooks");
+
+const logger = baseLogger.child({module: "ScraperBridgeService"});
 
 /* This service acts as the bridge from the Scraper to Skillhub's backend.
  *
@@ -19,55 +22,80 @@ class ScraperBridgeService {
     /* The master entrypoint to the service. Handles taking data from the Scraping service,
      * potentially processing it some more, and then storing it in the database. */
     async create(data) {
+        logger.info("Starting injestion of scraped data");
+
         const {issues, projects, users} = data;
 
-        const responseData = {};
+        const result = {};
 
         if (users) {
-            const usersResult = await this.createUsers(users);
-            responseData.users = usersResult;
+            const usersResult = await this._createUsers(users);
+            result.users = usersResult;
         }
 
         if (projects) {
-            const projectsResult = await this.createProjects(projects);
-            responseData.projects = projectsResult;
+            const projectsResult = await this._createProjects(projects);
+            result.projects = projectsResult;
         }
 
         if (issues) {
-            const contributorsResult = await this.createContributors(issues);
-            responseData.contributors = contributorsResult;
+            const contributorsResult = await this._createContributors(issues);
+            result.contributors = contributorsResult;
         }
+
+        logger.info({message: "Finished injestion of scraped data", result});
 
         return {
             status: "success",
-            result: responseData
+            result
         };
     }
 
-    async createUsers(users = []) {
+    async _createUsers(users = []) {
+        logger.info({
+            message: "Starting to create users",
+            usersCount: users.length
+        });
+
         const profilesService = this.app.service("profiles");
-        const result = await profilesService.create(users);
+        const createdProfiles = await profilesService.create(users);
 
-        return {
+        const result = {
             scraped: users.length,
-            created: result.length
+            created: createdProfiles.length
         };
+
+        logger.info({message: "Finished creating users", result});
+        return result;
     }
 
-    async createProjects(projects = []) {
-        const projectsService = this.app.service("projects");
-        const result = await projectsService.create(projects);
+    async _createProjects(projects = []) {
+        logger.info({
+            message: "Starting to create projects",
+            projectsCount: projects.length
+        });
 
-        return {
+        const projectsService = this.app.service("projects");
+        const createdProjects = await projectsService.create(projects);
+
+        const result = {
             scraped: projects.length,
-            created: result.length
+            created: createdProjects.length
         };
+
+        logger.info({message: "Finished creating projects", result});
+        return result;
     }
 
     /* Handles taking the issues, sending them off to the predictions service, and
      * saving the resulting project contributors back to the database. */
-    async createContributors(issues = []) {
-        const responseData = {};
+    async _createContributors(issues = []) {
+        logger.info({
+            message: "Starting to create contributors",
+            issuesCount: issues.length
+        });
+
+        let result = {};
 
         // Perform contribution predictions. `predictions` is of the following form:
         // {
@@ -77,7 +105,9 @@ class ScraperBridgeService {
         //         }
         //     }
         // }
+        logger.info("Querying predictions service...");
         const predictions = await this.predictionsService.predictContributors(issues);
+        logger.info({message: "Finished querying predictions service", result: predictions});
 
         const projectKeys = Object.keys(predictions);
 
@@ -90,16 +120,19 @@ class ScraperBridgeService {
         for (const projectKey of projectKeys) {
             const scrapedContributors = await this._createContributorsForProject(projectKey, predictions[projectKey]);
 
-            responseData[projectKey] = {scraped: scrapedContributors.length};
+            result[projectKey] = {scraped: scrapedContributors.length};
         }
 
         // Get the updated per-project contributor counts
         const updatedCountsByProject = await this._getContributorsCountByProject(projectKeys);
 
-        // Calculate the number of new contributors that were created and add them to the `responseData`
-        return this._calculateCreatedContributorsCount(
-            responseData, projectKeys, existingCountsByProject, updatedCountsByProject
+        // Calculate the number of new contributors that were created and add them to the `result`
+        result = this._calculateCreatedContributorsCount(
+            result, projectKeys, existingCountsByProject, updatedCountsByProject
         );
+
+        logger.info({message: "Finished creating contributors", result});
+        return result;
     }
 
     async _createContributorsForProject(projectKey = "", projectPredictions = {}) {
@@ -142,7 +175,7 @@ class ScraperBridgeService {
         }, {});
     }
 
-    _calculateCreatedContributorsCount(responseData, projectKeys, existingCounts, updatedCounts) {
+    _calculateCreatedContributorsCount(result, projectKeys, existingCounts, updatedCounts) {
         return projectKeys.reduce((acc, key) => {
             const initialCount = existingCounts[key] || 0;
             const finalCount = updatedCounts[key] || 0;
@@ -158,7 +191,7 @@ class ScraperBridgeService {
             }
 
             return acc;
-        }, responseData);
+        }, result);
     }
 }
 
