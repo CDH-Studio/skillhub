@@ -25,7 +25,7 @@ app.configure(configuration());
 app.use(helmet());
 app.use(cors());
 app.use(compress());
-app.use(express.json({limit: "100mb"}));  // TODO: Move the limit into just the scraper bridge
+app.use(express.json({limit: "100mb"}));  // Need a larger limit for the parser to post Jira data
 app.use(express.urlencoded({extended: true}));
 
 // Set up Plugins and providers
