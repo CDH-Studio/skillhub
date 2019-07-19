@@ -15,9 +15,11 @@ const PersonalDetails = ({
     };
 
     const closeDialog = useCallback(() => {
-        clearPatchError();
+        if (error) {
+            clearPatchError();
+        }
         setDialogOpen(false);
-    }, [setDialogOpen, clearPatchError]);
+    }, [setDialogOpen, clearPatchError, error]);
 
     useLayoutEffect(() => {
         if (!isPatching && !error) {

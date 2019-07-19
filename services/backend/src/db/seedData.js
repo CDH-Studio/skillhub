@@ -51,7 +51,7 @@ const TEST_PROFILE_ID = TEST_PROFILE.map(getId);
 const PROFILES = [
     {
         id: "7835a29d-b447-4812-b263-36ac30b9a053",
-        userId: "07a4d430-7f9e-466a-b671-8076468d84e6",
+        userId: null,
         name: "Devin Sit",
         primaryRole: "Software Developer",
         contactEmail: "Devin.Sit@canada.ca",
