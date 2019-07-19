@@ -1,5 +1,6 @@
 export default {
     authRequests: "authRequests",
+    notification: "notification",
     profiles: "profiles",
     profilesRequests: "profilesRequests",
     profileSkills: "profileSkills",
