@@ -2,9 +2,9 @@ import React from "react";
 import ProfileLayout from "./ProfileLayout";
 import connect from "./connect";
 
-const Profile = ({
-    isLoading = false, isUserProfile, profile = {}, projects = [], skills = {}
-}) => {
+const Profile = ({addNewProfileSkill, addNewSkill, isLoading = false, isUserProfile, profile = {}, projects = [], skills = {}}
+
+) => {
     return (
         <ProfileLayout
             isLoading={isLoading}
@@ -12,6 +12,8 @@ const Profile = ({
             profile={profile}
             projects={projects}
             databaseSkills={skills}
+            addNewProfileSkill={addNewProfileSkill}
+            addNewSkill={addNewSkill}
         />
     );
 };

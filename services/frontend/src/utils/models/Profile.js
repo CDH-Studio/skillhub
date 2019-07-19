@@ -107,6 +107,8 @@ export default class Profile {
 
     static addSkills = (profile, updatedSkills, skills) => {
         const currentSkillsLC = profile.skills.map((skill) => skill.name.toLowerCase());
+        const newProfileSkillsObjects = [];
+        const newSkillsObjects = [];
 
         /* Returns a list of the new skills entered */
         const newSkills = removeDuplicate(updatedSkills.reduce((acc, skillName) => {
@@ -116,7 +118,7 @@ export default class Profile {
             return acc;
         }, []));
 
-        /* Adds skill from database or Create new Skill */
+        /* Adds skill from database */
         if (newSkills.length > 0) {
             for (const skill of Object.values(skills)) {
                 const skillName = skill.name;
@@ -124,6 +126,10 @@ export default class Profile {
                 if (newSkills.includes(skillNameLC)) {
                     profile.skills.push(skill);
                     newSkills.splice(newSkills.indexOf(skillName), 1);
+                    newProfileSkillsObjects.push(new ProfileSkill ({
+                        profileId: profile.id,
+                        skillId: skill.id
+                    }));
                 }
             }
         }
@@ -133,8 +139,16 @@ export default class Profile {
             for (const skillName of newSkills) {
                 const newSkill = new Skill({name: skillName});
                 profile.skills.push(newSkill);
+                newSkillsObjects.push(newSkill);
+                newProfileSkillsObjects.push(new ProfileSkill ({
+                    profileId: profile.id,
+                    skillId: newSkill.id
+                }));
             }
         }
+        profile.newSkillObjects = newSkillsObjects;
+        profile.newProfileSkillsObjects = newProfileSkillsObjects;
+        console.log(profile);
         return profile;
     };
 

@@ -28,7 +28,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({databaseSkills, isLoading, isUserProfile, profile, projects, skills}) => (
+const ProfileLayout = ({addNewProfileSkill, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills, isLoading}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -45,6 +45,8 @@ const ProfileLayout = ({databaseSkills, isLoading, isUserProfile, profile, proje
                         projects={projects}
                         profile={profile}
                         skills={skills}
+                        addNewProfileSkill={addNewProfileSkill}
+                        addNewSkill={addNewSkill}
                     />
                 </>
             }
@@ -93,7 +95,86 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const Skills = ({sectionName, profile, databaseSkills}) => {
+const PersonalDetails = ({profile}) => {
+    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
+
+    const openDialog = () => {
+        setPersonalDetailsDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setPersonalDetailsDialogOpen(false);
+    };
+
+    return (
+        <>
+            <PersonalDetailsDialog
+                profile={profile}
+                open={personalDetailsDialogOpen}
+                closeDialog={closeDialog}
+            />
+            <Paper className="profile-page-card profile-card-details">
+                <div className="profile-card-details-content">
+                    <ProfileCard
+                        key={profile.name}
+                        page="profile"
+                        {...profile}
+                    />
+                    <IconButton className="profile-card-details-edit-button" onClick={openDialog} color="primary">
+                        <Create />
+                    </IconButton>
+                </div>
+            </Paper>
+        </>
+    );
+};
+
+const PersonalDetailsDialog = ({closeDialog, open, profile}) => {
+    const formFieldData = {
+        "nameInput": {
+            ...useInput(profile.name),
+            id: "name",
+            label: "Name",
+            autoFocus: true
+        },
+        "emailInput": {
+            ...useInput(profile.contactEmail),
+            id: "contactEmail",
+            label: "Contact Email"
+        },
+        "roleInput": {
+            ...useInput(profile.primaryRole),
+            id: "role",
+            label: "Primary Role"
+        },
+        "phoneInput": {
+            ...useInput(profile.phone),
+            id: "phone",
+            label: "Phone Number"
+        },
+        "slackInput": {
+            ...useInput(profile.slackHandle),
+            id: "slackHandle",
+            label: "Slack Handle"
+        },
+        "rocketChatInput": {
+            ...useInput(profile.rocketChatHandle),
+            id: "rocketChatHandle",
+            label: "Rocket Chat Handle"
+        }
+    };
+
+    return (
+        <DetailsDialog
+            dialogTitle="Edit Personal Details"
+            open={open}
+            closeDialog={closeDialog}
+            formFieldData={formFieldData}
+        />
+    );
+};
+
+const Skills = ({addNewProfileSkill, addNewSkill, sectionName, profile, databaseSkills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
@@ -108,6 +189,11 @@ const Skills = ({sectionName, profile, databaseSkills}) => {
     const handleSubmit = (updatedSkills) => {
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
         updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
+        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, skills));
+        console.log(profile.newSkillObjects);
+        profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
+        console.log(profile.newProfileSkillsObjects);
+        profileUpdated.newProfileSkillsObjects.map((profileSkill) => addNewProfileSkill(profileSkill))
         closeDialog();
     };
 

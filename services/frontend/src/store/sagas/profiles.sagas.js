@@ -33,6 +33,11 @@ function* profilesPatchPersonalDetails({payload}, success) {
     yield call(success);
 }
 
+function* addNewProfileSkills({payload}) {
+    const result = yield call(api.service("profileSkills").create, payload.profileSkill);
+
+    yield put(profileSkillsSlice.setPro);
+}
 function* profilesSaga() {
     yield fork(profilesRequestsSlice.fetchAll.watchRequestSaga(
         profilesFetchAll

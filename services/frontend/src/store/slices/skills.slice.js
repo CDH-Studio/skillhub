@@ -14,4 +14,4 @@ export const skillsSlice = createSlice({
     }
 });
 
-export const skillsRequestsSlice = createRequestSlices(mounts.skillsRequests, ["fetchAll"]);
+export const skillsRequestsSlice = createRequestSlices(mounts.skillsRequests, ["fetchAll", "addNewSkill"]);

@@ -8,6 +8,7 @@ import {
     skillsRequestsSlice
 } from "store/slices";
 import ScreenUrls from "utils/screenUrls";
+import {profileSkillsSlice} from "../../store/slices";
 
 const mapStateToProps = (state) => {
     const mappedState = {};
@@ -45,4 +46,9 @@ const mapStateToProps = (state) => {
     return mappedState;
 };
 
-export default connect(mapStateToProps, null);
+const mapDispatchToProps = (dispatch) => ({
+    addNewSkill: (skill) => dispatch (skillsRequestsSlice.addNewSkill.actions.request({skill})),
+    addNewProfileSkill: (profileSkill) => dispatch(profileSkillsSlice.addProfileSkill({profileSkill})),
+    clearAddError: () => dispatch(skillsRequestsSlice.addNewSkill.actions.clear())
+});
+export default connect(mapStateToProps, mapDispatchToProps);
