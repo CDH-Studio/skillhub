@@ -12,10 +12,8 @@ from typing import Dict, List, Tuple, Union
 
 # File configuration
 
-TRAINING_DATA_FOLDER = os.path.join(".", "training_data")
-TRAINED_MODELS_FOLDER = os.path.join("..", "trained_models")
-
-TRAINING_DATA_HASH = "all_data"
+TRAINING_DATA_FOLDER = os.path.join(".", os.path.dirname(__file__), "training_data")
+TRAINED_MODELS_FOLDER = os.path.join(".", os.path.dirname(__file__), "..", "trained_models")
 
 CURRENT_DATE = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 MODEL_TYPE = "extra_trees"
@@ -23,10 +21,10 @@ SCORING_ALGORITHM = "f1"
 SAMPLING_ALGORITHM = "adasyn"
 CROSS_VALIDATION_FOLDS = 5
 
-TRAINING_DATA_FILE = os.path.join(TRAINING_DATA_FOLDER, "{}--training_data.csv")
+TRAINING_DATA_FILE = os.path.join(TRAINING_DATA_FOLDER, "{}--training-data.csv")
 
-TRAINED_MODEL_FILE = os.path.join(TRAINED_MODELS_FOLDER, "{}-{}-{}-{}-{}.joblib".format(
-    CURRENT_DATE, TRAINING_DATA_HASH, MODEL_TYPE, SCORING_ALGORITHM, SAMPLING_ALGORITHM
+TRAINED_MODEL_FILE = os.path.join(TRAINED_MODELS_FOLDER, "{}-{{}}-{}-{}-{}.joblib".format(
+    CURRENT_DATE, MODEL_TYPE, SCORING_ALGORITHM, SAMPLING_ALGORITHM
 ))
 
 # Parameter grids for doing Grid Search
@@ -47,10 +45,9 @@ params_grid_trees = {
 def load_dataset(training_data_file: str) -> pd.DataFrame:
     # Load dataset
     raw_data_set = pd.read_csv(training_data_file)
-    data_set = raw_data_set.drop(["projectKey", "name"], axis=1)
 
-    # Make sure data set columns are in a consistent order
-    data_set = data_set.reindex(sorted(data_set.columns), axis=1)
+    # Sort the columns to make sure they are always in a consistent order
+    data_set = raw_data_set.reindex(sorted(raw_data_set.columns), axis=1)
 
     return data_set
 
@@ -95,7 +92,7 @@ def find_best_model_grid_search(
     return grid_search.best_estimator_
 
 
-def train(training_data_hash: str = TRAINING_DATA_HASH):
+def train(training_data_hash: str = ""):
     # Load data set
     data_set = load_dataset(TRAINING_DATA_FILE.format(training_data_hash))
     print("Loaded data set")
@@ -115,13 +112,13 @@ def train(training_data_hash: str = TRAINING_DATA_HASH):
     print(getattr(sklearn.metrics, "{}_score".format(SCORING_ALGORITHM))(y_test, y_pred))
 
     # Save the best model to a file
-    joblib.dump(clf, TRAINED_MODEL_FILE)
+    joblib.dump(clf, TRAINED_MODEL_FILE.format(training_data_hash))
     print("Saved model to '{}'".format(TRAINED_MODEL_FILE))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script for training the Jira Contributors ML model.")
-    parser.add_argument("--training-data-hash", dest="training_data_hash")
+    parser.add_argument("--training-data-hash", dest="training_data_hash", required=True)
 
     args = parser.parse_args()
 
