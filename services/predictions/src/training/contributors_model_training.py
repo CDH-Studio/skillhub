@@ -1,23 +1,15 @@
 import joblib
-import json
-import matplotlib.pyplot as plt
-import numpy as np
 import os
 import pandas as pd
-import requests
-import scipy
-import seaborn as sns
 import sklearn
 import sklearn.metrics
-import warnings
-from collections import Counter
 from datetime import datetime
 from imblearn.over_sampling import ADASYN
 from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
-from typing import Tuple
+from sklearn.model_selection import train_test_split, GridSearchCV
+from typing import Dict, List, Tuple, Union
 
-## File configuration
+# File configuration
 
 TRAINING_DATA_FOLDER = os.path.join(".", "training_data")
 TRAINED_MODELS_FOLDER = os.path.join("..", "trained_models")
@@ -30,13 +22,13 @@ SCORING_ALGORITHM = "f1"
 SAMPLING_ALGORITHM = "adasyn"
 CROSS_VALIDATION_FOLDS = 5
 
-TRAINING_DATA_FILE = os.path.join(FOLDER, "{}--training_data.csv")
+TRAINING_DATA_FILE = os.path.join(TRAINING_DATA_FOLDER, "{}--training_data.csv")
 
-TRAINED_MODEL_FILE = os.path.join(FOLDER, "{}-{}-{}-{}.joblib".format(
-    CURRENT_DATE, MODEL_TYPE, SCORING_ALGORITHM, SAMPLING_ALGORITHM
+TRAINED_MODEL_FILE = os.path.join(TRAINED_MODELS_FOLDER, "{}-{}-{}-{}-{}.joblib".format(
+    CURRENT_DATE, TRAINING_DATA_HASH, MODEL_TYPE, SCORING_ALGORITHM, SAMPLING_ALGORITHM
 ))
 
-## Parameter grids for doing Grid Search
+# Parameter grids for doing Grid Search
 
 params_grid_trees = {
     "bootstrap": [True],
@@ -49,7 +41,7 @@ params_grid_trees = {
 }
 
 
-## Helper Functions
+# Helper Functions
 
 def load_dataset(training_data_file: str) -> pd.DataFrame:
     # Load dataset
@@ -58,7 +50,7 @@ def load_dataset(training_data_file: str) -> pd.DataFrame:
 
     # Make sure data set columns are in a consistent order
     data_set = data_set.reindex(sorted(data_set.columns), axis=1)
-    
+
     return data_set
 
 
@@ -80,12 +72,14 @@ def split_dataset(data_set: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, p
 def find_best_model_grid_search(
     base_clf: sklearn.base.BaseEstimator,
     grid_params: Dict[str, List[Union[bool, int, str]]],
+    X_train: pd.DataFrame,
+    y_train: pd.DataFrame,
     cross_validation_folds: int = CROSS_VALIDATION_FOLDS,
     scoring_algorithm: str = SCORING_ALGORITHM
 ) -> sklearn.base.BaseEstimator:
     grid_search = GridSearchCV(
         base_clf,
-        params,
+        grid_params,
         cv=cross_validation_folds,
         scoring=scoring_algorithm,
         n_jobs=-1,
@@ -100,8 +94,6 @@ def find_best_model_grid_search(
     return grid_search.best_estimator_
 
 
-## Train
-
 def train(training_data_hash: str = TRAINING_DATA_HASH):
     # Load data set
     data_set = load_dataset(TRAINING_DATA_FILE.format(training_data_hash))
@@ -110,14 +102,14 @@ def train(training_data_hash: str = TRAINING_DATA_HASH):
     X_train, X_test, y_train, y_test = split_dataset(data_set)
 
     # Perform grid search cross validation against the ExtraTreesClassifier to find optimal hyperparameters
-    clf = find_best_model_grid_search(ExtraTreesClassifier(), params_grid_trees)
+    clf = find_best_model_grid_search(ExtraTreesClassifier(), params_grid_trees, X_train, y_train)
 
     # Score against the test set
     y_pred = clf.predict(X_test)
     print(getattr(sklearn.metrics, "{}_score".format(SCORING_ALGORITHM))(y_test, y_pred))
 
     # Save the best model to a file
-    joblib.dump(clf, MODEL_FILE)
+    joblib.dump(clf, TRAINED_MODEL_FILE)
 
 
 if __name__ == "__main__":
