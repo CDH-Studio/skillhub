@@ -20,16 +20,6 @@ describe("liftProjectsProfiles", () => {
             {projectProfiles: []}
         ];
 
-<<<<<<< HEAD
-        expect(Project.liftProjectProfiles(projects)).toEqual(processedProjects);
-    });
-
-    it("returns an empty array when there are no projects to lift", () => {
-        expect(Project.liftProjectProfiles()).toEqual([]);
-        expect(Project.liftProjectProfiles([])).toEqual([]);
-    });
-});
-=======
         expect(Project.liftProjectsProfiles(projects)).toEqual(processedProjects);
     });
 
@@ -45,4 +35,3 @@ describe("liftProjectsProfiles", () => {
         expect(Project.liftProjectsProfiles([])).toEqual([]);
     });
 });
->>>>>>> 10c48f1... CDHSH-99 Added projectChangeRecords scaffholding

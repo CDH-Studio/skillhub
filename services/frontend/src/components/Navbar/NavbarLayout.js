@@ -24,7 +24,7 @@ const NavbarLayout = ({activeTab, onLogout}) => (
 );
 
 const NavbarTabs = ({activeTab = 0}) => (
-    <Tabs className="navbar-links" value={activeTab}>
+    <Tabs className="navbar-links" value={activeTab}>Logo
         <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile" />
         <Tab to={ScreenUrls.PEOPLE} component={Link} label="People" />
         <Tab to={ScreenUrls.PROJECTS} component={Link} label="Projects" />

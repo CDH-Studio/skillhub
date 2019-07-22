@@ -18,11 +18,11 @@ class Project {
 
     static liftProjectsProfiles(projects = []) {
         if (!Array.isArray(projects)) {
-            return this.processProjectProfiles(projects);
+            return this.liftProjectProfiles(projects);
         }
         else {
             return projects.map((project) => (
-                this.processProjectProfiles(project)
+                this.liftProjectProfiles(project)
             ));
         }
     }

@@ -8,6 +8,7 @@ export default {
     projects: "projects",
     projectsRequests: "projectsRequests",
     projectChangeRecords: "projectChangeRecords",
+    projectChangeRecordsRequests: "projectChangeRecordsRequests",
     projectProfiles: "projectProfiles",
     skills: "skills",
     skillsRequests: "skillsRequests",

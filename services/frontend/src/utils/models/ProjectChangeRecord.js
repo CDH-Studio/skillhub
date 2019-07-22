@@ -1,52 +1,28 @@
 import uuidv4 from "uuid/v4";
+import {arrayToObject} from "utils/helperFunctions";
 
 export default class ProjectChangeRecord {
     constructor({
-        id = uuidv4(), projectId = "", userId = "",
-        changedAttribute = "", createdAt = new Date(), updatedAt = new Date()
+        id = uuidv4(), projectId = "", userId = "", changedAttribute = "",
+        oldValue = "", newValue = "", createdAt = new Date(), updatedAt = new Date()
     } = {}) {
         this.id = id;
         this.projectId = projectId;
         this.userId = userId;
         this.changedAttribute = changedAttribute;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    static mapProjectIdToProjectChangeRecords(projectId, byId, byProjectId) {
-        return mapForeignIdToProjectChangeRecords(projectId, byId, byProjectId);
-    }
+    static normalizeProjectChangeRecord = (projectChangeRecord) => {
+        return new ProjectChangeRecord(projectChangeRecord);
+    };
 
-    static mapSkillIdToProjectChangeRecords(userId, byId, byUserId) {
-        return mapForeignIdToProjectChangeRecords(userId, byId, byUserId);
-    }
-
-    static mapProjectChangeRecordsToProjects(projectChangeRecords, projectsById) {
-        return mapProjectChangeRecordsToForeignModel("projectId", projectChangeRecords, projectsById);
-    }
-
-    static mapProjectChangeRecordsToUsers(projectChangeRecords, usersById) {
-        return mapProjectChangeRecordsToForeignModel("userId", projectChangeRecords, usersById);
+    /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
+     * with the skills processed to just their IDs, for appropriate use in the Redux store. */
+    static normalizeApiResultsForRedux(projectChangeRecords) {
+        return projectChangeRecords.reduce(arrayToObject({processor: this.normalizeProjectChangeRecord}), {});
     }
 }
-
-const mapForeignIdToProjectChangeRecords = (foreignId, byId, byForeignId) => {
-    if (foreignId in byForeignId) {
-        return byForeignId[foreignId].map((id) => byId[id]);
-    }
-
-    return [];
-};
-
-const mapProjectChangeRecordsToForeignModel = (foreignKey, projectChangeRecords, foreignModelsById) => {
-    const addedIds = {};
-
-    return projectChangeRecords.reduce((acc, {[foreignKey]: foreignId}) => {
-        if (foreignId in foreignModelsById && !(foreignId in addedIds)) {
-            acc = [...acc, foreignModelsById[foreignId]];
-            addedIds[foreignId] = true;
-        }
-
-        return acc;
-    }, []);
-};

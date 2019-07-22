@@ -8,11 +8,10 @@ const {Project} = require("utils/models");
 const includeAssociations = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
     const ProfilesModel = context.app.services.profiles.Model;
-    const ProjectChangeRecords = context.app.services.projectChangeRecords.Model;
 
     context.params.sequelize = {
         // Include the Profiles model to get at the ProjectProfiles model data
-        include: [{model: SkillsModel}, {model: ProfilesModel}, {model: ProjectChangeRecords}],
+        include: [{model: SkillsModel}, {model: ProfilesModel}],
         raw: false
     };
 
@@ -32,6 +31,27 @@ const validateProjectInfo = () => (context) => {
     if (Object.entries(emptyFields).length !== 0) {
         throw new errors.BadRequest("Missing Data", emptyFields);
     }
+};
+
+/*  Checks the passed arguments (context.data) versus the existing project (projectBeforeUpdate)
+ *  to and creates changelogs for every changed property. */
+const createChangeLog = () => (context) => {
+    const projectId = context.data.id;
+    const userId = context.params.user.id;
+
+    context.app.service("projects").get(projectId).then((projectBeforeUpdate) => {
+        for (const fieldKey of Object.keys(context.data)) {
+            if (context.data[fieldKey] !== projectBeforeUpdate[fieldKey]) {
+                context.app.service("projectChangeRecords").create({
+                    projectId: projectId,
+                    userId: userId,
+                    oldValue: projectBeforeUpdate[fieldKey],
+                    newValue: context.data[fieldKey],
+                    changedAttribute: fieldKey
+                });
+            }
+        }
+    });
 };
 
 const liftProjectsProfiles = () => (context) => {
@@ -82,8 +102,10 @@ module.exports = {
         create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [
+            createChangeLog(),
             validateProjectInfo(),
-            includeAssociations()],
+            includeAssociations()
+        ],
         remove: []
     },
 

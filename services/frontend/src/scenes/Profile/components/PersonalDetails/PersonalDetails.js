@@ -7,7 +7,6 @@ import {Paper} from "@material-ui/core";
 const PersonalDetails = ({
     clearPatchError, error, isUserProfile, open, onSubmit, profile, setDialogState
 }) => {
-    console.log(open);
     const openDialog = () => {
         setDialogState("personalDetails", true);
     };

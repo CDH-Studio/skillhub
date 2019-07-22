@@ -92,14 +92,6 @@ $project-card-width: $default-spacing * 45;
                 color: $color-text-secondary;
             }
         }
-        .profile-card-details-edit-button {
-            align-self: baseline;
-            padding: 3px;
-
-            svg {
-                font-size: $font-size-subtitle;
-            }
-        }
 
         &.profile-card-extras--profile {
             display: flex;
