@@ -39,6 +39,16 @@ services:
         volumes:
         - ./frontend/:/frontend
         - frontend-deps:/frontend/node_modules
+    predictions:
+        build: ./predictions
+        command: python src/main.py
+        image: predictions
+        environment:
+            - "PYTHONUNBUFFERED=1"
+        ports:
+        - 5002:5000
+        volumes:
+        - ./predictions/:/app
     scraper:
         build:
             context: ./scraper
