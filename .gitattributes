@@ -1,1 +1,4 @@
 * text=auto eol=lf
+
+# Don't touch line endings of model files
+*.joblib binary
