@@ -1,3 +1,4 @@
+import argparse
 import joblib
 import os
 import pandas as pd
@@ -33,11 +34,11 @@ TRAINED_MODEL_FILE = os.path.join(TRAINED_MODELS_FOLDER, "{}-{}-{}-{}-{}.joblib"
 params_grid_trees = {
     "bootstrap": [True],
     "class_weight": ["balanced"],
-    "max_depth": [50, 80, 90, 100, 110, 120, 130, 140, 150, 200, 300, None],
+    "max_depth": [50, 80, 90, 100, 110, 130, 150, 200, 300, None],
     "max_features": ["auto"],
     "min_samples_leaf": [1, 2, 4],
-    "min_samples_split": [3, 4, 5, 6, 7, 8, 9],
-    "n_estimators": [30, 40, 50, 60, 70, 80, 100, 150, 200, 300],
+    "min_samples_split": [3, 5, 7, 9],
+    "n_estimators": [40, 50, 60, 70, 80, 100, 150, 200, 300],
 }
 
 
@@ -65,7 +66,7 @@ def split_dataset(data_set: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, p
     # - Use 0.4 (40%) of the data set for the test set
     # - Ensure consistent splitting by setting the random_state to 42 (the answer to everything)
     # - Stratify y so that there's an even split of classes in each data set
-    #   -> (probably not necessary now that we use ADASYN, but ehh...)
+    #   -> (probably not as necessary now that we use ADASYN, but ehh...)
     return train_test_split(X, y, test_size=0.4, random_state=42, stratify=y)
 
 
@@ -97,20 +98,31 @@ def find_best_model_grid_search(
 def train(training_data_hash: str = TRAINING_DATA_HASH):
     # Load data set
     data_set = load_dataset(TRAINING_DATA_FILE.format(training_data_hash))
+    print("Loaded data set")
 
     # Split data set into train and test set
     X_train, X_test, y_train, y_test = split_dataset(data_set)
+    print("Split data set")
 
     # Perform grid search cross validation against the ExtraTreesClassifier to find optimal hyperparameters
+    print("Performing grid search to train optimal model...")
     clf = find_best_model_grid_search(ExtraTreesClassifier(), params_grid_trees, X_train, y_train)
+    print("Finished training model")
 
     # Score against the test set
     y_pred = clf.predict(X_test)
+    print("Results:")
     print(getattr(sklearn.metrics, "{}_score".format(SCORING_ALGORITHM))(y_test, y_pred))
 
     # Save the best model to a file
     joblib.dump(clf, TRAINED_MODEL_FILE)
+    print("Saved model to '{}'".format(TRAINED_MODEL_FILE))
 
 
 if __name__ == "__main__":
-    train()
+    parser = argparse.ArgumentParser(description="Script for training the Jira Contributors ML model.")
+    parser.add_argument("--training-data-hash", dest="training_data_hash")
+
+    args = parser.parse_args()
+
+    train(args.training_data_hash)
