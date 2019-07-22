@@ -45,7 +45,7 @@ $project-card-width: $default-spacing * 45;
     margin-bottom: $default-spacing * 2;
     margin-top: $default-spacing;
     padding: $default-spacing * 2;
-    width: $project-card-width;
+    width: 100%;
 
     @include query-project-card-width {
         width: auto;
@@ -53,33 +53,26 @@ $project-card-width: $default-spacing * 45;
 }
 
 #profile-personal-details {
+    max-width: $tablet-width;
+    width: 100%;
+
     .profile-card-details-content {
         display: flex;
         justify-content: space-between;
-
         width: 100%;
 
         .profile-card-details {
             width: 90%;
             padding-right: 0;
         }
-
-        .profile-card-details-edit-button {
-            align-self: baseline;
-            padding: 3px;
-
-            svg {
-                font-size: $font-size-subtitle;
-            }
-        }
     }
-
-
 }
 
 #profile-skills {
     display: flex;
     flex-direction: column;
+    max-width: $tablet-width;
+    width: 100%;
 
     .profile-card-skills {
         flex: 1;
@@ -104,6 +97,9 @@ $project-card-width: $default-spacing * 45;
 }
 
 #profile-projects {
+    max-width: $tablet-width;
+    width: 100%;
+
     .profile-card-projects {
         flex-direction: column;
         padding: 0;
