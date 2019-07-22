@@ -1,5 +1,6 @@
 export default {
     authRequests: "authRequests",
+    dialogsState: "dialogsState",
     notification: "notification",
     profiles: "profiles",
     profilesRequests: "profilesRequests",

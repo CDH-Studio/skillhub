@@ -5,7 +5,6 @@ import {projectsRequestsSlice, profilesRequestsSlice, skillsRequestsSlice} from 
 
 const mapStateToProps = (state) => {
     const mappedState = {};
-    const projectInfoRequest = {};
     const loadedProject = crossSliceSelectors.getProjectFromUrlId(state);
 
     /* All loading dependencies */
@@ -16,8 +15,6 @@ const mapStateToProps = (state) => {
     ], state);
 
     /* Map required data for the project details request */
-    mappedState.projectInfoRequest = projectInfoRequest;
-
     if (loadedProject) {
         mappedState.project = loadedProject;
         mappedState.contributors = crossSliceSelectors.getContributorsForProject(state);

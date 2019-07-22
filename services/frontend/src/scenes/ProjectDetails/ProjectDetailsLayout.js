@@ -1,12 +1,9 @@
-import React, {useState} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
-import {useInput} from "utils/hooks";
-import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, DetailsDialog, LoadingValidator} from "components/";
-import {Button, IconButton, Paper} from "@material-ui/core";
-import {Create} from "@material-ui/icons";
-import {Project} from "utils/models";
+import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, LoadingValidator} from "components/";
+import {ProjectInfo} from "./components";
+import {Button, Paper} from "@material-ui/core";
 import "./ProjectDetails.scss";
-import classNames from "classnames";
 import ScreenUrls from "utils/screenUrls";
 
 const containerClass = ".scroll-container";
@@ -93,91 +90,6 @@ const ProjectContent = ({...sectionProps}) => (
                 </section>
             ))
         }
-    </div>
-);
-
-const ProjectInfo = ({project, projectInfoRequest}) => {
-    const onSubmit = projectInfoRequest.submitProjectInfo;
-
-    const [projectInfoDialogOpen, setProjectInfoDialogOpen] = useState(false);
-
-    const openDialog = () => {
-        setProjectInfoDialogOpen(true);
-    };
-
-    const closeDialog = () => {
-        setProjectInfoDialogOpen(false);
-    };
-
-    return (
-        <>
-            <ProjectInfoDialog
-                closeDialog={closeDialog}
-                onSubmit={onSubmit}
-                open={projectInfoDialogOpen}
-                project={project}
-            />
-            <Paper className="project-details-card">
-                <div className="project-info-card-active-section">
-                    <ActiveBadge isActive={Project.isActive(project)} />
-                </div>
-                <div className="project-info-card-content-section">
-                    <h3 className="project-info-card-name">{project.name}</h3>
-                    <p className="project-info-card-description">{project.description}</p>
-                </div>
-                <div className="project-info-card-edit-section">
-                    <IconButton className="project-info-card-edit-button" onClick={openDialog} color="primary">
-                        <Create />
-                    </IconButton>
-                </div>
-            </Paper>
-        </>
-    );
-};
-
-const ProjectInfoDialog = ({closeDialog, open , project}) => {
-    const formFieldData = {
-        "nameInput": {
-            ...useInput(project.name),
-            id: "name",
-            label: "Name",
-            autoFocus: true
-        },
-        "descriptionInput": {
-            ...useInput(project.description),
-            id: "description",
-            label: "Description",
-            multiline: true
-        },
-    };
-
-    return (
-        <DetailsDialog
-            dialogTitle="Edit Project Info"
-            open={open}
-            closeDialog={closeDialog}
-            formFieldData={formFieldData}
-        />
-    );
-};
-
-const ActiveBadge = ({isActive = true}) => (
-    <TextBadge
-        className="active-badge"
-        text={isActive ? "Active" : "Inactive"}
-        isHighlighted={isActive}
-    />
-);
-
-const TextBadge = ({className, text, isHighlighted = false}) => (
-    <div
-        className={classNames(
-            "text-badge",
-            {"text-badge--highlighted": isHighlighted},
-            className
-        )}
-    >
-        {text}
     </div>
 );
 

@@ -64,36 +64,6 @@
     }
 }
 
-#project-info {
-
-    .project-info-card-active-section {
-        align-self: flex-start;
-        display: flex;
-        flex: 1;
-    }
-
-    .project-info-card-content-section {
-        flex: 4;
-
-        .project-info-card-name {
-            margin-bottom: $default-spacing;
-        }
-
-        .project-info-card-description {
-            color: $color-text-secondary;
-        }
-    }
-
-    .project-info-card-edit-button {
-        display: flex;
-        justify-content: flex-end;
-        margin: -9px 0;
-
-        svg {
-            font-size: $font-size-subtitle;
-        }
-    }
-}
 #project-used-skills {
 
     .project-used-skills-content {

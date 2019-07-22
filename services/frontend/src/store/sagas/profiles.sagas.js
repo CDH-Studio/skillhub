@@ -1,6 +1,8 @@
 import {call, fork, put} from "redux-saga/effects";
 import api from "api/";
-import {notificationSlice, profilesSlice, profilesRequestsSlice, profileSkillsSlice} from "store/slices";
+import {
+    dialogsStateSlice, notificationSlice, profilesSlice, profilesRequestsSlice, profileSkillsSlice
+} from "store/slices";
 import {Profile} from "utils/models";
 
 function* profilesFetchAll() {
@@ -27,8 +29,12 @@ function* profilesPatchPersonalDetails({payload}, success) {
         throw error;
     }
 
+    yield put (dialogsStateSlice.actions.setDialogState({
+        dialog: "personalDetails",
+        dialogState: false
+    }));
     yield put(notificationSlice.actions.setNotification(
-        {type: "success", message: "Updated successfully", createdAt: new Date()}
+        {type: "success", message: "Updated profile successfully", createdAt: new Date()}
     ));
     yield call(success);
 }

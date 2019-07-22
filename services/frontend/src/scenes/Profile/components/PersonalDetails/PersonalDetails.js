@@ -1,40 +1,32 @@
-
-import React, {useState, useCallback, useLayoutEffect} from "react";
+import React, {useCallback} from "react";
 import connect from "./connect";
 import {useInput} from "utils/hooks";
 import {DetailsDialog, ProfileCard} from "components/";
 import {Paper} from "@material-ui/core";
 
 const PersonalDetails = ({
-    clearPatchError, error, isPatching, isUserProfile, profile, submitPersonalDetails
+    clearPatchError, error, isUserProfile, open, onSubmit, profile, setDialogState
 }) => {
-    const [dialogOpen, setDialogOpen] = useState(false);
-
+    console.log(open);
     const openDialog = () => {
-        setDialogOpen(true);
+        setDialogState("personalDetails", true);
     };
 
-    const closeDialog = useCallback(() => {
+    const closeDialog = () => {
         if (error) {
             clearPatchError();
         }
-        setDialogOpen(false);
-    }, [setDialogOpen, clearPatchError, error]);
-
-    useLayoutEffect(() => {
-        if (!isPatching && !error) {
-            closeDialog();
-        }
-    }, [error, isPatching, clearPatchError, closeDialog]);
+        setDialogState("personalDetails", false);
+    };
 
     return (
         <>
             <PersonalDetailsDialog
                 closeDialog={closeDialog}
                 error={error}
-                key={dialogOpen ? profile : error}
-                onSubmit={submitPersonalDetails}
-                open={dialogOpen}
+                key={open ? profile : error}
+                onSubmit={onSubmit}
+                open={open}
                 profile={profile}
             />
             <Paper className="profile-page-card profile-card-details">
@@ -66,7 +58,7 @@ const PersonalDetailsDialog = ({closeDialog, error, open, profile, onSubmit}) =>
         },
         "roleInput": {
             ...useInput(profile.primaryRole),
-            id: "role",
+            id: "primaryRole",
             label: "Primary Role"
         },
         "phoneInput": {

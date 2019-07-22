@@ -1,4 +1,5 @@
 export {authRequestsSlice} from "./auth.slice";
+export {dialogsStateSlice} from "./dialogsState.slice";
 export {notificationSlice} from "./notification.slice";
 export {profilesSlice, profilesRequestsSlice} from "./profiles.slice";
 export {profileSkillsSlice} from "./profileSkills.slice";

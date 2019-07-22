@@ -1,6 +1,8 @@
 import {call, fork, put} from "redux-saga/effects";
 import api from "api/";
-import {projectsSlice, projectsRequestsSlice, projectProfilesSlice} from "store/slices";
+import {
+    dialogsStateSlice, notificationSlice, projectsSlice, projectsRequestsSlice, projectProfilesSlice
+} from "store/slices";
 import {Project} from "utils/models";
 
 function* projectsFetchAll() {
@@ -14,10 +16,26 @@ function* projectsFetchAll() {
 }
 
 function* projectsPatchProjectDetails({payload}, success) {
-    const result = yield call(api.service("projects").patch, payload.id, payload);
-    const normalizedProject = Project.normalizeProject(result);
+    try {
+        const result = yield call(api.service("projects").patch, payload.id, payload);
+        const normalizedProject = Project.normalizeProject(result);
 
-    yield put(projectsSlice.actions.setProject(normalizedProject));
+        yield put(projectsSlice.actions.setProject(normalizedProject));
+    }
+    catch (error) {
+        yield put(notificationSlice.actions.setNotification(
+            {type: "error", message: error.message, createdAt: new Date()}
+        ));
+        throw error;
+    }
+
+    yield put (dialogsStateSlice.actions.setDialogState({
+        dialog: "projectInfo",
+        dialogState: false
+    }));
+    yield put(notificationSlice.actions.setNotification(
+        {type: "success", message: "Updated project successfully", createdAt: new Date()}
+    ));
 
     yield call(success);  // Mark success before continuing with other actions
 }
