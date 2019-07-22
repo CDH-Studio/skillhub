@@ -4,7 +4,6 @@ import os
 import pandas as pd
 import random
 import sys
-from pathlib import Path
 
 # Add the root path of the project's folder so that deeply nested
 # files and folders can access the top-level files and folders (like utils)
@@ -40,8 +39,10 @@ vector_weight_map = {
     "comment_count": 1.3,
 }
 
+
 def calc_weight(ratio: float, base_weight: float) -> float:
     return ratio * base_weight
+
 
 def heuristic_model(vector: pd.Series) -> bool:
     """
@@ -51,24 +52,24 @@ def heuristic_model(vector: pd.Series) -> bool:
     to be classified as a contributor.
 
     Since this is used to generate the labels for the ML model training data, an element
-    of randomness is injected into the classifications to regularize the data so that 
+    of randomness is injected into the classifications to regularize the data so that
     the model doesn't (heavily) overfit. This also helps to match the domain whereby someone
     might have been a contributor all along, but just didn't make great use of Jira (i.e. random sampling).
     """
     score = 0
-    
+
     # Calculate the score by summing up all of the weighted contribution ratios
     for column in vector.index:
         if "ratio" not in column:
             ratio_column = column + "_ratio"
             score += calc_weight(vector[ratio_column], vector_weight_map[column])
-        
+
     # Normalize score by number of columns
     score /= len(vector.index)
-    
+
     # Multiply the score by a random factor to regularize the data
     score *= random.randint(8, 12) * 0.1
-    
+
     # Randomly say that some people did or didn't contribute to regularize the data
     if score > WEIGHT_CUTOFF:
         # 1/20 (5%) chance to reject a contributor as a non-contributor
