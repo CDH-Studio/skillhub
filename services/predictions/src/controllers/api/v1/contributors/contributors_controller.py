@@ -1,6 +1,7 @@
 import logging
 from flask import jsonify, request, Response
 from werkzeug.exceptions import BadRequest, InternalServerError
+from middleware import api_key_authentication
 from predictors.contributors_predictor import ContributorsPredictor
 from utils import LoggingUtils
 from utils.NestableBlueprint import NestableBlueprint
@@ -14,6 +15,7 @@ predictor = ContributorsPredictor()
 
 
 @contributors_controller.route("/predict", methods=["POST"])
+@api_key_authentication()
 @LoggingUtils.log_execution_time("Prediction processing finished")
 def predict_contributors() -> Response:
     issues = request.get_json()

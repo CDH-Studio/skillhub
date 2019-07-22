@@ -40,14 +40,14 @@ You can then access the frontend at `localhost:3000`, and the backend at `localh
 
 ## Running the Scraper
 
-The Scraper is currently setup to pull data from the temporary [Jira instance](https://skillhubca.atlassian.net) that Devin setup.
+The Scraper is currently setup to pull data from the CDH Studio accessible [Jira instance](https://jira.ised-isde.canada.ca).
 
-In order to run the scraper locally, you'll need to have an account on the Jira instance and also have setup an API token (see [here](https://confluence.atlassian.com/cloud/api-tokens-938839638.html) for a how-to).
+In order to run the scraper locally, you'll need to have an account on the Jira instance.
 
-Once you have your API token, you'll need to create a `.env` file in `services/scraper`, with the following format:
+Once you have your account, you'll need to create a `.env` file in `services/scraper`, with the following format:
 
 ```
-JIRA_AUTH_TOKEN=jira_username:api_token
+JIRA_AUTH_TOKEN=jira_username:jira_password
 ```
 
 Once the `.env` is created, running `make start` should bring up the scraper without any errors.

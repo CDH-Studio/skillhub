@@ -1,6 +1,6 @@
 const Profile = require("./Profile");
 
-describe("processProfilesSkills", () => {
+describe("liftProfilesSkills", () => {
     it("takes just the profileSkills and removes the skill data from an array of profiles", () => {
         const profiles = [
             // Multiple profileSkills at once
@@ -20,18 +20,18 @@ describe("processProfilesSkills", () => {
             {profileSkills: []}
         ];
 
-        expect(Profile.processProfilesSkills(profiles)).toEqual(processedProfiles);
+        expect(Profile.liftProfilesSkills(profiles)).toEqual(processedProfiles);
     });
 
     it("takes just the profileSkills and removes the skill data from a single profile", () => {
         const profile = {skills: [{profileSkills: {id: "1"}}, {profileSkills: {id: "3"}}]};
         const processedProfile = {profileSkills: [{id: "1"}, {id: "3"}]};
 
-        expect(Profile.processProfilesSkills(profile)).toEqual(processedProfile);
+        expect(Profile.liftProfilesSkills(profile)).toEqual(processedProfile);
     });
 
     it("returns an empty array when there are no projects to process", () => {
-        expect(Profile.processProfilesSkills()).toEqual([]);
-        expect(Profile.processProfilesSkills([])).toEqual([]);
+        expect(Profile.liftProfilesSkills()).toEqual([]);
+        expect(Profile.liftProfilesSkills([])).toEqual([]);
     });
 });

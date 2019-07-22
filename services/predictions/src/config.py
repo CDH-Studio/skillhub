@@ -4,3 +4,5 @@ import os
 
 MODELS_FOLDER = os.path.join(".", "src", "trained_models")
 CONTRIBUTORS_MODEL = os.path.join(MODELS_FOLDER, "2019-07-15-14-17-41-extra_trees_f1_adasyn_random_5_weight_5.joblib")
+
+SKILLHUB_API_KEY = os.getenv("SKILLHUB_API_KEY", "5a2bd29d9f044bd294ea75af1d431365")

@@ -1,7 +1,7 @@
 class Profile {
     /* Extracts the profileSkills from the associated profile object
      * and replaces the skills as a top-level attribute of the profile object. */
-    static processProfileSkills(profile) {
+    static liftProfileSkills(profile) {
         const processedProfile = {...profile};
         delete processedProfile.skills;
 
@@ -18,13 +18,12 @@ class Profile {
 
     /* Takes in an array of profiles or a single profile and returns an array of processed
      * profiles or a single processed profile object */
-    static processProfilesSkills(profiles = []) {
+    static liftProfilesSkills(profiles = []) {
         if (!Array.isArray(profiles)) {
-            return this.processProfileSkills(profiles);
-        }
-        else {
+            return this.liftProfileSkills(profiles);
+        } else {
             return profiles.map((profile) => (
-                this.processProfileSkills(profile)
+                this.liftProfileSkills(profile)
             ));
         }
     }

@@ -15,5 +15,8 @@ module.exports = (DataTypes) => ({
     },
     lastActive: {
         type: DataTypes.DATE
+    },
+    jiraKey: {
+        type: DataTypes.STRING
     }
 });
