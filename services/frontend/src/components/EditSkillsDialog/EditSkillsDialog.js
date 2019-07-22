@@ -4,8 +4,8 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import "./EditSkillsDialog.scss";
 
-const EditSkillsDialog = ({dbSkills, skills, handleCancel, handleSubmit, open}) => {
-    const sortedSkills = Object.values(dbSkills).sort((a, b) => a.name.localeCompare(b.name));
+const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, open}) => {
+    const sortedSkills = Object.values(databaseSkills).sort((a, b) => a.name.localeCompare(b.name));
 
     let currentChips = skills;
 
