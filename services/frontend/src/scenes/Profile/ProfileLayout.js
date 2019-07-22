@@ -189,7 +189,6 @@ const Skills = ({addNewProfileSkill, addNewSkill, sectionName, profile, database
     const handleSubmit = (updatedSkills) => {
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
         updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
-        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, skills));
         console.log(profile.newSkillObjects);
         profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
         console.log(profile.newProfileSkillsObjects);
