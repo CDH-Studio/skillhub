@@ -28,7 +28,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({databaseSkills: databaseSkills, isLoading, isUserProfile, profile, projects, skills}) => (
+const ProfileLayout = ({databaseSkills, isLoading, isUserProfile, profile, projects, skills}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
