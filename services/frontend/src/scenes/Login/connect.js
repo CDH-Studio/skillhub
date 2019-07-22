@@ -1,16 +1,24 @@
 import {connect} from "react-redux";
 import {authRequestsSlice} from "store/";
 
-const errorMessageMap = (message) => {
-    if (message === "Invalid login") {
-        return "Wrong email or password";
-    } else if (message === "Missing credentials") {
-        return "Form cannot be empty";
-    } else if (message === "Invalid email") {
-        // Ignore invalid email messages in favour of the `isEmailInvalid` prop
-        return null;
-    } else {
-        return message;
+const errorMessageMap = (error) => {
+    if (error) {
+        const message = error.message;
+        if (message === "Validation error") {
+            return "This user already exists";
+        } else if (message === "Missing credentials") {
+            return "Form cannot be empty";
+        } else if (message === "Invalid email") {
+            return "Invalid Email";
+        } else {
+            return message;
+        }
+    }
+};
+
+const checkInvalidEmail = (error) => {
+    if (error && error.message === "Invalid email") {
+        return true;
     }
 };
 
@@ -19,7 +27,7 @@ const mapStateToProps = (state) => {
 
     return {
         errorMessage: errorMessageMap(loginState.error),
-        isEmailInvalid: loginState.error === "Invalid email",
+        inInvalidEmail: checkInvalidEmail(loginState.error),
         isLoading: loginState.loading
     };
 };

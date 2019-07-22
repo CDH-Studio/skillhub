@@ -1,10 +1,10 @@
 import React, {useMemo, useState} from "react";
-import {useInput} from "utils/hooks";
 import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
+import PersonalDetails from "./components";
 import {
-    EditSkillsDialog, LoadingValidator, NavSidebar, DetailsDialog, ProfileCard, ProjectCard,
+    EditSkillsDialog, LoadingValidator, NavSidebar, ProjectCard,
     ScrollContainer, SkillBadges
 } from "components/";
 import {Profile, Project} from "utils/models";
@@ -28,7 +28,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({projects, profile, skills, isLoading}) => (
+const ProfileLayout = ({isLoading, isUserProfile, profile, projects, skills}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -40,6 +40,7 @@ const ProfileLayout = ({projects, profile, skills, isLoading}) => (
                         containerClass={containerClass}
                     />
                     <ProfileContent
+                        isUserProfile={isUserProfile}
                         projects={projects}
                         profile={profile}
                         skills={skills}
@@ -89,85 +90,6 @@ const renderSectionComponent = (sectionName, sectionProps) => {
         default:
             return null;
     }
-};
-
-const PersonalDetails = ({profile}) => {
-    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
-
-    const openDialog = () => {
-        setPersonalDetailsDialogOpen(true);
-    };
-
-    const closeDialog = () => {
-        setPersonalDetailsDialogOpen(false);
-    };
-
-    return (
-        <>
-            <PersonalDetailsDialog
-                profile={profile}
-                open={personalDetailsDialogOpen}
-                closeDialog={closeDialog}
-            />
-            <Paper className="profile-page-card profile-card-details">
-                <div className="profile-card-details-content">
-                    <ProfileCard
-                        key={profile.name}
-                        page="profile"
-                        {...profile}
-                    />
-                    <IconButton className="profile-card-details-edit-button" onClick={openDialog} color="primary">
-                        <Create />
-                    </IconButton>
-                </div>
-            </Paper>
-        </>
-    );
-};
-
-const PersonalDetailsDialog = ({closeDialog, open, profile}) => {
-    const formFieldData = {
-        "nameInput": {
-            ...useInput(profile.name),
-            id: "name",
-            label: "Name",
-            autoFocus: true
-        },
-        "emailInput": {
-            ...useInput(profile.contactEmail),
-            id: "contactEmail",
-            label: "Contact Email"
-        },
-        "roleInput": {
-            ...useInput(profile.primaryRole),
-            id: "role",
-            label: "Primary Role"
-        },
-        "phoneInput": {
-            ...useInput(profile.phone),
-            id: "phone",
-            label: "Phone Number"
-        },
-        "slackInput": {
-            ...useInput(profile.slackHandle),
-            id: "slackHandle",
-            label: "Slack Handle"
-        },
-        "rocketChatInput": {
-            ...useInput(profile.rocketChatHandle),
-            id: "rocketChatHandle",
-            label: "Rocket Chat Handle"
-        }
-    };
-
-    return (
-        <DetailsDialog
-            dialogTitle="Edit Personal Details"
-            open={open}
-            closeDialog={closeDialog}
-            formFieldData={formFieldData}
-        />
-    );
 };
 
 const Skills = ({sectionName, profile, skills}) => {

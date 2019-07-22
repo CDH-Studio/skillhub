@@ -158,7 +158,7 @@ export const createRequestSlice = (mountpoint, type) => {
                 // Reset the flag for the next request
                 successCalled = false;
             } catch (e) {
-                yield put(failureAction(e.message));
+                yield put(failureAction(e));
             }
         };
     };

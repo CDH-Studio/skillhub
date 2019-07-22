@@ -11,6 +11,7 @@ export {default as LoadingButton} from "./LoadingButton";
 export {default as LoadingValidator} from "./LoadingValidator";
 export {default as Navbar} from "./Navbar";
 export {default as NavSidebar} from "./NavSidebar";
+export {default as PopupNotifier} from "./PopupNotifier";
 export {default as ProfileCard} from "./ProfileCard";
 export {default as ProjectCard} from "./ProjectCard";
 export {default as ScrollContainer} from "./ScrollContainer";

@@ -1,5 +1,5 @@
 import {IconButton} from "@material-ui/core";
-import {ChevronRight, Email, LocalPhone} from "@material-ui/icons";
+import {Create, ChevronRight, Email, LocalPhone} from "@material-ui/icons";
 import React from "react";
 import {AvatarIcon, SkillBadges} from "components/";
 import "./ProfileCard.scss";
@@ -8,7 +8,7 @@ import classNames from "classnames";
 
 const DISPLAY_SKILL_COUNT = 4;
 
-const ProfileCard = ({id, page, name, primaryRole, contactEmail, phone, skills}) => {
+const ProfileCard = ({id, page, openDialog, name, primaryRole, contactEmail, phone, skills}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     return (
         <div className="profile-card">
@@ -59,6 +59,22 @@ const ProfileCard = ({id, page, name, primaryRole, contactEmail, phone, skills})
                             <ChevronRight />
                         </IconButton>
                     </Link>
+                </div>
+            </div>
+            <div
+                className={classNames(
+                    "profile-card-extras",
+                    {"profile-card-extras--profile": (page === "userProfile")}
+                )}
+            >
+                <div className="profile-card-extras-edit">
+                    <IconButton
+                        className="profile-card-extras-edit-button"
+                        onClick={openDialog}
+                        color="primary"
+                    >
+                        <Create />
+                    </IconButton>
                 </div>
             </div>
         </div>

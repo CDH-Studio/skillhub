@@ -5,8 +5,8 @@ import SignUpLayout from "./SignUpLayout";
 const SignUp = ({errorMessage, isEmailInvalid, isLoading, onSignUp}) => (
     <SignUpLayout
         errorMessage={errorMessage}
-        isLoading={isLoading}
         isEmailInvalid={isEmailInvalid}
+        isLoading={isLoading}
         onSignUp={onSignUp}
     />
 );
