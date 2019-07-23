@@ -28,7 +28,9 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({addNewProfileSkill, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills, isLoading}) => (
+const ProfileLayout = ({
+    addNewProfileSkill, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills, isLoading
+}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -95,88 +97,10 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const PersonalDetails = ({profile}) => {
-    const [personalDetailsDialogOpen, setPersonalDetailsDialogOpen] = useState(false);
-
-    const openDialog = () => {
-        setPersonalDetailsDialogOpen(true);
-    };
-
-    const closeDialog = () => {
-        setPersonalDetailsDialogOpen(false);
-    };
-
-    return (
-        <>
-            <PersonalDetailsDialog
-                profile={profile}
-                open={personalDetailsDialogOpen}
-                closeDialog={closeDialog}
-            />
-            <Paper className="profile-page-card profile-card-details">
-                <div className="profile-card-details-content">
-                    <ProfileCard
-                        key={profile.name}
-                        page="profile"
-                        {...profile}
-                    />
-                    <IconButton className="profile-card-details-edit-button" onClick={openDialog} color="primary">
-                        <Create />
-                    </IconButton>
-                </div>
-            </Paper>
-        </>
-    );
-};
-
-const PersonalDetailsDialog = ({closeDialog, open, profile}) => {
-    const formFieldData = {
-        "nameInput": {
-            ...useInput(profile.name),
-            id: "name",
-            label: "Name",
-            autoFocus: true
-        },
-        "emailInput": {
-            ...useInput(profile.contactEmail),
-            id: "contactEmail",
-            label: "Contact Email"
-        },
-        "roleInput": {
-            ...useInput(profile.primaryRole),
-            id: "role",
-            label: "Primary Role"
-        },
-        "phoneInput": {
-            ...useInput(profile.phone),
-            id: "phone",
-            label: "Phone Number"
-        },
-        "slackInput": {
-            ...useInput(profile.slackHandle),
-            id: "slackHandle",
-            label: "Slack Handle"
-        },
-        "rocketChatInput": {
-            ...useInput(profile.rocketChatHandle),
-            id: "rocketChatHandle",
-            label: "Rocket Chat Handle"
-        }
-    };
-
-    return (
-        <DetailsDialog
-            dialogTitle="Edit Personal Details"
-            open={open}
-            closeDialog={closeDialog}
-            formFieldData={formFieldData}
-        />
-    );
-};
-
 const Skills = ({addNewProfileSkill, addNewSkill, sectionName, profile, databaseSkills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
+    console.log(databaseSkills);
 
     const openDialog = () => {
         setEditSkillsDialogOpen(true);
@@ -189,10 +113,9 @@ const Skills = ({addNewProfileSkill, addNewSkill, sectionName, profile, database
     const handleSubmit = (updatedSkills) => {
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
         updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
-        console.log(profile.newSkillObjects);
         profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
-        console.log(profile.newProfileSkillsObjects);
-        profileUpdated.newProfileSkillsObjects.map((profileSkill) => addNewProfileSkill(profileSkill))
+        // console.log(profile.newProfileSkillsObjects);
+        // profileUpdated.newProfileSkillsObjects.map((profileSkill) => addNewProfileSkill(profileSkill));
         closeDialog();
     };
 
@@ -212,7 +135,7 @@ const Skills = ({addNewProfileSkill, addNewSkill, sectionName, profile, database
             <div className="profile-card-skills-header-section">
                 <h2>{sectionName}</h2>
                 <IconButton className="profile-card-edit-skills-button" onClick={openDialog} color="primary">
-                    <Create />
+                    <Create/>
                 </IconButton>
             </div>
             <Paper className="profile-page-card profile-card-skills">

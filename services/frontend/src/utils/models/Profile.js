@@ -107,13 +107,12 @@ export default class Profile {
 
     static addSkills = (profile, updatedSkills, skills) => {
         const currentSkillsLC = profile.skills.map((skill) => skill.name.toLowerCase());
-        const newProfileSkillsObjects = [];
         const newSkillsObjects = [];
 
         /* Returns a list of the new skills entered */
         const newSkills = removeDuplicate(updatedSkills.reduce((acc, skillName) => {
             if (!currentSkillsLC.includes(skillName.toLowerCase())) {
-                return [...acc, skillName];
+                return [...acc, skillName.toLowerCase()];
             }
             return acc;
         }, []));
@@ -121,15 +120,11 @@ export default class Profile {
         /* Adds skill from database */
         if (newSkills.length > 0) {
             for (const skill of Object.values(skills)) {
-                const skillName = skill.name;
                 const skillNameLC = skill.name.toLowerCase();
                 if (newSkills.includes(skillNameLC)) {
                     profile.skills.push(skill);
-                    newSkills.splice(newSkills.indexOf(skillName), 1);
-                    newProfileSkillsObjects.push(new ProfileSkill ({
-                        profileId: profile.id,
-                        skillId: skill.id
-                    }));
+                    newSkills.splice(newSkills.indexOf(skillNameLC), 1);
+
                 }
             }
         }
@@ -140,24 +135,14 @@ export default class Profile {
                 const newSkill = new Skill({name: skillName});
                 profile.skills.push(newSkill);
                 newSkillsObjects.push(newSkill);
-                newProfileSkillsObjects.push(new ProfileSkill ({
-                    profileId: profile.id,
-                    skillId: newSkill.id
-                }));
             }
         }
         profile.newSkillObjects = newSkillsObjects;
-        profile.newProfileSkillsObjects = newProfileSkillsObjects;
-        console.log(profile);
         return profile;
     };
 
     static removeSkills = (profile, updatedSkills) => {
-        for (const skill of profile.skills) {
-            if (!updatedSkills.includes(skill.name)) {
-                profile.skills.splice(profile.skills.indexOf(skill), 1);
-            }
-        }
+        profile.skills = profile.skills.filter((skill) => updatedSkills.includes(skill.name));
         return profile;
     };
 }

@@ -3,6 +3,8 @@ const errors = require("@feathersjs/errors");
 const {restrictToOwner} = require("feathers-authentication-hooks");
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const {findOrCreate, parameterizedHydrate, preventBulkDuplication} = require("hooks/");
+const hydrate = require("feathers-sequelize/hooks/hydrate");
+const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
 
 const EMAIL_REGEX = /^\S+@\S+$/;
@@ -20,7 +22,14 @@ const includeSkills = () => (context) => {
 
 const liftProfilesSkills = () => (context) => {
     context.result = Profile.liftProfilesSkills(context.result);
-    return context;
+}
+const addSkills = () => async (context) => {
+    const {skills} = context.data;
+
+    if (skills) {
+        const profile = context.result;
+        await profile.addSkills(skills);
+    }
 };
 
 const validatePersonalDetails = () => (context) => {
@@ -61,7 +70,7 @@ module.exports = {
         all: [],
         find: [dehydrate(), liftProfilesSkills()],
         get: [dehydrate(), liftProfilesSkills()],
-        create: [parameterizedHydrate()],
+        create: [parameterizedHydrate(), hydrate(), addSkills(), dehydrate()],
         update: [],
         patch: [dehydrate(), liftProfilesSkills()],
         remove: []
