@@ -34,6 +34,9 @@ inspect-database:
 generate-contributors-model-training-data:
 	bash ./scripts/generate_contributors_model_training_data.sh "$(JIRA_AUTH_TOKEN)"
 
+train-contributors-model:
+	bash ./scripts/train_contributors_model.sh "$(DATASET_HASH)"
+
 #################################################################################
 # SELF DOCUMENTING COMMANDS
 #################################################################################
