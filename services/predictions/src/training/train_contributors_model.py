@@ -94,7 +94,7 @@ def find_best_model_grid_search(
 
 # Main
 
-def train(training_data_hash: str = ""):
+def train(training_data_hash: str = "") -> None:
     # Load data set
     data_set = load_dataset(TRAINING_DATA_FILE.format(training_data_hash))
     print("Loaded data set")
