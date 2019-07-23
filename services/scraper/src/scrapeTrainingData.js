@@ -19,12 +19,10 @@ const jiraScraper = new JiraScraper();
 switch (modelToScrapeFor) {
     case "contributors":
         (async () => {
-            const scrapeProjectIssues = async (project = "") => await jiraScraper.getIssues(project);
-
             try {
                 const projects = await jiraScraper.getProjects();
 
-                const listsOfIssues = await chainingPromisePool(projects, scrapeProjectIssues);
+                const listsOfIssues = await chainingPromisePool(projects, jiraScraper.getIssues.bind(jiraScraper));
                 const issues = [].concat(...listsOfIssues);
 
                 fs.writeFileSync("./raw_issues.json", JSON.stringify(issues));
@@ -33,6 +31,8 @@ switch (modelToScrapeFor) {
             } catch (e) {
                 console.log(e);
                 console.log("Ya dun goofed");
+
+                process.exitCode = 1;
             }
         })();
         break;

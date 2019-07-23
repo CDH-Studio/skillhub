@@ -27,7 +27,7 @@ TRAINED_MODEL_FILE = os.path.join(TRAINED_MODELS_FOLDER, "{}-{{}}-{}-{}-{}.jobli
     CURRENT_DATE, MODEL_TYPE, SCORING_ALGORITHM, SAMPLING_ALGORITHM
 ))
 
-# Parameter grids for doing Grid Search
+# Parameter grid for doing Grid Search
 
 params_grid_trees = {
     "bootstrap": [True],
@@ -91,6 +91,8 @@ def find_best_model_grid_search(
 
     return grid_search.best_estimator_
 
+
+# Main
 
 def train(training_data_hash: str = ""):
     # Load data set

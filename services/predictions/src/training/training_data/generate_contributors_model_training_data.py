@@ -14,7 +14,7 @@ sys.path.append(os.path.abspath(os.path.join(__file__, "../../..")))  # noqa
 from data_models.processed_jira_data import ProcessedJiraData
 
 
-# File setup
+# File configuration
 
 TRAINING_DATA_FOLDER = os.path.dirname(__file__)
 RAW_ISSUES_FILE = os.path.join(TRAINING_DATA_FOLDER, "raw_issues.json")
@@ -23,7 +23,7 @@ TRAINING_DATA_FILE = os.path.join(TRAINING_DATA_FOLDER, "{}--training-data.csv")
 
 # Heuristic Model
 
-# The contribution ratio at which we can say that someone 'contributed'
+# The ratio at which we can say that someone 'contributed'
 WEIGHT_CUTOFF = 0.05
 
 # Somewhat arbitrary weight to assign to each column; somewhat derived from Jira analysis
