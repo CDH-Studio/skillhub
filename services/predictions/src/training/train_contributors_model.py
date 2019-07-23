@@ -49,6 +49,13 @@ def load_dataset(training_data_file: str) -> pd.DataFrame:
     # Sort the columns to make sure they are always in a consistent order
     data_set = raw_data_set.reindex(sorted(raw_data_set.columns), axis=1)
 
+    # Drop the 'projectKey' and 'name' columns if they exist
+    if "projectKey" in data_set.columns:
+        data_set = data_set.drop(["projectKey"], axis=1)
+
+    if "name" in data_set.columns:
+        data_set = data_set.drop(["name"], axis=1)
+
     return data_set
 
 
@@ -114,8 +121,10 @@ def train(training_data_hash: str = "") -> None:
     print(getattr(sklearn.metrics, "{}_score".format(SCORING_ALGORITHM))(y_test, y_pred))
 
     # Save the best model to a file
-    joblib.dump(clf, TRAINED_MODEL_FILE.format(training_data_hash))
-    print("Saved model to '{}'".format(TRAINED_MODEL_FILE))
+    model_file = TRAINED_MODEL_FILE.format(training_data_hash)
+    joblib.dump(clf, model_file)
+
+    print("Saved model to '{}'".format(model_file))
 
 
 if __name__ == "__main__":
