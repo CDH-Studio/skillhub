@@ -64,7 +64,7 @@ def heuristic_model(vector: pd.Series) -> bool:
             ratio_column = column + "_ratio"
             score += calc_weight(vector[ratio_column], vector_weight_map[column])
 
-    # Normalize score by number of types of columns 
+    # Normalize score by number of types of columns
     # (i.e. divide by 2 so that the 'ratio' columns aren't counted)
     score /= len(vector.index) / 2
 

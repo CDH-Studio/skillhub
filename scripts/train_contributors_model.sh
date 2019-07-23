@@ -21,4 +21,7 @@ pipenv install
 echo "Training model using dataset ${dataset_hash}..."
 pipenv run python3 src/training/train_contributors_model.py --training-data-hash $dataset_hash
 
+# Go back to project root
+
+cd ../../
 echo "Done."
