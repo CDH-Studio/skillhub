@@ -11,7 +11,7 @@ const Profile = ({
             isUserProfile={isUserProfile}
             profile={profile}
             projects={projects}
-            skills={skills}
+            databaseSkills={skills}
         />
     );
 };

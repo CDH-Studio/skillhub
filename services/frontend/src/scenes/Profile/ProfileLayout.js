@@ -28,7 +28,7 @@ const sections = [
     }
 ];
 
-const ProfileLayout = ({isLoading, isUserProfile, profile, projects, skills}) => (
+const ProfileLayout = ({databaseSkills, isLoading, isUserProfile, profile, projects, skills}) => (
     <ScrollContainer className="profile">
         <LoadingValidator
             dependencies={[profile]}
@@ -40,6 +40,7 @@ const ProfileLayout = ({isLoading, isUserProfile, profile, projects, skills}) =>
                         containerClass={containerClass}
                     />
                     <ProfileContent
+                        databaseSkills={databaseSkills}
                         isUserProfile={isUserProfile}
                         projects={projects}
                         profile={profile}
@@ -92,7 +93,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const Skills = ({sectionName, profile, skills}) => {
+const Skills = ({sectionName, profile, databaseSkills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
@@ -106,7 +107,7 @@ const Skills = ({sectionName, profile, skills}) => {
 
     const handleSubmit = (updatedSkills) => {
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
-        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, skills));
+        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
         closeDialog();
     };
 
@@ -117,6 +118,7 @@ const Skills = ({sectionName, profile, skills}) => {
     return (
         <>
             <EditSkillsDialog
+                databaseSkills={databaseSkills}
                 skills={profileUpdated.skills.map((skill) => skill.name)}
                 open={editSkillsDialogOpen}
                 handleCancel={handleCancel}
