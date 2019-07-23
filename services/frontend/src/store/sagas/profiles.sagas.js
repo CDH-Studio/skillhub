@@ -21,6 +21,7 @@ function* profilesPatchPersonalDetails({payload}, success) {
         const normalizedProfile = Profile.normalizeProfile(result);
 
         yield put(profilesSlice.actions.setProfile(normalizedProfile));
+        yield call(success);  // Mark success before continuing with other actions
     }
     catch (error) {
         yield put(notificationSlice.actions.setNotification(
@@ -36,7 +37,6 @@ function* profilesPatchPersonalDetails({payload}, success) {
     yield put(notificationSlice.actions.setNotification(
         {type: "success", message: "Updated profile successfully", createdAt: new Date()}
     ));
-    yield call(success);
 }
 
 function* profilesSaga() {

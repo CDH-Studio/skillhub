@@ -2,13 +2,13 @@ import {connect} from "react-redux";
 import {dialogsStateSlice, projectsRequestsSlice} from "store/slices";
 
 const mapStateToProps = (state) => ({
-    error: projectsRequestsSlice.patchProjectDetails.selectors.getError(state),
+    error: projectsRequestsSlice.patchProjectInfo.selectors.getError(state),
     open: dialogsStateSlice.selectors.getProjectInfoDialogState(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
     onSubmit: (id, name, description) => dispatch(
-        projectsRequestsSlice.patchProjectDetails.actions.request({
+        projectsRequestsSlice.patchProjectInfo.actions.request({
             id, name, description
         })
     ),
@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
         })
     ),
     clearPatchError: () => dispatch(
-        projectsRequestsSlice.patchProjectDetails.actions.clear()
+        projectsRequestsSlice.patchProjectInfo.actions.clear()
     )
 });
 

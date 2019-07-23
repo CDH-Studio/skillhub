@@ -12,9 +12,9 @@ function* appBoot() {
     yield put(skillsRequestsSlice.fetchAll.actions.request());
     yield take(skillsRequestsSlice.fetchAll.actions.success);
 
-    yield put(projectChangeRecordsRequestsSlice.fetchAll.actions.request());
     yield put(projectsRequestsSlice.fetchAll.actions.request());
     yield put(profilesRequestsSlice.fetchAll.actions.request());
+    yield put(projectChangeRecordsRequestsSlice.fetchAll.actions.request());
 }
 
 /* The first app boot is handled when the authenticated user navigates to

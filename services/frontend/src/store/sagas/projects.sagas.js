@@ -16,12 +16,13 @@ function* projectsFetchAll() {
     yield put(projectProfilesSlice.actions.addProjectProfiles(projectProfiles));
 }
 
-function* projectsPatchProjectDetails({payload}, success) {
+function* projectsPatchProjectInfo({payload}, success) {
     try {
         const result = yield call(api.service("projects").patch, payload.id, payload);
         const normalizedProject = Project.normalizeProject(result);
 
         yield put(projectsSlice.actions.setProject(normalizedProject));
+        yield call(success);  // Mark success before continuing with other actions
     }
     catch (error) {
         // On failure set the error to show up in the dialog box and re-throw
@@ -44,7 +45,6 @@ function* projectsPatchProjectDetails({payload}, success) {
     yield put(notificationSlice.actions.setNotification(
         {type: "success", message: "Updated project successfully", createdAt: new Date()}
     ));
-    yield call(success);
 }
 
 function* projectsSaga() {
@@ -52,8 +52,8 @@ function* projectsSaga() {
         projectsFetchAll
     ));
 
-    yield fork(projectsRequestsSlice.patchProjectDetails.watchRequestSaga(
-        projectsPatchProjectDetails
+    yield fork(projectsRequestsSlice.patchProjectInfo.watchRequestSaga(
+        projectsPatchProjectInfo
     ));
 }
 

@@ -35,23 +35,25 @@ const validateProjectInfo = () => (context) => {
 
 /*  Checks the passed arguments (context.data) versus the existing project (projectBeforeUpdate)
  *  to and creates changelogs for every changed property. */
-const createChangeLog = () => (context) => {
+const createChangeLog = () => async (context) => {
     const projectId = context.data.id;
     const userId = context.params.user.id;
 
-    context.app.service("projects").get(projectId).then((projectBeforeUpdate) => {
-        for (const fieldKey of Object.keys(context.data)) {
-            if (context.data[fieldKey] !== projectBeforeUpdate[fieldKey]) {
-                context.app.service("projectChangeRecords").create({
-                    projectId: projectId,
-                    userId: userId,
-                    oldValue: projectBeforeUpdate[fieldKey],
-                    newValue: context.data[fieldKey],
-                    changedAttribute: fieldKey
-                });
-            }
+    const projectBeforeUpdate = await context.app.service("projects").get(projectId);
+
+    for (const fieldKey of Object.keys(context.data)) {
+        if (context.data[fieldKey] !== projectBeforeUpdate[fieldKey]) {
+            context.app.service("projectChangeRecords").create({
+                projectId: projectId,
+                userId: userId,
+                oldValue: projectBeforeUpdate[fieldKey],
+                newValue: context.data[fieldKey],
+                changedAttribute: fieldKey
+            });
         }
-    });
+    }
+
+    return context;
 };
 
 const liftProjectsProfiles = () => (context) => {
@@ -102,8 +104,8 @@ module.exports = {
         create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [
-            createChangeLog(),
             validateProjectInfo(),
+            createChangeLog(),
             includeAssociations()
         ],
         remove: []

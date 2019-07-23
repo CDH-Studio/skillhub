@@ -13,9 +13,8 @@ function* projectChangeRecordsFetchAll() {
     yield put(projectChangeRecordsSlice.actions.setProjectChangeRecords(normalizedProjectChangeRecords));
 }
 
-function* projectChangeRecordsAddRecord({payload}, success) {
+function* projectChangeRecordsAddRecord({payload}) {
     yield call(api.service("projectChangeRecords").create, payload);
-    yield call(success);
 }
 
 function* projectsSaga() {

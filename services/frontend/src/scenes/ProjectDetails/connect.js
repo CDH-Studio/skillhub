@@ -27,12 +27,4 @@ const mapStateToProps = (state) => {
     return mappedState;
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    submitProjectInfo: (id, name, description) => dispatch(
-        projectsRequestsSlice.patchProjectDetails.actions.request({
-            id, name, description
-        })
-    )
-});
-
-export default connect(mapStateToProps, mapDispatchToProps);
+export default connect(mapStateToProps, null);
