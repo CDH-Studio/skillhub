@@ -1,16 +1,25 @@
+/* Representation of a Jira user that can be converted to a Skillhub 'user' (profile). */
 class JiraUser {
-    constructor({key, displayName, emailAddress}) {
-        this.key = key;
+    constructor({displayName = "", emailAddress = ""}) {
         this.displayName = displayName;
         this.emailAddress = emailAddress;
     }
 
     toSkillhubUser() {
         return {
-            name: this.displayName,
+            name: reformatLastNameFirst(this.displayName),
             contactEmail: this.emailAddress
         };
     }
 }
+
+const reformatLastNameFirst = (name) => {
+    if (name.includes(",")) {
+        const splitName = name.split(",").map((n) => n.trim());
+        return `${splitName[1]} ${splitName[0]}`;
+    }
+
+    return name;
+};
 
 module.exports = JiraUser;

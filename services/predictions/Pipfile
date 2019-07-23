@@ -12,6 +12,7 @@ requests = "==2.19.1"
 pandas = "==0.24.2"
 joblib = "==0.13.2"
 scikit-learn = "==0.21.2"
+werkzeug = "==0.15.5"
 
 [requires]
 python_version = "3"

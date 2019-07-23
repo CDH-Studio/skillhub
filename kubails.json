@@ -14,7 +14,12 @@
     "__services": {
         "backend": {
             "container_port": "5000",
-            "env": [],
+            "env": [
+                {
+                    "name": "PREDICTIONS_PROTOCOL",
+                    "value": "https"
+                }
+            ],
             "external_port": "80",
             "folder": "backend",
             "host": "backend.skillhub.ca",
@@ -28,8 +33,9 @@
                 "file": ".env.encrypted",
                 "name": "backend-secrets",
                 "variables": [
-                    "TOKEN_SECRET",
-                    "SCRAPER_API_KEY"
+                    "PREDICTIONS_API_KEY",
+                    "SCRAPER_API_KEY",
+                    "TOKEN_SECRET"
                 ]
             },
             "templates": [
@@ -112,7 +118,13 @@
             "pre_startup_command": null,
             "production_replicas": 1,
             "replicas": 1,
-            "secrets": {},
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "predictions-secrets",
+                "variables": [
+                    "SKILLHUB_API_KEY"
+                ]
+            },
             "templates": [
                 "deployment",
                 "ingress",
@@ -126,11 +138,11 @@
             "env": [
                 {
                     "name": "JIRA_HOST",
-                    "value": "https://skillhubca.atlassian.net"
+                    "value": "https://jira.ised-isde.canada.ca"
                 },
                 {
                     "name": "JIRA_PLATFORM",
-                    "value": "cloud"
+                    "value": "server"
                 },
                 {
                     "name": "BACKEND_PROTOCOL",
