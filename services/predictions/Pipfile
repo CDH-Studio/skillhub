@@ -8,11 +8,12 @@ flask = "==1.1.1"
 flask-cors = "==3.0.8"
 gunicorn = "==19.9.0"
 python-dotenv = "==0.8.2"
-requests = "==2.19.1"
+requests = "==2.20.0"
 pandas = "==0.24.2"
 joblib = "==0.13.2"
 scikit-learn = "==0.21.2"
 werkzeug = "==0.15.5"
+imbalanced-learn = "==0.5.0"
 
 [requires]
 python_version = "3"

@@ -9,6 +9,7 @@ kind: Service
 metadata:
     name: {{.Values.serviceName}}
     labels:
+        app: {{.Values.__project_name}}
         run: {{.Values.serviceName}}
     namespace: {{.Values.namespace | lower}}
 

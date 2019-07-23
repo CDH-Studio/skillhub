@@ -135,6 +135,46 @@ All commits (on every branch) are linted, tested, and deployed to a live namespa
 
 CI/CD configuration is all setup by Kubails. For more information on the CI/CD configuration, visit the Kubails docs (TODO).
 
+# Model Training
+
+If the models for the predictions ever need to be retrained, the following will show you how to do it.
+
+## Contributors Model
+
+Training the contributors model happens in two steps: picking/generating a dataset, and then training the model on that data set.
+
+### Picking/Generating a Dataset
+
+To find out which datasets already exist, look in the `services/predictions/src/training/training_data/` folder. If you want to use an existing dataset, make note of the 'hash' -- the part of the CSV file name before `--training-data.csv`.
+
+If you instead want to generate a new dataset from the CDH Studio accessible [Jira instance](https://jira.ised-isde.canada.ca), you can run generation process with the following `make` command:
+
+```
+make generate-contributors-model-training-data JIRA_AUTH_TOKEN="YOUR_JIRA_USERNAME:YOUR_JIRA_PASSWORD"
+```
+
+This will add another CSV file to the `training_data` folder. Again, make note of its hash.
+
+**NOTE 1:** One of the already existing datasets is the `our_jira_and_ccdev--training-data.csv` file. This dataset is special because it includes, as the name implies, all of the data from our [Jira instance](https://jira.ised-isde.canada.ca), as well as the data from the `CCDEV` project from the on-network [Jira instance](http://jira.ic.gc.ca). 
+
+This is the dataset that was used to train the current contributors model. 
+
+**NOTE 2:**: Since running `make generate-contributors-model-training-data` runs `scraper` and `predictions` service scripts on your host machine (_not_ in a Docker container), you'll need to make sure to have appropriate installations of Node/npm and Python 3/pipenv to install the packages and run the scripts.
+
+### Training the Model
+
+Once you have your dataset hash from the last section, training the model is just another `make` command:
+
+```
+make train-contributors-model DATASET_HASH="YOUR_DATASET_HASH"
+```
+
+On a 4 core i5-6200U laptop, this took about 4.5 minutes to train. It runs the grid search in parallel, so more cores = faster training.
+
+Once it's done, it'll output the trained model to `services/predictions/src/trained_models/`.
+
+To make use of the trained model in the `predictions` service, you'll need to manually update the `CONTRIBUTORS_MODEL` variable in the `services/predictions/src/config.py` file to use the new file name.
+
 # Code Structure
 
 The bulk of the file structure of the repo is Kubails dependent, and as such has more to do with deployment. For more information on the default Kubails structure, visit the Kubails docs (TODO).
