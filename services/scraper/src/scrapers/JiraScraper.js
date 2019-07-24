@@ -178,7 +178,7 @@ class JiraScraper {
         const path = getPath(this.platform, "getProjectsLastUpdated");
         const fullPath = `${path}&jql=project=${projectKey}+order+by+updated+desc`;
 
-        const response = await this.axios.get(path);
+        const response = await this.axios.get(fullPath);
         const issues = response.data.issues;
 
         if (issues.length) {
