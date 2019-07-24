@@ -113,6 +113,7 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
         updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
         profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
+        delete profileUpdated.newSkillObjects;
         addProfileSkills(profileUpdated);
         closeDialog();
     };
@@ -133,7 +134,7 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
             <div className="profile-card-skills-header-section">
                 <h2>{sectionName}</h2>
                 <IconButton className="profile-card-edit-skills-button" onClick={openDialog} color="primary">
-                    <Create/>
+                    <Create />
                 </IconButton>
             </div>
             <Paper className="profile-page-card profile-card-skills">
