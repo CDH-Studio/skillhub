@@ -21,6 +21,7 @@ function* profilesPatchPersonalDetails({payload}, success) {
         yield put(profilesSlice.actions.setProfile(normalizedProfile));
     }
     catch (error) {
+        console.log(error);
         yield put(notificationSlice.actions.setNotification(
             {type: "error", message: error.message, createdAt: new Date()}
         ));
@@ -34,12 +35,21 @@ function* profilesPatchPersonalDetails({payload}, success) {
 }
 
 function* addNewProfileSkills({payload}) {
-    console.log(payload);
-    const result = yield call(api.service("profiles").create, payload.profile);
-    console.log(result);
+    try {
+        const result = yield call(api.service("profiles").create, payload.profile);
 
-    const normalizedProfile = Profile.normalizeProfile(result);
-    yield put(profilesSlice.actions.setProfile(normalizedProfile));
+        const normalizedProfile = Profile.normalizeProfile(result);
+        yield put(profilesSlice.actions.setProfile(normalizedProfile));
+    } catch (error) {
+        yield put(notificationSlice.actions.setNotification(
+            {type: "error", message: error.message, createdAt: new Date()}
+        ));
+        throw error;
+    }
+
+    yield put(notificationSlice.actions.setNotification(
+        {type: "success", message: "Updated Skills Successfully", createdAt: new Date()}
+    ));
 }
 
 function* profilesSaga() {

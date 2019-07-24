@@ -113,7 +113,6 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
         updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
         profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
-        console.log(profileUpdated);
         addProfileSkills(profileUpdated);
         closeDialog();
     };

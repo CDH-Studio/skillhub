@@ -29,8 +29,6 @@ const addSkills = () => async (context) => {
     const {skills} = context.data;
     const skillIds = skills.map(({id}) => id);
 
-    console.log("HERE");
-
     const sequelizeClient = context.app.get("sequelizeClient");
     const SkillsModel = sequelizeClient.models[tableNames.SKILLS];
 
@@ -39,8 +37,6 @@ const addSkills = () => async (context) => {
             id: skillIds
         }
     });
-
-    console.log(hydratedSkills);
 
     if (hydratedSkills) {
         const profile = context.result;
@@ -74,7 +70,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication("contactEmail"), findOrCreate()],
+        create: [preventBulkDuplication("contactEmail"), findOrCreate((data) => ({id: data.id}))],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),
@@ -88,7 +84,7 @@ module.exports = {
         all: [],
         find: [dehydrate(), liftProfilesSkills()],
         get: [dehydrate(), liftProfilesSkills()],
-        create: [hydrate(), addSkills(), dehydrate, parameterizedHydrate()],
+        create: [hydrate(), addSkills(), dehydrate(), parameterizedHydrate()],
         update: [],
         patch: [dehydrate(), liftProfilesSkills()],
         remove: []
