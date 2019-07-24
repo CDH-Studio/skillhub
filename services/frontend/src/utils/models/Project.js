@@ -28,22 +28,22 @@ export default class Project {
     static get FILTER_ACTIVE() {return "active";}
     static get FILTER_INACTIVE() {return "inactive";}
 
+    static normalizeProject(project) {
+        const processedProject = new Project(project);
+
+        if (processedProject.skills) {
+            processedProject.skills = processedProject.skills.map(({id}) => id);
+        } else {
+            processedProject.skills = [];
+        }
+
+        return processedProject;
+    }
+
     /* Normalizes the list of projects that the API returns into a map of {ID -> project},
      * with the skills processed to just their IDs, for appropriate use in the Redux store. */
     static normalizeApiResultsForRedux(projects = []) {
-        const processProject = (project) => {
-            const processedProject = new Project(project);
-
-            if (processedProject.skills) {
-                processedProject.skills = processedProject.skills.map(({id}) => id);
-            } else {
-                processedProject.skills = [];
-            }
-
-            return processedProject;
-        };
-
-        return projects.reduce(arrayToObject({processor: processProject}), {});
+        return projects.reduce(arrayToObject({processor: this.normalizeProject}), {});
     }
 
     static extractProjectProfiles(projects = []) {

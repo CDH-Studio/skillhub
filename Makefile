@@ -31,6 +31,12 @@ test-scraper-locally:
 inspect-database:
 	docker-compose -f ./services/docker-compose.yaml exec backend-database psql app-database app-database-user
 
+generate-contributors-model-training-data:
+	bash ./scripts/generate_contributors_model_training_data.sh "$(JIRA_AUTH_TOKEN)"
+
+train-contributors-model:
+	bash ./scripts/train_contributors_model.sh "$(DATASET_HASH)"
+
 #################################################################################
 # SELF DOCUMENTING COMMANDS
 #################################################################################

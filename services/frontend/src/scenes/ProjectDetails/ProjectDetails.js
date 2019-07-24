@@ -2,8 +2,12 @@ import React from "react";
 import ProjectDetailsLayout from "./ProjectDetailsLayout";
 import connect from "./connect";
 
-const ProjectDetails = ({project, contributors, isLoading}) => (
-    <ProjectDetailsLayout project={project} contributors={sortContributors(contributors)} isLoading={isLoading} />
+const ProjectDetails = ({contributors = [], isLoading = false, project = {}}) => (
+    <ProjectDetailsLayout
+        isLoading={isLoading}
+        contributors={sortContributors(contributors)}
+        project={project}
+    />
 );
 
 const sortContributors = (contributors) => contributors.sort((a, b) => a.name.localeCompare(b.name));

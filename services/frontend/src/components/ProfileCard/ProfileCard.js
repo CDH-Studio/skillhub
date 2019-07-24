@@ -4,11 +4,15 @@ import React from "react";
 import {AvatarIcon, SkillBadges} from "components/";
 import "./ProfileCard.scss";
 import {Link} from "react-router-dom";
+import {SlackIcon, RocketChatIcon} from "assets/icons";
 import classNames from "classnames";
 
 const DISPLAY_SKILL_COUNT = 4;
 
-const ProfileCard = ({id, page, openDialog, name, primaryRole, contactEmail, phone, skills}) => {
+const ProfileCard = ({
+    id, page, openDialog, skills,
+    name, primaryRole, contactEmail, phone, slackHandle, rocketChatHandle
+}) => {
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     return (
         <div className="profile-card">
@@ -28,15 +32,26 @@ const ProfileCard = ({id, page, openDialog, name, primaryRole, contactEmail, pho
                 </h3>
 
                 <div className="profile-card-contact">
-                    <p className="profile-card-text">
-                        <Email />
-                        {contactEmail}
-                    </p>
-
-                    <p className="profile-card-text">
-                        <LocalPhone />
-                        {phone}
-                    </p>
+                    <ProfileDetail
+                        icon={<Email />}
+                        data={contactEmail}
+                    />
+                    <ProfileDetail
+                        icon={<LocalPhone />}
+                        data={phone}
+                    />
+                    <ProfileDetail
+                        icon={
+                            <SlackIcon />
+                        }
+                        data={slackHandle}
+                    />
+                    <ProfileDetail
+                        icon={
+                            <RocketChatIcon />
+                        }
+                        data={rocketChatHandle}
+                    />
                 </div>
             </div>
             <div
@@ -80,5 +95,16 @@ const ProfileCard = ({id, page, openDialog, name, primaryRole, contactEmail, pho
         </div>
     );
 };
+
+const ProfileDetail = ({icon, data}) => (
+    (data) ? (
+        <p className="profile-card-text">
+            {icon}
+            {data}
+        </p>
+    ) : (
+        null
+    )
+);
 
 export default ProfileCard;
