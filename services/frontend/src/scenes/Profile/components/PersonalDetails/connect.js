@@ -1,17 +1,22 @@
 import {connect} from "react-redux";
 import {
-    profilesRequestsSlice,
+    dialogsStateSlice, profilesRequestsSlice,
 } from "store/slices";
 
 const mapStateToProps = (state) => ({
     error: profilesRequestsSlice.patchPersonalDetails.selectors.getError(state),
-    isPatching: profilesRequestsSlice.patchPersonalDetails.selectors.getLoading(state)
+    open: dialogsStateSlice.selectors.getPersonalDetailsDialogState(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    submitPersonalDetails: (id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle) => dispatch(
+    onSubmit: (id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle) => dispatch(
         profilesRequestsSlice.patchPersonalDetails.actions.request({
             id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle
+        })
+    ),
+    setDialogState: (dialog, dialogState) => dispatch(
+        dialogsStateSlice.actions.setDialogState({
+            dialog, dialogState
         })
     ),
     clearPatchError: () => dispatch(

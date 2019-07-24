@@ -2,11 +2,11 @@ import React, {useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
-import PersonalDetails from "./components";
 import {
     EditSkillsDialog, LoadingValidator, NavSidebar, ProjectCard,
     ScrollContainer, SkillBadges
 } from "components/";
+import {PersonalDetails} from "./components";
 import {Profile, Project} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";

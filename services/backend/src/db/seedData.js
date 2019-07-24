@@ -28,6 +28,7 @@ const USERS = [
 ];
 
 const USER_IDS = USERS.map((user) => user.id);
+const USER_IDS_BY_NAME = [...USERS].reduce(keyIdByName, {});
 
 // In order to maintain seeder order integrity, this profile is created separately,
 // because the seeder for it came first.
@@ -489,6 +490,71 @@ const PROFILE_SKILLS = [
     }
 ];
 
+const PROJECT_CHANGE_RECORDS = [
+    {
+        id: "7b0167c6-acae-11e9-a2a3-2a2ae2dbcce4",
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        userId: USER_IDS_BY_NAME["Joshua Gorman"],
+        changedAttribute: "description",
+        oldValue: "X",
+        newValue: "A service for finding other people with skills.",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "7b016a1e-acae-11e9-a2a3-2a2ae2dbcce4",
+        projectId: PROJECT_IDS_BY_NAME["Skillhub"],
+        userId: USER_IDS_BY_NAME["Joshua gorman"],
+        changedAttribute: "name",
+        oldValue: "Y",
+        newValue: "Skillhub",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "7b016b7c-acae-11e9-a2a3-2a2ae2dbcce4",
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        userId: USER_IDS_BY_NAME["testBro"],
+        changedAttribute: "description",
+        oldValue: "A service for classifying memes",
+        newValue: "A service for screening people out",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "7b016cbc-acae-11e9-a2a3-2a2ae2dbcce4",
+        projectId: PROJECT_IDS_BY_NAME["ScreenDoor"],
+        userId: USER_IDS_BY_NAME["testBro"],
+        changedAttribute: "name",
+        oldValue: "Meme Classifier",
+        newValue: "ScreenDoor",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "7b016df2-acae-11e9-a2a3-2a2ae2dbcce4",
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        userId: USER_IDS_BY_NAME["Sam Heaton"],
+        changedAttribute: "name",
+        oldValue: "Meme Classifier",
+        newValue: "Dank Meme Classifier",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        id: "7b0172b6-acae-11e9-a2a3-2a2ae2dbcce4",
+        projectId: PROJECT_IDS_BY_NAME["Dank Meme Classifier"],
+        userId: USER_IDS_BY_NAME["Sam Heaton"],
+        changedAttribute: "description",
+        oldValue: "A meme evaluation tool.",
+        newValue: "A service for classifying memes.",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+];
+
+const PROJECT_CHANGE_RECORD_IDS = PROJECT_CHANGE_RECORDS.map(getId);
+
 const PROFILE_SKILL_IDS = PROFILE_SKILLS.map(getId);
 
 module.exports = {
@@ -498,6 +564,8 @@ module.exports = {
     PROFILE_SKILL_IDS,
     PROJECTS,
     PROJECT_IDS,
+    PROJECT_CHANGE_RECORDS,
+    PROJECT_CHANGE_RECORD_IDS,
     PROJECT_PROFILES,
     PROJECT_PROFILE_IDS,
     PROJECT_SKILLS,

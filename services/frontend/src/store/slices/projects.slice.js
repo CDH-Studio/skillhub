@@ -7,6 +7,10 @@ export const projectsSlice = createSlice({
     initialState: {},
     reducers: {
         setProjects: (state, action) => action.payload,
+        setProject: (state, action) => {
+            // Expects a Project object as payload
+            state[action.payload.id] = action.payload;
+        },
         addProject: (state, action) => {
             // Expects a Project object as payload
             state[action.payload.id] = action.payload;
@@ -14,4 +18,7 @@ export const projectsSlice = createSlice({
     }
 });
 
-export const projectsRequestsSlice = createRequestSlices(mounts.projectsRequests, ["fetchAll"]);
+export const projectsRequestsSlice = createRequestSlices(
+    mounts.projectsRequests,
+    ["fetchAll", "patchProjectInfo"]
+);
