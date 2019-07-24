@@ -6,6 +6,7 @@ const {findOrCreate, parameterizedHydrate, preventBulkDuplication} = require("ho
 const hydrate = require("feathers-sequelize/hooks/hydrate");
 const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
+const tableNames = require("db/tableNames");
 
 const EMAIL_REGEX = /^\S+@\S+$/;
 
@@ -22,14 +23,31 @@ const includeSkills = () => (context) => {
 
 const liftProfilesSkills = () => (context) => {
     context.result = Profile.liftProfilesSkills(context.result);
-}
+};
+
 const addSkills = () => async (context) => {
     const {skills} = context.data;
+    const skillIds = skills.map(({id}) => id);
 
-    if (skills) {
+    console.log("HERE");
+
+    const sequelizeClient = context.app.get("sequelizeClient");
+    const SkillsModel = sequelizeClient.models[tableNames.SKILLS];
+
+    const hydratedSkills = await SkillsModel.findAll({
+        where: {
+            id: skillIds
+        }
+    });
+
+    console.log(hydratedSkills);
+
+    if (hydratedSkills) {
         const profile = context.result;
-        await profile.addSkills(skills);
+        await profile.addSkills(hydratedSkills);
     }
+
+    return context;
 };
 
 const validatePersonalDetails = () => (context) => {
@@ -70,7 +88,7 @@ module.exports = {
         all: [],
         find: [dehydrate(), liftProfilesSkills()],
         get: [dehydrate(), liftProfilesSkills()],
-        create: [parameterizedHydrate(), hydrate(), addSkills(), dehydrate()],
+        create: [hydrate(), addSkills(), dehydrate, parameterizedHydrate()],
         update: [],
         patch: [dehydrate(), liftProfilesSkills()],
         remove: []

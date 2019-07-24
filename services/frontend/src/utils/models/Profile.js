@@ -124,7 +124,6 @@ export default class Profile {
                 if (newSkills.includes(skillNameLC)) {
                     profile.skills.push(skill);
                     newSkills.splice(newSkills.indexOf(skillNameLC), 1);
-
                 }
             }
         }
@@ -138,6 +137,7 @@ export default class Profile {
             }
         }
         profile.newSkillObjects = newSkillsObjects;
+
         return profile;
     };
 

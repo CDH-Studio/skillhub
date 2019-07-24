@@ -13,8 +13,12 @@ const findOrCreate = (queryCustomizer = (data) => data) => async (context) => {
         return context;
     }
 
-    const query = queryCustomizer(data);
+    console.log("findorcreate");
+
+    const query = queryCustomizer(data); //todo custom queryCustomizer
     const response = await service.find({query});
+
+    console.log("findorcreate");
 
     // This handles both cases for whether a service has pagination enabled or not.
     if (response.length || response.data && response.data.length) {

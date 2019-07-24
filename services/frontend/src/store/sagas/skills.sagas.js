@@ -11,8 +11,6 @@ function* skillsFetchAll() {
 }
 
 function* addSkill({payload}){
-    console.log(payload);
-
     const result = yield call(api.service("skills").create, payload.skill);
 
     yield put(skillsSlice.setSkills(result));

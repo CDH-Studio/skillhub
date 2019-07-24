@@ -34,13 +34,21 @@ function* profilesPatchPersonalDetails({payload}, success) {
 }
 
 function* addNewProfileSkills({payload}) {
-    const result = yield call(api.service("profileSkills").create, payload.profileSkill);
+    console.log(payload);
+    const result = yield call(api.service("profiles").create, payload.profile);
+    console.log(result);
 
-    yield put(profileSkillsSlice.setPro);
+    const normalizedProfile = Profile.normalizeProfile(result);
+    yield put(profilesSlice.actions.setProfile(normalizedProfile));
 }
+
 function* profilesSaga() {
     yield fork(profilesRequestsSlice.fetchAll.watchRequestSaga(
         profilesFetchAll
+    ));
+
+    yield fork(profilesRequestsSlice.addNewProfileSkills.watchRequestSaga(
+        addNewProfileSkills
     ));
 
     yield fork(profilesRequestsSlice.patchPersonalDetails.watchRequestSaga(

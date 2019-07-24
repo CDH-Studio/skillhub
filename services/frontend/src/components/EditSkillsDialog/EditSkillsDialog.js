@@ -6,7 +6,7 @@ import "./EditSkillsDialog.scss";
 
 const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, open}) => {
     const sortedSkills = Object.values(databaseSkills).sort((a, b) => a.name.localeCompare(b.name));
-    console.log("sorted array", sortedSkills.map((skill) => skill.name));
+
     let currentChips = skills;
 
     const handleChange = (chips) => {
