@@ -3,7 +3,7 @@ import ProfileLayout from "./ProfileLayout";
 import connect from "./connect";
 
 const Profile = ({
-    isLoading = false, isUserProfile, profile = {}, projects = [], skills = {}
+    addProfileSkills, addNewSkill, isLoading = false, isUserProfile, profile = {}, projects = [], skills = {}
 }) => {
     return (
         <ProfileLayout
@@ -12,6 +12,8 @@ const Profile = ({
             profile={profile}
             projects={projects}
             databaseSkills={skills}
+            addProfileSkills={addProfileSkills}
+            addNewSkill={addNewSkill}
         />
     );
 };

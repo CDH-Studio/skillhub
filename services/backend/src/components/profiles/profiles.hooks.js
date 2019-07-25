@@ -3,7 +3,10 @@ const errors = require("@feathersjs/errors");
 const {restrictToOwner} = require("feathers-authentication-hooks");
 const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const {findOrCreate, parameterizedHydrate, preventBulkDuplication} = require("hooks/");
+const hydrate = require("feathers-sequelize/hooks/hydrate");
+const {arrayToObject} = require("utils/helperFunctions");
 const {Profile} = require("utils/models");
+const tableNames = require("db/tableNames");
 
 const EMAIL_REGEX = /^\S+@\S+$/;
 
@@ -20,6 +23,28 @@ const includeSkills = () => (context) => {
 
 const liftProfilesSkills = () => (context) => {
     context.result = Profile.liftProfilesSkills(context.result);
+};
+
+const addSkills = () => async (context) => {
+    const {skills} = context.data;
+    if (skills) {
+        const skillIds = skills.map(({id}) => id);
+
+        const sequelizeClient = context.app.get("sequelizeClient");
+        const SkillsModel = sequelizeClient.models[tableNames.SKILLS];
+
+        const hydratedSkills = await SkillsModel.findAll({
+            where: {
+                id: skillIds
+            }
+        });
+
+        if (hydratedSkills) {
+            const profile = context.result;
+            await profile.addSkills(hydratedSkills);
+        }
+    }
+
     return context;
 };
 
@@ -47,7 +72,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication("contactEmail"), findOrCreate()],
+        create: [preventBulkDuplication("contactEmail"), findOrCreate((data) => ({id: data.id}))],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),
@@ -61,7 +86,7 @@ module.exports = {
         all: [],
         find: [dehydrate(), liftProfilesSkills()],
         get: [dehydrate(), liftProfilesSkills()],
-        create: [parameterizedHydrate()],
+        create: [hydrate(), addSkills(), dehydrate(), parameterizedHydrate()],
         update: [],
         patch: [dehydrate(), liftProfilesSkills()],
         remove: []

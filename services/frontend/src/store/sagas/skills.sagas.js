@@ -10,8 +10,16 @@ function* skillsFetchAll() {
     yield put(skillsSlice.actions.setSkills(normalizedSkills));
 }
 
+function* addSkill({payload}){
+    const result = yield call(api.service("skills").create, payload.skill);
+
+    yield put(skillsSlice.setSkills(result));
+}
 function* skillsSaga() {
     yield fork(skillsRequestsSlice.fetchAll.watchRequestSaga(skillsFetchAll));
+    yield fork(skillsRequestsSlice.addNewSkill.watchRequestSaga(
+        addSkill
+    ));
 }
 
 export default skillsSaga;
