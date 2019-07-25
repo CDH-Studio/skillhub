@@ -9,8 +9,12 @@ import "./ProjectCard.scss";
 const DISPLAY_SKILL_COUNT = 3;
 
 const ProjectCard = ({
-    className, id, name, description, showMoreSkills, skills, isActive, openRoleInputDialog
+    className, id, name, description, showMoreSkills, skills, isActive, openRoleInputDialog, setCurrentProject
 }) => {
+    const openRoleInput = () => {
+        openRoleInputDialog();
+        setCurrentProject();
+    };
     // Only show the first DISPLAY_SKILL_COUNT skills, so as to not crowd the card too much
     return (
         <Card className={classNames("project-card", className)}>
@@ -39,7 +43,7 @@ const ProjectCard = ({
                 <div className="project-card-nav-section">
                     {
                         className === "add-projects-dialog-card" ? (
-                            <IconButton onClick={openRoleInputDialog}>
+                            <IconButton onClick={openRoleInput}>
                                 <Add className="project-card-nav" />
                             </IconButton>
                         ) : (

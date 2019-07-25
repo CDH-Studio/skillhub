@@ -1,21 +1,21 @@
 import {connect} from "react-redux";
 import {crossSliceSelectors} from "store/";
 import {
-    dialogsStateSlice, profilesRequestsSlice,
+    dialogsStateSlice, projectsRequestsSlice
 } from "store/slices";
 
 const mapStateToProps = (state) => ({
-    error: profilesRequestsSlice.patchPersonalDetails.selectors.getError(state),
+    error: projectsRequestsSlice.createProjectProfile.selectors.getError(state),
     roleInputDialogOpen: dialogsStateSlice.selectors.getRoleInputDialogState(state),
     searchDialogOpen: dialogsStateSlice.selectors.getSearchProjectDialogState(state),
     unrelatedProjects: crossSliceSelectors.getUnrelatedProjectsForUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onSubmit: (id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle) => dispatch(
-        profilesRequestsSlice.patchPersonalDetails.actions.request({
-            id, name, contactEmail, primaryRole, phone, slackHandle, rocketChatHandle
-        })
+    onSubmit: (project) => dispatch(
+        projectsRequestsSlice.createProjectProfile.actions.request(
+            project
+        )
     ),
     setDialogState: (dialog, dialogState) => dispatch(
         dialogsStateSlice.actions.setDialogState({
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => ({
         })
     ),
     clearPatchError: () => dispatch(
-        profilesRequestsSlice.patchPersonalDetails.actions.clear()
+        projectsRequestsSlice.createProjectProfile.actions.clear()
     )
 });
 

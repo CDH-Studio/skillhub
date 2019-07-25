@@ -47,9 +47,32 @@ function* projectsPatchProjectInfo({payload}, success) {
     ));
 }
 
+function* projectsCreateProjectProfile({payload}, success) {
+    try {
+        const result = yield call(api.service("projects").create, payload);
+
+        const normalizedProject = Project.normalizeProject(result);
+        yield put(projectsSlice.actions.setProject(normalizedProject));
+    }
+    catch (error) {
+        yield put(notificationSlice.actions.setNotification(
+            {type: "error", message: error.message, createdAt: new Date()}
+        ));
+        throw error;
+    }
+
+    yield put(notificationSlice.actions.setNotification(
+        {type: "success", message: "Project Added Successfully", createdAt: new Date()}
+    ));
+}
+
 function* projectsSaga() {
     yield fork(projectsRequestsSlice.fetchAll.watchRequestSaga(
         projectsFetchAll
+    ));
+
+    yield fork(projectsRequestsSlice.createProjectProfile.watchRequestSaga(
+        projectsCreateProjectProfile
     ));
 
     yield fork(projectsRequestsSlice.patchProjectInfo.watchRequestSaga(

@@ -4,6 +4,7 @@ const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const hydrate = require("feathers-sequelize/hooks/hydrate");
 const {findOrCreate, preventBulkDuplication} = require("hooks/");
 const {Project} = require("utils/models");
+const tableNames = require("db/tableNames");
 
 const includeAssociations = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
@@ -71,6 +72,13 @@ const addProfiles = () => async (context) => {
     // Also, the hook needs to be used after a `hydrate` hook, since the 'project' object
     // also has to be a Sequelize instance.
     const {profiles} = context.data;
+    const {profile} = context.data;
+    const {role} = context.data;
+
+    if (profile) {
+        const project = context.result;
+        await project.addProfile(profile.id, {through: {role: role}});
+    }
 
     if (profiles) {
         const project = context.result;
@@ -101,7 +109,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeAssociations()],
         get: [includeAssociations()],
-        create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
+        create: [includeAssociations(), preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [
             validateProjectInfo(),
