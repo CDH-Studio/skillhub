@@ -27,20 +27,22 @@ const liftProfilesSkills = () => (context) => {
 
 const addSkills = () => async (context) => {
     const {skills} = context.data;
-    const skillIds = skills.map(({id}) => id);
+    if (skills) {
+        const skillIds = skills.map(({id}) => id);
 
-    const sequelizeClient = context.app.get("sequelizeClient");
-    const SkillsModel = sequelizeClient.models[tableNames.SKILLS];
+        const sequelizeClient = context.app.get("sequelizeClient");
+        const SkillsModel = sequelizeClient.models[tableNames.SKILLS];
 
-    const hydratedSkills = await SkillsModel.findAll({
-        where: {
-            id: skillIds
+        const hydratedSkills = await SkillsModel.findAll({
+            where: {
+                id: skillIds
+            }
+        });
+
+        if (hydratedSkills) {
+            const profile = context.result;
+            await profile.addSkills(hydratedSkills);
         }
-    });
-
-    if (hydratedSkills) {
-        const profile = context.result;
-        await profile.addSkills(hydratedSkills);
     }
 
     return context;
