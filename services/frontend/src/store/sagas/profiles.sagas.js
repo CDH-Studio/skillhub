@@ -24,7 +24,6 @@ function* profilesPatchPersonalDetails({payload}, success) {
         yield call(success);  // Mark success before continuing with other actions
     }
     catch (error) {
-        console.log(error);
         yield put(notificationSlice.actions.setNotification(
             {type: "error", message: error.message, createdAt: new Date()}
         ));
