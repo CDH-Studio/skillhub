@@ -70,11 +70,14 @@ const validatePersonalDetails = () => (context) => {
 const findOrCreateQueryCustomizer = (data) => {
     let query = {};
 
-    if ("id" in data){
+    if ("name" in data) {
+        query.name = data.name;
+    } else if ("id" in data) {
         query.id = data.id;
     } else {
         query = data;
     }
+
     return query;
 };
 
