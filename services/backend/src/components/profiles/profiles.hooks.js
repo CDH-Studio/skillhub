@@ -67,12 +67,26 @@ const validatePersonalDetails = () => (context) => {
     }
 };
 
+const findOrCreateQueryCustomizer = (data) => {
+    let query = {};
+
+    if ("id" in data) {
+        query.id = data.id;
+    } else if ("name" in data) {
+        query.name = data.name;
+    } else {
+        query = data;
+    }
+
+    return query;
+};
+
 module.exports = {
     before: {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication("contactEmail"), findOrCreate((data) => ({id: data.id}))],
+        create: [preventBulkDuplication("contactEmail"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),
