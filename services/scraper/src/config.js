@@ -2,6 +2,9 @@ const {
     BACKEND_HOST = "backend",
     BACKEND_PORT = "5000",
     BACKEND_PROTOCOL = "http",
+    GIT_AUTH_TOKEN = null,
+    GIT_HOST = "https://api.github.com",
+    GIT_PLATFORM = "github",
     JIRA_AUTH_TOKEN = null,
     JIRA_HOST = "https://jira.ised-isde.canada.ca",
     JIRA_PLATFORM = "server",
@@ -16,6 +19,9 @@ if (BACKEND_PORT !== "80" && BACKEND_PORT !== "443") {
 
 module.exports = {
     BACKEND_URL,
+    GIT_AUTH_TOKEN,
+    GIT_HOST,
+    GIT_PLATFORM,
     JIRA_AUTH_TOKEN,
     JIRA_HOST,
     JIRA_PLATFORM,
