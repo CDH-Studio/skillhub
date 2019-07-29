@@ -6,6 +6,8 @@ const {chainingPromisePool, logger: baseLogger} = require("utils/");
 
 const logger = baseLogger.child({module: "GitScraper"});
 
+const REPO_STORAGE_PATH = "/tmp/repo";
+
 const PLATFORM_BITBUCKET = "bitbucket";
 const PLATFORM_GITHUB = "github";
 
@@ -59,13 +61,85 @@ class GitScraper {
     }
 
     async generateSkillMapping(repoUrl = "") {
-        await this._cloneRepo(repoUrl);
+        // await this._cloneRepo(repoUrl);
+        const skillFileBreakdown = await this._getSkillFileBreakdown(REPO_STORAGE_PATH);
+        await this._generateRawStats(skillFileBreakdown);
     }
 
     async _cloneRepo(repoUrl = "") {
-        console.log(repoUrl);
-        deleteFolderRecursive("/tmp/repo");
-        await promisifiedSpawn("git", ["clone", repoUrl, "/tmp/repo"]);
+        deleteFolderRecursive(REPO_STORAGE_PATH);
+        await promisifiedSpawn("git", ["clone", repoUrl, REPO_STORAGE_PATH]);
+    }
+
+    async _getSkillFileBreakdown(repoPath = "") {
+        const output = await promisifiedSpawn("ruby", ["./scripts/skill_file_breakdown.rb", repoPath]);
+        const skillFileBreakdown = JSON.parse(output);
+
+        return skillFileBreakdown;
+    }
+
+    async _generateRawStats(skillFileBreakdown = {}) {
+        const rawStats = {};
+        const skills = Object.keys(skillFileBreakdown);
+
+        for (const skill of skills) {
+            const files = skillFileBreakdown[skill];
+
+            for (const file of files) {
+                if (!(skill in rawStats)) {
+                    rawStats[skill] = {};
+                }
+
+                rawStats[skill][file] = await this._getFileStats(file);
+            }
+        }
+
+        return rawStats;
+    }
+
+    async _getFileStats(file = "") {
+        const rawFileLog = await promisifiedSpawn(
+            "git",
+            [
+                `--git-dir=${REPO_STORAGE_PATH}/.git`, "log", "--pretty='%aE%n%aD'", "--numstat", "--no-merges",
+                "--", file
+            ]
+        );
+
+        const fileLog = rawFileLog.split("\n").map((line) => line.replace("'", "")).filter((line) => line);
+
+        const stats = {
+            authors: [],
+            oldestCommitDates: [],
+            latestCommitDates: [],
+            changeCounts: [],
+            commitCounts: []
+        };
+
+        let index = 0; 
+        
+        while (index < (fileLog.length - 2)) {
+            const author = fileLog[index];
+            const date = fileLog[index+1];
+            const changes = fileLog[index+2];
+
+            const dateEpoch = new Date(date).getTime();  // Get epoch in milliseconds
+
+            stats.authors.push(author);
+            stats.oldestCommitDates.push(dateEpoch);
+            stats.latestCommitDates.push(dateEpoch);
+            stats.changeCounts.push(this._calculateTotalCommitChanges(changes));
+            stats.commitCounts.push(1);
+
+            index += 3;
+        }
+
+        return stats;
+    }
+
+    _calculateTotalCommitChanges(outputLine = "") {
+        const splitLine = outputLine.split("\t");
+        return parseInt(splitLine[0]) + parseInt(splitLine[1]);
     }
 }
 
