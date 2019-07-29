@@ -23,7 +23,6 @@ const ProjectsList = ({projects}) => {
             className="projects-list-card"
             key={project.id}
             isActive={Project.isActive(project)}
-            showMoreSkills={true}
             {...project}
         />
     )), [projects]);

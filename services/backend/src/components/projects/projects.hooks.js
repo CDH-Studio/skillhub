@@ -4,7 +4,6 @@ const dehydrate = require("feathers-sequelize/hooks/dehydrate");
 const hydrate = require("feathers-sequelize/hooks/hydrate");
 const {findOrCreate, preventBulkDuplication} = require("hooks/");
 const {Project} = require("utils/models");
-const tableNames = require("db/tableNames");
 
 const includeAssociations = () => (context) => {
     const SkillsModel = context.app.services.skills.Model;
@@ -57,29 +56,33 @@ const createChangeLog = () => async (context) => {
     return context;
 };
 
+const validateProjectProfile = (role) => {
+    if (!role) {
+        throw new errors.BadRequest("Missing Data", "Invalid role");
+    }
+};
+
 const liftProjectsProfiles = () => (context) => {
     context.result = Project.liftProjectsProfiles(context.result);
     return context;
 };
 
 const addProfiles = () => async (context) => {
-    // This hook only works with profile objects that are Sequelize instances
-    // (e.g. they've been retrieved from a route that supports hydration, or have been
-    // queried directly using the Sequelize client).
-    //
-    // Passing regular (i.e. raw) objects in the 'profiles' key will result in an error.
-    //
-    // Also, the hook needs to be used after a `hydrate` hook, since the 'project' object
-    // also has to be a Sequelize instance.
+    // This hook needs to be used after a `hydrate` hook, since the 'project' object
+    // has to be a Sequelize instance.
     const {profiles} = context.data;
     const {profile} = context.data;
     const {role} = context.data;
 
+    // If a profile object has been passed create a projectProfile to it
     if (profile) {
+        validateProjectProfile(role);
+
         const project = context.result;
         await project.addProfile(profile.id, {through: {role: role}});
     }
 
+    // If multiple profiles are found create projectProfiles for them
     if (profiles) {
         const project = context.result;
         await project.addProfiles(profiles);
@@ -109,7 +112,7 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeAssociations()],
         get: [includeAssociations()],
-        create: [includeAssociations(), preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
+        create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
         update: [],
         patch: [
             validateProjectInfo(),

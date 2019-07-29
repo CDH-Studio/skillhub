@@ -2,14 +2,14 @@ import React, {useCallback, useState, useMemo} from "react";
 import {useInput} from "utils/hooks";
 import {Add, Search} from "@material-ui/icons";
 import {ProjectCard} from "components/";
-import {Project, ProjectProfile} from "utils/models";
+import {Project} from "utils/models";
 import {Button, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@material-ui/core";
 import connect from "./connect";
 import "./Projects.scss";
 
 const Projects = ({
-    sectionName, projects, unrelatedProjects, setDialogState,
-    roleInputDialogOpen, searchDialogOpen, isUserProfile, onSubmit, profile
+    clearPatchError, error, isUserProfile, onSubmit, profile, projects, roleInputDialogOpen,
+    searchDialogOpen, sectionName, setDialogState, unrelatedProjects
 }) => {
     const openSearchDialog = () => {
         setDialogState("searchProject", true);
@@ -28,12 +28,14 @@ const Projects = ({
     return (
         <>
             <SearchDialog
-                unrelatedProjects={unrelatedProjects}
-                setDialogState={setDialogState}
-                roleInputDialogOpen={roleInputDialogOpen}
-                searchDialogOpen={searchDialogOpen}
+                clearPatchError={clearPatchError}
+                error={error}
                 onSubmit={onSubmit}
                 profile={profile}
+                roleInputDialogOpen={roleInputDialogOpen}
+                searchDialogOpen={searchDialogOpen}
+                setDialogState={setDialogState}
+                unrelatedProjects={unrelatedProjects}
             />
             <div className="profile-card-projects-header-section">
                 <h2>{sectionName}</h2>
@@ -55,13 +57,13 @@ const Projects = ({
 };
 
 const SearchDialog = ({
-    setDialogState, roleInputDialogOpen, searchDialogOpen,
-    unrelatedProjects, onSubmit, profile
+    clearPatchError, error, onSubmit, profile, roleInputDialogOpen,
+    searchDialogOpen, setDialogState, unrelatedProjects
 }) => {
-    //Create 'projectProfile' state to hold data on our projectProfile to add.
+    // Create 'currentProject' state to hold the profile to create an association for.
     const [currentProject, setCurrentProject] = useState(null);
 
-    //create all your state setting functions
+    // create all your state setting functions
     const openRoleInputDialog = useCallback(() => {
         setDialogState("roleInput", true);
     }, [setDialogState]);
@@ -72,12 +74,15 @@ const SearchDialog = ({
 
     const closeRoleInputDialog = () => {
         setDialogState("roleInput", false);
+        clearPatchError();
     };
 
-    //Create a controlled search field to be used to filter projects
+    // Create a controlled search field to be used to filter projects
     const searchInput = useInput();
     const {value: searchTerm} = searchInput;
 
+    /* Generate a list of projects that match the searchTerm and are not currently
+     * on the profile */
     const searchedProjects = useMemo(() => (
         Project.searchProjects(unrelatedProjects, searchTerm)
     ), [unrelatedProjects, searchTerm]);
@@ -87,6 +92,7 @@ const SearchDialog = ({
             className="add-projects-dialog-card"
             key={project.id}
             isActive={Project.isActive(project)}
+            isSearchCard={true}
             openRoleInputDialog={openRoleInputDialog}
             setCurrentProject={() => setCurrentProject(project)}
             {...project}
@@ -97,12 +103,12 @@ const SearchDialog = ({
         <>
             <RoleInputDialog
                 closeDialog={closeRoleInputDialog}
-                dialogTitle={"Input Project Role"}
+                currentProject={currentProject}
+                error={error}
+                key={roleInputDialogOpen}
                 open={roleInputDialogOpen}
                 onSubmit={onSubmit}
-                currentProject={currentProject}
                 profile={profile}
-                unrelatedProjects={unrelatedProjects}
             />
             <Dialog
                 className="search-dialog"
@@ -144,11 +150,17 @@ const SearchDialog = ({
     );
 };
 
-const RoleInputDialog = ({dialogTitle, closeDialog, open, currentProject, profile, onSubmit}) => {
+const RoleInputDialog = ({closeDialog, currentProject, error, open, profile, onSubmit}) => {
 
+    //Generate the role fields dynamic attributes
     const roleInput = useInput();
+    if (error) {
+        roleInput.error = true;
+        roleInput.helperText = error.data;
+    }
     const {value: role} = roleInput;
 
+    // Attach the 'profile' and 'role' to create projectProfile association
     if (currentProject) {
         currentProject.role = role;
         currentProject.profile = profile;
@@ -170,7 +182,7 @@ const RoleInputDialog = ({dialogTitle, closeDialog, open, currentProject, profil
         >
             <div className="role-input-dialog-header">
                 <DialogTitle className="project-dialog-title">
-                    {dialogTitle}
+                    Input Project Role
                 </DialogTitle>
             </div>
             <DialogContent

@@ -68,11 +68,8 @@ const validatePersonalDetails = () => (context) => {
 };
 
 const findOrCreateQueryCustomizer = (data) => {
-<<<<<<< HEAD
-=======
     // Allows the `findOrCreate` hook to use a more specific query than
-    // just the whole data blob when trying to find an existing project.
->>>>>>> CDHSH-105 added funcitonality to connect fronted via sagas
+    // just the whole data blob when trying to find an existing profile.
     let query = {};
 
     if ("id" in data) {
