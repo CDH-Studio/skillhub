@@ -1,4 +1,6 @@
 const axios = require("axios");
+const fs = require("fs");
+const {spawn} = require("child_process");
 const {GIT_AUTH_TOKEN, GIT_HOST, GIT_PLATFORM} = require("config");
 const {chainingPromisePool, logger: baseLogger} = require("utils/");
 
@@ -55,6 +57,62 @@ class GitScraper {
         console.log(cloneUrls);
         return cloneUrls;
     }
+
+    async generateSkillMapping(repoUrl = "") {
+        await this._cloneRepo(repoUrl);
+    }
+
+    async _cloneRepo(repoUrl = "") {
+        console.log(repoUrl);
+        deleteFolderRecursive("/tmp/repo");
+        await promisifiedSpawn("git", ["clone", repoUrl, "/tmp/repo"]);
+    }
 }
+
+const promisifiedSpawn = (command = "", args = []) => (
+    new Promise((resolve, reject) => {
+        const child = spawn(command, args);
+
+        let output = "";
+        let errorOutput = "";
+
+        child.stdout.on("data", (data) => {
+            output += data.toString();
+        });
+
+        child.stderr.on("data", (data) => {
+            errorOutput += data.toString();
+        });
+
+        child.on("exit", (code) => {
+            if (code === 0) {
+                resolve(output);
+            } else {
+                reject(errorOutput);
+            }
+        });
+
+        child.on("error", (err) => {
+            reject(err);
+        });
+    })
+);
+
+// Taken from https://geedew.com/remove-a-directory-that-is-not-empty-in-nodejs/
+const deleteFolderRecursive = (path) => {
+    if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach((file, index) => {
+            const currentPath = path + "/" + file;
+
+            if (fs.lstatSync(currentPath).isDirectory()) {
+                deleteFolderRecursive(currentPath);
+            } else {
+                fs.unlinkSync(currentPath);
+            }
+        });
+
+        fs.rmdirSync(path);
+    }
+};
 
 module.exports = GitScraper;

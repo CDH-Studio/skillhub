@@ -74,7 +74,11 @@ class SkillhubBridge {
     }
 
     async testSkills(org = "") {
-        await this.gitScraper.getRepoUrls(org);
+        const urls = await this.gitScraper.getRepoUrls(org);
+
+        for (const url of urls.slice(0, 1)) {
+            await this.gitScraper.generateSkillMapping("https://github.com/DevinSit/kubails.git");
+        }
     }
 }
 
