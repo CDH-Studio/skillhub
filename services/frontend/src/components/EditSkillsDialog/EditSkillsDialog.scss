@@ -11,4 +11,10 @@
             font-weight: 700;
         }
     }
+    .chipArray{
+        width: 400px;
+        .chipArraySkill{
+            margin: $default-spacing*0.25 $default-spacing*0.3;
+        }
+    }
 }

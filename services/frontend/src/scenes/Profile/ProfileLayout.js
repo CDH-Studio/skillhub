@@ -111,9 +111,9 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
     const handleSubmit = (updatedSkills) => {
         updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
         updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
-        profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
-        delete profileUpdated.newSkillObjects;
-        addProfileSkills(profileUpdated);
+        //profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
+        //delete profileUpdated.newSkillObjects;
+        //addProfileSkills(profileUpdated);
         closeDialog();
     };
 
@@ -125,7 +125,7 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
         <>
             <EditSkillsDialog
                 databaseSkills={databaseSkills}
-                skills={profileUpdated.skills.map((skill) => skill.name)}
+                skills={profileUpdated.skills}
                 open={editSkillsDialogOpen}
                 handleCancel={handleCancel}
                 handleSubmit={(updatedSkills) => handleSubmit(updatedSkills)}
