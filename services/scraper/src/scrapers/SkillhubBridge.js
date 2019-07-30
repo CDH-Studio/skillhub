@@ -73,12 +73,16 @@ class SkillhubBridge {
         return await this.axios.post("/scraperBridge", {issues});
     }
 
+    // TODO (CDHSH-112): Move this into the main scrape function
     async testSkills(org = "") {
         const urls = await this.gitScraper.getRepoUrls(org);
+        const skillMappings = {};
 
-        for (const url of urls.slice(0, 1)) {
-            await this.gitScraper.generateSkillMapping("https://github.com/DevinSit/kubails.git");
+        for (const url of urls) {
+            skillMappings[url] = await this.gitScraper.generateSkillMapping(url);
         }
+
+        return skillMappings;
     }
 }
 

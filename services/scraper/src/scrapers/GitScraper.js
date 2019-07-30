@@ -1,10 +1,11 @@
 const axios = require("axios");
-const fs = require("fs");
 const {spawn} = require("child_process");
+const fs = require("fs");
 const {GIT_AUTH_TOKEN, GIT_HOST, GIT_PLATFORM} = require("config");
-const {chainingPromisePool, logger: baseLogger} = require("utils/");
+const {chainingPromisePool, logger: baseLogger, loggerUtils} = require("utils/");
 
 const logger = baseLogger.child({module: "GitScraper"});
+const logExecutionTime = loggerUtils.logExecutionTime(logger);
 
 const REPO_STORAGE_PATH = "/tmp/repo";
 
@@ -14,7 +15,7 @@ const PLATFORM_GITHUB = "github";
 const PLATFORM_CONFIGS = {
     [PLATFORM_BITBUCKET]: {
         basePath: "/rest/api/1.0",
-        getOrgRepos: (org) => "",  // TODO
+        getOrgRepos: () => "",  // TODO once we get Bitbucket access
     },
     [PLATFORM_GITHUB]: {
         basePath: "",  // Yes, this should be empty. Github puts the 'api' portion as a subdomain.
@@ -51,50 +52,66 @@ class GitScraper {
     }
 
     async getRepoUrls(organization = "") {
-        const path = getPath(this.platform, "getOrgRepos")(organization);
+        return await logExecutionTime("getRepoUrls", {organization}, async () => {
+            const path = getPath(this.platform, "getOrgRepos")(organization);
 
-        const result = await this.axios.get(path);
+            const result = await this.axios.get(path);
+            const cloneUrls = result.data.map(({clone_url: cloneUrl}) => cloneUrl);
 
-        const cloneUrls = result.data.map(({clone_url: cloneUrl}) => cloneUrl);
-        console.log(cloneUrls);
-        return cloneUrls;
+            return cloneUrls;
+        });
     }
 
     async generateSkillMapping(repoUrl = "") {
-        // await this._cloneRepo(repoUrl);
-        const skillFileBreakdown = await this._getSkillFileBreakdown(REPO_STORAGE_PATH);
-        await this._generateRawStats(skillFileBreakdown);
+        return await logExecutionTime("generateSkillMapping", {repoUrl}, async () => {
+            try {
+                await this._cloneRepo(repoUrl);
+                const skillFileBreakdown = await this._getSkillFileBreakdown(REPO_STORAGE_PATH, repoUrl);
+                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl);
+
+                return rawStats;
+            } catch (err) {
+                logger.error(err);
+                throw new Error(err);
+            }
+        });
     }
 
     async _cloneRepo(repoUrl = "") {
-        deleteFolderRecursive(REPO_STORAGE_PATH);
-        await promisifiedSpawn("git", ["clone", repoUrl, REPO_STORAGE_PATH]);
+        await logExecutionTime("_cloneRepo", {repoUrl}, async () => {
+            deleteFolderRecursive(REPO_STORAGE_PATH);
+            await promisifiedSpawn("git", ["clone", repoUrl, REPO_STORAGE_PATH]);
+        });
     }
 
-    async _getSkillFileBreakdown(repoPath = "") {
-        const output = await promisifiedSpawn("ruby", ["./scripts/skill_file_breakdown.rb", repoPath]);
-        const skillFileBreakdown = JSON.parse(output);
+    async _getSkillFileBreakdown(repoPath = "", repoUrl = "") {
+        return await logExecutionTime("_getSkillFileBreakdown", {repoPath, repoUrl}, async () => {
+            const output = await promisifiedSpawn("ruby", ["./scripts/skill_file_breakdown.rb", repoPath]);
+            const skillFileBreakdown = JSON.parse(output);
 
-        return skillFileBreakdown;
+            return skillFileBreakdown;
+        });
     }
 
-    async _generateRawStats(skillFileBreakdown = {}) {
-        const rawStats = {};
-        const skills = Object.keys(skillFileBreakdown);
+    async _generateRawStats(skillFileBreakdown = {}, repoUrl = "") {
+        return await logExecutionTime("_generateRawStats", {repoUrl}, async () => {
+            const rawStats = {};
+            const skills = Object.keys(skillFileBreakdown);
 
-        for (const skill of skills) {
-            const files = skillFileBreakdown[skill];
+            for (const skill of skills) {
+                const files = skillFileBreakdown[skill];
 
-            for (const file of files) {
-                if (!(skill in rawStats)) {
-                    rawStats[skill] = {};
+                for (const file of files) {
+                    if (!(skill in rawStats)) {
+                        rawStats[skill] = {};
+                    }
+
+                    rawStats[skill][file] = await this._getFileStats(file);
                 }
-
-                rawStats[skill][file] = await this._getFileStats(file);
             }
-        }
 
-        return rawStats;
+            return rawStats;
+        });
     }
 
     async _getFileStats(file = "") {
@@ -116,12 +133,12 @@ class GitScraper {
             commitCounts: []
         };
 
-        let index = 0; 
-        
+        let index = 0;
+
         while (index < (fileLog.length - 2)) {
             const author = fileLog[index];
-            const date = fileLog[index+1];
-            const changes = fileLog[index+2];
+            const date = fileLog[index + 1];
+            const changes = fileLog[index + 2];
 
             const dateEpoch = new Date(date).getTime();  // Get epoch in milliseconds
 
@@ -137,6 +154,12 @@ class GitScraper {
         return stats;
     }
 
+    /* Calculates the total number of changes that were made to a particular file by adding
+     * the number of additions and deletions that were made.
+     *
+     * @param outputLine    The line from the commit log with the changes. e.g. "10\t5\tfilename"
+     * @return The sum of the addition and deletion changes.
+     */
     _calculateTotalCommitChanges(outputLine = "") {
         const splitLine = outputLine.split("\t");
         return parseInt(splitLine[0]) + parseInt(splitLine[1]);
@@ -175,7 +198,7 @@ const promisifiedSpawn = (command = "", args = []) => (
 // Taken from https://geedew.com/remove-a-directory-that-is-not-empty-in-nodejs/
 const deleteFolderRecursive = (path) => {
     if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach((file, index) => {
+        fs.readdirSync(path).forEach((file) => {
             const currentPath = path + "/" + file;
 
             if (fs.lstatSync(currentPath).isDirectory()) {
