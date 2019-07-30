@@ -1,10 +1,9 @@
 FROM node:10.15.3
 
-# Install ruby et al to install the github-linguist gem
+# Install ruby and the github-linguist package
 RUN \
     apt-get update && \
-    apt-get install -y cmake pkg-config libicu-dev zlib1g-dev libcurl4-openssl-dev libssl-dev ruby ruby-dev && \
-    gem install github-linguist
+    apt-get install -y ruby ruby-dev ruby-github-linguist
 
 RUN mkdir -p /backend
 WORKDIR /backend
