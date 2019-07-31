@@ -83,6 +83,13 @@
         ],
         "space-unary-ops": [
             "error"
+        ],
+        "brace-style": [
+            "error",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
         ]
     }
 }

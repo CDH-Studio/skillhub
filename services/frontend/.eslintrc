@@ -96,6 +96,13 @@
         "space-unary-ops": [
             "error"
         ],
+        "brace-style": [
+            "error",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
         "react/jsx-boolean-value": ["error", "always"],
         "react/jsx-closing-bracket-location": "error",
         "react/jsx-curly-spacing": ["error", "never"],
