@@ -11,10 +11,10 @@ const missingDependency = (dependencies) => dependencies.reduce((acc, currentDep
 const emptyDependency = (dependencies) => dependencies.reduce((acc, currentDependency) => {
     if (currentDependency.isArray) {
         return acc || (currentDependency.length === 0);
-    }
-    else if (typeof currentDependency === "object") {
+    } else if (typeof currentDependency === "object") {
         return acc || (Object.keys(currentDependency).length === 0);
     }
+
     return acc;
 }, false);
 
@@ -23,8 +23,7 @@ renders an inputted component (componentOnFailedLoad) if one of the dependencies
 const LoadingValidator = ({isLoading, renderOnLoad, renderOnFailedLoad, dependencies}) => {
     if (isLoading || missingDependency(dependencies)) {
         return <CircularProgress className="loading-indicator" />;
-    }
-    else {
+    } else {
         return (emptyDependency(dependencies)) ? (
             renderOnFailedLoad
         ) : (

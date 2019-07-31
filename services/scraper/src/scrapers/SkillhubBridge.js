@@ -1,6 +1,7 @@
 const axios = require("axios");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
 const {chainingPromisePool, logger: baseLogger} = require("utils/");
+const GitScraper = require("./GitScraper");
 const JiraScraper = require("./JiraScraper");
 
 const logger = baseLogger.child({module: "SkillhubBridge"});
@@ -18,6 +19,7 @@ class SkillhubBridge {
             maxContentLength: 100000000
         });
 
+        this.gitScraper = new GitScraper();
         this.jiraScraper = new JiraScraper();
     }
 
@@ -69,6 +71,18 @@ class SkillhubBridge {
     async _scrapeProjectIssues(project = "") {
         const issues = await this.jiraScraper.getIssues(project);
         return await this.axios.post("/scraperBridge", {issues});
+    }
+
+    // TODO (CDHSH-112): Move this into the main scrape function
+    async testSkills(org = "") {
+        const urls = await this.gitScraper.getRepoUrls(org);
+        const skillMappings = {};
+
+        for (const url of urls) {
+            skillMappings[url] = await this.gitScraper.generateSkillMapping(url);
+        }
+
+        return skillMappings;
     }
 }
 

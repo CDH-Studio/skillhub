@@ -22,8 +22,7 @@ function* profilesPatchPersonalDetails({payload}, success) {
 
         yield put(profilesSlice.actions.setProfile(normalizedProfile));
         yield call(success);  // Mark success before continuing with other actions
-    }
-    catch (error) {
+    } catch (error) {
         yield put(notificationSlice.actions.setNotification(
             {type: "error", message: error.message, createdAt: new Date()}
         ));
