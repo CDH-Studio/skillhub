@@ -1,5 +1,4 @@
 import uuidv4 from "uuid/v4";
-import {arrayToObject} from "utils/helperFunctions";
 
 export default class ProjectChangeRecord {
     constructor({
@@ -16,13 +15,41 @@ export default class ProjectChangeRecord {
         this.updatedAt = updatedAt;
     }
 
-    static normalizeProjectChangeRecord = (projectChangeRecord) => {
-        return new ProjectChangeRecord(projectChangeRecord);
-    };
+    static mapUserIdToProjectChangeRecords(userId, byId, byUserId) {
+        return mapForeignIdToProjectChangeRecords(userId, byId, byUserId);
+    }
 
-    /* Normalizes the list of profiles that the API returns into a map of {ID -> Profile},
-     * with the skills processed to just their IDs, for appropriate use in the Redux store. */
-    static normalizeApiResultsForRedux(projectChangeRecords) {
-        return projectChangeRecords.reduce(arrayToObject({processor: this.normalizeProjectChangeRecord}), {});
+    static mapProjectIdToProjectChangeRecords(projectId, byId, byProjectId) {
+        return mapForeignIdToProjectChangeRecords(projectId, byId, byProjectId);
+    }
+
+    static mapProjectChangeRecordsToUsers(projectChangeRecords, usersById) {
+        return mapProjectChangeRecordsToForeignModel("userId", projectChangeRecords, usersById);
+    }
+
+    static mapProjectChangeRecordsToProjects(projectChangeRecords, projectsById) {
+        return mapProjectChangeRecordsToForeignModel("projectId", projectChangeRecords, projectsById);
     }
 }
+
+const mapForeignIdToProjectChangeRecords = (foreignId, byId, byForeignId) => {
+    if (foreignId in byForeignId) {
+        return byForeignId[foreignId].map((id) => byId[id]);
+    }
+
+    return [];
+};
+
+const mapProjectChangeRecordsToForeignModel = (foreignKey, projectChangeRecords, foreignModelsById) => {
+    const addedIds = {};
+
+    return projectChangeRecords.reduce((acc, {[foreignKey]: foreignId}) => {
+        if (foreignId in foreignModelsById && !(foreignId in addedIds)) {
+            acc = [...acc, foreignModelsById[foreignId]];
+            addedIds[foreignId] = true;
+        }
+
+        return acc;
+    }, []);
+};
+

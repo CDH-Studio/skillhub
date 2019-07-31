@@ -1,15 +1,19 @@
 import React from "react";
 import ProjectDetailsLayout from "./ProjectDetailsLayout";
+import {sortObjectsByProperty} from "utils/helperFunctions";
 import connect from "./connect";
 
-const ProjectDetails = ({contributors = [], isLoading = false, project = {}}) => (
+const ProjectDetails = ({contributors = [], isLoading = false, project = {}, projectChangeRecords = []}) => (
     <ProjectDetailsLayout
         isLoading={isLoading}
-        contributors={sortContributors(contributors)}
+        contributors={
+            sortObjectsByProperty(contributors, "name")
+        }
         project={project}
+        projectChangeRecords={
+            sortObjectsByProperty(projectChangeRecords, "createdAt").reverse()
+        }
     />
 );
-
-const sortContributors = (contributors) => contributors.sort((a, b) => a.name.localeCompare(b.name));
 
 export default connect(ProjectDetails);

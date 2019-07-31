@@ -19,6 +19,7 @@ const mapStateToProps = (state) => {
         mappedState.project = loadedProject;
         mappedState.contributors = crossSliceSelectors.getContributorsForProject(state);
     } else {
+        mappedState.projectChangeRecords = crossSliceSelectors.getProjectChangeRecordsForProject(state);
         mappedState.project = {};
         mappedState.contributors = [];
     }
