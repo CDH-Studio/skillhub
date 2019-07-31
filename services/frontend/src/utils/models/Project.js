@@ -78,8 +78,7 @@ export default class Project {
                 const projectLC = project.name.toLowerCase();
                 return projectLC.includes(searchTermLC);
             });
-        }
-        else {
+        } else {
             return projects;
         }
     }

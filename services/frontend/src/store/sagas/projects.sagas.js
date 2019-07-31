@@ -23,8 +23,7 @@ function* projectsPatchProjectInfo({payload}, success) {
 
         yield put(projectsSlice.actions.setProject(normalizedProject));
         yield call(success);  // Mark success before continuing with other actions
-    }
-    catch (error) {
+    } catch (error) {
         // On failure set the error to show up in the dialog box and re-throw
         yield put(notificationSlice.actions.setNotification(
             {type: "error", message: error.message, createdAt: new Date()}
@@ -58,8 +57,7 @@ function* projectsCreateProjectProfile({payload}, success) {
         yield put(projectsSlice.actions.setProject(normalizedProject));
         yield put(projectProfilesSlice.actions.addProjectProfiles(projectProfiles));
         yield call(success);  // Mark success before continuing with other actions
-    }
-    catch (error) {
+    } catch (error) {
         yield put(notificationSlice.actions.setNotification(
             {type: "error", message: error.message, createdAt: new Date()}
         ));
