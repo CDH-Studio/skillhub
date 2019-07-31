@@ -1,13 +1,12 @@
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Create} from "@material-ui/icons";
 import {
-    EditSkillsDialog, LoadingValidator, NavSidebar, ProjectCard,
-    ScrollContainer, SkillBadges
+    EditSkillsDialog, LoadingValidator, NavSidebar, ScrollContainer, SkillBadges
 } from "components/";
-import {PersonalDetails} from "./components";
-import {Profile, Project} from "utils/models";
+import {PersonalDetails, Projects} from "./components";
+import {Profile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
@@ -143,25 +142,6 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
                     skills={profileUpdated.skills}
                 />
             </Paper>
-        </>
-    );
-};
-const Projects = ({sectionName, projects}) => {
-    const projectCards = useMemo(() => projects.map((project) => (
-        <ProjectCard
-            className="profile-project-card"
-            key={project.id}
-            isActive={Project.isActive(project)}
-            {...project}
-        />
-    )), [projects]);
-
-    return (
-        <>
-            <h2>{sectionName}</h2>
-            <div className="profile-page-card profile-card-projects">
-                {projectCards}
-            </div>
         </>
     );
 };

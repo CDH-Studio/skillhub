@@ -11,7 +11,10 @@ const DetailsDialog = ({closeDialog, dialogTitle, formFieldData, open, onSubmit}
         <DialogTitle className="details-dialog-title">
             {dialogTitle}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent
+            className="details-dialog-content"
+            dividers={true}
+        >
             <DetailsForm
                 formFieldData={formFieldData}
             />

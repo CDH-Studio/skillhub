@@ -6,9 +6,9 @@
 .details-dialog {
     .details-dialog-title {
         padding-bottom: $default-spacing * 0.5;
+    }
 
-        h6 {
-            font-weight: 700;
-        }
+    .details-dialog-content {
+        background-color: #F0F4F8;
     }
 }

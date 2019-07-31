@@ -42,6 +42,12 @@ export default class ProjectProfile {
 
         return ProjectProfile.mapProjectProfilesToProjects(projectProfiles, projectsById);
     }
+
+    static mapProfileToUnrelatedProjects(projectsById = [], profileProjects = []) {
+        return projectsById.filter((project) => (
+            !(profileProjects.includes(project))
+        ));
+    }
 }
 
 const mapForeignIdToProjectProfiles = (foreignId, byId, byForeignId) => {

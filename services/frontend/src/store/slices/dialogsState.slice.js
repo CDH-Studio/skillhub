@@ -3,7 +3,9 @@ import mounts from "store/mountpoints";
 
 const initialState = {
     projectInfo: false,
-    personalDetails: false
+    personalDetails: false,
+    searchProject: false,
+    roleInput: false
 };
 
 export const dialogsStateSlice = createSlice({
@@ -27,8 +29,20 @@ const getProjectInfoDialogState = createSelector(
     (dialogs) => dialogs.projectInfo
 );
 
+const getSearchProjectDialogState = createSelector(
+    [dialogsStateSlice.selectors.getDialogsState],
+    (dialogs) => dialogs.searchProject
+);
+
+const getRoleInputDialogState = createSelector(
+    [dialogsStateSlice.selectors.getDialogsState],
+    (dialogs) => dialogs.roleInput
+);
+
 dialogsStateSlice.selectors = {
     ...dialogsStateSlice.selectors,
     getPersonalDetailsDialogState,
-    getProjectInfoDialogState
+    getProjectInfoDialogState,
+    getSearchProjectDialogState,
+    getRoleInputDialogState
 };
