@@ -34,7 +34,7 @@ class GitScraper {
         }
 
         if (!authToken && platform === PLATFORM_BITBUCKET) {
-            throw Error("Missing Git auth token");
+            throw Error("Missing Git platform auth token");
         }
 
         this.authToken = authToken || "";
@@ -178,7 +178,7 @@ class GitScraper {
         let index = 0;
 
         // Iterate in chunks of 3, where each chunk is one block of commit information.
-        // The first line in the chunk is the author's email ('%aE').
+        // The first line in the block is the author's email ('%aE').
         // The second line is the date the commit was made in RFC2822 style ('%aD').
         // The third line is the addition/deletion changes for the file in question ('--numstat').
         while (index < (fileLog.length - 2)) {
