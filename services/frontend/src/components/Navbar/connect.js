@@ -9,6 +9,8 @@ const mapPathToTab = (path) => {
         return 1;
     } else if (path.includes(ScreenUrls.PROJECTS)) {
         return 2;
+    } else if (path.includes(ScreenUrls.SEARCH)) {
+        return 3;
     } else {
         return null;
     }

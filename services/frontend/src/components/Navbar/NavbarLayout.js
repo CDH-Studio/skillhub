@@ -28,13 +28,16 @@ const NavbarTabs = ({activeTab = 0}) => (
         <Tab to={ScreenUrls.PROFILE} component={Link} label="My Profile" />
         <Tab to={ScreenUrls.PEOPLE} component={Link} label="People" />
         <Tab to={ScreenUrls.PROJECTS} component={Link} label="Projects" />
+        <Tab to={ScreenUrls.SEARCH} component={Link} label="Search" />
     </Tabs>
 );
 
 const NavbarSearch = () => (
-    <IconButton className="navbar-search">
-        <Search />
-    </IconButton>
+    <Link to={ScreenUrls.SEARCH}>
+        <IconButton className="navbar-search">
+            <Search />
+        </IconButton>
+    </Link>
 );
 
 const NavbarMenu = ({onLogout}) => {

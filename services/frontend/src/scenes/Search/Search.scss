@@ -1,0 +1,129 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+$search-card-width: $default-spacing * 45;
+
+@mixin query-search-card-width {
+    @media (max-width: #{$search-card-width}) {
+        @content
+    }
+}
+
+.something {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - #{$navbar-height});
+    overflow: auto;
+    align-items: center;
+
+    .projects-list-card {
+        margin: $default-spacing 0;
+    }
+}
+
+
+.search {
+    height: calc(100% - #{$navbar-height});
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.search-input {
+    display: flex;
+    justify-content: center;
+    padding: $default-spacing;
+    padding-bottom: 0;
+
+    .input-base {
+        position: relative;
+        background-color: $color-light;
+        font-size: 16px;
+        height: 100%;
+
+        &:focus {
+          border-radius: 4;
+          border-color: #80bdff;
+          box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+    }
+
+    .search-box {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        padding: $default-spacing * 0.5 $default-spacing;
+        border-radius: 25px;
+    }
+
+    .search-icon {
+        padding: 5px;
+    }
+}
+
+.search-page-card {
+    display: flex;
+    margin-bottom: $default-spacing * 2;
+    margin-top: $default-spacing;
+    padding: $default-spacing * 2;
+    width: $search-card-width;
+
+    @include query-search-card-width {
+        width: auto;
+    }
+}
+
+.pagin {
+    display: flex;
+    justify-content: center;
+    padding: $default-spacing;
+    border-top: 1px solid $color-text-secondary;
+
+    .pagination {
+        display: flex;
+
+        li {
+            background-color: $color-light;
+            display: flex;
+            border: 1px solid $color-neutral-7;
+            border-right: 0;
+
+            a {
+                height: 100%;
+                padding: 10px 10px;
+                text-decoration: none;
+                user-select: none;
+            }
+
+
+            &:last-child {
+                border: 1px solid $color-neutral-7;
+                border-top-right-radius: $pagination-border-radius;
+                border-bottom-right-radius: $pagination-border-radius;
+                a {
+                    border-top-right-radius: $pagination-border-radius;
+                    border-bottom-right-radius: $pagination-border-radius;
+                }
+            }
+
+            &:first-child {
+                border-top-left-radius: $pagination-border-radius;
+                border-bottom-left-radius: $pagination-border-radius;
+                a {
+                    border-top-left-radius: $pagination-border-radius;
+                    border-bottom-left-radius: $pagination-border-radius;
+                }
+            }
+
+            // :not(.active):hover {
+            //     background-color: $color-neutral-10;
+            // }
+
+            &.active {
+                background-color: $color-primary;
+                color: $color-light;
+            }
+        }
+    }
+}
