@@ -25,6 +25,8 @@ const PLATFORM_CONFIGS = {
 
 const getPath = (platform, key) => PLATFORM_CONFIGS[platform][key];
 
+/* Scraper for the various git hosting platforms (i.e. Bitbucket and Github) that handles cloning
+ * and scraping various stats from repos that can then be used to make skill predictions. */
 class GitScraper {
     constructor({authToken = GIT_AUTH_TOKEN, host = GIT_HOST, platform = GIT_PLATFORM} = {}) {
         if (platform !== PLATFORM_BITBUCKET && platform !== PLATFORM_GITHUB) {
@@ -51,6 +53,11 @@ class GitScraper {
         this.axios = axios.create({baseURL: this.baseUrl, headers});
     }
 
+    /* Grabs a list of clone urls for all the repos of the given Bitbucket/Github organization.
+     *
+     * @param organization  The Bitbucket/Github organization to pull from.
+     * @return The list of clone urls.
+     */
     async getRepoUrls(organization = "") {
         return await logExecutionTime("getRepoUrls", {organization}, async () => {
             const path = getPath(this.platform, "getOrgRepos")(organization);
@@ -62,12 +69,34 @@ class GitScraper {
         });
     }
 
+    /* Clones the given repo and generates a raw skill mapping for it. This raw skill mapping can then be used
+     * by the 'predictions' service to generate skill predictions.
+     *
+     * @param repoUrl   The url to clone the repo from.
+     * @return A raw skill mapping, that looks like this:
+     *
+     *  ```
+     *  {
+     *      [skill]: {
+     *          [file]: {
+     *              authors: [...],
+     *              oldestCommitDates: [...],
+     *              latestCommitDates: [...],
+     *              changeCounts: [...],
+     *              commitCounts: [...]
+     *          }
+     *      }
+     *  }
+     *  ```
+     *
+     *  The `skill`s and `file`s are determined by the repo's github-linguist breakdown.
+     */
     async generateSkillMapping(repoUrl = "") {
         return await logExecutionTime("generateSkillMapping", {repoUrl}, async () => {
             try {
-                await this._cloneRepo(repoUrl);
-                const skillFileBreakdown = await this._getSkillFileBreakdown(REPO_STORAGE_PATH, repoUrl);
-                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl);
+                await this._cloneRepo(repoUrl, REPO_STORAGE_PATH);
+                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, REPO_STORAGE_PATH);
+                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, REPO_STORAGE_PATH);
 
                 return rawStats;
             } catch (err) {
@@ -77,15 +106,17 @@ class GitScraper {
         });
     }
 
-    async _cloneRepo(repoUrl = "") {
+    /* Clones a repo to a given file path. */
+    async _cloneRepo(repoUrl = "", repoPath = "") {
         await logExecutionTime("_cloneRepo", {repoUrl}, async () => {
-            deleteFolderRecursive(REPO_STORAGE_PATH);
-            await promisifiedSpawn("git", ["clone", repoUrl, REPO_STORAGE_PATH]);
+            deleteFolderRecursive(repoPath);
+            await promisifiedSpawn("git", ["clone", repoUrl, repoPath]);
         });
     }
 
-    async _getSkillFileBreakdown(repoPath = "", repoUrl = "") {
-        return await logExecutionTime("_getSkillFileBreakdown", {repoPath, repoUrl}, async () => {
+    /* Runs the github-linguist script to get a breakdown of skills -> files. */
+    async _getSkillFileBreakdown(repoUrl = "", repoPath = "") {
+        return await logExecutionTime("_getSkillFileBreakdown", {repoUrl, repoPath}, async () => {
             const output = await promisifiedSpawn("ruby", ["./scripts/skill_file_breakdown.rb", repoPath]);
             const skillFileBreakdown = JSON.parse(output);
 
@@ -93,10 +124,12 @@ class GitScraper {
         });
     }
 
-    async _generateRawStats(skillFileBreakdown = {}, repoUrl = "") {
-        return await logExecutionTime("_generateRawStats", {repoUrl}, async () => {
+    /* Generates the set of raw stats for each combination of skill/file. */
+    async _generateRawStats(skillFileBreakdown = {}, repoUrl = "", repoPath = "") {
+        const skills = Object.keys(skillFileBreakdown);
+
+        return await logExecutionTime("_generateRawStats", {skills, repoUrl}, async () => {
             const rawStats = {};
-            const skills = Object.keys(skillFileBreakdown);
 
             for (const skill of skills) {
                 const files = skillFileBreakdown[skill];
@@ -106,7 +139,7 @@ class GitScraper {
                         rawStats[skill] = {};
                     }
 
-                    rawStats[skill][file] = await this._getFileStats(file);
+                    rawStats[skill][file] = await this._getFileStats(file, repoPath);
                 }
             }
 
@@ -114,17 +147,26 @@ class GitScraper {
         });
     }
 
-    async _getFileStats(file = "") {
+    /* Generates a set of raw stats for a single file. Raw stats encompass various information
+     * parsed from the file's commit log, particularly the number of changes made by each author.
+     */
+    async _getFileStats(file = "", repoPath) {
         const rawFileLog = await promisifiedSpawn(
             "git",
             [
-                `--git-dir=${REPO_STORAGE_PATH}/.git`, "log", "--pretty='%aE%n%aD'", "--numstat", "--no-merges",
+                `--git-dir=${repoPath}/.git`, "log", "--pretty='%aE%n%aD'", "--numstat", "--no-merges",
                 "--", file
             ]
         );
 
+        // Split the lines into an array, strip any outstanding quotes, and remove any empty lines.
         const fileLog = rawFileLog.split("\n").map((line) => line.replace("'", "")).filter((line) => line);
 
+        // The reason we build a set of lists for all this data is so that it can be easily
+        // imported into a DataFrame when it gets sent to the 'predictions' service.
+        // Remember, these are the _raw_ stats; it might seem weird that we have a list
+        // where the only thing that gets put in it are '1's (i.e. 'commitCounts'), but it makes
+        // the data manipulation easier on the backend.
         const stats = {
             authors: [],
             oldestCommitDates: [],
@@ -135,6 +177,10 @@ class GitScraper {
 
         let index = 0;
 
+        // Iterate in chunks of 3, where each chunk is one block of commit information.
+        // The first line in the chunk is the author's email ('%aE').
+        // The second line is the date the commit was made in RFC2822 style ('%aD').
+        // The third line is the addition/deletion changes for the file in question ('--numstat').
         while (index < (fileLog.length - 2)) {
             const author = fileLog[index];
             const date = fileLog[index + 1];
@@ -166,6 +212,13 @@ class GitScraper {
     }
 }
 
+/* A promisified version of `child_process.spawn`, so that we can use it with the same
+ * async/await paradigms that the rest of the code uses.
+ *
+ * @param command   The base command to call.
+ * @param args      A list of arguments to pass to the base command.
+ * @return A promise that resolves to the output of the command called by spawn.
+ */
 const promisifiedSpawn = (command = "", args = []) => (
     new Promise((resolve, reject) => {
         const child = spawn(command, args);
@@ -196,6 +249,7 @@ const promisifiedSpawn = (command = "", args = []) => (
 );
 
 // Taken from https://geedew.com/remove-a-directory-that-is-not-empty-in-nodejs/
+// Deletes a folder if it exists, even if it is non-empty.
 const deleteFolderRecursive = (path) => {
     if (fs.existsSync(path)) {
         fs.readdirSync(path).forEach((file) => {
