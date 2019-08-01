@@ -66,12 +66,39 @@
 }
 
 #project-used-skills {
-
     .project-used-skills-content {
         flex-wrap: wrap;
         padding: $default-spacing*1.5 $default-spacing*1.5;
     }
 }
 
+#project-changelog {
+    .project-changelog-content {
+        align-content: center;
+        display: flex;
+        flex-direction: column;
 
+        .project-changelog {
+            display: flex;
+            justify-content: space-between;
+            line-height: 1.2;
+            margin-bottom: $default-spacing * 0.5;
 
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .project-changelog-date {
+                color: $color-neutral-6;
+                flex: 1;
+                font-size: $font-size-content*1.2;
+            }
+
+            .project-changelog-description{
+                flex: 3;
+                font-size: $font-size-content*1.2;
+                text-align: right;
+            }
+        }
+    }
+}

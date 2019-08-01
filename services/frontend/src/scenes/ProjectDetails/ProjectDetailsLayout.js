@@ -1,14 +1,15 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {Link} from "react-router-dom";
 import {AvatarIcon, ScrollContainer, NavSidebar, SkillBadges, LoadingValidator} from "components/";
 import {ProjectInfo} from "./components";
 import {Button, Paper} from "@material-ui/core";
-import "./ProjectDetails.scss";
+import {parseDateStringToYMD} from "utils/helperFunctions";
 import ScreenUrls from "utils/screenUrls";
+import "./ProjectDetails.scss";
 
 const containerClass = ".scroll-container";
 
-const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequest}) => {
+const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequest, projectChangeRecords}) => {
     return (
         <ScrollContainer className="project">
             <LoadingValidator
@@ -23,6 +24,7 @@ const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequ
                         <ProjectContent
                             contributors={contributors}
                             project={project}
+                            projectChangeRecords={projectChangeRecords}
                             projectInfoRequest={projectInfoRequest}
                         />
                     </>
@@ -129,41 +131,44 @@ const UsedSkills = ({sectionName, project}) => (
     </>
 );
 
-const Changelog = ({sectionName}) => (
-    <>
-        <h2>{sectionName}</h2>
-        <Paper className="project-details-card">
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+const Changelog = ({projectChangeRecords, sectionName}) => {
+    const mappedChangeRecords = useMemo(() => projectChangeRecords.map((projectChangeRecord) => (
+        <ProjectChangeRecord
+            className="project-changelog"
+            key={projectChangeRecord.id}
+            {...projectChangeRecord}
+        />
+    )), [projectChangeRecords]);
 
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
+    return (
+        <>
+            <h2>{sectionName}</h2>
+            <Paper className="project-details-card project-changelog-content">
+                {
+                    (mappedChangeRecords.length === 0) ? (
+                        <NoChangeRecords />
+                    ) : (
+                        mappedChangeRecords
+                    )
+                }
+            </Paper>
+        </>
+    );
+};
 
-            <br /> <br />
+const NoChangeRecords = () => (
+    <p>No project change records found</p>
+);
 
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-
-            Occaecat reprehenderit fugiat qui ullamco ad commodo Lorem velit nisi aliquip sit esse officia con
-            sequat. Officia aliqua ut reprehenderit ex occaecat ut aute dolor amet deserunt veniam. Reprehende
-            rit Lorem laboris est consequat. Enim ipsum ea do esse non esse incididunt id deserunt elit except
-            eur adipisicing ea irure. Elit voluptate cupidatat anim sit aute non excepteur Lorem nostrud occae
-            cat irure ut esse fugiat. Veniam proident esse aliqua do mollit laboris dolor. Adipisicing est nis
-            i id nisi nisi amet anim nostrud eiusmod ad fugiat qui.
-        </Paper>
-    </>
+const ProjectChangeRecord = ({className, oldValue, newValue, changedAttribute, createdAt}) => (
+    <div className={className}>
+        <p className="project-changelog-date">
+            {parseDateStringToYMD(createdAt)}
+        </p>
+        <p className="project-changelog-description">
+            {changedAttribute} changed - from &quot;{oldValue}&quot; to &quot;{newValue}&quot;
+        </p>
+    </div>
 );
 
 export default ProjectDetailsLayout;

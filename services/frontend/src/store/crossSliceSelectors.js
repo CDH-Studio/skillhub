@@ -1,9 +1,12 @@
 import {createMatchSelector} from "connected-react-router";
 import {createSelector} from "redux-starter-kit";
 import {arrayToObject} from "utils/helperFunctions";
-import {Profile, Project, ProjectProfile} from "utils/models";
+import {Profile, Project, ProjectProfile, ProjectChangeRecord} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
-import {profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice, userSlice, profileSkillsSlice} from "./slices";
+import {
+    profilesSlice, projectsSlice, projectProfilesSlice, skillsSlice,
+    userSlice, profileSkillsSlice, projectChangeRecordsSlice
+} from "./slices";
 
 const isMatchingRoute = createMatchSelector;
 
@@ -98,6 +101,15 @@ const getUnrelatedProjectsForUser = createSelector(
     ProjectProfile.mapProfileToUnrelatedProjects
 );
 
+const getProjectChangeRecordsForProject = createSelector(
+    [
+        getProjectIdFromUrl,
+        projectChangeRecordsSlice.selectors.getById,
+        projectChangeRecordsSlice.selectors.getByProjectId
+    ],
+    ProjectChangeRecord.mapProjectIdToProjectChangeRecords
+);
+
 export const crossSliceSelectors = {
     isMatchingRoute,
     getProfilesWithSkills,
@@ -110,6 +122,7 @@ export const crossSliceSelectors = {
     getProjectIdFromUrl,
     getProjectFromUrlId,
     getContributorsForProject,
+    getProjectChangeRecordsForProject,
     getProjectsFromProfileUrlId,
     getProjectsForUser,
     getUnrelatedProjectsForUser
