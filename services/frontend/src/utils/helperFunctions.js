@@ -16,8 +16,7 @@ export const parseDateStringToYMD = (dateString) => {
     if (!dateString) {
         return "";
     } else {
-        const epochDate = Date.parse(dateString);
-        const dateObject = new Date(epochDate);
+        const dateObject = new Date(dateString);
 
         return new Date(
             dateObject.getTime() - (dateObject.getTimezoneOffset() * 60000 )

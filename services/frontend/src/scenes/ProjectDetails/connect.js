@@ -17,9 +17,9 @@ const mapStateToProps = (state) => {
     /* Map required data for the project details request */
     if (loadedProject) {
         mappedState.project = loadedProject;
+        mappedState.projectChangeRecords = crossSliceSelectors.getProjectChangeRecordsForProject(state);
         mappedState.contributors = crossSliceSelectors.getContributorsForProject(state);
     } else {
-        mappedState.projectChangeRecords = crossSliceSelectors.getProjectChangeRecordsForProject(state);
         mappedState.project = {};
         mappedState.contributors = [];
     }

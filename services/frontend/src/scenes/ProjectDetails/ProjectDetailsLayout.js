@@ -131,7 +131,7 @@ const UsedSkills = ({sectionName, project}) => (
     </>
 );
 
-const Changelog = ({sectionName, projectChangeRecords}) => {
+const Changelog = ({projectChangeRecords, sectionName}) => {
     const mappedChangeRecords = useMemo(() => projectChangeRecords.map((projectChangeRecord) => (
         <ProjectChangeRecord
             className="project-changelog"

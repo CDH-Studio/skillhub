@@ -74,30 +74,30 @@
 
 #project-changelog {
     .project-changelog-content {
+        align-content: center;
         display: flex;
         flex-direction: column;
-        align-content: center;
 
         .project-changelog {
             display: flex;
             justify-content: space-between;
-            margin-bottom: $default-spacing * 0.5;
             line-height: 1.2;
+            margin-bottom: $default-spacing * 0.5;
 
             &:last-child {
                 margin-bottom: 0;
             }
 
             .project-changelog-date {
-                flex: 1;
                 color: $color-neutral-6;
+                flex: 1;
                 font-size: $font-size-content*1.2;
             }
 
             .project-changelog-description{
                 flex: 3;
-                text-align: right;
                 font-size: $font-size-content*1.2;
+                text-align: right;
             }
         }
     }
