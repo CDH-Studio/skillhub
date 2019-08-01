@@ -1,12 +1,15 @@
 import React, {useCallback, useState} from "react";
 import connect from "./connect";
 import {searchRecords} from "utils/helperFunctions";
-import {FILTER_PROFILES} from "utils/searchGlobals";
+import {FILTER_PROFILES, Query} from "utils/searchGlobals";
 import SearchLayout from "./SearchLayout";
 
-const Search = ({projects, profiles}) => {
+const Search = ({projects, profiles, isLoading}) => {
+    /* create the state for the profile/projects filter and the search properties.
+     * search properties are set as an object of the form:
+     * {searchTerm: , SearchBy: } */
     const [activeFilter, setActiveFilter] = useState(FILTER_PROFILES);
-    const [searchProperties, setSearchProperties] = useState({});
+    const [searchProperties, setSearchProperties] = useState(new Query());
     const onFilterClick = useCallback((filter) => () => setActiveFilter(filter), [setActiveFilter]);
 
     const searchedProjects = searchRecords(projects, searchProperties.searchTerm, searchProperties.searchBy);
@@ -14,6 +17,7 @@ const Search = ({projects, profiles}) => {
 
     return (
         <SearchLayout
+            isLoading={isLoading}
             projects={searchedProjects}
             profiles={searchedProfiles}
             setSearchProperties={setSearchProperties}

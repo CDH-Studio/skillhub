@@ -1,45 +1,50 @@
-import React, {useMemo, useState} from "react";
-import {useInput} from "utils/hooks";
-import {Paper, IconButton, MenuItem, Input, Select} from "@material-ui/core";
+import React, {useCallback, useMemo, useState} from "react";
+import {useInput, useOnEnterKey} from "utils/hooks";
+import {Paper, IconButton, MenuItem, Input, Select, CircularProgress} from "@material-ui/core";
 import {Search} from "@material-ui/icons";
 import ReactPaginate from "react-paginate";
 import classNames from "classnames";
-import {ProfileCard, ProjectCard} from "components/";
+import {ProfileCard, ProjectCard, LoadingValidator} from "components/";
 import {Project} from "utils/models";
-import {FILTER_PROFILES, FILTER_PROJECTS} from "utils/searchGlobals";
+import {FILTER_PROFILES, FILTER_PROJECTS, Query} from "utils/searchGlobals";
 import "./Search.scss";
 
 const CARDS_PER_PAGE = 10;
-
-const currencies = [
-    {
-        value: 'BTC',
-        label: 'name',
-    },
-    {
-        value: 'JPY',
-        label: 'skill',
-    },
+const searchOptions = [
+    "name",
+    "skill"
 ];
 
-const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearchProperties, searchTerm}) => {
-    console.log(FILTER_PROFILES);
+const SearchLayout = ({
+    projects, profiles, activeFilter, onFilterClick,
+    setSearchProperties, searchTerm, isLoading
+}) => {
     return (
         <div className="search">
-            <SearchField
-                setSearchProperties={setSearchProperties}
-            />
-            <FilterHeader
-                labels={[FILTER_PROFILES, FILTER_PROJECTS]}
-                onFilterClick={onFilterClick}
-                activeFilter={activeFilter}
-            />
-
-            <FilteredContent
-                key={searchTerm}
-                profiles={profiles}
-                projects={projects}
-                activeFilter={activeFilter}
+            <LoadingValidator
+                dependencies={[profiles, projects]}
+                isLoading={isLoading}
+                renderOnLoad={
+                    <>
+                        <SearchField
+                            setSearchProperties={setSearchProperties}
+                        />
+                        <FilterHeader
+                            labels={[FILTER_PROFILES, FILTER_PROJECTS]}
+                            onFilterClick={onFilterClick}
+                            activeFilter={activeFilter}
+                        />
+                        <FilteredContent
+                            key={searchTerm}
+                            profiles={profiles}
+                            projects={projects}
+                            activeFilter={activeFilter}
+                        />
+                    </>
+                }
+                renderOnFailedLoad={
+                    <CircularProgress className="loading-indicator" />
+                }
             />
         </div>
     );
@@ -68,7 +73,9 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
         return (
             <>
                 <div className="something">
-                    <ProfilesList profiles={paginatedProfiles} />
+                    <ProfilesList
+                        profiles={paginatedProfiles}
+                    />
                 </div>
                 <PaginationFooter
                     data={profiles}
@@ -104,16 +111,18 @@ const handlePageChange = (newPageIndex, setData, cards) => {
     ));
 };
 
-const ProjectsList = ({projects}) => (
-    useMemo(() => projects.map((project) => (
-        <ProjectCard
-            className="projects-list-card"
-            key={project.id}
-            isActive={Project.isActive(project)}
-            {...project}
-        />
-    )), [projects])
-);
+const ProjectsList = ({projects}) => {
+    return (
+        useMemo(() => projects.map((project) => (
+            <ProjectCard
+                className="projects-list-card"
+                key={project.id}
+                isActive={Project.isActive(project)}
+                {...project}
+            />
+        )), [projects])
+    );
+};
 
 const ProfilesList = ({profiles}) => (
     useMemo(() => profiles.map((profile) => (
@@ -130,16 +139,25 @@ const ProfilesList = ({profiles}) => (
 );
 
 const SearchField = ({setSearchProperties}) => {
+    // Create the controlled search input and state to hold the type of search (ex. by name)
     const searchInput = useInput();
     const {value: searchTerm} = searchInput;
+    const [searchOption, setSearchOption] = React.useState();
 
-    const [values, setValues] = React.useState({
-        currency: "BTC"
-    });
-
-    const handleChange = (name) => (event) => {
-        setValues({...values, [name]: event.target.value});
+    const handleChange = (event) => {
+        setSearchOption(event.target.value);
     };
+
+    /* Create a new query containing all of the required data for the search and set it in State
+     * to begin the search */
+    const onSearch = () => (
+        setSearchProperties(new Query({
+            searchBy: searchOption,
+            searchTerm: searchTerm
+        }))
+    );
+    const onInputEnter = useCallback(useOnEnterKey(onSearch), [onSearch]);
+
     return (
         <div className="search-input">
             <Paper className="search-box">
@@ -148,32 +166,26 @@ const SearchField = ({setSearchProperties}) => {
                     disableUnderline={true}
                     type="search"
                     className=""
+                    onKeyPress={onInputEnter}
                     {...searchInput}
                 />
                 <Select
                     label="Select"
                     className="input-base"
-                    value={values.currency}
-                    onChange={handleChange('currency')}
+                    value={searchOptions[0]}
+                    onChange={handleChange}
                     disableUnderline={true}
-                    SelectProps={{
-                        MenuProps: {
-                        },
-                    }}
                 >
-                    {currencies.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
+                    {searchOptions.map((option) => (
+                        <MenuItem key={option} value={option}>
+                            {option}
                         </MenuItem>
                     ))
                     }
                 </Select>
                 <IconButton
                     className="search-icon"
-                    onClick={() => setSearchProperties({
-                        searchTerm: searchTerm,
-                        searchBy: values.currency
-                    })}
+                    onClick={onSearch}
                 >
                     <Search />
                 </IconButton >

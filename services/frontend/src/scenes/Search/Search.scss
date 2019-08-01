@@ -28,6 +28,7 @@ $search-card-width: $default-spacing * 45;
     display: flex;
     flex-direction: column;
     align-content: center;
+    justify-content: center;
 }
 
 .search-input {
@@ -64,7 +65,7 @@ $search-card-width: $default-spacing * 45;
 
 .search-page-card {
     display: flex;
-    margin-bottom: $default-spacing * 2;
+    margin-bottom: $default-spacing;
     margin-top: $default-spacing;
     padding: $default-spacing * 2;
     width: $search-card-width;
@@ -121,6 +122,8 @@ $search-card-width: $default-spacing * 45;
             // }
 
             &.active {
+                transition: background-color 0.8s ease,
+                            color 0.8s ease;
                 background-color: $color-primary;
                 color: $color-light;
             }
