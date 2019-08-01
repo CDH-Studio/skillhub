@@ -129,17 +129,30 @@ class GitScraper {
         const skills = Object.keys(skillFileBreakdown);
 
         return await logExecutionTime("_generateRawStats", {skills, repoUrl}, async () => {
-            const rawStats = {};
+            const rawStats = {
+                author: [],
+                oldestCommitDate: [],
+                latestCommitDate: [],
+                changeCount: [],
+                commitCount: [],
+                file: [],
+                skill: []
+            };
 
             for (const skill of skills) {
                 const files = skillFileBreakdown[skill];
 
                 for (const file of files) {
-                    if (!(skill in rawStats)) {
-                        rawStats[skill] = {};
-                    }
+                    const fileStats = await this._getFileStats(file, repoPath);
 
-                    rawStats[skill][file] = await this._getFileStats(file, repoPath);
+                    const numberOfCommits = fileStats["commitCount"].length;
+                    const skillStat = new Array(numberOfCommits).fill(skill);
+
+                    Object.keys(fileStats).forEach((statKey) => {
+                        rawStats[statKey] = rawStats[statKey].concat(fileStats[statKey]);
+                    });
+
+                    rawStats["skill"] = rawStats["skill"].concat(skillStat);
                 }
             }
 
@@ -168,11 +181,12 @@ class GitScraper {
         // where the only thing that gets put in it are '1's (i.e. 'commitCounts'), but it makes
         // the data manipulation easier on the backend.
         const stats = {
-            authors: [],
-            oldestCommitDates: [],
-            latestCommitDates: [],
-            changeCounts: [],
-            commitCounts: []
+            author: [],
+            oldestCommitDate: [],
+            latestCommitDate: [],
+            changeCount: [],
+            commitCount: [],
+            file: []
         };
 
         let index = 0;
@@ -188,11 +202,12 @@ class GitScraper {
 
             const dateEpoch = new Date(date).getTime();  // Get epoch in milliseconds
 
-            stats.authors.push(author);
-            stats.oldestCommitDates.push(dateEpoch);
-            stats.latestCommitDates.push(dateEpoch);
-            stats.changeCounts.push(this._calculateTotalCommitChanges(changes));
-            stats.commitCounts.push(1);
+            stats.author.push(author);
+            stats.oldestCommitDate.push(dateEpoch);
+            stats.latestCommitDate.push(dateEpoch);
+            stats.changeCount.push(this._calculateTotalCommitChanges(changes));
+            stats.commitCount.push(1);
+            stats.file.push(file);
 
             index += 3;
         }

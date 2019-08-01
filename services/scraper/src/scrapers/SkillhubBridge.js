@@ -76,10 +76,29 @@ class SkillhubBridge {
     // TODO (CDHSH-112): Move this into the main scrape function
     async testSkills(org = "") {
         const urls = await this.gitScraper.getRepoUrls(org);
-        const skillMappings = {};
+
+        const skillMappings = {
+            author: [],
+            oldestCommitDate: [],
+            latestCommitDate: [],
+            changeCount: [],
+            commitCount: [],
+            file: [],
+            skill: [],
+            repo: []
+        };
 
         for (const url of urls) {
-            skillMappings[url] = await this.gitScraper.generateSkillMapping(url);
+            const skillMapping = await this.gitScraper.generateSkillMapping(url);
+
+            const numberOfCommits = skillMapping["commitCount"].length;
+            const repoStat = new Array(numberOfCommits).fill(url);
+
+            Object.keys(skillMapping).forEach((statKey) => {
+                skillMappings[statKey] = skillMappings[statKey].concat(skillMapping[statKey]);
+            });
+
+            skillMappings["repo"] = skillMappings["repo"].concat(repoStat);
         }
 
         return skillMappings;
