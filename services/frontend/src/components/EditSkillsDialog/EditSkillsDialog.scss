@@ -11,10 +11,19 @@
             font-weight: 700;
         }
     }
-    .chipArray{
+    .edit-skills-dialog-text{
+        padding: $default-spacing*0.5;
+        width: 100%;
+    }
+    .chip-array{
+        margin-bottom: $default-spacing;
         width: 400px;
-        .chipArraySkill{
+        .chip-array-skill{
             margin: $default-spacing*0.25 $default-spacing*0.3;
+            &.chip-array-skill--skilled {
+                background-color: $color-secondary;
+                color: $color-light;
+            }
         }
     }
 }

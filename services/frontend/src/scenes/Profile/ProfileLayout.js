@@ -28,7 +28,7 @@ const sections = [
 ];
 
 const ProfileLayout = ({
-    addProfileSkills, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills, isLoading
+    addProfileSkills, addNewSkill, patchProfileSkills, isUserProfile, databaseSkills, projects, profile, skills, isLoading
 }) => (
     <ScrollContainer className="profile">
         <LoadingValidator
@@ -48,6 +48,7 @@ const ProfileLayout = ({
                         skills={skills}
                         addProfileSkills={addProfileSkills}
                         addNewSkill={addNewSkill}
+                        patchProfileSkills={patchProfileSkills}
                     />
                 </>
             }
@@ -96,7 +97,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSkills}) => {
+const Skills = ({addProfileSkills, addNewSkill, patchProfileSkills, sectionName, profile, databaseSkills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
@@ -106,18 +107,31 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
 
     const closeDialog = () => {
         setEditSkillsDialogOpen(false);
+        console.log("close", profileUpdated);
+
     };
 
     const handleSubmit = (updatedSkills) => {
-        updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
-        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
-        //profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
+        profileUpdated.skills = updatedSkills;
+        console.log("submit", databaseSkills);
+        updateProfile(profileUpdated);
+        const databaseSkillsName = Object.values(databaseSkills).map((skill) => skill.name.toLowerCase());
+        const newSkills = profileUpdated.skills.reduce((acc, skill) => {
+            if (!databaseSkillsName.includes(skill.name.toLowerCase()))
+                acc = [...acc, skill];
+            return acc;
+        }, []);
+        console.log("hi", newSkills);
+        //updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
+        newSkills.map((skill) => addNewSkill(skill));
         //delete profileUpdated.newSkillObjects;
-        //addProfileSkills(profileUpdated);
+        addProfileSkills(profileUpdated);
+        patchProfileSkills(profileUpdated);
         closeDialog();
     };
 
     const handleCancel = () => {
+        console.log("cancel", profileUpdated);
         closeDialog();
     };
 
