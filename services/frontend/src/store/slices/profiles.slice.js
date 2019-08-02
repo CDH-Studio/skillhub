@@ -15,5 +15,5 @@ export const profilesSlice = createSlice({
 
 export const profilesRequestsSlice = createRequestSlices(
     mounts.profilesRequests,
-    ["fetchAll", "addNewProfileSkills", "patchProfileSkills", "patchPersonalDetails"]
+    ["fetchAll", "addNewProfileSkills", "patchPersonalDetails"]
 );

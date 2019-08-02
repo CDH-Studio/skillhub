@@ -1,6 +1,5 @@
 import React from "react";
-import Downshift from "downshift";
-import {Profile, Project} from "utils/models";
+import {Profile} from "utils/models";
 
 import {
     Button,
@@ -43,10 +42,8 @@ const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, o
         if (event.key === "Enter") {
             const newSkill = event.target.value.trim();
             const newSkillObject = Profile.addSkill(newSkill, skillsUpdated, databaseSkills);
-            if (newSkillObject) {
-                console.log("before", skillsUpdated);
+            if (newSkillObject){
                 setSkills([...skillsUpdated, newSkillObject]);
-                console.log("after", skillsUpdated);
             }
 
             event.target.value = "";

@@ -56,24 +56,6 @@ function* addNewProfileSkills({payload}) {
     ));
 }
 
-function* patchProfileSkills({payload}) {
-    try {
-        const result = yield call(api.service("profiles").patch, payload.profile);
-
-        const normalizedProfile = Profile.normalizeProfile(result);
-        yield put(profilesSlice.actions.setProfile(normalizedProfile));
-    } catch (error) {
-        yield put(notificationSlice.actions.setNotification(
-            {type: "error", message: error.message, createdAt: new Date()}
-        ));
-        throw error;
-    }
-
-    yield put(notificationSlice.actions.setNotification(
-        {type: "success", message: "Updated Skills Successfully", createdAt: new Date()}
-    ));
-}
-
 function* profilesSaga() {
     yield fork(profilesRequestsSlice.fetchAll.watchRequestSaga(
         profilesFetchAll
@@ -81,10 +63,6 @@ function* profilesSaga() {
 
     yield fork(profilesRequestsSlice.addNewProfileSkills.watchRequestSaga(
         addNewProfileSkills
-    ));
-
-    yield fork(profilesRequestsSlice.patchProfileSkills.watchRequestSaga(
-        patchProfileSkills
     ));
 
     yield fork(profilesRequestsSlice.patchPersonalDetails.watchRequestSaga(
