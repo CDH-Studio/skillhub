@@ -134,7 +134,7 @@ class GitScraper {
                 oldestCommitDate: [],
                 latestCommitDate: [],
                 changeCount: [],
-                commitCount: [],
+                commit: [],
                 file: [],
                 skill: []
             };
@@ -145,7 +145,7 @@ class GitScraper {
                 for (const file of files) {
                     const fileStats = await this._getFileStats(file, repoPath);
 
-                    const numberOfCommits = fileStats["commitCount"].length;
+                    const numberOfCommits = fileStats["commit"].length;
                     const skillStat = new Array(numberOfCommits).fill(skill);
 
                     Object.keys(fileStats).forEach((statKey) => {
@@ -167,7 +167,7 @@ class GitScraper {
         const rawFileLog = await promisifiedSpawn(
             "git",
             [
-                `--git-dir=${repoPath}/.git`, "log", "--pretty='%aE%n%aD'", "--numstat", "--no-merges",
+                `--git-dir=${repoPath}/.git`, "log", "--pretty='%H%n%aE%n%aD'", "--numstat", "--no-merges",
                 "--", file
             ]
         );
@@ -177,28 +177,27 @@ class GitScraper {
 
         // The reason we build a set of lists for all this data is so that it can be easily
         // imported into a DataFrame when it gets sent to the 'predictions' service.
-        // Remember, these are the _raw_ stats; it might seem weird that we have a list
-        // where the only thing that gets put in it are '1's (i.e. 'commitCounts'), but it makes
-        // the data manipulation easier on the backend.
         const stats = {
             author: [],
             oldestCommitDate: [],
             latestCommitDate: [],
             changeCount: [],
-            commitCount: [],
+            commit: [],
             file: []
         };
 
         let index = 0;
 
-        // Iterate in chunks of 3, where each chunk is one block of commit information.
-        // The first line in the block is the author's email ('%aE').
-        // The second line is the date the commit was made in RFC2822 style ('%aD').
-        // The third line is the addition/deletion changes for the file in question ('--numstat').
-        while (index < (fileLog.length - 2)) {
-            const author = fileLog[index];
-            const date = fileLog[index + 1];
-            const changes = fileLog[index + 2];
+        // Iterate in chunks of 4, where each chunk is one block of commit information.
+        // The line is the commit hash ('%H')
+        // The second line is the author's email ('%aE').
+        // The third line is the date the commit was made in RFC2822 style ('%aD').
+        // The fourth line is the addition/deletion changes for the file in question ('--numstat').
+        while (index < (fileLog.length - 3)) {
+            const commitHash = fileLog[index];
+            const author = fileLog[index + 1];
+            const date = fileLog[index + 2];
+            const changes = fileLog[index + 3];
 
             const dateEpoch = new Date(date).getTime();  // Get epoch in milliseconds
 
@@ -206,10 +205,10 @@ class GitScraper {
             stats.oldestCommitDate.push(dateEpoch);
             stats.latestCommitDate.push(dateEpoch);
             stats.changeCount.push(this._calculateTotalCommitChanges(changes));
-            stats.commitCount.push(1);
+            stats.commit.push(commitHash);
             stats.file.push(file);
 
-            index += 3;
+            index += 4;
         }
 
         return stats;

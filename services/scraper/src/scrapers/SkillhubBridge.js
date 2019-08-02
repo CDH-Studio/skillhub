@@ -82,7 +82,7 @@ class SkillhubBridge {
             oldestCommitDate: [],
             latestCommitDate: [],
             changeCount: [],
-            commitCount: [],
+            commit: [],
             file: [],
             skill: [],
             repo: []
@@ -91,7 +91,7 @@ class SkillhubBridge {
         for (const url of urls) {
             const skillMapping = await this.gitScraper.generateSkillMapping(url);
 
-            const numberOfCommits = skillMapping["commitCount"].length;
+            const numberOfCommits = skillMapping["commit"].length;
             const repoStat = new Array(numberOfCommits).fill(url);
 
             Object.keys(skillMapping).forEach((statKey) => {
