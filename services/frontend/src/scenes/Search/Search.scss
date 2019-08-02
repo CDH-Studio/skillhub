@@ -1,6 +1,7 @@
 @import "styles/_colors.scss";
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
+@import "styles/_media_queries.scss";
 
 $search-card-width: $default-spacing * 45;
 
@@ -10,7 +11,21 @@ $search-card-width: $default-spacing * 45;
     }
 }
 
-.something {
+.search {
+    height: calc(100% - #{$navbar-height});
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+}
+
+.loading-indicator {
+    align-self: center;
+    justify-self: center;
+}
+
+.list-container {
+    padding: 0 $default-spacing*2;
     display: flex;
     flex-direction: column;
     height: calc(100% - #{$navbar-height});
@@ -22,13 +37,13 @@ $search-card-width: $default-spacing * 45;
     }
 }
 
+.empty-search {
+    margin: auto;
+    padding: $default-spacing;
 
-.search {
-    height: calc(100% - #{$navbar-height});
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
+    .empty-search-heading {
+        font-size: $font-size-title;
+    }
 }
 
 .search-input {
@@ -36,6 +51,7 @@ $search-card-width: $default-spacing * 45;
     justify-content: center;
     padding: $default-spacing;
     padding-bottom: 0;
+
 
     .input-base {
         position: relative;
@@ -63,7 +79,7 @@ $search-card-width: $default-spacing * 45;
     }
 }
 
-.search-page-card {
+.profile-list-card {
     display: flex;
     margin-bottom: $default-spacing;
     margin-top: $default-spacing;
@@ -72,6 +88,7 @@ $search-card-width: $default-spacing * 45;
 
     @include query-search-card-width {
         width: auto;
+        min-width: $minimum-width;
     }
 }
 

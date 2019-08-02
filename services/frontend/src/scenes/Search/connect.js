@@ -11,9 +11,9 @@ const mapStateToProps = (state) => ({
     projects: crossSliceSelectors.getProjectsWithSkills(state),
     profiles: crossSliceSelectors.getProfilesWithSkills(state),
     isLoading: reduceLoadingStates([
+        skillsRequestsSlice,
         profilesRequestsSlice,
-        projectsRequestsSlice,
-        skillsRequestsSlice
+        projectsRequestsSlice
     ], state)
 });
 

@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from "react";
 import connect from "./connect";
-import {searchRecords} from "utils/helperFunctions";
-import {FILTER_PROFILES, Query} from "utils/searchGlobals";
+import {sortObjectsByProperty} from "utils/helperFunctions";
+import {FILTER_PROFILES, searchRecords, Query} from "utils/searchGlobals";
 import SearchLayout from "./SearchLayout";
 
 const Search = ({projects, profiles, isLoading}) => {
@@ -12,14 +12,23 @@ const Search = ({projects, profiles, isLoading}) => {
     const [searchProperties, setSearchProperties] = useState(new Query());
     const onFilterClick = useCallback((filter) => () => setActiveFilter(filter), [setActiveFilter]);
 
-    const searchedProjects = searchRecords(projects, searchProperties.searchTerm, searchProperties.searchBy);
-    const searchedProfiles = searchRecords(profiles, searchProperties.searchTerm, searchProperties.searchBy);
+    const searchedProjects = searchRecords(
+        projects,
+        searchProperties.searchTerm,
+        searchProperties.searchBy
+    );
+
+    const searchedProfiles = searchRecords(
+        profiles,
+        searchProperties.searchTerm,
+        searchProperties.searchBy
+    );
 
     return (
         <SearchLayout
             isLoading={isLoading}
-            projects={searchedProjects}
-            profiles={searchedProfiles}
+            projects={sortObjectsByProperty(searchedProjects, "name")}
+            profiles={sortObjectsByProperty(searchedProfiles, "name")}
             setSearchProperties={setSearchProperties}
             searchTerm={searchProperties.searchTerm}
             activeFilter={activeFilter}

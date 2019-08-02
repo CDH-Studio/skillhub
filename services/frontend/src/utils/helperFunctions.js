@@ -29,16 +29,3 @@ export const reduceLoadingStates = (slices, state) => (
         acc || slice.fetchAll.selectors.getLoading(state)
     ), false)
 );
-
-export const searchRecords = (projects, searchTerm, searchType) => {
-    if (searchTerm) {
-        const searchTermLC = searchTerm.toLowerCase();
-        return projects.filter ((project) => {
-            const projectLC = project.name.toLowerCase();
-            return projectLC.includes(searchTermLC);
-        });
-    }
-    else {
-        return projects;
-    }
-};

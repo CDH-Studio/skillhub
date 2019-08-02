@@ -1,19 +1,22 @@
 import React, {useCallback, useMemo, useState} from "react";
 import {useInput, useOnEnterKey} from "utils/hooks";
-import {Paper, IconButton, MenuItem, Input, Select, CircularProgress} from "@material-ui/core";
+import {Paper, IconButton, MenuItem, Input, Select} from "@material-ui/core";
 import {Search} from "@material-ui/icons";
 import ReactPaginate from "react-paginate";
 import classNames from "classnames";
 import {ProfileCard, ProjectCard, LoadingValidator} from "components/";
 import {Project} from "utils/models";
-import {FILTER_PROFILES, FILTER_PROJECTS, Query} from "utils/searchGlobals";
+import {FILTER_PROFILES, FILTER_PROJECTS, SEARCH_OPTIONS, Query} from "utils/searchGlobals";
 import "./Search.scss";
 
 const CARDS_PER_PAGE = 10;
-const searchOptions = [
-    "name",
-    "skill"
-];
+
+const handlePageChange = (newPageIndex, setData, cards) => {
+    setData(cards.slice(
+        newPageIndex * CARDS_PER_PAGE,
+        newPageIndex * CARDS_PER_PAGE + CARDS_PER_PAGE
+    ));
+};
 
 const SearchLayout = ({
     projects, profiles, activeFilter, onFilterClick,
@@ -22,7 +25,7 @@ const SearchLayout = ({
     return (
         <div className="search">
             <LoadingValidator
-                dependencies={[profiles, projects]}
+                dependencies={[]}
                 isLoading={isLoading}
                 renderOnLoad={
                     <>
@@ -42,9 +45,6 @@ const SearchLayout = ({
                         />
                     </>
                 }
-                renderOnFailedLoad={
-                    <CircularProgress className="loading-indicator" />
-                }
             />
         </div>
     );
@@ -57,7 +57,7 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
     if (activeFilter === FILTER_PROJECTS) {
         return (
             <>
-                <div className="something">
+                <div className="list-container">
                     <ProjectsList
                         projects={paginatedProjects}
                     />
@@ -68,11 +68,10 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
                 />
             </>
         );
-    }
-    else if (activeFilter === FILTER_PROFILES) {
+    } else if (activeFilter === FILTER_PROFILES) {
         return (
             <>
-                <div className="something">
+                <div className="list-container">
                     <ProfilesList
                         profiles={paginatedProfiles}
                     />
@@ -104,30 +103,27 @@ const PaginationFooter = ({data, setData}) => (
     </div>
 );
 
-const handlePageChange = (newPageIndex, setData, cards) => {
-    setData(cards.slice(
-        newPageIndex * CARDS_PER_PAGE,
-        newPageIndex * CARDS_PER_PAGE + CARDS_PER_PAGE
-    ));
-};
-
 const ProjectsList = ({projects}) => {
-    return (
-        useMemo(() => projects.map((project) => (
-            <ProjectCard
-                className="projects-list-card"
-                key={project.id}
-                isActive={Project.isActive(project)}
-                {...project}
-            />
-        )), [projects])
+    const mappedProjects = useMemo(() => projects.map((project) => (
+        <ProjectCard
+            className="projects-list-card"
+            key={project.id}
+            isActive={Project.isActive(project)}
+            {...project}
+        />
+    )), [projects]);
+
+    return (mappedProjects.length === 0) ? (
+        <EmptyContent />
+    ) : (
+        mappedProjects
     );
 };
 
-const ProfilesList = ({profiles}) => (
-    useMemo(() => profiles.map((profile) => (
+const ProfilesList = ({profiles}) => {
+    const mappedProfiles = useMemo(() => profiles.map((profile) => (
         <Paper
-            className="search-page-card"
+            className="profile-list-card"
             key={profile.name}
         >
             <ProfileCard
@@ -135,14 +131,28 @@ const ProfilesList = ({profiles}) => (
                 {...profile}
             />
         </Paper>
-    )), [profiles])
+    )), [profiles]);
+
+    return (mappedProfiles.length === 0) ? (
+        <EmptyContent />
+    ) : (
+        mappedProfiles
+    );
+};
+
+const EmptyContent = () => (
+    <Paper className="empty-search">
+        <h2 className="empty-search-heading">
+            Content Not Found
+        </h2>
+    </Paper>
 );
 
 const SearchField = ({setSearchProperties}) => {
     // Create the controlled search input and state to hold the type of search (ex. by name)
     const searchInput = useInput();
     const {value: searchTerm} = searchInput;
-    const [searchOption, setSearchOption] = React.useState();
+    const [searchOption, setSearchOption] = React.useState(SEARCH_OPTIONS[0]);
 
     const handleChange = (event) => {
         setSearchOption(event.target.value);
@@ -165,18 +175,17 @@ const SearchField = ({setSearchProperties}) => {
                     placeholder="Search..."
                     disableUnderline={true}
                     type="search"
-                    className=""
                     onKeyPress={onInputEnter}
                     {...searchInput}
                 />
                 <Select
                     label="Select"
                     className="input-base"
-                    value={searchOptions[0]}
+                    value={searchOption}
                     onChange={handleChange}
                     disableUnderline={true}
                 >
-                    {searchOptions.map((option) => (
+                    {SEARCH_OPTIONS.map((option) => (
                         <MenuItem key={option} value={option}>
                             {option}
                         </MenuItem>

@@ -15,15 +15,21 @@ const Projects = ({
         setDialogState("searchProject", true);
     };
 
-    const projectCards = useMemo(() => projects.map((project) => (
-        <ProjectCard
-            className="profile-project-card"
-            key={project.id}
-            isActive={Project.isActive(project)}
-            showMoreSkills={true}
-            {...project}
-        />
-    )), [projects]);
+    const projectCards = useMemo(() => projects.map((project) => {
+        const projectActive = Project.isActive(project);
+
+        if (projectActive) {
+            return (
+                <ProjectCard
+                    className="profile-project-card"
+                    key={project.id}
+                    isActive={projectActive}
+                    showMoreSkills={true}
+                    {...project}
+                />
+            );
+        }
+    }), [projects]);
 
     return (
         <>
