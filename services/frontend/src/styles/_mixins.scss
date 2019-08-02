@@ -1,4 +1,5 @@
 @import "styles/_colors.scss";
+@import "_animations.scss";
 
 $default-transition-time: 0.1s;
 $default-percentage: 5%;
@@ -29,6 +30,15 @@ $default-percentage: 5%;
     }
 }
 
+@mixin hover-box-shadow() {
+    transition: box-shadow 2 ease-out;
+    box-shadow: 0;
+
+    &:hover, &:focus {
+        box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.3);
+    }
+}
+
 @mixin hover-text($color, $hover-color) {
     @include smooth-transition-all();
 
@@ -47,4 +57,12 @@ $default-percentage: 5%;
     &:hover, &:focus {
         border-color: $hover-color;
     }
+}
+
+@mixin animate($animation, $time) {
+    -webkit-animation: $animation $time; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: $animation $time; /* Firefox < 16 */
+    -ms-animation: $animation $time; /* Internet Explorer */
+    -o-animation: $animation $time; /* Opera < 12.1 */
+    animation: $animation $time;
 }

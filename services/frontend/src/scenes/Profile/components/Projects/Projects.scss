@@ -13,6 +13,7 @@ $project-card-width: $default-spacing * 45;
 
 #profile-projects {
     .profile-card-projects {
+        display: flex;
         flex-direction: column;
         padding: 0;
 
@@ -24,10 +25,6 @@ $project-card-width: $default-spacing * 45;
                 .project-card-content-section{
                     margin-left: $default-spacing;
                 }
-            }
-
-            &:first-child {
-                margin-top: 0;
             }
         }
     }

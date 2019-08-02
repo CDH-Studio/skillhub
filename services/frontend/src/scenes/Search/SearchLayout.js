@@ -20,7 +20,7 @@ const handlePageChange = (newPageIndex, setData, cards) => {
 
 const SearchLayout = ({
     projects, profiles, activeFilter, onFilterClick,
-    setSearchProperties, searchTerm, isLoading
+    setSearchProperties, searchId, isLoading
 }) => {
     return (
         <div className="search">
@@ -38,7 +38,7 @@ const SearchLayout = ({
                             activeFilter={activeFilter}
                         />
                         <FilteredContent
-                            key={searchTerm}
+                            key={searchId}
                             profiles={profiles}
                             projects={projects}
                             activeFilter={activeFilter}
@@ -61,6 +61,7 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
                     <ProjectsList
                         projects={paginatedProjects}
                     />
+                    <br className="list-container-flex-padding" />
                 </div>
                 <PaginationFooter
                     data={projects}
@@ -75,6 +76,7 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
                     <ProfilesList
                         profiles={paginatedProfiles}
                     />
+                    <br className="list-container-flex-padding" />
                 </div>
                 <PaginationFooter
                     data={profiles}
@@ -86,7 +88,7 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
 };
 
 const PaginationFooter = ({data, setData}) => (
-    <div className="pagin">
+    <div className="pagination-container">
         <ReactPaginate
             previousLabel={"previous"}
             nextLabel={"next"}
@@ -96,7 +98,7 @@ const PaginationFooter = ({data, setData}) => (
             onPageChange={(newPageIndex) => {
                 handlePageChange(newPageIndex.selected, setData, data);
             }}
-            containerClassName={"pagination"}
+            containerClassName={"paginator"}
             subContainerClassName={"pages pagination"}
             activeClassName={"active"}
         />

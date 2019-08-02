@@ -32,10 +32,31 @@ $search-card-width: $default-spacing * 45;
     overflow: auto;
     align-items: center;
 
+    .list-container-flex-padding {
+        margin: $default-spacing * 0.5;
+    }
+
+    .profile-list-card {
+        display: flex;
+        margin-bottom: $default-spacing;
+        margin-top: $default-spacing;
+        padding: $default-spacing * 2;
+        width: $search-card-width;
+        @include animate(bounceIn, 0.5s);
+        @include query-search-card-width {
+            width: auto;
+            min-width: $minimum-width;
+        }
+        @include hover-box-shadow;
+    }
+
     .projects-list-card {
+        @include animate(bounceIn, 0.5s);
+        @include hover-box-shadow;
         margin: $default-spacing 0;
     }
 }
+
 
 .empty-search {
     margin: auto;
@@ -79,26 +100,13 @@ $search-card-width: $default-spacing * 45;
     }
 }
 
-.profile-list-card {
-    display: flex;
-    margin-bottom: $default-spacing;
-    margin-top: $default-spacing;
-    padding: $default-spacing * 2;
-    width: $search-card-width;
-
-    @include query-search-card-width {
-        width: auto;
-        min-width: $minimum-width;
-    }
-}
-
-.pagin {
+.pagination-container {
     display: flex;
     justify-content: center;
     padding: $default-spacing;
     border-top: 1px solid $color-text-secondary;
 
-    .pagination {
+    .paginator {
         display: flex;
 
         li {

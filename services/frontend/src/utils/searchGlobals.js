@@ -1,10 +1,14 @@
+import uuidv4 from "uuid/v4";
+
 export class Query{
     constructor({
         searchTerm = "",
-        searchBy = ""
+        searchBy = "",
+        id = uuidv4()
     } = {}) {
         this.searchTerm = searchTerm;
         this.searchBy = searchBy;
+        this.id = id;
     }
 }
 

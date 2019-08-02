@@ -30,7 +30,7 @@ const Search = ({projects, profiles, isLoading}) => {
             projects={sortObjectsByProperty(searchedProjects, "name")}
             profiles={sortObjectsByProperty(searchedProfiles, "name")}
             setSearchProperties={setSearchProperties}
-            searchTerm={searchProperties.searchTerm}
+            searchId={searchProperties.id}
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
         />

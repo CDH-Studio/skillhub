@@ -15,11 +15,12 @@ const Projects = ({
         setDialogState("searchProject", true);
     };
 
-    const projectCards = useMemo(() => projects.map((project) => {
+    const projectCards = useMemo(() => projects.reduce((acc, project) => {
         const projectActive = Project.isActive(project);
 
         if (projectActive) {
-            return (
+            return [
+                ...acc,
                 <ProjectCard
                     className="profile-project-card"
                     key={project.id}
@@ -27,9 +28,10 @@ const Projects = ({
                     showMoreSkills={true}
                     {...project}
                 />
-            );
+            ];
         }
-    }), [projects]);
+        return acc;
+    }, []), [projects]);
 
     return (
         <>
@@ -55,7 +57,7 @@ const Projects = ({
                     </IconButton>
                 }
             </div>
-            <div className="profile-page-card profile-card-projects">
+            <div className="profile-card-projects">
                 {projectCards}
             </div>
         </>

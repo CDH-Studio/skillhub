@@ -2,7 +2,7 @@ import React from "react";
 import {Switch, Route} from "react-router";
 import {Profile, ProjectDetails, Projects, Search} from "scenes/";
 import ScreenUrls from "utils/screenUrls";
-import {Navbar, PopupNotifier} from "components/";
+import {Navbar, PopupNotifier, NoRoute} from "components/";
 import {SnackbarProvider} from "notistack";
 
 const AppRouter = () => (
@@ -16,6 +16,7 @@ const AppRouter = () => (
                 <Route path={ScreenUrls.PROJECT_DETAILS} component={ProjectDetails} />
                 <Route path={ScreenUrls.PROJECTS} component={Projects} />
                 <Route path={ScreenUrls.SEARCH} component={Search} />
+                <Route component={NoRoute} />
             </Switch>
         </SnackbarProvider>
     </>
