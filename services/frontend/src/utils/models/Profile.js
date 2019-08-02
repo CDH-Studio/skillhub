@@ -133,14 +133,4 @@ export default class Profile {
     };
 }
 
-const removeDuplicate = (arr) => {
-    const arrUnique = arr.reduce((acc, value) => {
-        if (!acc.includes(value.toLowerCase())) {
-            return [...acc, value.toLowerCase()];
-        }
-        return acc;
-    }, []);
-
-    return arrUnique;
-};
 

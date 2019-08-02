@@ -6,7 +6,6 @@ import {
     EditSkillsDialog, LoadingValidator, NavSidebar, ScrollContainer, SkillBadges
 } from "components/";
 import {PersonalDetails, Projects} from "./components";
-import {Profile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
@@ -101,8 +100,6 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
-    console.log("false == null", false == null);
-    console.log("false === null", false === null);
     const openDialog = () => {
         setEditSkillsDialogOpen(true);
     };

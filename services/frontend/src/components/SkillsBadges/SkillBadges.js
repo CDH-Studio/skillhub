@@ -3,8 +3,9 @@ import {TextBadge} from "components/";
 import "./SkillBadges.scss";
 
 const SkillBadges = ({displayCount, skills}) => {
+    const sortedSkills = skills.sort((a, b) => a.name.localeCompare(b.name));
     displayCount = displayCount || skills.length;
-    const mappedSkillBadges = useMemo(() => skills.slice(0, displayCount).map((skill) => {
+    const mappedSkillBadges = useMemo(() => sortedSkills.slice(0, displayCount).map((skill) => {
         return (
             <SkillBadge
                 key={skill.name}
@@ -12,7 +13,7 @@ const SkillBadges = ({displayCount, skills}) => {
                 isHighlySkilled={skill.isHighlySkilled}
             />
         );
-    }), [skills, displayCount]);
+    }), [sortedSkills, displayCount]);
 
     return (
         <>

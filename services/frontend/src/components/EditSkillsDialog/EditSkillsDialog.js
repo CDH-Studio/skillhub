@@ -8,25 +8,58 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    IconButton,
     TextField
 } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import "./EditSkillsDialog.scss";
 import classNames from "classnames";
 
 const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, open}) => {
     //Sort the Database skills and
     const sortedSkills = Object.values(databaseSkills).sort((a, b) => a.name.localeCompare(b.name));
-    const suggestions = sortedSkills.map((skill) => {
-        return {id: skill.id, value: skill.name};
-    });
 
     const [skillsUpdated, setSkills] = React.useState(JSON.parse(JSON.stringify(skills)));
+    const [suggestionsUpdated, setSuggestions] = React.useState([]);
+    const [textfield, setTextfield] = React.useState("");
 
-    console.log("skillsupdated", skillsUpdated);
+    const addSkillToChipArray = (skill) => {
+        const newSkillObject = Profile.addSkill(skill, skillsUpdated, databaseSkills);
+        if (newSkillObject) {
+            setSkills([...skillsUpdated, newSkillObject]);
+        }
+        setTextfield("");
+    };
+
+    const onAddClick = () => {
+        addSkillToChipArray(textfield);
+    };
+
+    const onChangeTextfield = (event) => {
+        const searchTerm = event.target.value.trim();
+        const searchTermLength = searchTerm.length;
+        let newSuggestions = [];
+        if (searchTermLength > 0){
+            newSuggestions = getSuggestions(searchTerm);
+        }
+        setSuggestions([...newSuggestions]);
+        setTextfield(searchTerm);
+    };
+
+    const onClickSuggestion = (value) => {
+        setTextfield(value);
+        setSuggestions([]);
+    };
+
+    const getSuggestions = (searchTerm) => {
+        const currentSuggestions = sortedSkills.filter((skill) =>
+            skill.name.substring(0, searchTerm.length).toLowerCase() === searchTerm.toLowerCase()
+        );
+        return currentSuggestions;
+    };
 
     const onDeleteChip = (skillToDelete) => () => {
         setSkills(skillsUpdated.filter((skill) => skill.id !== skillToDelete.id));
-        console.log(skillsUpdated);
     };
 
     const onClickChip = (skillToUpdate) => () => {
@@ -40,13 +73,7 @@ const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, o
 
     const onPressEnter = (event) => {
         if (event.key === "Enter") {
-            const newSkill = event.target.value.trim();
-            const newSkillObject = Profile.addSkill(newSkill, skillsUpdated, databaseSkills);
-            if (newSkillObject){
-                setSkills([...skillsUpdated, newSkillObject]);
-            }
-
-            event.target.value = "";
+            addSkillToChipArray(event.target.value.trim());
         }
     };
 
@@ -73,12 +100,31 @@ const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, o
                             onDelete={onDeleteChip(skill)}
                         />)}
                 </div>
-                <div>
+                <div className="edit-skills-dialog-text">
                     <TextField
-                        className="edit-skills-dialog-text"
+                        className="edit-skills-dialog-text-field"
+                        onChange={onChangeTextfield}
                         onKeyPress={onPressEnter}
+                        value={textfield}
                         placeholder="Enter Skill"
                     />
+                    <IconButton className="edit-skills-dialog-add-icon" onClick={onAddClick}>
+                        <AddIcon />
+                    </IconButton>
+                </div>
+                <div className="suggestion-dropdown">
+                    {
+                        suggestionsUpdated.map((suggestion) =>
+                            <Button
+                                className="suggestion"
+                                key={suggestion.id}
+                                onClick={() => onClickSuggestion(suggestion.name)}
+                                variant="outlined"
+                            >
+                                {suggestion.name}
+                            </Button>
+                        )
+                    }
                 </div>
                 <DialogActions>
                     <Button onClick={handleCancel} color="primary">
