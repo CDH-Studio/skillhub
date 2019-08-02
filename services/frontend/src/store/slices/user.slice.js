@@ -1,4 +1,5 @@
 import {createSelector, createSlice} from "redux-starter-kit";
+import {createRequestSlices} from "store/utils";
 import mounts from "store/mountpoints";
 
 export const userSlice = createSlice({
@@ -28,3 +29,8 @@ userSlice.selectors = {
     getUserId,
     getUserEmail
 };
+
+export const usersRequestsSlice = createRequestSlices(
+    mounts.userRequests,
+    ["fetchAll"]
+);

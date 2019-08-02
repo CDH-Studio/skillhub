@@ -2,7 +2,7 @@ import {call, put, take, takeLatest} from "redux-saga/effects";
 import api from "api/";
 import {
     authRequestsSlice, projectChangeRecordsRequestsSlice, profilesRequestsSlice,
-    projectsRequestsSlice, skillsRequestsSlice
+    projectsRequestsSlice, skillsRequestsSlice, usersRequestsSlice
 } from "store/";
 import {routerActionTypes, tryingToAccessApp} from "store/utils";
 
@@ -12,6 +12,7 @@ function* appBoot() {
     yield put(skillsRequestsSlice.fetchAll.actions.request());
     yield take(skillsRequestsSlice.fetchAll.actions.success);
 
+    yield put(usersRequestsSlice.fetchAll.actions.request());
     yield put(projectsRequestsSlice.fetchAll.actions.request());
     yield put(profilesRequestsSlice.fetchAll.actions.request());
     yield put(projectChangeRecordsRequestsSlice.fetchAll.actions.request());
