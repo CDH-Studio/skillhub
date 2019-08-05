@@ -2,3 +2,6 @@
 
 # Don't touch line endings of model files
 *.joblib binary
+
+# Don't touch line endings of deb files
+*.deb binary
