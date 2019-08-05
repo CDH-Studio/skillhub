@@ -29,4 +29,8 @@ router.get("/skills", asyncMiddleware(async (req, res) => {
     res.send({status: "success", result});
 }));
 
+router.get("/test", asyncMiddleware(async (req, res) => {
+    res.send({status: "success", message: "Test route working."});
+}));
+
 module.exports = router;

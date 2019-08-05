@@ -19,8 +19,8 @@ class SkillhubBridge {
             maxContentLength: 100000000
         });
 
-        this.gitScraper = new GitScraper();
-        this.jiraScraper = new JiraScraper();
+        // this.gitScraper = new GitScraper();
+        // this.jiraScraper = new JiraScraper();
     }
 
     async scrapeToSkillhub() {
