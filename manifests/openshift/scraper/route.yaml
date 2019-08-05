@@ -1,0 +1,16 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: scraper
+  labels:
+    run: scraper
+spec:
+  host: scraper-personal-playground.apps.us-east-2.online-starter.openshift.com
+  subdomain: ''
+  to:
+    kind: Service
+    name: scraper
+    weight: 100
+  port:
+    targetPort: 5000-tcp
+  wildcardPolicy: None
