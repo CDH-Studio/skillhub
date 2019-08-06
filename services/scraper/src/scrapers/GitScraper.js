@@ -129,17 +129,35 @@ class GitScraper {
         const skills = Object.keys(skillFileBreakdown);
 
         return await logExecutionTime("_generateRawStats", {skills, repoUrl}, async () => {
-            const rawStats = {};
+            const rawStats = {
+                author: [],
+                oldestCommitDate: [],
+                latestCommitDate: [],
+                changeCount: [],
+                commit: [],
+                file: [],
+                skill: []
+            };
 
             for (const skill of skills) {
                 const files = skillFileBreakdown[skill];
 
                 for (const file of files) {
-                    if (!(skill in rawStats)) {
-                        rawStats[skill] = {};
-                    }
+                    const fileStats = await this._getFileStats(file, repoPath);
 
-                    rawStats[skill][file] = await this._getFileStats(file, repoPath);
+                    // Fill up an array equal in length to the number of commits
+                    // we get back from the file stats with the skill, so that it can be used
+                    // as a marker on the backend that these commits were associated with this skill.
+                    const numberOfCommits = fileStats["commit"].length;
+                    const skillStat = new Array(numberOfCommits).fill(skill);
+
+                    // Combine the new file stats with the old ones to build one giant array
+                    Object.keys(fileStats).forEach((statKey) => {
+                        rawStats[statKey] = rawStats[statKey].concat(fileStats[statKey]);
+                    });
+
+                    // Combine the newly filled skill array into the existing one
+                    rawStats["skill"] = rawStats["skill"].concat(skillStat);
                 }
             }
 
@@ -154,7 +172,7 @@ class GitScraper {
         const rawFileLog = await promisifiedSpawn(
             "git",
             [
-                `--git-dir=${repoPath}/.git`, "log", "--pretty='%aE%n%aD'", "--numstat", "--no-merges",
+                `--git-dir=${repoPath}/.git`, "log", "--pretty='%H%n%aE%n%aD'", "--numstat", "--no-merges",
                 "--", file
             ]
         );
@@ -164,37 +182,38 @@ class GitScraper {
 
         // The reason we build a set of lists for all this data is so that it can be easily
         // imported into a DataFrame when it gets sent to the 'predictions' service.
-        // Remember, these are the _raw_ stats; it might seem weird that we have a list
-        // where the only thing that gets put in it are '1's (i.e. 'commitCounts'), but it makes
-        // the data manipulation easier on the backend.
         const stats = {
-            authors: [],
-            oldestCommitDates: [],
-            latestCommitDates: [],
-            changeCounts: [],
-            commitCounts: []
+            author: [],
+            oldestCommitDate: [],
+            latestCommitDate: [],
+            changeCount: [],
+            commit: [],
+            file: []
         };
 
         let index = 0;
 
-        // Iterate in chunks of 3, where each chunk is one block of commit information.
-        // The first line in the block is the author's email ('%aE').
-        // The second line is the date the commit was made in RFC2822 style ('%aD').
-        // The third line is the addition/deletion changes for the file in question ('--numstat').
-        while (index < (fileLog.length - 2)) {
-            const author = fileLog[index];
-            const date = fileLog[index + 1];
-            const changes = fileLog[index + 2];
+        // Iterate in chunks of 4, where each chunk is one block of commit information.
+        // The first line is the commit hash ('%H')
+        // The second line is the author's email ('%aE').
+        // The third line is the date the commit was made in RFC2822 style ('%aD').
+        // The fourth line is the addition/deletion changes for the file in question ('--numstat').
+        while (index < (fileLog.length - 3)) {
+            const commitHash = fileLog[index];
+            const author = fileLog[index + 1];
+            const date = fileLog[index + 2];
+            const changes = fileLog[index + 3];
 
             const dateEpoch = new Date(date).getTime();  // Get epoch in milliseconds
 
-            stats.authors.push(author);
-            stats.oldestCommitDates.push(dateEpoch);
-            stats.latestCommitDates.push(dateEpoch);
-            stats.changeCounts.push(this._calculateTotalCommitChanges(changes));
-            stats.commitCounts.push(1);
+            stats.author.push(author);
+            stats.oldestCommitDate.push(dateEpoch);
+            stats.latestCommitDate.push(dateEpoch);
+            stats.changeCount.push(this._calculateTotalCommitChanges(changes));
+            stats.commit.push(commitHash);
+            stats.file.push(file);
 
-            index += 3;
+            index += 4;
         }
 
         return stats;
