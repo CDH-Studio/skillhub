@@ -1,7 +1,7 @@
 import logging
 from flask import jsonify, request, Response
 from werkzeug.exceptions import BadRequest, InternalServerError
-# from middleware import api_key_authentication
+from middleware import api_key_authentication
 from predictors.skills_predictor import SkillsPredictor
 from utils import LoggingUtils
 from utils.NestableBlueprint import NestableBlueprint
@@ -15,7 +15,7 @@ predictor = SkillsPredictor()
 
 
 @skills_controller.route("/predict", methods=["POST"])
-# @api_key_authentication() TODO: Uncomment this
+@api_key_authentication()
 @LoggingUtils.log_execution_time("Prediction processing finished")
 def predict_skills() -> Response:
     raw_stats = request.get_json().get("raw_stats", {})

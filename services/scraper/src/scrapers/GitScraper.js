@@ -145,13 +145,18 @@ class GitScraper {
                 for (const file of files) {
                     const fileStats = await this._getFileStats(file, repoPath);
 
+                    // Fill up an array equal in length to the number of commits
+                    // we get back from the file stats with the skill, so that it can be used
+                    // as a marker on the backend that these commits were associated with this skill.
                     const numberOfCommits = fileStats["commit"].length;
                     const skillStat = new Array(numberOfCommits).fill(skill);
 
+                    // Combine the new file stats with the old ones to build one giant array
                     Object.keys(fileStats).forEach((statKey) => {
                         rawStats[statKey] = rawStats[statKey].concat(fileStats[statKey]);
                     });
 
+                    // Combine the newly filled skill array into the existing one
                     rawStats["skill"] = rawStats["skill"].concat(skillStat);
                 }
             }
@@ -189,7 +194,7 @@ class GitScraper {
         let index = 0;
 
         // Iterate in chunks of 4, where each chunk is one block of commit information.
-        // The line is the commit hash ('%H')
+        // The first line is the commit hash ('%H')
         // The second line is the author's email ('%aE').
         // The third line is the date the commit was made in RFC2822 style ('%aD').
         // The fourth line is the addition/deletion changes for the file in question ('--numstat').

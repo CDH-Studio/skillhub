@@ -1,5 +1,8 @@
+# Have to use 19.04 since the latest version of the deb packaged github-linguist
+# depends on some other packages that are only available in the 19.04 repositories
 FROM ubuntu:19.04
 
+# Copy in the latest deb packaged version of github-linguist
 COPY ./vendor/ruby-github-linguist_6.4.0-2_amd64.deb /tmp/
 
 # Install ruby and the github-linguist package

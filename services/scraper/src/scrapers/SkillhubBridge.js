@@ -91,13 +91,18 @@ class SkillhubBridge {
         for (const url of urls) {
             const skillMapping = await this.gitScraper.generateSkillMapping(url);
 
+            // Fill up an array equal in length to the number of commits
+            // we get back from the file stats with the repo, so that it can be used
+            // as a marker on the backend that these commits were associated with this repo.
             const numberOfCommits = skillMapping["commit"].length;
             const repoStat = new Array(numberOfCommits).fill(url);
 
+            // Combine the new repo stats with the old ones to build one giant array
             Object.keys(skillMapping).forEach((statKey) => {
                 skillMappings[statKey] = skillMappings[statKey].concat(skillMapping[statKey]);
             });
 
+            // Combine the newly filled repo array into the existing one
             skillMappings["repo"] = skillMappings["repo"].concat(repoStat);
         }
 
