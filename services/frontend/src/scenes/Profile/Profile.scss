@@ -91,9 +91,11 @@ $project-card-width: $default-spacing * 45;
 
     .profile-card-edit-skills-button {
             margin: -9px 0;
-
             svg {
                 font-size: $font-size-subtitle;
+            }
+            &.profile-card-edit-skills-button--other {
+                display: none;
             }
         }
 

@@ -9,6 +9,7 @@ import {Profile} from "utils/models";
 import {PersonalDetails, Projects} from "./components";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
+import classNames from "classnames";
 
 const containerClass = ".scroll-container";
 
@@ -97,7 +98,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const Skills = ({updateProfileSkills, addNewSkill, sectionName, profile, databaseSkills}) => {
+const Skills = ({addNewSkill, databaseSkills, isUserProfile, profile, sectionName, updateProfileSkills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
@@ -133,14 +134,19 @@ const Skills = ({updateProfileSkills, addNewSkill, sectionName, profile, databas
         <>
             <EditSkillsDialog
                 databaseSkills={databaseSkills}
-                skills={profileUpdated.skills}
-                open={editSkillsDialogOpen}
                 handleCancel={handleCancel}
                 handleSubmit={(updatedSkills) => handleSubmit(updatedSkills)}
+                open={editSkillsDialogOpen}
+                skills={profileUpdated.skills}
             />
             <div className="profile-card-skills-header-section">
                 <h2>{sectionName}</h2>
-                <IconButton className="profile-card-edit-skills-button" onClick={openDialog} color="primary">
+
+                <IconButton
+                    className={classNames("profile-card-edit-skills-button", {"profile-card-edit-skills-button--other": !isUserProfile})}
+                    onClick={openDialog}
+                    color="primary"
+                >
                     <Create />
                 </IconButton>
             </div>
