@@ -3,7 +3,6 @@
 @import "styles/_mixins.scss";
 
 #project-info {
-
     .project-info-card-active-section {
         align-self: flex-start;
         display: flex;
@@ -12,6 +11,7 @@
 
     .project-info-card-content-section {
         flex: 4;
+        margin-left: $default-spacing;
 
         .project-info-card-name {
             margin-bottom: $default-spacing;

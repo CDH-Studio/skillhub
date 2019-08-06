@@ -3,14 +3,14 @@ import {authRequestsSlice} from "store/";
 import ScreenUrls from "utils/screenUrls";
 
 const mapPathToTab = (path) => {
-    if (path.includes(ScreenUrls.PROFILE)) {
-        return 0;
-    } else if (path.includes(ScreenUrls.PEOPLE)) {
+    if (path === ScreenUrls.PROFILE) {
         return 1;
-    } else if (path.includes(ScreenUrls.PROJECTS)) {
+    } else if (path.includes(ScreenUrls.SEARCH)) {
+        return 0;
+    } else if (path === ScreenUrls.PROJECTS) {
         return 2;
     } else {
-        return null;
+        return 0;
     }
 };
 
