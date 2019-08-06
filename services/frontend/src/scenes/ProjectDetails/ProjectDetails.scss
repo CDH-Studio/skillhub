@@ -47,6 +47,7 @@
     flex: 1;
     margin: $default-spacing*2 0;
     padding: $default-spacing*2;
+    @include hover-box-shadow;
 }
 
 .project-details-content {

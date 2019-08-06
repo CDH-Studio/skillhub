@@ -42,9 +42,9 @@ const InvalidProject = () => (
         <h2 className="invalid-project-heading">
             Content Not Found
         </h2>
-        <Link to={ScreenUrls.PEOPLE}>
+        <Link to={ScreenUrls.SEARCH}>
             <Button color="primary">
-                Back to People
+                Back to Search
             </Button>
         </Link>
     </Paper>

@@ -46,6 +46,7 @@ $project-card-width: $default-spacing * 45;
     margin-top: $default-spacing;
     padding: $default-spacing * 2;
     width: 100%;
+    @include hover-box-shadow;
 
     @include query-project-card-width {
         width: auto;

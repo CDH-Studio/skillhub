@@ -1,0 +1,15 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
+
+.invalid-route{
+    justify-self: center;
+    align-self: center;
+    padding: $default-spacing * 1.5;
+    text-align: center;
+    margin: auto;
+
+    .invalid-route-error {
+        margin: $default-spacing * 0.5;
+    }
+}

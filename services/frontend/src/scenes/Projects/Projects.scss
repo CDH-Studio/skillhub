@@ -23,7 +23,7 @@
     border-radius: $default-border-radius;
     box-shadow: none;
     color: $color-text-secondary;
-    margin: 0 16px;
+    margin: 0 $default-spacing;
     padding: $default-spacing/2 $default-spacing*1.5;
     text-transform: none;
 
@@ -40,6 +40,8 @@
     padding: $default-spacing * 2;
 
     .projects-list-card {
+        @include animate(bounceIn, 0.5s);
+        @include hover-box-shadow;
         margin: $default-spacing 0;
     }
 }

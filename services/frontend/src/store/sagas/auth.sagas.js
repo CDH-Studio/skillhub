@@ -24,7 +24,7 @@ function* authLogin({payload}, success) {
     yield call(success);  // Mark success before continuing with other actions
 
     yield put(userSlice.actions.setUser({id: result.user.id, email}));
-    yield put(push(ScreenUrls.PROFILE));
+    yield put(push(ScreenUrls.SEARCH));
 }
 
 function* authLogout() {
@@ -40,7 +40,7 @@ function* authenticateAppAccess({payload}) {
 
 function* redirectAuthenticatedUserToApp({payload}) {
     if (tryingToAccessAuth(payload) && api.isAuthenticated()) {
-        yield put(replace(ScreenUrls.PROFILE));
+        yield put(replace(ScreenUrls.SEARCH));
     }
 }
 
