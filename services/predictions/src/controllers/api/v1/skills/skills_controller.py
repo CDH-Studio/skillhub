@@ -18,13 +18,14 @@ predictor = SkillsPredictor()
 # @api_key_authentication() TODO: Uncomment this
 @LoggingUtils.log_execution_time("Prediction processing finished")
 def predict_skills() -> Response:
-    raw_stats = request.get_json()["raw_stats"]
+    raw_stats = request.get_json().get("raw_stats", {})
+    existing_emails = request.get_json().get("existing_emails", [])
 
     if type(raw_stats) != dict:
         raise BadRequest("'raw_stats' must be a set of skill/file stats from the Scraper service.")
 
     try:
-        predictions = predictor.predict(raw_stats)
+        predictions = predictor.predict(raw_stats, existing_emails)
     except:
         raise InternalServerError("Failed to make predictions; see logs for more details.")
 
