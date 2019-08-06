@@ -143,7 +143,10 @@ const Skills = ({addNewSkill, databaseSkills, isUserProfile, profile, sectionNam
                 <h2>{sectionName}</h2>
 
                 <IconButton
-                    className={classNames("profile-card-edit-skills-button", {"profile-card-edit-skills-button--other": !isUserProfile})}
+                    className={classNames(
+                        "profile-card-edit-skills-button",
+                        {"profile-card-edit-skills-button--other": !isUserProfile}
+                    )}
                     onClick={openDialog}
                     color="primary"
                 >
