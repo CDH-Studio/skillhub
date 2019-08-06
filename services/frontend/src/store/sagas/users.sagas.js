@@ -5,9 +5,8 @@ import {User} from "utils/models";
 
 function* usersFetchAll() {
     const result = yield call(api.service("users").find);
-    console.log(result);
-    const normalizedUsers = User.normalizeApiResultsForRedux(result);
 
+    const normalizedUsers = User.normalizeApiResultsForRedux(result);
     yield put(usersSlice.actions.setUsers(normalizedUsers));
 }
 

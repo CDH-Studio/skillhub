@@ -1,7 +1,9 @@
 import {connect} from "react-redux";
 import {crossSliceSelectors} from "store/";
 import {reduceLoadingStates} from "utils/helperFunctions";
-import {projectsRequestsSlice, profilesRequestsSlice, skillsRequestsSlice} from "store/slices";
+import {
+    projectsRequestsSlice, profilesRequestsSlice, skillsRequestsSlice, usersRequestsSlice, usersSlice
+} from "store/slices";
 
 const mapStateToProps = (state) => {
     const mappedState = {};
@@ -19,6 +21,7 @@ const mapStateToProps = (state) => {
         mappedState.project = loadedProject;
         mappedState.projectChangeRecords = crossSliceSelectors.getProjectChangeRecordsForProject(state);
         mappedState.contributors = crossSliceSelectors.getContributorsForProject(state);
+        mappedState.users = usersSlice.selectors.getUsers(state);
     } else {
         mappedState.project = {};
         mappedState.contributors = [];
