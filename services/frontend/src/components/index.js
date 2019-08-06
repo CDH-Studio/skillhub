@@ -15,6 +15,7 @@ export {default as NoRoute} from "./NoRoute";
 export {default as PopupNotifier} from "./PopupNotifier";
 export {default as ProfileCard} from "./ProfileCard";
 export {default as ProjectCard} from "./ProjectCard";
+export {default as RoleInputDialog} from "./RoleInputDialog";
 export {default as ScrollContainer} from "./ScrollContainer";
 export {default as SkillBadges} from "./SkillsBadges";
 export {default as TextBadge} from "./TextBadge";

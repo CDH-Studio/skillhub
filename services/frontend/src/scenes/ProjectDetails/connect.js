@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import {crossSliceSelectors} from "store/";
 import {reduceLoadingStates} from "utils/helperFunctions";
 import {
-    projectsRequestsSlice, profilesRequestsSlice, skillsRequestsSlice, usersRequestsSlice, usersSlice
+    projectsRequestsSlice, profilesRequestsSlice, skillsRequestsSlice, usersSlice
 } from "store/slices";
 
 const mapStateToProps = (state) => {

@@ -1,0 +1,16 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_media_queries.scss";
+@import "styles/_mixins.scss";
+
+.role-input-dialog {
+    .role-input-dialog-content {
+        background-color: #F0F4F8;
+        flex: 1 1 100px;  
+        padding: $default-spacing*0.75 $default-spacing*5;
+
+        .role-input-dialog-field {
+            display: flex;
+        }
+    }
+}

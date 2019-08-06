@@ -28,6 +28,7 @@ $project-card-width: $default-spacing * 45;
             }
         }
     }
+
     .profile-card-edit-projects-button {
         margin: -9px 0;
         padding: 9px;
@@ -65,18 +66,5 @@ $project-card-width: $default-spacing * 45;
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-}
-
-
-.role-input-dialog {
-    .role-input-dialog-content {
-        background-color: #F0F4F8;
-        flex: 1 1 100px;  
-        padding: $default-spacing*0.75 $default-spacing*5;
-
-        .role-input-dialog-field {
-            display: flex;
-        }
     }
 }

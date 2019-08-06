@@ -35,6 +35,6 @@ export const searchRecords = (records, searchTerm, searchType) => {
 export const FILTER_PROJECTS = "Projects";
 export const FILTER_PROFILES = "Profiles";
 export const SEARCH_OPTIONS = [
-    "name",
-    "skill"
+    "Name",
+    "Skill"
 ];

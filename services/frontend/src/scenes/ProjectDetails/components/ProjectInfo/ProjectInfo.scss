@@ -22,13 +22,30 @@
         }
     }
 
-    .project-info-card-edit-button {
+    .project-info-card-edit-section {
         display: flex;
-        justify-content: flex-end;
-        margin: -9px 0;
+        align-items: center;
+        flex-wrap: wrap;
 
-        svg {
-            font-size: $font-size-subtitle;
+        button {
+            margin: -9px 0;
+        }
+
+        .project-info-card-edit-button {
+            display: flex;
+
+            svg {
+                font-size: $font-size-subtitle;
+            }
+        }
+
+        .project-info-card-add-button{
+            display: flex;
+            padding: 9px;
+
+            svg {
+                font-size: $font-size-title;
+            }
         }
     }
 }

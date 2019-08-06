@@ -133,7 +133,6 @@ const UsedSkills = ({sectionName, project}) => (
 );
 
 const Changelog = ({projectChangeRecords, sectionName, users}) => {
-    console.log(users)
     const mappedChangeRecords = useMemo(() => projectChangeRecords.map((projectChangeRecord) => {
         const changelogCreator = users[projectChangeRecord.userId];
         return (
@@ -166,15 +165,24 @@ const NoChangeRecords = () => (
     <p>No project change records found</p>
 );
 
-const ProjectChangeRecord = ({className, oldValue, newValue, changedAttribute, createdAt, changelogCreator}) => (
-    <div className={className}>
-        <p className="project-changelog-date">
-            {parseDateStringToYMD(createdAt)}
-        </p>
-        <p className="project-changelog-description">
-            {changelogCreator} changed {changedAttribute} - from &quot;{oldValue}&quot; to &quot;{newValue}&quot;
-        </p>
-    </div>
-);
+const ProjectChangeRecord = ({className, oldValue, newValue, changedAttribute, createdAt, changelogCreator}) => {
+
+    const changelogDescription = (changedAttribute === "Contributor") ? (
+        `${changelogCreator} added contributor - "${newValue}"`
+    ) : (
+        `${changelogCreator} changed ${changedAttribute} - from "${oldValue}" to "${newValue}"`
+    );
+
+    return (
+        <div className={className}>
+            <p className="project-changelog-date">
+                {parseDateStringToYMD(createdAt)}
+            </p>
+            <p className="project-changelog-description">
+                {changelogDescription}
+            </p>
+        </div>
+    );
+};
 
 export default ProjectDetailsLayout;
