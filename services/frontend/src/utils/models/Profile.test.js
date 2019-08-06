@@ -148,24 +148,57 @@ describe ("addSkills", () => {
     const newSkill4 = "Test2";
     const updatedSkills4 = [skillB];
 
-    it("skill already in database is sent", () => {
+    it("can return a skill already in database", () => {
         expect(Profile.addSkill(newSkill, updatedSkills1, dbSkills)
         ).toEqual(skillA);
     });
 
-    it("skill already in database is sent but with different case", () => {
+    it("can return a skill already in database if sent with different case", () => {
         expect(Profile.addSkill(newSkill2, updatedSkills2, dbSkills)
         ).toEqual(skillA);
     });
 
-    it("new skill is sent", () => {
+    it("can return a new skill", () => {
         expect(Profile.addSkill(newSkill3, updatedSkills3, dbSkills).name
         ).toEqual(newSkill3);
     });
 
-    it("skill already exists for user", () => {
+    it("can return undefined when skill already exists", () => {
         expect(typeof Profile.addSkill(newSkill4, updatedSkills4, dbSkills)
         ).toEqual("undefined");
     });
 
+});
+
+describe ("removeSkills", () => {
+    const skillA = new Skill({id: "x", name: "Test1"});
+    const skillB = new Skill({id: "y", name: "Test2"});
+    const skillC = new Skill({id: "z", name: "Test3"});
+
+    const currentSkills1 = [skillA, skillB, skillC];
+    const updatedSkills1 = [skillA];
+    const result1 = [skillB, skillC];
+
+    const currentSkills2 = [];
+    const updatedSkills2 = [];
+    const result2 = [];
+
+    const currentSkills3 = [skillA];
+    const updatedSkills3 = [skillA];
+    const result3 = [];
+
+    it("can return an array of skills to remove", () => {
+        expect(Profile.removeSkills(currentSkills1, updatedSkills1)
+        ).toEqual(result1);
+    });
+
+    it("can handle empty arrays", () => {
+        expect(Profile.removeSkills(currentSkills2, updatedSkills2)
+        ).toEqual(result2);
+    });
+
+    it("can return an empty array when no skills need to be removed", () => {
+        expect(Profile.removeSkills(currentSkills3, updatedSkills3)
+        ).toEqual(result3);
+    });
 });
