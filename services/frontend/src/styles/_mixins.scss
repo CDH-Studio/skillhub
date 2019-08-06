@@ -31,8 +31,7 @@ $default-percentage: 5%;
 }
 
 @mixin hover-box-shadow() {
-    transition: box-shadow 2 ease-out;
-    box-shadow: 0;
+    transition: box-shadow 0.2s ease-out;
 
     &:hover, &:focus {
         box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.3);

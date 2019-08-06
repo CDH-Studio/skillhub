@@ -22,8 +22,8 @@
     text-transform: none;
 
     &.filter-button--active {
-        transition: background-color 0.8s ease,
-                    color 0.8s ease;
+        transition: background-color 0.5s ease,
+                    color 0.5s ease;
         color: $color-light;
     }
 }
