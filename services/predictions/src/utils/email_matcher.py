@@ -22,6 +22,9 @@ HARD_CODED_EMAIL_MAPPING = {
 
 def generate_ngrams(email, n=3):
     """Handles parsing the emails into a set of ngrams."""
+    if not email:
+        return []
+
     # Strip out the part of the email after the '@' sign, since we don't care about the domain
     beforeAt = email.split("@")[0].lower()
 

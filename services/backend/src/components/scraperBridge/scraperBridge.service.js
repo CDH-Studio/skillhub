@@ -25,7 +25,7 @@ class ScraperBridgeService {
     async create(data) {
         logger.info("Starting injestion of scraped data");
 
-        const {issues, projects, users} = data;
+        const {issues, projects, users, skillsStats} = data;
 
         const result = {};
 
@@ -42,6 +42,11 @@ class ScraperBridgeService {
         if (issues) {
             const contributorsResult = await this._createContributors(issues);
             result.contributors = contributorsResult;
+        }
+
+        if (skillsStats) {
+            const skillsResult = await this._createSkills(skillsStats);
+            result.skills = skillsResult;
         }
 
         logger.info({message: "Finished injestion of scraped data", result});
@@ -137,6 +142,49 @@ class ScraperBridgeService {
         );
 
         contributorsLogger.info({message: "Finished creating contributors", result});
+        return result;
+    }
+
+    async _createSkills(skillsStats) {
+        const profilesService = this.app.service("profiles");
+        const skillsService = this.app.service("skills");
+
+        let result = {};
+
+        const existingProfiles = await profilesService.find({query: {$select: ["contactEmail"]}});
+        const existingEmails = await existingProfiles.map(({contactEmail}) => contactEmail);
+
+        const predictions = await this.predictionsService.predictSkills(skillsStats, existingEmails);
+        console.log(predictions);
+
+        const emails = Object.keys(predictions);
+        const skillsCache = {};
+
+        for (const email of emails) {
+            const skillNames = predictions[email];
+            const profiles = await profilesService.find({query: {contactEmail: email}});
+
+            if (profiles.length) {
+                const profile = profiles[0];
+                const skills = [];
+
+                for (const skillName of skillNames) {
+                    let skill;
+
+                    if (skillName in skillsCache) {
+                        skill = skillsCache[skillName];
+                    } else {
+                        skill = await skillsService.create({name: skillName});
+                        skillsCache[skillName] = skill;
+                    }
+
+                    skills.push(skill);
+                }
+
+                await profilesService.create({id: profile.id, skills});
+            }
+        }
+
         return result;
     }
 

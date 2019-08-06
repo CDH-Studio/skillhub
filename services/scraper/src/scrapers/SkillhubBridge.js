@@ -77,7 +77,7 @@ class SkillhubBridge {
     async testSkills(org = "") {
         const urls = await this.gitScraper.getRepoUrls(org);
 
-        const skillMappings = {
+        const skillsStats = {
             author: [],
             oldestCommitDate: [],
             latestCommitDate: [],
@@ -88,7 +88,7 @@ class SkillhubBridge {
             repo: []
         };
 
-        for (const url of urls) {
+        for (const url of urls.slice(0, 2)) {
             const skillMapping = await this.gitScraper.generateSkillMapping(url);
 
             // Fill up an array equal in length to the number of commits
@@ -99,14 +99,16 @@ class SkillhubBridge {
 
             // Combine the new repo stats with the old ones to build one giant array
             Object.keys(skillMapping).forEach((statKey) => {
-                skillMappings[statKey] = skillMappings[statKey].concat(skillMapping[statKey]);
+                skillsStats[statKey] = skillsStats[statKey].concat(skillMapping[statKey]);
             });
 
             // Combine the newly filled repo array into the existing one
-            skillMappings["repo"] = skillMappings["repo"].concat(repoStat);
+            skillsStats["repo"] = skillsStats["repo"].concat(repoStat);
         }
 
-        return skillMappings;
+        const skillsResponse = await this.axios.post("/scraperBridge", {skillsStats});
+
+        return skillsResponse.data;
     }
 }
 
