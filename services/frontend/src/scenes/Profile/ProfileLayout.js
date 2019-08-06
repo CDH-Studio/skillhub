@@ -21,7 +21,7 @@ const sections = [
         selector: "profile-skills"
     },
     {
-        name: "Projects",
+        name: "Active Projects",
         selector: "profile-projects"
     }
 ];
@@ -63,9 +63,9 @@ const InvalidProfile = () => (
         <h2 className="invalid-profile-heading">
             Content Not Found
         </h2>
-        <Link to={ScreenUrls.PEOPLE}>
+        <Link to={ScreenUrls.SEARCH}>
             <Button color="primary">
-                Back to People
+                Back to Search
             </Button>
         </Link>
     </Paper>
@@ -89,7 +89,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
             return <PersonalDetails {...sectionProps} />;
         case "Skills":
             return <Skills sectionName={sectionName} {...sectionProps} />;
-        case "Projects":
+        case "Active Projects":
             return <Projects sectionName={sectionName} {...sectionProps} />;
         default:
             return null;
