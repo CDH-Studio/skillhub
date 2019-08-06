@@ -105,40 +105,26 @@ export default class Profile {
         return profilesWithSkills;
     }
 
-    static addSkills = (profile, updatedSkills, skills) => {
-        const currentSkillsLC = profile.skills.map((skill) => skill.name.toLowerCase());
-        const newSkillsObjects = [];
+    static addSkill = (newSkillName, updatedSkills, databaseSkills) => {
+        const currentSkillsLC = updatedSkills.map((skill) => skill.name.toLowerCase());
 
-        /* Returns a list of the new skills entered */
-        const newSkills = removeDuplicate(updatedSkills.reduce((acc, skillName) => {
-            if (!currentSkillsLC.includes(skillName.toLowerCase())) {
-                return [...acc, skillName.toLowerCase()];
-            }
-            return acc;
-        }, []));
+        //Checks if the skill already has been added
+        if (currentSkillsLC.filter((skill) => skill === newSkillName.toLowerCase()).length){
+            return;
+        }
 
         /* Adds skill from database */
-        if (newSkills.length > 0) {
-            for (const skill of Object.values(skills)) {
+        if (newSkillName.length > 0) {
+            for (const skill of Object.values(databaseSkills)) {
                 const skillNameLC = skill.name.toLowerCase();
-                if (newSkills.includes(skillNameLC)) {
-                    profile.skills.push(skill);
-                    newSkills.splice(newSkills.indexOf(skillNameLC), 1);
-                }
+                if (skillNameLC === newSkillName.toLowerCase())
+                    return skill;
             }
         }
-
         /* Adds new Skill */
-        if (newSkills.length > 0) {
-            for (const skillName of newSkills) {
-                const newSkill = new Skill({name: skillName});
-                profile.skills.push(newSkill);
-                newSkillsObjects.push(newSkill);
-            }
+        if (newSkillName.length > 0) {
+            return new Skill({name: newSkillName});
         }
-        profile.newSkillObjects = newSkillsObjects;
-
-        return profile;
     };
 
     static removeSkills = (profile, updatedSkills) => {
@@ -146,15 +132,4 @@ export default class Profile {
         return profile;
     };
 }
-
-const removeDuplicate = (arr) => {
-    const arrUnique = arr.reduce((acc, value) => {
-        if (!acc.includes(value.toLowerCase())) {
-            return [...acc, value.toLowerCase()];
-        }
-        return acc;
-    }, []);
-
-    return arrUnique;
-};
 

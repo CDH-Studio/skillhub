@@ -6,7 +6,6 @@ import {
     EditSkillsDialog, LoadingValidator, NavSidebar, ScrollContainer, SkillBadges
 } from "components/";
 import {PersonalDetails, Projects} from "./components";
-import {Profile} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
 
@@ -28,7 +27,8 @@ const sections = [
 ];
 
 const ProfileLayout = ({
-    addProfileSkills, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills, isLoading
+    addProfileSkills, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills,
+    isLoading
 }) => (
     <ScrollContainer className="profile">
         <LoadingValidator
@@ -109,11 +109,18 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
     };
 
     const handleSubmit = (updatedSkills) => {
-        updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
-        updateProfile(Profile.addSkills(profileUpdated, updatedSkills, databaseSkills));
-        profileUpdated.newSkillObjects.map((skill) => addNewSkill(skill));
+        const databaseSkillsName = Object.values(databaseSkills).map((skill) => skill.name.toLowerCase());
+        const newSkills = updatedSkills.reduce((acc, skill) => {
+            if (!databaseSkillsName.includes(skill.name.toLowerCase()))
+                acc = [...acc, skill];
+            return acc;
+        }, []);
+        profileUpdated.skills = updatedSkills;
+        //updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
+        newSkills.map((skill) => addNewSkill(skill));
         delete profileUpdated.newSkillObjects;
         addProfileSkills(profileUpdated);
+        updateProfile(profileUpdated);
         closeDialog();
     };
 
@@ -125,7 +132,7 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
         <>
             <EditSkillsDialog
                 databaseSkills={databaseSkills}
-                skills={profileUpdated.skills.map((skill) => skill.name)}
+                skills={profileUpdated.skills}
                 open={editSkillsDialogOpen}
                 handleCancel={handleCancel}
                 handleSubmit={(updatedSkills) => handleSubmit(updatedSkills)}

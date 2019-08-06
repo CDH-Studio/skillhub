@@ -4,11 +4,53 @@
 @import "styles/_media_queries.scss";
 
 .edit-skills-dialog {
+    z-index: 0;
     #edit-skills-title {
         padding-bottom: $default-spacing * 0.5;
 
         h6 {
             font-weight: 700;
+        }
+    }
+    .edit-skills-dialog-text{
+        display: flex;
+        flex-direction: row;
+        padding: $default-spacing*0.5;
+        width: 100%;
+
+        .edit-skills-dialog-text-field{
+            flex: 10;
+        }
+        .edit-skills-dialog-add-icon{
+            align-self: end;
+            flex: 1;
+            padding: 0;
+        }
+    }
+    .chip-array{
+        margin-bottom: $default-spacing;
+        width: 400px;
+        .chip-array-skill{
+            margin: $default-spacing*0.25 $default-spacing*0.3;
+            &.chip-array-skill--skilled {
+                background-color: $color-secondary;
+                color: $color-light;
+            }
+        }
+    }
+    .suggestion-dropdown{
+        align-content: start;
+        background: white;
+        //border: $color-primary;
+        position: fixed;
+        width: 400px;
+        z-index: 1;
+
+        .suggestion{
+            margin-top:-1px;
+            padding: $default-spacing*0.2;
+            width: 100%;
+            border-radius:0;
         }
     }
 }
