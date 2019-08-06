@@ -5,6 +5,7 @@ import {Create} from "@material-ui/icons";
 import {
     EditSkillsDialog, LoadingValidator, NavSidebar, ScrollContainer, SkillBadges
 } from "components/";
+import {Profile} from "utils/models";
 import {PersonalDetails, Projects} from "./components";
 import ScreenUrls from "utils/screenUrls";
 import "./Profile.scss";
@@ -27,7 +28,7 @@ const sections = [
 ];
 
 const ProfileLayout = ({
-    addProfileSkills, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills,
+    updateProfileSkills, addNewSkill, isUserProfile, databaseSkills, projects, profile, skills,
     isLoading
 }) => (
     <ScrollContainer className="profile">
@@ -46,7 +47,7 @@ const ProfileLayout = ({
                         projects={projects}
                         profile={profile}
                         skills={skills}
-                        addProfileSkills={addProfileSkills}
+                        updateProfileSkills={updateProfileSkills}
                         addNewSkill={addNewSkill}
                     />
                 </>
@@ -96,7 +97,7 @@ const renderSectionComponent = (sectionName, sectionProps) => {
     }
 };
 
-const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSkills}) => {
+const Skills = ({updateProfileSkills, addNewSkill, sectionName, profile, databaseSkills}) => {
     const [editSkillsDialogOpen, setEditSkillsDialogOpen] = useState(false);
     const [profileUpdated, updateProfile] = useState(profile);
 
@@ -115,11 +116,11 @@ const Skills = ({addProfileSkills, addNewSkill, sectionName, profile, databaseSk
                 acc = [...acc, skill];
             return acc;
         }, []);
+        profileUpdated.skillsToRemove = Profile.removeSkills(profileUpdated.skills, updatedSkills);
         profileUpdated.skills = updatedSkills;
-        //updateProfile(Profile.removeSkills(profileUpdated, updatedSkills));
+
         newSkills.map((skill) => addNewSkill(skill));
-        delete profileUpdated.newSkillObjects;
-        addProfileSkills(profileUpdated);
+        updateProfileSkills(profileUpdated);
         updateProfile(profileUpdated);
         closeDialog();
     };

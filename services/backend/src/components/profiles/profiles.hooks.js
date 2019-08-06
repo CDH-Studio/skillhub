@@ -25,15 +25,17 @@ const liftProfilesSkills = () => (context) => {
     context.result = Profile.liftProfilesSkills(context.result);
 };
 
-const addSkills = () => async (context) => {
-    const {skills} = context.data;
-    if (skills) {
-        const profile = context.result;
-        for (const skill of skills) {
-            await profile.addSkill(skill.id, {through: {isHighlySkilled: skill.isHighlySkilled}});
-        }
-    }
+const updateSkills = () => async (context) => {
+    const {skills, skillsToRemove} = context.data;
+    const profile = context.result;
 
+    if (skillsToRemove)
+        await profile.removeSkills(skillsToRemove.map((skill) => skill.id));
+
+    if (skills) {
+        for (const skill of skills)
+            await profile.addSkill(skill.id, {through: {isHighlySkilled: skill.isHighlySkilled}});
+    }
     return context;
 };
 
@@ -82,7 +84,7 @@ module.exports = {
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),
             validatePersonalDetails(),
-            includeSkills()
+            includeSkills(),
         ],
         remove: []
     },
@@ -91,9 +93,9 @@ module.exports = {
         all: [],
         find: [dehydrate(), liftProfilesSkills()],
         get: [dehydrate(), liftProfilesSkills()],
-        create: [hydrate(), addSkills(), dehydrate(), parameterizedHydrate()],
+        create: [dehydrate(), parameterizedHydrate()],
         update: [],
-        patch: [dehydrate(), liftProfilesSkills()],
+        patch: [hydrate(), updateSkills(), dehydrate(), liftProfilesSkills()],
         remove: []
     },
 

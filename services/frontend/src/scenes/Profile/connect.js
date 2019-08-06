@@ -47,6 +47,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     addNewSkill: (skill) => dispatch(skillsRequestsSlice.addNewSkill.actions.request({skill})),
-    addProfileSkills: (profile) => dispatch(profilesRequestsSlice.addNewProfileSkills.actions.request({profile}))
+    updateProfileSkills: (profile) => dispatch(profilesRequestsSlice.updateProfileSkills.actions.request({profile}))
 });
 export default connect(mapStateToProps, mapDispatchToProps);
