@@ -88,7 +88,7 @@ class SkillhubBridge {
             repo: []
         };
 
-        for (const url of urls.slice(0, 2)) {
+        for (const url of urls) {
             const skillMapping = await this.gitScraper.generateSkillMapping(url);
 
             // Fill up an array equal in length to the number of commits

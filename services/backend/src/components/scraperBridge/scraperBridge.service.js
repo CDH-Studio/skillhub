@@ -23,7 +23,7 @@ class ScraperBridgeService {
     /* The master entrypoint to the service. Handles taking data from the Scraping service,
      * potentially processing it some more, and then storing it in the database. */
     async create(data) {
-        logger.info("Starting injestion of scraped data");
+        logger.info("Starting ingestion of scraped data");
 
         const {issues, projects, users, skillsStats} = data;
 
@@ -49,7 +49,7 @@ class ScraperBridgeService {
             result.skills = skillsResult;
         }
 
-        logger.info({message: "Finished injestion of scraped data", result});
+        logger.info({message: "Finished ingestion of scraped data", result});
 
         return {
             status: "success",
@@ -149,13 +149,12 @@ class ScraperBridgeService {
         const profilesService = this.app.service("profiles");
         const skillsService = this.app.service("skills");
 
-        let result = {};
+        const result = {imported: 0};
 
         const existingProfiles = await profilesService.find({query: {$select: ["contactEmail"]}});
         const existingEmails = await existingProfiles.map(({contactEmail}) => contactEmail);
 
         const predictions = await this.predictionsService.predictSkills(skillsStats, existingEmails);
-        console.log(predictions);
 
         const emails = Object.keys(predictions);
         const skillsCache = {};
@@ -182,6 +181,7 @@ class ScraperBridgeService {
                 }
 
                 await profilesService.create({id: profile.id, skills});
+                result.imported += skills.length;
             }
         }
 
