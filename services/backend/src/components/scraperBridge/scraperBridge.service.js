@@ -146,14 +146,19 @@ class ScraperBridgeService {
     }
 
     async _createSkills(skillsStats) {
+        logger.info({message: "Starting to create skills"});
+
         const profilesService = this.app.service("profiles");
         const skillsService = this.app.service("skills");
 
         const result = {imported: 0};
 
+        // Get the list of existing profile emails for use by the predictions service
+        // to match the git emails back to actual profiles
         const existingProfiles = await profilesService.find({query: {$select: ["contactEmail"]}});
         const existingEmails = await existingProfiles.map(({contactEmail}) => contactEmail);
 
+        // Get the skill predictions in the form of `{[email]: [LIST_OF_SKILL_NAMES]}`
         const predictions = await this.predictionsService.predictSkills(skillsStats, existingEmails);
 
         const emails = Object.keys(predictions);
@@ -161,30 +166,38 @@ class ScraperBridgeService {
 
         for (const email of emails) {
             const skillNames = predictions[email];
+
+            // Try to find the profile object that matches the email;
+            // could potentially have an unknown email slip through the predictions service.
             const profiles = await profilesService.find({query: {contactEmail: email}});
 
-            if (profiles.length) {
-                const profile = profiles[0];
-                const skills = [];
+            if (!profiles.length) {
+                continue;
+            }
 
-                for (const skillName of skillNames) {
-                    let skill;
+            const profile = profiles[0];
+            const skills = [];
 
-                    if (skillName in skillsCache) {
-                        skill = skillsCache[skillName];
-                    } else {
-                        skill = await skillsService.create({name: skillName});
-                        skillsCache[skillName] = skill;
-                    }
+            for (const skillName of skillNames) {
+                let skill;
 
-                    skills.push(skill);
+                if (skillName in skillsCache) {
+                    skill = skillsCache[skillName];
+                } else {
+                    skill = await skillsService.create({name: skillName});
+
+                    // Cache the skill so that we don't have to keep looking it up for subsequent profiles
+                    skillsCache[skillName] = skill;
                 }
 
-                await profilesService.create({id: profile.id, skills});
-                result.imported += skills.length;
+                skills.push(skill);
             }
+
+            await profilesService.create({id: profile.id, skills});
+            result.imported += skills.length;
         }
 
+        logger.info({message: "Finished creating skills", result});
         return result;
     }
 
