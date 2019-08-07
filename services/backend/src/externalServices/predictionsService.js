@@ -23,6 +23,14 @@ class PredictionsService {
         const response = await this.axios.post("/contributors/predict", issues);
         return response.data.predictions;
     }
+
+    async predictSkills(rawStats = {}, existingEmails = []) {
+        const response = await this.axios.post(
+            "/skills/predict", {raw_stats: rawStats, existing_emails: existingEmails}
+        );
+
+        return response.data.predictions;
+    }
 }
 
 module.exports = PredictionsService;
