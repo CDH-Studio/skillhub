@@ -1,10 +1,11 @@
-import {all, call, fork, put, takeEvery} from "redux-saga/effects";
+import {all, call, fork, put, select, takeEvery} from "redux-saga/effects";
 import {push, replace} from "connected-react-router";
 import api from "api/";
 import {authRequestsSlice, userSlice} from "store/slices";
 import {routerActionTypes, tryingToAccessApp, tryingToAccessAuth} from "store/utils";
 import {User} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
+import {crossSliceSelectors} from "store";
 
 function* authSignUp({payload}, success) {
     const {email, password} = payload;
@@ -33,13 +34,27 @@ function* authLogout() {
 }
 
 function* authenticateAppAccess({payload}) {
-    if (tryingToAccessApp(payload) && !api.isAuthenticated()) {
+    const userProfile = yield select(crossSliceSelectors.getUserProfile);
+
+    if (tryingToAccessApp(payload) && !api.isAuthenticated() && userProfile) {
+        console.log("debug2")
+        yield put(replace(ScreenUrls.LOGIN));
+    }
+}
+
+function* ensureProfileCreated({payload}) {
+    const userProfile = yield select(crossSliceSelectors.getUserProfile);
+    console.log(!userProfile)
+
+    if (tryingToAccessApp(payload) && api.isAuthenticated() && !userProfile) {
+        console.log("debug")
         yield put(replace(ScreenUrls.LOGIN));
     }
 }
 
 function* redirectAuthenticatedUserToApp({payload}) {
     if (tryingToAccessAuth(payload) && api.isAuthenticated()) {
+        console.log("nolo")
         yield put(replace(ScreenUrls.SEARCH));
     }
 }
@@ -62,6 +77,7 @@ function* authSaga() {
 
     yield all([
         takeEvery(routerActionTypes, authenticateAppAccess),
+        takeEvery(routerActionTypes, ensureProfileCreated),
         takeEvery(routerActionTypes, redirectAuthenticatedUserToApp)
     ]);
 }

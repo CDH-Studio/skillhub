@@ -2,6 +2,7 @@ const ScreenUrls = {
     APP_ROUTER: "/app",
     LANDING: "/",
     LOGIN: "/login",
+    ONBOARDING: "/onboarding"
     PROFILE: "/app/profile",
     PEOPLE: "/app/people",
     PEOPLE_DETAILS: "/app/people/:id",
