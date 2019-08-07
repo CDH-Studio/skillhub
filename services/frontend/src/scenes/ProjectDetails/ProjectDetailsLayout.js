@@ -9,7 +9,7 @@ import "./ProjectDetails.scss";
 
 const containerClass = ".scroll-container";
 
-const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequest, projectChangeRecords}) => {
+const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequest, projectChangeRecords, users}) => {
     return (
         <ScrollContainer className="project">
             <LoadingValidator
@@ -26,6 +26,7 @@ const ProjectDetailsLayout = ({isLoading, contributors, project, projectInfoRequ
                             project={project}
                             projectChangeRecords={projectChangeRecords}
                             projectInfoRequest={projectInfoRequest}
+                            users={users}
                         />
                     </>
                 }
@@ -131,14 +132,18 @@ const UsedSkills = ({sectionName, project}) => (
     </>
 );
 
-const Changelog = ({projectChangeRecords, sectionName}) => {
-    const mappedChangeRecords = useMemo(() => projectChangeRecords.map((projectChangeRecord) => (
-        <ProjectChangeRecord
-            className="project-changelog"
-            key={projectChangeRecord.id}
-            {...projectChangeRecord}
-        />
-    )), [projectChangeRecords]);
+const Changelog = ({projectChangeRecords, sectionName, users}) => {
+    const mappedChangeRecords = useMemo(() => projectChangeRecords.map((projectChangeRecord) => {
+        const changelogCreator = users[projectChangeRecord.userId];
+        return (
+            <ProjectChangeRecord
+                changelogCreator={(changelogCreator) ? changelogCreator.email : null}
+                className="project-changelog"
+                key={projectChangeRecord.id}
+                {...projectChangeRecord}
+            />
+        );
+    }), [projectChangeRecords, users]);
 
     return (
         <>
@@ -160,15 +165,24 @@ const NoChangeRecords = () => (
     <p>No project change records found</p>
 );
 
-const ProjectChangeRecord = ({className, oldValue, newValue, changedAttribute, createdAt}) => (
-    <div className={className}>
-        <p className="project-changelog-date">
-            {parseDateStringToYMD(createdAt)}
-        </p>
-        <p className="project-changelog-description">
-            {changedAttribute} changed - from &quot;{oldValue}&quot; to &quot;{newValue}&quot;
-        </p>
-    </div>
-);
+const ProjectChangeRecord = ({className, oldValue, newValue, changedAttribute, createdAt, changelogCreator}) => {
+
+    const changelogDescription = (changedAttribute === "Contributor") ? (
+        `${changelogCreator} added contributor - "${newValue}"`
+    ) : (
+        `${changelogCreator} changed ${changedAttribute} - from "${oldValue}" to "${newValue}"`
+    );
+
+    return (
+        <div className={className}>
+            <p className="project-changelog-date">
+                {parseDateStringToYMD(createdAt)}
+            </p>
+            <p className="project-changelog-description">
+                {changelogDescription}
+            </p>
+        </div>
+    );
+};
 
 export default ProjectDetailsLayout;

@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => ({
             dialog, dialogState
         })
     ),
-    clearPatchError: () => dispatch(
+    clearCreateError: () => dispatch(
         projectsRequestsSlice.createProjectProfile.actions.clear()
     )
 });

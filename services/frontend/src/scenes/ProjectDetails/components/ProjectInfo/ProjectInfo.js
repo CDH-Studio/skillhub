@@ -1,34 +1,58 @@
 import React, {useCallback} from "react";
 import {useInput} from "utils/hooks";
 import {Project} from "utils/models";
-import {DetailsDialog} from "components/";
+import {DetailsDialog, RoleInputDialog} from "components/";
 import {IconButton, Paper} from "@material-ui/core";
-import {Create} from "@material-ui/icons";
+import {Add, Create} from "@material-ui/icons";
 import classNames from "classnames";
 import connect from "./connect.js";
 import "./ProjectInfo.scss";
 
-const ProjectInfo = ({clearPatchError, error, project, onSubmit, open, setDialogState}) => {
+const ProjectInfo = ({
+    clearPatchError, addProjectError, patchProjectError, project, clearAddError,
+    onPatchProject, onAddProject, open, setDialogState, profile, roleInputDialogOpen
+}) => {
     const openDialog = () => {
         setDialogState("projectInfo", true);
     };
 
     const closeDialog = () => {
-        if (error) {
+        if (patchProjectError) {
             clearPatchError();
         }
         setDialogState("projectInfo", false);
+    };
+
+    const openRoleInputDialog = () => {
+        setDialogState("roleInput", true);
+    };
+
+    const closeRoleInputDialog = () => {
+        if (addProjectError) {
+            clearAddError();
+        }
+        setDialogState("roleInput", false);
     };
 
     return (
         <>
             <ProjectInfoDialog
                 closeDialog={closeDialog}
-                error={error}
-                key={open ? project : error}
-                onSubmit={onSubmit}
+                error={patchProjectError}
+                key={open ? project : patchProjectError}
+                onSubmit={onPatchProject}
                 open={open}
                 project={project}
+            />
+            <RoleInputDialog
+                closeDialog={closeRoleInputDialog}
+                currentProject={project}
+                dialogTitle="Add to my Profile"
+                error={addProjectError}
+                key={roleInputDialogOpen}
+                open={roleInputDialogOpen}
+                onSubmit={onAddProject}
+                profile={profile}
             />
             <Paper className="project-details-card">
                 <div className="project-info-card-active-section">
@@ -41,6 +65,9 @@ const ProjectInfo = ({clearPatchError, error, project, onSubmit, open, setDialog
                 <div className="project-info-card-edit-section">
                     <IconButton className="project-info-card-edit-button" onClick={openDialog} color="primary">
                         <Create />
+                    </IconButton>
+                    <IconButton className="project-info-card-add-button" onClick={openRoleInputDialog} color="primary">
+                        <Add />
                     </IconButton>
                 </div>
             </Paper>

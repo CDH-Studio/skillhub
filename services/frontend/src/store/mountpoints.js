@@ -13,5 +13,7 @@ export default {
     skills: "skills",
     skillsRequests: "skillsRequests",
     router: "router",
-    user: "user"
+    user: "user",
+    users: "users",
+    usersRequests: "usersRequests"
 };
