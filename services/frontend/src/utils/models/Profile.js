@@ -106,10 +106,10 @@ export default class Profile {
     }
 
     static addSkill = (newSkillName, updatedSkills, databaseSkills) => {
-        const currentSkillsLC = updatedSkills.map((skill) => skill.name.toLowerCase());
+        const updatedSkillsLC = updatedSkills.map((skill) => skill.name.toLowerCase());
 
         //Checks if the skill already has been added
-        if (currentSkillsLC.filter((skill) => skill === newSkillName.toLowerCase()).length){
+        if (updatedSkillsLC.filter((skill) => skill === newSkillName.toLowerCase()).length){
             return;
         }
 
@@ -127,9 +127,10 @@ export default class Profile {
         }
     };
 
-    static removeSkills = (profile, updatedSkills) => {
-        profile.skills = profile.skills.filter((skill) => updatedSkills.includes(skill.name));
-        return profile;
+    static removeSkills = (currentSkills, updatedSkills) => {
+        const updatedSkillsNameLC = updatedSkills.map((skill) => skill.name.toLowerCase());
+        const skillsToRemove = currentSkills.filter((skill) => !updatedSkillsNameLC.includes(skill.name.toLowerCase()));
+        return skillsToRemove;
     };
 }
 

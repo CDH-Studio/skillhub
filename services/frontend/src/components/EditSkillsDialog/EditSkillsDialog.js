@@ -1,6 +1,5 @@
 import React from "react";
 import {Profile} from "utils/models";
-
 import {
     Button,
     Chip,
@@ -16,7 +15,7 @@ import "./EditSkillsDialog.scss";
 import classNames from "classnames";
 
 const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, open}) => {
-    //Sort the Database skills and
+    //Sort the Database skills
     const sortedSkills = Object.values(databaseSkills).sort((a, b) => a.name.localeCompare(b.name));
 
     const [skillsUpdated, setSkills] = React.useState(JSON.parse(JSON.stringify(skills)));
@@ -36,7 +35,7 @@ const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, o
     };
 
     const onChangeTextfield = (event) => {
-        const searchTerm = event.target.value.trim();
+        const searchTerm = event.target.value.replace(/^\s+/g, "");
         const searchTermLength = searchTerm.length;
         let newSuggestions = [];
         if (searchTermLength > 0){
