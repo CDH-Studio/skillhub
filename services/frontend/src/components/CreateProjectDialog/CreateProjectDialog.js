@@ -20,7 +20,7 @@ const CreateProjectDialog = ({handleCancel, handleSubmit, open}) => {
             <DialogTitle className="create-project-dialog-title">
                 Create Project
             </DialogTitle>
-            <DialogContent className="create-project-dialog-content">
+            <DialogContent className="create-project-dialog-content" dividers={true}>
                 <TextField
                     className="input-field"
                     label="Enter Name"
