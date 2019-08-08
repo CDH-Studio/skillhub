@@ -164,7 +164,7 @@ const SearchField = ({setSearchProperties}) => {
      * to begin the search */
     const onSearch = () => (
         setSearchProperties(new Query({
-            searchBy: searchOption,
+            searchBy: searchOption.toLowerCase(),
             searchTerm: searchTerm
         }))
     );
