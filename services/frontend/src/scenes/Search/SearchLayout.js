@@ -130,8 +130,8 @@ const FilteredContent = ({activeFilter, profiles, projects}) => {
 const PaginationFooter = ({data, setData}) => (
     <div className="pagination-container">
         <ReactPaginate
-            previousLabel={"previous"}
-            nextLabel={"next"}
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
             pageCount={Math.ceil(data.length / CARDS_PER_PAGE)}
             marginPagesDisplayed={1}
             pageRangeDisplayed={2}
@@ -166,7 +166,7 @@ const ProfilesList = ({profiles}) => {
     const mappedProfiles = useMemo(() => profiles.map((profile) => (
         <Paper
             className="profile-list-card"
-            key={profile.name}
+            key={profile.id}
         >
             <ProfileCard
                 page="people"
@@ -204,7 +204,7 @@ const SearchField = ({setSearchProperties}) => {
      * to begin the search */
     const onSearch = () => (
         setSearchProperties(new Query({
-            searchBy: searchOption,
+            searchBy: searchOption.toLowerCase(),
             searchTerm: searchTerm
         }))
     );

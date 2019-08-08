@@ -64,6 +64,9 @@ function* projectsCreateProjectProfile({payload}, success) {
         throw error;
     }
 
+    // Update the changelogs
+    yield put(projectChangeRecordsRequestsSlice.fetchAll.actions.request());
+
     // Close the dialog box
     yield put (dialogsStateSlice.actions.setDialogState({
         dialog: "roleInput",

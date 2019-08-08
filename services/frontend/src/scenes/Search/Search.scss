@@ -38,6 +38,7 @@ $search-card-width: $default-spacing * 45;
 
     .profile-list-card {
         display: flex;
+        flex-shrink: 0;
         margin-bottom: $default-spacing;
         margin-top: $default-spacing;
         padding: $default-spacing * 2;

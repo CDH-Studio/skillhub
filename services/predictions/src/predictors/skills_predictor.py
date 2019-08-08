@@ -134,8 +134,9 @@ class SkillsPredictor:
 
         for email, skills in predictions.items():
             existing_email = matching_existing_emails[email]
-            remapped_predictions.setdefault(existing_email, [])
 
-            remapped_predictions[existing_email] = list(set(remapped_predictions[existing_email] + skills))
+            if existing_email:
+                remapped_predictions.setdefault(existing_email, [])
+                remapped_predictions[existing_email] = list(set(remapped_predictions[existing_email] + skills))
 
         return remapped_predictions

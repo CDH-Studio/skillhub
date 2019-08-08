@@ -19,17 +19,18 @@
 }
 
 #project-contributors {
-
     .project-contributors-content {
         display: grid;
         justify-content: space-around;
         grid-template-columns: repeat(auto-fill, 100px);
-        padding: $default-spacing*1.5;
+        padding: $default-spacing * 1.5;
+        padding-top: 0;
         flex-wrap: wrap;
     }
 }
 
 .project-contributors-badge {
+    margin-top: $default-spacing * 1.5;
     flex: 1;
     flex-direction: column;
     flex-wrap: wrap;
