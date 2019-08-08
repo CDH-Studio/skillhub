@@ -29,12 +29,14 @@ const updateSkills = () => async (context) => {
     const {skills, skillsToRemove} = context.data;
     const profile = context.result;
 
-    if (skillsToRemove)
+    if (skillsToRemove) {
         await profile.removeSkills(skillsToRemove.map((skill) => skill.id));
+    }
 
     if (skills) {
-        for (const skill of skills)
+        for (const skill of skills) {
             await profile.addSkill(skill.id, {through: {isHighlySkilled: skill.isHighlySkilled}});
+        }
     }
     return context;
 };

@@ -4,7 +4,7 @@ import "./AvatarIcon.scss";
 
 const AvatarIcon = ({name, personsRole, className}) => (
     <div className="avatar-icon-content">
-        <Tooltip title={personsRole} placement="top" disableHoverListener={!personsRole}>
+        <Tooltip title={personsRole ? personsRole : ""} placement="top" disableHoverListener={!personsRole}>
             <Avatar className={className}>
                 {generateAvatarInitials(name)}
             </Avatar>

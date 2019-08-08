@@ -7,4 +7,4 @@ export {projectsSlice, projectsRequestsSlice} from "./projects.slice";
 export {projectChangeRecordsSlice, projectChangeRecordsRequestsSlice} from "./projectChangeRecords.slice";
 export {projectProfilesSlice} from "./projectProfiles.slice";
 export {skillsSlice, skillsRequestsSlice} from "./skills.slice";
-export {userSlice} from "./user.slice";
+export {userSlice, usersSlice, usersRequestsSlice} from "./user.slice";

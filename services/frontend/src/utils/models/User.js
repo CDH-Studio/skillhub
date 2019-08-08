@@ -1,4 +1,5 @@
 import uuidv4 from "uuid/v4";
+import {arrayToObject} from "utils/helperFunctions";
 const EMAIL_REGEX = /^\S+@\S+$/;
 
 export default class User {
@@ -18,5 +19,9 @@ export default class User {
         if (!EMAIL_REGEX.test(email)) {
             throw new Error("Invalid email");
         }
+    }
+
+    static normalizeApiResultsForRedux(projects = []) {
+        return projects.reduce(arrayToObject(), {});
     }
 }

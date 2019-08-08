@@ -56,10 +56,17 @@ const createChangeLog = () => async (context) => {
     return context;
 };
 
-const validateProjectProfile = (role) => {
-    if (!role) {
-        throw new errors.BadRequest("Missing Data", "Invalid role");
-    }
+const createContributorChangelog = (context) => {
+    const projectId = context.data.id;
+    const userId = context.params.user.id;
+    const {profile} = context.data;
+
+    context.app.service("projectChangeRecords").create({
+        projectId: projectId,
+        userId: userId,
+        newValue: profile.name,
+        changedAttribute: "Contributor"
+    });
 };
 
 const liftProjectsProfiles = () => (context) => {
@@ -76,7 +83,8 @@ const addProfiles = () => async (context) => {
 
     // If a profile object has been passed create a projectProfile to it
     if (profile) {
-        validateProjectProfile(role);
+        validateProjectProfile(context);
+        createContributorChangelog(context);
 
         const project = context.result;
         await project.addProfile(profile.id, {through: {role: role}});
@@ -89,6 +97,21 @@ const addProfiles = () => async (context) => {
     }
 
     return context;
+};
+
+const validateProjectProfile = async (context) => {
+    const {profile} = context.data;
+    const {role} = context.data;
+    const project = context.result;
+
+    if (!role) {
+        throw new errors.BadRequest("Missing Data", "Invalid role");
+    }
+
+    const existingAssociation = await (project.hasProfile(profile.id));
+    if (existingAssociation) {
+        throw new errors.BadRequest("Project Already on Profile");
+    }
 };
 
 const findOrCreateQueryCustomizer = (data) => {
