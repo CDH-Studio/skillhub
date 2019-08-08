@@ -1,0 +1,28 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+@import "styles/_media_queries.scss";
+
+.create-project-dialog {
+    #create-project-dialog-title {
+        padding-bottom: 0;
+
+        h6 {
+            font-weight: 700;
+        }
+    }
+}
+
+.create-project-dialog-content {
+    background: #F0F4F8;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+
+    .input-field {
+        margin: $default-spacing*0.5 0;
+    }
+}
+
+
+

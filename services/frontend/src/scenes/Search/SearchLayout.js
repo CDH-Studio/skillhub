@@ -1,10 +1,12 @@
 import React, {useCallback, useMemo, useState} from "react";
 import {useInput, useOnEnterKey} from "utils/hooks";
 import {Paper, IconButton, MenuItem, Input, Select} from "@material-ui/core";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import {Search} from "@material-ui/icons";
 import ReactPaginate from "react-paginate";
 import classNames from "classnames";
-import {ProfileCard, ProjectCard, LoadingValidator} from "components/";
+import {CreateProjectDialog, ProfileCard, ProjectCard, LoadingValidator} from "components/";
 import {Project} from "utils/models";
 import {FILTER_PROFILES, FILTER_PROJECTS, SEARCH_OPTIONS, Query} from "utils/searchGlobals";
 import "./Search.scss";
@@ -18,10 +20,24 @@ const handlePageChange = (newPageIndex, setData, cards) => {
     ));
 };
 
-const SearchLayout = ({
-    projects, profiles, activeFilter, onFilterClick,
-    setSearchProperties, searchId, isLoading
-}) => {
+const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearchProperties, searchId, isLoading}) => {
+    const [createProjectDialogOpen, setProjectDialogOpen] = useState(false);
+
+    const openDialog = () => {
+        setProjectDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setProjectDialogOpen(false);
+    };
+    const handleSubmit = () => {
+        closeDialog();
+    };
+
+    const handleCancel = () => {
+        closeDialog();
+    };
+
     return (
         <div className="search">
             <LoadingValidator
@@ -29,9 +45,33 @@ const SearchLayout = ({
                 isLoading={isLoading}
                 renderOnLoad={
                     <>
-                        <SearchField
-                            setSearchProperties={setSearchProperties}
+                        <CreateProjectDialog
+                            handleCancel={handleCancel}
+                            handleSubmit={handleSubmit}
+                            open={createProjectDialogOpen}
                         />
+                        <div className="search-create-row">
+                            <div className="column" />
+                            <div className="column">
+                                <SearchField
+                                    setSearchProperties={setSearchProperties}
+                                />
+                            </div>
+                            <div className="column">
+                                <div className="create-project-button" onClick={openDialog}>
+                                    <Fab
+                                        variant="extended"
+                                        size="medium"
+                                        color="primary"
+                                        aria-label="add"
+                                    >
+                                        <AddIcon className="create-project-button-add-icon" />
+                                        Create Project
+                                    </Fab>
+                                </div>
+                            </div>
+                        </div>
+
                         <FilterHeader
                             labels={[FILTER_PROFILES, FILTER_PROJECTS]}
                             onFilterClick={onFilterClick}
@@ -51,8 +91,8 @@ const SearchLayout = ({
 };
 
 const FilteredContent = ({activeFilter, profiles, projects}) => {
-    const [paginatedProjects, setPaginatedProjects] = useState(projects.slice(0,CARDS_PER_PAGE));
-    const [paginatedProfiles, setPaginatedProfiles] = useState(profiles.slice(0,CARDS_PER_PAGE));
+    const [paginatedProjects, setPaginatedProjects] = useState(projects.slice(0, CARDS_PER_PAGE));
+    const [paginatedProfiles, setPaginatedProfiles] = useState(profiles.slice(0, CARDS_PER_PAGE));
 
     if (activeFilter === FILTER_PROJECTS) {
         return (
@@ -199,7 +239,7 @@ const SearchField = ({setSearchProperties}) => {
                     onClick={onSearch}
                 >
                     <Search />
-                </IconButton >
+                </IconButton>
             </Paper>
         </div>
     );
