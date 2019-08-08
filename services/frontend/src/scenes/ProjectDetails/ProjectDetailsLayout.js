@@ -97,25 +97,29 @@ const ProjectContent = ({...sectionProps}) => (
 );
 
 const Contributors = ({sectionName, contributors}) => {
+    const contributorsDisplay = contributors.length > 0 ?
+        contributors.map((contributor) => {
+            return (
+                <div className="project-contributors-badge" key={contributor.name}>
+                    <Link to={ScreenUrls.PEOPLE + `/${contributor.profileId}`}>
+                        <AvatarIcon
+                            name={contributor.name}
+                            personsRole={contributor.role}
+                            className="avatar-icon"
+                        />
+                        <h3 className="project-contributors-badge-name">{contributor.name}</h3>
+                    </Link>
+                </div>
+            );
+        })
+        :
+        <p> No contributors found </p>;
+
     return (
         <>
             <h2>{sectionName}</h2>
             <Paper className="project-details-card project-contributors-content">
-                {contributors.map((contributor) => {
-                    return (
-                        <div className="project-contributors-badge" key={contributor.name}>
-                            <Link to={ScreenUrls.PEOPLE + `/${contributor.profileId}`}>
-                                <AvatarIcon
-                                    name={contributor.name}
-                                    personsRole={contributor.role}
-                                    className="avatar-icon"
-                                />
-                                <h3 className="project-contributors-badge-name">{contributor.name}</h3>
-                            </Link>
-                        </div>
-                    );
-                }
-                )}
+                {contributorsDisplay}
             </Paper>
         </>
     );
@@ -127,7 +131,7 @@ const UsedSkills = ({sectionName, project}) => {
             skills={project.skills}
         />
         :
-        <p> There are no skills. </p>;
+        <p> No skills found </p>;
     return (
         <>
             <h2>{sectionName}</h2>

@@ -136,7 +136,7 @@ const Skills = ({addNewSkill, databaseSkills, isUserProfile, profile, sectionNam
             skills={profileUpdated.skills}
         />
         :
-        <p> You have no skills. </p>;
+        <p> No skills found </p>;
 
     return (
         <>
