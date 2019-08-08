@@ -130,6 +130,14 @@ const Skills = ({addNewSkill, databaseSkills, isUserProfile, profile, sectionNam
         closeDialog();
     };
 
+    const skillsDisplay = profile.skills.length > 0 ?
+        <SkillBadges
+            displayCount={profileUpdated.skills.length}
+            skills={profileUpdated.skills}
+        />
+        :
+        <p> You have no skills. </p>;
+
     return (
         <>
             <EditSkillsDialog
@@ -154,10 +162,7 @@ const Skills = ({addNewSkill, databaseSkills, isUserProfile, profile, sectionNam
                 </IconButton>
             </div>
             <Paper className="profile-page-card profile-card-skills">
-                <SkillBadges
-                    displayCount={profileUpdated.skills.length}
-                    skills={profileUpdated.skills}
-                />
+                {skillsDisplay}
             </Paper>
         </>
     );

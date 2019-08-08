@@ -121,16 +121,22 @@ const Contributors = ({sectionName, contributors}) => {
     );
 };
 
-const UsedSkills = ({sectionName, project}) => (
-    <>
-        <h2>{sectionName}</h2>
-        <Paper className="project-details-card project-used-skills-content">
-            <SkillBadges
-                skills={project.skills}
-            />
-        </Paper>
-    </>
-);
+const UsedSkills = ({sectionName, project}) => {
+    const skillsDisplay = project.skills.length > 0 ?
+        <SkillBadges
+            skills={project.skills}
+        />
+        :
+        <p> There are no skills. </p>;
+    return (
+        <>
+            <h2>{sectionName}</h2>
+            <Paper className="project-details-card project-used-skills-content">
+                {skillsDisplay}
+            </Paper>
+        </>
+    );
+};
 
 const Changelog = ({projectChangeRecords, sectionName, users}) => {
     const mappedChangeRecords = useMemo(() => projectChangeRecords.map((projectChangeRecord) => {
