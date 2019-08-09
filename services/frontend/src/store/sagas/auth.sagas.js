@@ -5,7 +5,6 @@ import {authRequestsSlice, userSlice} from "store/slices";
 import {routerActionTypes, tryingToAccessApp, tryingToAccessAuth} from "store/utils";
 import {User} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
-import {crossSliceSelectors} from "store";
 
 function* authSignUp({payload}, success) {
     const {email, password} = payload;
@@ -25,7 +24,13 @@ function* authLogin({payload}, success) {
     yield call(success);  // Mark success before continuing with other actions
 
     yield put(userSlice.actions.setUser({id: result.user.id, email}));
-    yield put(push(ScreenUrls.SEARCH));
+    const userProfile = yield call(api.service("profiles").find, {query: {userId: result.user.id}});
+
+    if (!userProfile) {
+        yield put(push(ScreenUrls.ONBOARDING));
+    } else {
+        yield put(push(ScreenUrls.SEARCH));
+    }
 }
 
 function* authLogout() {
@@ -34,27 +39,29 @@ function* authLogout() {
 }
 
 function* authenticateAppAccess({payload}) {
-    const userProfile = yield select(crossSliceSelectors.getUserProfile);
-
-    if (tryingToAccessApp(payload) && !api.isAuthenticated() && userProfile) {
-        console.log("debug2")
-        yield put(replace(ScreenUrls.LOGIN));
+    if (tryingToAccessApp(payload) && !api.isAuthenticated()) {
+        const userId = yield select(userSlice.selectors.getUserId);
+        const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
+        if (!userProfile) {
+            yield put(replace(ScreenUrls.ONBOARDING));
+        } else {
+            yield put(replace(ScreenUrls.SEARCH));
+        }
     }
 }
 
 function* ensureProfileCreated({payload}) {
-    const userProfile = yield select(crossSliceSelectors.getUserProfile);
-    console.log(!userProfile)
-
-    if (tryingToAccessApp(payload) && api.isAuthenticated() && !userProfile) {
-        console.log("debug")
-        yield put(replace(ScreenUrls.LOGIN));
-    }
+    // if (tryingToAccessApp(payload) && api.isAuthenticated()) {
+    //     const userId = yield select(userSlice.selectors.getUserId);
+    //     const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
+    //     if (!userProfile) {
+    //         yield put(replace(ScreenUrls.ONBOARDING));
+    //     }
+    // }
 }
 
 function* redirectAuthenticatedUserToApp({payload}) {
     if (tryingToAccessAuth(payload) && api.isAuthenticated()) {
-        console.log("nolo")
         yield put(replace(ScreenUrls.SEARCH));
     }
 }

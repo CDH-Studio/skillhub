@@ -1,11 +1,16 @@
 import React from "react";
+import connect from "./connect";
 import OnboardingLayout from "./OnboardingLayout";
 
-const Onboarding = () => {
+const Onboarding = ({user, error, isLoading, onSubmit}) => {
     return (
         <OnboardingLayout
+            user={user}
+            error={error}
+            isLoading={isLoading}
+            onSubmit={onSubmit}
         />
     );
 };
 
-export default Onboarding;
+export default connect(Onboarding);

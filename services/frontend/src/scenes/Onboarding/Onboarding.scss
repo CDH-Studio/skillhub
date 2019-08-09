@@ -1,3 +1,49 @@
 @import "styles/_colors.scss";
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
+
+.onboarding {
+    display: flex;
+    min-height: 100%;
+
+    .onboarding-branding {
+        align-items: center;
+        background-color: $color-primary;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .onboarding-content{
+        align-items: center;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+.onboarding-form {
+    max-width: $default-spacing*30;
+    margin: $default-spacing;
+
+    .onboarding-form-header {
+        padding: $default-spacing*1.5;
+        padding-bottom: 0;
+    }
+
+    .onboarding-form-content {
+        padding: $default-spacing;
+
+        .details-form {
+            margin: $default-spacing*0.5 0;
+            margin-top: (-$default-spacing);
+        }
+    }
+
+    .onboarding-form-actions {
+        padding: $default-spacing*1.5;
+        padding-top: 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+}
