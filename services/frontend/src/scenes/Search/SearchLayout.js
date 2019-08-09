@@ -63,7 +63,6 @@ const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearc
                                         variant="extended"
                                         size="medium"
                                         color="primary"
-                                        aria-label="add"
                                     >
                                         <AddIcon className="create-project-button-add-icon" />
                                         Create Project
