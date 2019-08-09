@@ -18,7 +18,6 @@ function* profilesFetchAll() {
 }
 
 function* profilesCreateProfile({payload}, success) {
-    console.log(payload)
     try {
         const result = yield call(api.service("profiles").create, payload);
         const normalizedProfile = Profile.normalizeProfile(result);
@@ -28,6 +27,7 @@ function* profilesCreateProfile({payload}, success) {
     } catch (error) {
         throw error;
     }
+    yield put(push(ScreenUrls.SEARCH));
 }
 
 function* profilesPatchPersonalDetails({payload}, success) {

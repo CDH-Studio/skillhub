@@ -16,12 +16,10 @@ $search-card-width: $default-spacing * 45;
     display: flex;
     flex-direction: column;
     align-content: center;
-    justify-content: center;
 }
 
 .loading-indicator {
-    align-self: center;
-    justify-self: center;
+    margin: auto;
 }
 
 .list-container {

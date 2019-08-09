@@ -27,4 +27,5 @@ const tryingToAccessRoutes = (payload, routesBlacklist = []) => {
 };
 
 export const tryingToAccessApp = (payload) => tryingToAccessRoutes(payload, [ScreenUrls.APP_ROUTER]);
+export const tryingToAccessOnboarding = (payload) => tryingToAccessRoutes(payload, [ScreenUrls.ONBOARDING]);
 export const tryingToAccessAuth = (payload) => tryingToAccessRoutes(payload, [ScreenUrls.LOGIN, ScreenUrls.SIGN_UP]);

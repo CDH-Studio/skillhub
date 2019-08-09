@@ -74,6 +74,15 @@ const validatePersonalDetails = () => (context) => {
     }
 };
 
+const validateField = (field) => (context) => {
+    if (!context.data[field]) {
+        const emptyField = {
+            [field]: "Invalid " + field
+        };
+        throw new errors.BadRequest("Missing Data", emptyField);
+    }
+};
+
 const findOrCreateQueryCustomizer = (data) => {
     // Allows the `findOrCreate` hook to use a more specific query than
     // just the whole data blob when trying to find an existing profile.
@@ -95,7 +104,11 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication("contactEmail"), findOrCreate(findOrCreateQueryCustomizer)],
+        create: [
+            preventBulkDuplication("contactEmail"),
+            findOrCreate(findOrCreateQueryCustomizer),
+            validateField("name")
+        ],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),

@@ -2,7 +2,7 @@ import {all, call, fork, put, select, takeEvery} from "redux-saga/effects";
 import {push, replace} from "connected-react-router";
 import api from "api/";
 import {authRequestsSlice, userSlice} from "store/slices";
-import {routerActionTypes, tryingToAccessApp, tryingToAccessAuth} from "store/utils";
+import {routerActionTypes, tryingToAccessApp, tryingToAccessAuth, tryingToAccessOnboarding} from "store/utils";
 import {User} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
 
@@ -26,7 +26,7 @@ function* authLogin({payload}, success) {
     yield put(userSlice.actions.setUser({id: result.user.id, email}));
     const userProfile = yield call(api.service("profiles").find, {query: {userId: result.user.id}});
 
-    if (!userProfile) {
+    if (userProfile.length === 0) {
         yield put(push(ScreenUrls.ONBOARDING));
     } else {
         yield put(push(ScreenUrls.SEARCH));
@@ -38,31 +38,27 @@ function* authLogout() {
     yield put(push(ScreenUrls.LANDING));
 }
 
-function* authenticateAppAccess({payload}) {
-    if (tryingToAccessApp(payload) && !api.isAuthenticated()) {
-        const userId = yield select(userSlice.selectors.getUserId);
-        const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
-        if (!userProfile) {
-            yield put(replace(ScreenUrls.ONBOARDING));
-        } else {
-            yield put(replace(ScreenUrls.SEARCH));
-        }
+/* trying to access the app or onboarding pages, redirected due to not being authenticated */
+function* redirectUnAuthenticatedUserToAuth({payload}) {
+    if ((tryingToAccessApp(payload) || tryingToAccessOnboarding(payload))
+    && !api.isAuthenticated()) {
+        yield put(push(ScreenUrls.LOGIN));
     }
 }
 
-function* ensureProfileCreated({payload}) {
-    // if (tryingToAccessApp(payload) && api.isAuthenticated()) {
-    //     const userId = yield select(userSlice.selectors.getUserId);
-    //     const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
-    //     if (!userProfile) {
-    //         yield put(replace(ScreenUrls.ONBOARDING));
-    //     }
-    // }
-}
-
-function* redirectAuthenticatedUserToApp({payload}) {
-    if (tryingToAccessAuth(payload) && api.isAuthenticated()) {
-        yield put(replace(ScreenUrls.SEARCH));
+function* redirectAuthenticatedUser({payload}) {
+    if (api.isAuthenticated()) {
+        const userId = yield select(userSlice.selectors.getUserId);
+        const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
+        /* trying to access the app or onboarding pages, redirected due to not having
+         * a profile setup yet */
+        if ((tryingToAccessApp(payload) || tryingToAccessAuth(payload)) && userProfile.length === 0) {
+            yield put(replace(ScreenUrls.ONBOARDING));
+        /* trying to access the auth or onboarding pages, redirected due to already having
+         * an account and profile  */
+        } else if ((tryingToAccessAuth(payload) || tryingToAccessOnboarding(payload)) && userProfile.length > 0) {
+            yield put(replace(ScreenUrls.SEARCH));
+        }
     }
 }
 
@@ -83,9 +79,8 @@ function* authSaga() {
     ));
 
     yield all([
-        takeEvery(routerActionTypes, authenticateAppAccess),
-        takeEvery(routerActionTypes, ensureProfileCreated),
-        takeEvery(routerActionTypes, redirectAuthenticatedUserToApp)
+        takeEvery(routerActionTypes, redirectUnAuthenticatedUserToAuth),
+        takeEvery(routerActionTypes, redirectAuthenticatedUser),
     ]);
 }
 
