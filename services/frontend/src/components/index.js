@@ -1,6 +1,7 @@
 export {default as AvatarIcon} from "./AvatarIcon";
 export {default as AuthBranding} from "./AuthBranding";
 export {default as AuthForm} from "./AuthForm";
+export {default as CreateProjectDialog} from "./CreateProjectDialog";
 export {default as DetailsDialog} from "./DetailsDialog";
 export {default as DetailsForm} from "./DetailsForm";
 export {default as EditSkillsDialog} from "./EditSkillsDialog";
