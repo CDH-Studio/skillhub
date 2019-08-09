@@ -25,6 +25,19 @@ const liftProfilesSkills = () => (context) => {
     context.result = Profile.liftProfilesSkills(context.result);
 };
 
+const addSkills = () => async (context) => {
+    const {skills, skillsToRemove} = context.data;
+    const profile = context.result;
+
+    if (skills) {
+        for (const skill of skills) {
+            await profile.addSkill(skill.id, {through: {isHighlySkilled: skill.isHighlySkilled}});
+        }
+    }
+
+    return context;
+};
+
 const updateSkills = () => async (context) => {
     const {skills, skillsToRemove} = context.data;
     const profile = context.result;
@@ -38,6 +51,7 @@ const updateSkills = () => async (context) => {
             await profile.addSkill(skill.id, {through: {isHighlySkilled: skill.isHighlySkilled}});
         }
     }
+
     return context;
 };
 
@@ -95,7 +109,7 @@ module.exports = {
         all: [],
         find: [dehydrate(), liftProfilesSkills()],
         get: [dehydrate(), liftProfilesSkills()],
-        create: [dehydrate(), parameterizedHydrate()],
+        create: [hydrate(), addSkills(), dehydrate(), parameterizedHydrate()],
         update: [],
         patch: [hydrate(), updateSkills(), dehydrate(), liftProfilesSkills()],
         remove: []
