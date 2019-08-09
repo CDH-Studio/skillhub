@@ -130,7 +130,7 @@ const Skills = ({addNewSkill, databaseSkills, isUserProfile, profile, sectionNam
         closeDialog();
     };
 
-    const skillsDisplay = profile.skills.length > 0 ?
+    const skillsDisplay = profileUpdated.skills.length > 0 ?
         <SkillBadges
             displayCount={profileUpdated.skills.length}
             skills={profileUpdated.skills}
