@@ -18,6 +18,28 @@ const includeAssociations = () => (context) => {
     return context;
 };
 
+const updateLastActiveTimes = () => async (context) => {
+    const {data, service} = context;
+
+    // This hook is only for bulk methods
+    if (!Array.isArray(data)) {
+        return context;
+    }
+
+    const jiraKeys = data.map((project) => project.jiraKey);
+    const existingProjects = await service.find({query: {jiraKey: {$in: jiraKeys}}});
+
+    for (const existingProject of existingProjects) {
+        const filteredProjects = data.filter((project) => project.jiraKey === existingProject.jiraKey);
+
+        if (filteredProjects.length) {
+            await service.patch(existingProject.id, {lastActive: filteredProjects[0].lastActive});
+        }
+    }
+
+    return context;
+};
+
 const validateProjectInfo = () => (context) => {
     const emptyFields = Object.keys(context.data).reduce((acc, field) => {
         if (!context.data[field]) {
@@ -36,8 +58,14 @@ const validateProjectInfo = () => (context) => {
 /*  Checks the passed arguments (context.data) versus the existing project (projectBeforeUpdate)
  *  to and creates changelogs for every changed property. */
 const createChangeLog = () => async (context) => {
-    const projectId = context.data.id;
+    const {user} = context.params;
+
+    if (!user) {
+        return context;
+    }
+
     const userId = context.params.user.id;
+    const projectId = context.data.id;
 
     const projectBeforeUpdate = await context.app.service("projects").get(projectId);
 
@@ -135,7 +163,11 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeAssociations()],
         get: [includeAssociations()],
-        create: [preventBulkDuplication("jiraKey"), findOrCreate(findOrCreateQueryCustomizer)],
+        create: [
+            updateLastActiveTimes(),
+            preventBulkDuplication("jiraKey"),
+            findOrCreate(findOrCreateQueryCustomizer)
+        ],
         update: [],
         patch: [
             validateProjectInfo(),
