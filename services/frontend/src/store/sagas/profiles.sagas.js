@@ -17,16 +17,13 @@ function* profilesFetchAll() {
     yield put(profileSkillsSlice.actions.addProfileSkills(profileSkills));
 }
 
-function* profilesCreateProfile({payload}, success) {
-    try {
-        const result = yield call(api.service("profiles").create, payload);
-        const normalizedProfile = Profile.normalizeProfile(result);
+function* profilesCreateProfile({payload}) {
+    payload.validate = true;
 
-        yield put(profilesSlice.actions.setProfile(normalizedProfile));
-        yield call(success);  // Mark success before continuing with other actions
-    } catch (error) {
-        throw error;
-    }
+    const result = yield call(api.service("profiles").create, payload);
+    const normalizedProfile = Profile.normalizeProfile(result);
+
+    yield put(profilesSlice.actions.setProfile(normalizedProfile));
     yield put(push(ScreenUrls.SEARCH));
 }
 

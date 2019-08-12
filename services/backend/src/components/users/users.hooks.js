@@ -16,6 +16,20 @@ const validateUserInfo = () => (context) => {
     }
 };
 
+const linkExistingProfile = () => async (context) => {
+    if (context.result) {
+        const result = await context.app.service("profiles").patch(null, {
+            userId: context.result.id
+        }, {
+            query: {
+                $limit: 1,
+                contactEmail: context.result.email
+            }
+        });
+        console.log(result);
+    }
+};
+
 module.exports = {
     before: {
         all: [],
@@ -35,7 +49,7 @@ module.exports = {
         ],
         find: [],
         get: [],
-        create: [],
+        create: [linkExistingProfile()],
         update: [],
         patch: [],
         remove: []

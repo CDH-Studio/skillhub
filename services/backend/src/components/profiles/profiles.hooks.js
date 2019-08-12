@@ -69,13 +69,13 @@ const validatePersonalDetails = () => (context) => {
         throw new errors.BadRequest("Missing Data", emptyFields);
     }
 
-    if (!EMAIL_REGEX.test(context.data.contactEmail)) {
+    if (context.data.contactEmail && !EMAIL_REGEX.test(context.data.contactEmail)) {
         throw new errors.BadRequest("Invalid email");
     }
 };
 
 const validateField = (field) => (context) => {
-    if (!context.data[field]) {
+    if (context.data.validate && !context.data[field]) {
         const emptyField = {
             [field]: "Invalid " + field
         };

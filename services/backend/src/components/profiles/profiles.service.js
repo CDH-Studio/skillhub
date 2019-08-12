@@ -10,7 +10,7 @@ module.exports = function (app) {
     const options = {
         Model,
         paginate,
-        multi: ["create"]
+        multi: ["create", "patch"]
     };
 
     // Initialize our service with any options it requires
