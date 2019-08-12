@@ -1,0 +1,28 @@
+{{- if and .Values.__services .Values.serviceName}}
+{{- $projectName := .Values.__project_name}}
+{{- $serviceName := .Values.serviceName}}
+{{- $serviceMap := index .Values.__services .Values.serviceName}}
+{{- $serviceFolder := printf "services/%s" (index $serviceMap "folder")}}
+
+{{- $tag := "latest"}}
+{{- $imageStreamTag := printf "%s:%s" $serviceName $tag}}
+
+apiVersion: v1
+kind: BuildConfig
+metadata:
+    name: {{$serviceName}}
+    labels:
+        app: {{$projectName}}
+spec:
+    source:
+        git:
+            uri: {{.Values.__remote_repo_clone_url}}
+            ref: "master"
+        contextDir: {{$serviceFolder | quote}}
+    strategy:
+        type: Docker
+    output:
+        to:
+            kind: ImageStreamTag
+            name: {{$imageStreamTag | quote}}
+{{- end}}

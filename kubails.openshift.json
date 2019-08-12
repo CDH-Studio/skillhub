@@ -1,0 +1,187 @@
+{
+    "__domain": "skillhub.apps.ic.gc.ca",
+    "__gcp_project_id": "skillhub",
+    "__gcp_project_region": "northamerica-northeast1",
+    "__gcp_project_zone": "northamerica-northeast1-c",
+    "__nfs_mount_path": "/var/nfs-mount",
+    "__nfs_server_name": "nfs-server",
+    "__nfs_storage_bucket": "skillhub-nfs-storage",
+    "__production_namespace": "master",
+    "__project_name": "skillhub",
+    "__project_title": "Skillhub",
+    "__remote_repo_clone_url": "https://github.com/CDH-Studio/skillhub.git",
+    "__remote_repo_host": "github",
+    "__remote_repo_owner": "cdh-studio",
+    "__services": {
+        "backend": {
+            "container_port": "5000",
+            "env": [
+                {
+                    "name": "PREDICTIONS_PROTOCOL",
+                    "value": "https"
+                }
+            ],
+            "external_port": "80",
+            "folder": "backend",
+            "host": "backend-skillhub.apps.ic.gc.ca",
+            "image": "backend",
+            "image_in_project": true,
+            "persistent_volume": {},
+            "pre_startup_command": "npm run db:retryable-migrate && npm run db:seed",
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "backend-secrets",
+                "variables": [
+                    "PREDICTIONS_API_KEY",
+                    "SCRAPER_API_KEY",
+                    "TOKEN_SECRET"
+                ]
+            },
+            "templates": [
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
+            ],
+            "type": "NodePort",
+            "wait_for_service": "backend-database"
+        },
+        "backend-database": {
+            "container_port": "5432",
+            "env": [
+                {
+                    "name": "POSTGRES_DB",
+                    "value": "app-database"
+                },
+                {
+                    "name": "POSTGRES_USER",
+                    "value": "app-database-user"
+                }
+            ],
+            "external_port": "5432",
+            "folder": null,
+            "host": "backend-database",
+            "image": "postgres:11.1",
+            "image_in_project": false,
+            "persistent_volume": {
+                "mount_path": "/var/lib/postgresql/data",
+                "size": "5Gi",
+                "sub_path": "database"
+            },
+            "pre_startup_command": null,
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {},
+            "templates": [
+                "deployment",
+                "service-os"
+            ],
+            "type": "ClusterIP",
+            "wait_for_service": null
+        },
+        "frontend": {
+            "container_port": "80",
+            "env": [
+                {
+                    "name": "NODE_ENV",
+                    "value": "production"
+                }
+            ],
+            "external_port": "80",
+            "folder": "frontend",
+            "host": "skillhub.apps.ic.gc.ca",
+            "image": "frontend",
+            "image_in_project": true,
+            "persistent_volume": {},
+            "pre_startup_command": null,
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {},
+            "templates": [
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
+            ],
+            "type": "NodePort",
+            "wait_for_service": null
+        },
+        "predictions": {
+            "container_port": "5000",
+            "env": [],
+            "external_port": "80",
+            "folder": "predictions",
+            "host": "predictions-skillhub.apps.ic.gc.ca",
+            "image": "predictions",
+            "image_in_project": true,
+            "persistent_volume": {},
+            "pre_startup_command": null,
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "predictions-secrets",
+                "variables": [
+                    "SKILLHUB_API_KEY"
+                ]
+            },
+            "templates": [
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
+            ],
+            "type": "NodePort",
+            "wait_for_service": null
+        },
+        "scraper": {
+            "container_port": "5000",
+            "env": [
+                {
+                    "name": "JIRA_HOST",
+                    "value": "https://jira.ised-isde.canada.ca"
+                },
+                {
+                    "name": "JIRA_PLATFORM",
+                    "value": "server"
+                },
+                {
+                    "name": "BACKEND_PROTOCOL",
+                    "value": "https"
+                }
+            ],
+            "external_port": "80",
+            "folder": "scraper",
+            "host": "scraper-skillhub.apps.ic.gc.ca",
+            "image": "scraper",
+            "image_in_project": true,
+            "persistent_volume": {},
+            "pre_startup_command": "",
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "scraper-secrets",
+                "variables": [
+                    "JIRA_AUTH_TOKEN",
+                    "SKILLHUB_API_KEY"
+                ]
+            },
+            "templates": [
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
+            ],
+            "type": "NodePort",
+            "wait_for_service": null
+        }
+    },
+    "__wildcard_certificate_secret": "skillhub-tls"
+}

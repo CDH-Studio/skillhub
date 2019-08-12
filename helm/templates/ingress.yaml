@@ -1,4 +1,3 @@
-
 {{- if and .Values.__services .Values.serviceName}}
 {{- $serviceMap := index .Values.__services .Values.serviceName}}
 {{- $host := printf "%s%s" (.Values.subdomain | default "" | lower) (index $serviceMap "host")}}

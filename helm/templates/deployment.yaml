@@ -15,6 +15,7 @@
 {{- $pvClaimName := printf "%s-pv-claim" $serviceName}}
 {{- $volumeName := printf "%s-volume" $serviceName}}
 {{- $volumeConfig := index $serviceMap "persistent_volume"}}
+{{- $storageClass := index $volumeConfig "storage_class"}}
 
 {{- $waitForService := index $serviceMap "wait_for_service"}}
 {{- $preStartupCommand := index $serviceMap "pre_startup_command"}}
@@ -36,7 +37,9 @@ spec:
     resources:
         requests:
             storage: {{index $volumeConfig "size"}}
-    storageClassName: {{(index $volumeConfig "storage_class") | default "standard"}}
+    {{- if $storageClass}}
+    storageClassName: {{$storageClass}}
+    {{- end}}
 {{- end}}
 
 ---
