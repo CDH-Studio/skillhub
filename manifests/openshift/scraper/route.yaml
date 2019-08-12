@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Route
+metadata:
+    name: scraper
+    labels:
+        app: skillhub
+        run: scraper
+spec:
+    host: scraper-skillhub.apps.ic.gc.ca
+    port:
+        targetPort: 5000-tcp
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+    to:
+        kind: Service
+        name: scraper
+        weight: 100
+    wildcardPolicy: None

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: scraper
+    labels:
+        app: skillhub
+        run: scraper
+spec:
+    ports:
+    - name: 5000-tcp
+      protocol: TCP
+      port: 5000
+    targetPort: 5000
+    selector:
+        run: scraper
+    type: ClusterIP
