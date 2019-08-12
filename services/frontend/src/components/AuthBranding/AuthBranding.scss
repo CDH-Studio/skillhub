@@ -2,6 +2,7 @@
 @import "styles/_dimens.scss";
 
 .auth-branding {
+    z-index: 1;
     align-items: center;
     background-color: $color-primary;
     display: flex;

@@ -7,7 +7,13 @@ import "./Onboarding.scss";
 
 const OnboardingLayout = ({user, error, isLoading, onSubmit}) => (
     <div className="onboarding">
-        <div className="auth-branding">
+        <div className="onboarding-branding">
+            <h3 className="onboarding-branding-subtitle">
+                We can&apos;t seem to find a profile for you...
+            </h3>
+            <h1 className="onboarding-branding-title">
+                How about making one now?
+            </h1>
         </div>
         <div className="onboarding-content">
             <OnboardingForm

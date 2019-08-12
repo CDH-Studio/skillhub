@@ -5,6 +5,7 @@
 .landing {
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     .landing-header {
         align-items: center;
@@ -47,28 +48,41 @@
         }
     }
 
-    .landing-jumbotron {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: 25vh;
+    .landing-content {
+        @include background-image("/images/landing-background.jpg", 100%, 0.25, top, center);
 
-        .landing-tagline {
-            color: $color-text-secondary;
-            font-weight: bold;
-            margin-bottom: $default-spacing * 2;
-        }
+        height: 100%;
+        background: #ffffff;
+        position: relative;
 
-        .landing-create-profile {
-            @include hover-background($color-primary, $color-primary-hover);
-            @include fab-dropshadow();
-
+        .landing-jumbotron {
+            z-index: 1;
+            background-color: transparent;
             align-items: center;
-            border-radius: $default-border-radius;
-            color: $color-light;
             display: flex;
-            font-weight: bold;
-            padding: $default-spacing $default-spacing*4;
+            flex-direction: column;
+            margin-top: 30vh;
+
+            .landing-tagline {
+                text-shadow: 1px 1px 1.5px $color-primary-4;
+                font-size: $font-size-title * 2;
+                color: $color-primary-5;
+                font-weight: bold;
+                margin-bottom: $default-spacing * 2;
+                z-index: inherit;
+            }
+
+            .landing-create-profile {
+                @include hover-background($color-primary, $color-primary-hover);
+                @include fab-dropshadow();
+
+                align-items: center;
+                border-radius: $default-border-radius;
+                color: $color-light;
+                display: flex;
+                padding: $default-spacing $default-spacing*4;
+                z-index: inherit;
+            }
         }
     }
 }

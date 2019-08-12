@@ -3,6 +3,8 @@
 @import "styles/_mixins.scss";
 
 .auth-form {
+    z-index: 1;
+
     .auth-form-card-content {
         display: flex;
         flex-direction: column;

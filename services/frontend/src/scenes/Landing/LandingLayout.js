@@ -15,11 +15,13 @@ const LandingLayout = () => (
             </div>
         </div>
 
-        <div className="landing-jumbotron">
-            <h1 className="landing-tagline">WELCOME TO SKILLHUB!</h1>
-            <Link className="landing-create-profile" to={ScreenUrls.SIGN_UP}>
-                CREATE YOUR PROFILE
-            </Link>
+        <div className="landing-content">
+            <div className="landing-jumbotron">
+                <h1 className="landing-tagline">WELCOME TO SKILLHUB!</h1>
+                <Link className="landing-create-profile" to={ScreenUrls.SIGN_UP}>
+                    CREATE YOUR PROFILE
+                </Link>
+            </div>
         </div>
     </div>
 );

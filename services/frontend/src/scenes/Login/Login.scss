@@ -3,6 +3,8 @@
 @import "styles/_mixins.scss";
 
 .login {
+    @include background-image("/images/login-background.jpg", 100%, 0.5, top, left);
+
     display: flex;
     min-height: 100%;
 
