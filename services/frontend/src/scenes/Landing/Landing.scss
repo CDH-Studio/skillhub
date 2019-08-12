@@ -49,7 +49,7 @@
     }
 
     .landing-content {
-        @include background-image("/images/landing-background.jpg", 100%, 0.25, top, center);
+        @include background-image("/images/landing-background.jpg", 0%, 0.9, top, center);
 
         height: 100%;
         background: #ffffff;
