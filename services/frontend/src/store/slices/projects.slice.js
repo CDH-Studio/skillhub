@@ -20,5 +20,5 @@ export const projectsSlice = createSlice({
 
 export const projectsRequestsSlice = createRequestSlices(
     mounts.projectsRequests,
-    ["fetchAll", "createProjectProfile", "patchProjectInfo"]
+    ["fetchAll", "createProject", "createProjectProfile", "patchProjectInfo"]
 );

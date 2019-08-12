@@ -20,7 +20,8 @@ const handlePageChange = (newPageIndex, setData, cards) => {
     ));
 };
 
-const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearchProperties, searchId, isLoading}) => {
+const SearchLayout = ({createProject, projects, profiles, activeFilter, onFilterClick, setSearchProperties,
+                          searchId, isLoading}) => {
     const [createProjectDialogOpen, setProjectDialogOpen] = useState(false);
 
     const openDialog = () => {
@@ -30,7 +31,9 @@ const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearc
     const closeDialog = () => {
         setProjectDialogOpen(false);
     };
-    const handleSubmit = () => {
+    const handleSubmit = (project) => {
+        console.log(project);
+        createProject(project);
         closeDialog();
     };
 

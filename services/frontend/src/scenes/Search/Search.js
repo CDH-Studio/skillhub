@@ -4,7 +4,7 @@ import {sortObjectsByProperty} from "utils/helperFunctions";
 import {FILTER_PROFILES, searchRecords, Query} from "utils/searchGlobals";
 import SearchLayout from "./SearchLayout";
 
-const Search = ({projects, profiles, isLoading}) => {
+const Search = ({createProject, projects, profiles, isLoading}) => {
     /* create the state for the profile/projects filter and the search properties.
      * search properties are set as an object of the form:
      * {searchTerm: , SearchBy: } */
@@ -33,6 +33,7 @@ const Search = ({projects, profiles, isLoading}) => {
             searchId={searchProperties.id}
             activeFilter={activeFilter}
             onFilterClick={onFilterClick}
+            createProject={createProject}
         />
     );
 };
