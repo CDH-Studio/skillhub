@@ -5,7 +5,7 @@ import {createMuiTheme} from "@material-ui/core/styles";
 import {PersistGate} from "redux-persist/integration/react";
 import {Provider} from "react-redux";
 import {Switch, Route} from "react-router";
-import {Landing, Login, SignUp} from "scenes/";
+import {Landing, Login, Onboarding, SignUp} from "scenes/";
 import configureStore, {history} from "store/";
 import ScreenUrls from "utils/screenUrls";
 import AppRouter from "./AppRouter";
@@ -39,6 +39,7 @@ const AppLayout = () => (
         <Switch>
             <Route path={ScreenUrls.APP_ROUTER} component={AppRouter} />
             <Route path={ScreenUrls.LOGIN} component={Login} />
+            <Route path={ScreenUrls.ONBOARDING} component={Onboarding} />
             <Route path={ScreenUrls.SIGN_UP} component={SignUp} />
             <Route path={ScreenUrls.LANDING} component={Landing} />
         </Switch>

@@ -1,0 +1,71 @@
+@import "styles/_colors.scss";
+@import "styles/_dimens.scss";
+@import "styles/_mixins.scss";
+
+.onboarding {
+    display: flex;
+    min-height: 100%;
+
+    .onboarding-branding {
+        align-items: center;
+        background-color: $color-primary;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        z-index: 1;
+
+        .onboarding-branding-subtitle{
+            color: $color-light;
+            font-size: $font-size-subtitle * 1.1;
+            margin-left: $default-spacing;
+            padding: $default-spacing;
+            text-align: center;
+        }
+
+        .onboarding-branding-title{
+            color: $color-light;
+            font-weight: bold;
+            font-size: $font-size-title * 1.5;
+            margin-left: $default-spacing;
+            padding: $default-spacing;
+            text-align: center;
+        }
+    }
+
+    .onboarding-content{
+        @include background-image("/images/signup-background.jpg", 100%, 0.5, top, left);
+
+        align-items: center;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+.onboarding-form {
+    max-width: $default-spacing*30;
+    margin: $default-spacing;
+    z-index: 1;
+
+    .onboarding-form-header {
+        padding: $default-spacing*1.5;
+        padding-bottom: 0;
+    }
+
+    .onboarding-form-content {
+        padding: $default-spacing;
+
+        .details-form {
+            margin: $default-spacing*0.5 0;
+            margin-top: (-$default-spacing);
+        }
+    }
+
+    .onboarding-form-actions {
+        display: flex;
+        padding: $default-spacing*1.5;
+        padding-top: 0;
+        justify-content: flex-end;
+    }
+}

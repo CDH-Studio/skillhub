@@ -57,7 +57,9 @@ const updateSkills = () => async (context) => {
 
 const validatePersonalDetails = () => (context) => {
     const emptyFields = Object.keys(context.data).reduce((acc, field) => {
-        if (!context.data[field]) {
+        const fieldsToValidate = ["name", "contactEmail"];
+
+        if (!context.data[field] && field in fieldsToValidate) {
             // ex. Converts "contactEmail" to "contact email"
             const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ").toLowerCase();
             acc[field] = "Invalid " + errorMessageSpecifier;
@@ -69,8 +71,17 @@ const validatePersonalDetails = () => (context) => {
         throw new errors.BadRequest("Missing Data", emptyFields);
     }
 
-    if (!EMAIL_REGEX.test(context.data.contactEmail)) {
+    if (context.data.contactEmail && !EMAIL_REGEX.test(context.data.contactEmail)) {
         throw new errors.BadRequest("Invalid email");
+    }
+};
+
+const validateField = (field) => (context) => {
+    if (context.data.validate && !context.data[field]) {
+        const emptyField = {
+            [field]: "Invalid " + field
+        };
+        throw new errors.BadRequest("Missing Data", emptyField);
     }
 };
 
@@ -95,7 +106,11 @@ module.exports = {
         all: [authenticate("jwt")],
         find: [includeSkills()],
         get: [includeSkills()],
-        create: [preventBulkDuplication("contactEmail"), findOrCreate(findOrCreateQueryCustomizer)],
+        create: [
+            preventBulkDuplication("contactEmail"),
+            findOrCreate(findOrCreateQueryCustomizer),
+            validateField("name")
+        ],
         update: [],
         patch: [
             restrictToOwner({idField: "id", ownerField: "userId"}),

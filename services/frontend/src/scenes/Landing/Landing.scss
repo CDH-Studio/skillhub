@@ -5,6 +5,7 @@
 .landing {
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     .landing-header {
         align-items: center;
@@ -47,28 +48,44 @@
         }
     }
 
-    .landing-jumbotron {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: 25vh;
+    .landing-content {
+        @include background-image("/images/landing-background.jpg", 30%, 0.6, center, center);
+        @include flip-image();
 
-        .landing-tagline {
-            color: $color-text-secondary;
-            font-weight: bold;
-            margin-bottom: $default-spacing * 2;
-        }
+        background: #ffffff;
+        height: 100%;
+        position: relative;
 
-        .landing-create-profile {
-            @include hover-background($color-primary, $color-primary-hover);
-            @include fab-dropshadow();
-
+        .landing-jumbotron {
             align-items: center;
-            border-radius: $default-border-radius;
-            color: $color-light;
+            background-color: transparent;
             display: flex;
-            font-weight: bold;
-            padding: $default-spacing $default-spacing*4;
+            flex-direction: column;
+            margin-top: 30vh;
+            margin-left: $default-spacing;
+            width: 50%;
+            z-index: 1;
+
+            .landing-tagline {
+                color: $color-primary;
+                font-size: $font-size-title * 2;
+                font-weight: bold;
+                margin-bottom: $default-spacing * 2;
+                text-align: center;
+                z-index: inherit;
+            }
+
+            .landing-create-profile {
+                @include hover-background($color-primary, $color-primary-hover);
+                @include fab-dropshadow();
+
+                align-items: center;
+                border-radius: $default-border-radius;
+                color: $color-light;
+                display: flex;
+                padding: $default-spacing $default-spacing*2;
+                z-index: inherit;
+            }
         }
     }
 }

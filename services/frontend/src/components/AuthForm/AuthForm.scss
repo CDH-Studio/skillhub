@@ -3,6 +3,8 @@
 @import "styles/_mixins.scss";
 
 .auth-form {
+    z-index: 1;
+
     .auth-form-card-content {
         display: flex;
         flex-direction: column;
@@ -10,7 +12,6 @@
         width: 300px;
 
         .auth-form-title {
-            font-weight: bold;
             margin-bottom: $default-spacing * 1.5;
         }
 
