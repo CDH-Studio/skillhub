@@ -59,12 +59,16 @@
                 {
                     "name": "POSTGRES_USER",
                     "value": "app-database-user"
+                },
+                {
+                    "name": "POSTGRES_PASSWORD",
+                    "value": ""
                 }
             ],
             "external_port": "5432",
             "folder": null,
             "host": "backend-database",
-            "image": "postgres:11.1",
+            "image": "docker-registry.default.svc:5000/openshift/postgresql:9.6",
             "image_in_project": false,
             "persistent_volume": {
                 "mount_path": "/var/lib/postgresql/data",
@@ -76,7 +80,7 @@
             "replicas": 1,
             "secrets": {},
             "templates": [
-                "deployment",
+                "deployment-os",
                 "service-os"
             ],
             "type": "ClusterIP",

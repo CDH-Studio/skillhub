@@ -50,12 +50,16 @@
             "container_port": "5432",
             "env": [
                 {
-                    "name": "POSTGRES_DB",
+                    "name": "POSTGRESQL_DATABASE",
                     "value": "app-database"
                 },
                 {
-                    "name": "POSTGRES_USER",
+                    "name": "POSTGRESQL_USER",
                     "value": "app-database-user"
+                },
+                {
+                    "name": "POSTGRESQL_PASSWORD",
+                    "value": ""
                 }
             ],
             "external_port": "5432",
