@@ -5,6 +5,7 @@
 {{- $serviceFolder := printf "services/%s" (index $serviceMap "folder")}}
 
 {{- $tag := "latest"}}
+{{- $branch := .Values.tag | default "master"}}
 {{- $imageStreamTag := printf "%s:%s" $serviceName $tag}}
 
 apiVersion: v1
@@ -17,7 +18,7 @@ spec:
     source:
         git:
             uri: {{.Values.__remote_repo_clone_url}}
-            ref: "master"
+            ref: {{$branch | quote}}
         contextDir: {{$serviceFolder | quote}}
     strategy:
         type: Docker

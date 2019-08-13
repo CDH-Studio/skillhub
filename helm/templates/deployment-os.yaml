@@ -6,8 +6,9 @@
 {{- $serviceName := .Values.serviceName}}
 {{- $serviceMap := index .Values.__services $serviceName}}
 
+{{- $tag := "latest"}}
 {{- $serviceImage := index $serviceMap "image"}}
-{{- $projectImage := printf "gcr.io/%s/%s-%s:%s" .Values.__gcp_project_id .Values.__project_name $serviceImage .Values.tag}}
+{{- $projectImage := printf "gcr.io/%s/%s-%s:%s" .Values.__gcp_project_id .Values.__project_name $serviceImage $tag}}
 {{- $image := (index $serviceMap "image_in_project") | ternary $projectImage $serviceImage}}
 
 {{- $env := index $serviceMap "env"}}
