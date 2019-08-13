@@ -37,6 +37,21 @@ generate-contributors-model-training-data:
 train-contributors-model:
 	bash ./scripts/train_contributors_model.sh "$(DATASET_HASH)"
 
+deploy-openshift-manifests:
+	bash ./scripts/deploy_openshift_manifests.sh
+
+deploy-openshift-secrets:
+	bash ./scripts/deploy_openshift_secrets.sh
+
+start-openshift-builds:
+	bash ./scripts/start_openshift_builds.sh
+
+convert-kubails-to-gcp:
+	bash ./scripts/convert_kubails_to_gcp.sh
+
+convert-kubails-to-openshift:
+	bash ./scripts/convert_kubails_to_openshift.sh
+
 #################################################################################
 # SELF DOCUMENTING COMMANDS
 #################################################################################
