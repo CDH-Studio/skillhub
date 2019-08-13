@@ -19,9 +19,10 @@ function* projectsFetchAll() {
 function* createProject({payload}) {
     try {
         const result = yield call(api.service("projects").create, payload.project);
+        console.log("Result", result);
         const normalizedProject = Project.normalizeProject(result);
-
-        yield put(projectsSlice.actions.setProject(normalizedProject));
+        console.log("normalized", normalizedProject);
+        yield put(projectsSlice.actions.addProject(normalizedProject));
     } catch (error) {
         yield put(notificationSlice.actions.setNotification(
             {type: "error", message: error.message, createdAt: new Date()}
