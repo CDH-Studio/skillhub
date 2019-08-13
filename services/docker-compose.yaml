@@ -16,6 +16,7 @@ services:
         environment:
             POSTGRES_DB: app-database
             POSTGRES_USER: app-database-user
+            POSTGRES_PASSWORD: app-database-password
         image: postgres:11.1
         volumes:
         - backend-database-data:/var/lib/postgresql/data
