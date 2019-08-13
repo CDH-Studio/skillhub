@@ -85,7 +85,7 @@
             "wait_for_service": null
         },
         "frontend": {
-            "container_port": "80",
+            "container_port": "3000",
             "env": [
                 {
                     "name": "NODE_ENV",
