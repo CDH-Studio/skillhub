@@ -1,5 +1,6 @@
 
 {{- if and .Values.__services .Values.serviceName}}
+{{- $projectName := .Values.__project_name}}
 {{- $namespace := .Values.namespace | lower}}
 {{- $isProduction := eq $namespace .Values.__production_namespace}}
 
@@ -15,7 +16,6 @@
 {{- $pvClaimName := printf "%s-pv-claim" $serviceName}}
 {{- $volumeName := printf "%s-volume" $serviceName}}
 {{- $volumeConfig := index $serviceMap "persistent_volume"}}
-{{- $storageClass := index $volumeConfig "storage_class"}}
 
 {{- $waitForService := index $serviceMap "wait_for_service"}}
 {{- $preStartupCommand := index $serviceMap "pre_startup_command"}}
@@ -27,7 +27,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
     labels:
-        app: {{.Values.__project_name}}
+        app: {{$projectName}}
         run: {{$serviceName}}
     name: {{$pvClaimName}}
     namespace: {{$namespace}}
@@ -37,9 +37,7 @@ spec:
     resources:
         requests:
             storage: {{index $volumeConfig "size"}}
-    {{- if $storageClass}}
-    storageClassName: {{$storageClass}}
-    {{- end}}
+    storageClassName: {{(index $volumeConfig "storage_class") | default "standard"}}
 {{- end}}
 
 ---
@@ -48,6 +46,7 @@ kind: Deployment
 
 metadata:
     labels:
+        app: {{$projectName}}
         run: {{$serviceName}}
     name: {{$serviceName}}
     namespace: {{$namespace}}
