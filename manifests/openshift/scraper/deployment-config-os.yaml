@@ -1,10 +1,16 @@
+##---
+# Source: skillhub/templates/deployment-config-os.yaml
+
+
 apiVersion: v1
 kind: DeploymentConfig
+
 metadata:
     name: scraper
     labels:
         app: skillhub
         run: scraper
+
 spec:
     replicas: 1
     selector:
@@ -20,12 +26,27 @@ spec:
               imagePullPolicy: Always
               ports:
               - containerPort: 5000
-                protocol: TCP
               env:
               - name: BACKEND_PORT
                 value: "80"
               - name: BACKEND_HOST
-                value: "backend.skillhub.ca"
+                value: "backend-skillhub.apps.ic.gc.ca"
+              - name: BACKEND_DATABASE_PORT
+                value: "5432"
+              - name: BACKEND_DATABASE_HOST
+                value: "backend-database"
+              - name: FRONTEND_PORT
+                value: "80"
+              - name: FRONTEND_HOST
+                value: "skillhub.apps.ic.gc.ca"
+              - name: PREDICTIONS_PORT
+                value: "80"
+              - name: PREDICTIONS_HOST
+                value: "predictions-skillhub.apps.ic.gc.ca"
+              - name: SCRAPER_PORT
+                value: "80"
+              - name: SCRAPER_HOST
+                value: "scraper-skillhub.apps.ic.gc.ca"
               - name: JIRA_HOST
                 value: "https://jira.ised-isde.canada.ca"
               - name: JIRA_PLATFORM
@@ -42,7 +63,7 @@ spec:
                     secretKeyRef:
                         name: scraper-secrets
                         key: SKILLHUB_API_KEY
-            restartPolicy: Always
+
     triggers:
     - type: ConfigChange
     - type: ImageChange
@@ -53,4 +74,3 @@ spec:
           from:
               kind: ImageStreamTag
               name: "scraper:latest"
-

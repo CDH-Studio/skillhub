@@ -1,19 +1,23 @@
+##---
+# Source: skillhub/templates/route-os.yaml
+
+
 apiVersion: v1
 kind: Route
 metadata:
-    name: scraper
+    name: frontend
     labels:
         app: skillhub
-        run: scraper
+        run: frontend
+    annotations:
+        haproxy.router.openshift.io/timeout: 600s
 spec:
-    host: scraper-skillhub.apps.ic.gc.ca
-    port:
-        targetPort: 5000-tcp
+    host: skillhub.apps.ic.gc.ca
     tls:
         insecureEdgeTerminationPolicy: Redirect
         termination: edge
     to:
         kind: Service
-        name: scraper
+        name: frontend
         weight: 100
     wildcardPolicy: None
