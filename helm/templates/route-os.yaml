@@ -11,6 +11,8 @@ metadata:
     labels:
         app: {{$projectName}}
         run: {{$serviceName}}
+    annotations:
+        haproxy.router.openshift.io/timeout: 600s
 spec:
     host: {{$host}}
     tls:
