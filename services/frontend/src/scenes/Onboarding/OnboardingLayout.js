@@ -71,8 +71,6 @@ const OnboardingForm = ({user, onSubmit, isLoading, error}) => {
     /* Set the error property for incorrectly filled in fields */
     if (error && error.message === "Missing Data") {
         for (const invalidFieldIndex of Object.keys(error.data)) {
-            console.log(invalidFieldIndex);
-            console.log(error.data);
             formFieldDataById[invalidFieldIndex].error = true;
             formFieldDataById[invalidFieldIndex].helperText = error.data[invalidFieldIndex];
         }

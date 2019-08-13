@@ -57,7 +57,9 @@ const updateSkills = () => async (context) => {
 
 const validatePersonalDetails = () => (context) => {
     const emptyFields = Object.keys(context.data).reduce((acc, field) => {
-        if (!context.data[field]) {
+        const fieldsToValidate = ["name", "contactEmail"];
+
+        if (!context.data[field] && field in fieldsToValidate) {
             // ex. Converts "contactEmail" to "contact email"
             const errorMessageSpecifier = field.split(/(?=[A-Z])/).join(" ").toLowerCase();
             acc[field] = "Invalid " + errorMessageSpecifier;

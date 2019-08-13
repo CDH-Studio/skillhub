@@ -63,9 +63,9 @@
     }
 
     .onboarding-form-actions {
+        display: flex;
         padding: $default-spacing*1.5;
         padding-top: 0;
-        display: flex;
         justify-content: flex-end;
     }
 }

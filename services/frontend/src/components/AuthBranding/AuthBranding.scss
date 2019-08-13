@@ -2,12 +2,12 @@
 @import "styles/_dimens.scss";
 
 .auth-branding {
-    z-index: 1;
     align-items: center;
     background-color: $color-primary;
     display: flex;
     flex: 1;
     justify-content: center;
+    z-index: 1;
 
     .auth-branding-container {
         align-items: center;
