@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+    name: scraper
+    labels:
+        app: skillhub
+        run: scraper
+spec:
+    replicas: 1
+    selector:
+        run: scraper
+    template:
+        metadata:
+            labels:
+                run: scraper
+        spec:
+            containers:
+            - name: scraper
+              image: docker-registry.default.svc:5000/skillhub/scraper:latest
+              imagePullPolicy: Always
+              ports:
+              - containerPort: 5000
+                protocol: TCP
+              env:
+              - name: BACKEND_PORT
+                value: "80"
+              - name: BACKEND_HOST
+                value: "backend.skillhub.ca"
+              - name: JIRA_HOST
+                value: "https://jira.ised-isde.canada.ca"
+              - name: JIRA_PLATFORM
+                value: "server"
+              - name: BACKEND_PROTOCOL
+                value: "https"
+              - name: JIRA_AUTH_TOKEN
+                valueFrom:
+                    secretKeyRef:
+                        name: scraper-secrets
+                        key: JIRA_AUTH_TOKEN
+              - name: SKILLHUB_API_KEY
+                valueFrom:
+                    secretKeyRef:
+                        name: scraper-secrets
+                        key: SKILLHUB_API_KEY
+            restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+          automatic: true
+          containerNames:
+          - scraper
+          from:
+              kind: ImageStreamTag
+              name: "scraper:latest"
+

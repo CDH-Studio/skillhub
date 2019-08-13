@@ -65,3 +65,29 @@ $default-percentage: 5%;
     -o-animation: $animation $time; /* Opera < 12.1 */
     animation: $animation $time;
 }
+
+@mixin background-image($url, $grayscale, $opacity, $positionX, $positionY) {
+    &:after {
+        content: ' ';
+        opacity: $opacity;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: url($url) no-repeat $positionX $positionY fixed;
+        background-size: cover;
+        position: absolute;
+        filter: grayscale($grayscale);
+    }
+}
+
+@mixin flip-image() {
+    &:after {
+        -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        filter: FlipH;
+        -ms-filter: "FlipH";
+    }
+}

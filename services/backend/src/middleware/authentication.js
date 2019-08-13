@@ -5,6 +5,7 @@ const local = require("@feathersjs/authentication-local");
 module.exports = function (app) {
     const config = app.get("authentication");
 
+    config.jwt.expiresIn = "365d";
     if (process.env.NODE_ENV !== "production") {
         // Developers don't need to have access to the production secret.
         // It doesn't matter if this gets leaked since it only affects the local dev environments.

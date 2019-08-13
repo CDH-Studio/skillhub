@@ -1,3 +1,4 @@
+const Sequelize = require("sequelize");
 const {authenticate} = require("@feathersjs/authentication").hooks;
 const {hashPassword, protect} = require("@feathersjs/authentication-local").hooks;
 const errors = require("@feathersjs/errors");
@@ -14,6 +15,26 @@ const validateUserInfo = () => (context) => {
     if (!EMAIL_REGEX.test(email)) {
         throw new errors.BadRequest("Invalid email");
     }
+};
+
+const linkExistingProfile = () => async (context) => {
+    if (context.result) {
+        const result = await context.app.service("profiles").patch(null, {
+            userId: context.result.id
+        }, {
+            query: {
+                $limit: 1,
+                contactEmail: {
+                    $iLike: context.result.email
+                }
+            }
+        });
+        if (result.length > 0) {
+            context.result.linkedProfile = true;
+        }
+    }
+
+    return context;
 };
 
 module.exports = {
@@ -35,7 +56,7 @@ module.exports = {
         ],
         find: [],
         get: [],
-        create: [],
+        create: [linkExistingProfile()],
         update: [],
         patch: [],
         remove: []

@@ -4,9 +4,13 @@
 
 .signup {
     display: flex;
+    position: relative;
+    overflow: hidden;
     min-height: 100%;
 
     .signup-form {
+        @include background-image("/images/signup-background.jpg", 100%, 0.5, top, left);
+
         align-items: center;
         display: flex;
         flex: 1;

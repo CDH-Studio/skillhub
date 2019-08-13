@@ -29,6 +29,7 @@ const Search = ({createProject, projects, profiles, isLoading}) => {
             isLoading={isLoading}
             projects={sortObjectsByProperty(searchedProjects, "name")}
             profiles={sortObjectsByProperty(searchedProfiles, "name")}
+            dependency={profiles}
             setSearchProperties={setSearchProperties}
             searchId={searchProperties.id}
             activeFilter={activeFilter}

@@ -1,8 +1,10 @@
 import {call, fork, put} from "redux-saga/effects";
+import {push} from "connected-react-router";
 import api from "api/";
 import {
     dialogsStateSlice, notificationSlice, profilesSlice, profilesRequestsSlice, profileSkillsSlice
 } from "store/slices";
+import ScreenUrls from "utils/screenUrls";
 import {Profile} from "utils/models";
 
 function* profilesFetchAll() {
@@ -13,6 +15,20 @@ function* profilesFetchAll() {
 
     yield put(profilesSlice.actions.setProfiles(normalizedProfiles));
     yield put(profileSkillsSlice.actions.addProfileSkills(profileSkills));
+}
+
+function* profilesCreateProfile({payload}) {
+    payload.validate = true;
+
+    const result = yield call(api.service("profiles").create, payload);
+    const normalizedProfile = Profile.normalizeProfile(result);
+
+    yield put(profilesSlice.actions.setProfile(normalizedProfile));
+    yield put(push(ScreenUrls.SEARCH));
+
+    yield put(notificationSlice.actions.setNotification(
+        {type: "success", message: "Profile Created Successfully", createdAt: new Date()}
+    ));
 }
 
 function* profilesPatchPersonalDetails({payload}, success) {
@@ -63,6 +79,10 @@ function* profilesSaga() {
 
     yield fork(profilesRequestsSlice.updateProfileSkills.watchRequestSaga(
         updateProfileSkills
+    ));
+
+    yield fork(profilesRequestsSlice.createProfile.watchRequestSaga(
+        profilesCreateProfile
     ));
 
     yield fork(profilesRequestsSlice.patchPersonalDetails.watchRequestSaga(

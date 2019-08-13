@@ -1,14 +1,12 @@
 import React, {useCallback, useMemo, useState} from "react";
+import {FILTER_PROFILES, FILTER_PROJECTS, SEARCH_OPTIONS, Query} from "utils/searchGlobals";
 import {useInput, useOnEnterKey} from "utils/hooks";
-import {Paper, IconButton, MenuItem, Input, Select} from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import {Search} from "@material-ui/icons";
+import {Project} from "utils/models";
+import {CreateProjectDialog, ProfileCard, ProjectCard, LoadingValidator} from "components/";
+import {CircularProgress, Paper, Fab, IconButton, MenuItem, Input, Select} from "@material-ui/core";
+import {Add, Search} from "@material-ui/icons";
 import ReactPaginate from "react-paginate";
 import classNames from "classnames";
-import {CreateProjectDialog, ProfileCard, ProjectCard, LoadingValidator} from "components/";
-import {Project} from "utils/models";
-import {FILTER_PROFILES, FILTER_PROJECTS, SEARCH_OPTIONS, Query} from "utils/searchGlobals";
 import "./Search.scss";
 
 const CARDS_PER_PAGE = 10;
@@ -21,7 +19,8 @@ const handlePageChange = (newPageIndex, setData, cards) => {
 };
 
 const SearchLayout = ({
-    createProject, projects, profiles, activeFilter, onFilterClick, setSearchProperties, searchId, isLoading
+    createProject, activeFilter, projects, profiles, dependency, onFilterClick,
+    setSearchProperties, searchId, isLoading
 }) => {
     const [createProjectDialogOpen, setProjectDialogOpen] = useState(false);
 
@@ -43,49 +42,49 @@ const SearchLayout = ({
 
     return (
         <div className="search">
+            <CreateProjectDialog
+                handleCancel={handleCancel}
+                handleSubmit={handleSubmit}
+                open={createProjectDialogOpen}
+            />
+            <div className="search-create-row">
+                <div className="column" />
+                <div className="column">
+                    <SearchField
+                        setSearchProperties={setSearchProperties}
+                    />
+                </div>
+                <div className="column">
+                    <div className="create-project-button" onClick={openDialog}>
+                        <Fab
+                            variant="extended"
+                            size="medium"
+                            color="primary"
+                        >
+                            <Add className="create-project-button-add-icon" />
+                            Create Project
+                        </Fab>
+                    </div>
+                </div>
+            </div>
+            <FilterHeader
+                labels={[FILTER_PROFILES, FILTER_PROJECTS]}
+                onFilterClick={onFilterClick}
+                activeFilter={activeFilter}
+            />
             <LoadingValidator
-                dependencies={[]}
+                dependencies={[dependency]}
                 isLoading={isLoading}
                 renderOnLoad={
-                    <>
-                        <CreateProjectDialog
-                            handleCancel={handleCancel}
-                            handleSubmit={handleSubmit}
-                            open={createProjectDialogOpen}
-                        />
-                        <div className="search-create-row">
-                            <div className="column" />
-                            <div className="column">
-                                <SearchField
-                                    setSearchProperties={setSearchProperties}
-                                />
-                            </div>
-                            <div className="column">
-                                <div className="create-project-button" onClick={openDialog}>
-                                    <Fab
-                                        variant="extended"
-                                        size="medium"
-                                        color="primary"
-                                    >
-                                        <AddIcon className="create-project-button-add-icon" />
-                                        Create Project
-                                    </Fab>
-                                </div>
-                            </div>
-                        </div>
-
-                        <FilterHeader
-                            labels={[FILTER_PROFILES, FILTER_PROJECTS]}
-                            onFilterClick={onFilterClick}
-                            activeFilter={activeFilter}
-                        />
-                        <FilteredContent
-                            key={searchId}
-                            profiles={profiles}
-                            projects={projects}
-                            activeFilter={activeFilter}
-                        />
-                    </>
+                    <FilteredContent
+                        key={searchId}
+                        profiles={profiles}
+                        projects={projects}
+                        activeFilter={activeFilter}
+                    />
+                }
+                renderOnFailedLoad={
+                    <CircularProgress className="loading-indicator" />
                 }
             />
         </div>
@@ -165,6 +164,7 @@ const ProjectsList = ({projects}) => {
 };
 
 const ProfilesList = ({profiles}) => {
+
     const mappedProfiles = useMemo(() => profiles.map((profile) => (
         <Paper
             className="profile-list-card"
