@@ -16,7 +16,7 @@ const CreateProjectDialog = ({handleCancel, handleSubmit, open}) => {
     const [description, setDescription] = React.useState("");
     const onSubmitClick = () => {
         if (name.length !== 0 && description.length !== 0) {
-            const project = new Project ({name: name, description:description});
+            const project = new Project ({name: name.trim(), description:description.trim()});
             handleSubmit(project);
         }
     };
