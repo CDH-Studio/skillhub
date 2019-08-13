@@ -17,7 +17,7 @@ const LandingLayout = () => (
 
         <div className="landing-content">
             <div className="landing-jumbotron">
-                <h1 className="landing-tagline">WELCOME TO SKILLHUB!</h1>
+                <h1 className="landing-tagline">Skills Tracking for Enterprise</h1>
                 <Link className="landing-create-profile" to={ScreenUrls.SIGN_UP}>
                     CREATE YOUR PROFILE
                 </Link>

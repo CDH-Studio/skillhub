@@ -1,7 +1,7 @@
 import {all, call, fork, put, select, takeEvery} from "redux-saga/effects";
 import {push, replace} from "connected-react-router";
 import api from "api/";
-import {authRequestsSlice, userSlice} from "store/slices";
+import {authRequestsSlice, notificationSlice, userSlice} from "store/slices";
 import {routerActionTypes, tryingToAccessApp, tryingToAccessAuth, tryingToAccessOnboarding} from "store/utils";
 import {User} from "utils/models";
 import ScreenUrls from "utils/screenUrls";
@@ -10,10 +10,15 @@ function* authSignUp({payload}, success) {
     const {email, password} = payload;
     User.validateInfo(email, password);
 
-    yield call(api.service("users").create, {email, password});
+    const result = yield call(api.service("users").create, {email, password});
     yield call(success);  // Mark success before continuing with other actions
 
     yield put(authRequestsSlice.login.actions.request(payload));
+    if (result.linkedProfile){
+        yield put(notificationSlice.actions.setNotification(
+            {type: "success", message: `Account Successfully Linked to User: ${email}`, createdAt: new Date()}
+        ));
+    }
 }
 
 function* authLogin({payload}, success) {

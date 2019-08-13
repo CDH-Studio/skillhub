@@ -49,26 +49,29 @@
     }
 
     .landing-content {
-        @include background-image("/images/landing-background.jpg", 0%, 0.9, top, center);
+        @include background-image("/images/landing-background.jpg", 30%, 0.6, center, center);
+        @include flip-image();
 
-        height: 100%;
         background: #ffffff;
+        height: 100%;
         position: relative;
 
         .landing-jumbotron {
-            z-index: 1;
-            background-color: transparent;
             align-items: center;
+            background-color: transparent;
             display: flex;
             flex-direction: column;
             margin-top: 30vh;
+            margin-left: $default-spacing;
+            width: 50%;
+            z-index: 1;
 
             .landing-tagline {
-                text-shadow: 1px 1px 1.5px $color-primary-4;
+                color: $color-primary;
                 font-size: $font-size-title * 2;
-                color: $color-primary-5;
                 font-weight: bold;
                 margin-bottom: $default-spacing * 2;
+                text-align: center;
                 z-index: inherit;
             }
 
@@ -80,7 +83,7 @@
                 border-radius: $default-border-radius;
                 color: $color-light;
                 display: flex;
-                padding: $default-spacing $default-spacing*4;
+                padding: $default-spacing $default-spacing*2;
                 z-index: inherit;
             }
         }

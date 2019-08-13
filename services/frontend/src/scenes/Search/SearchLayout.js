@@ -18,7 +18,10 @@ const handlePageChange = (newPageIndex, setData, cards) => {
     ));
 };
 
-const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearchProperties, searchId, isLoading}) => {
+const SearchLayout = ({
+    activeFilter, projects, profiles, dependency, onFilterClick,
+    setSearchProperties, searchId, isLoading
+}) => {
     const [createProjectDialogOpen, setProjectDialogOpen] = useState(false);
 
     const openDialog = () => {
@@ -69,7 +72,7 @@ const SearchLayout = ({projects, profiles, activeFilter, onFilterClick, setSearc
                 activeFilter={activeFilter}
             />
             <LoadingValidator
-                dependencies={[profiles, projects]}
+                dependencies={[dependency]}
                 isLoading={isLoading}
                 renderOnLoad={
                     <FilteredContent

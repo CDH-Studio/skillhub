@@ -25,6 +25,10 @@ function* profilesCreateProfile({payload}) {
 
     yield put(profilesSlice.actions.setProfile(normalizedProfile));
     yield put(push(ScreenUrls.SEARCH));
+
+    yield put(notificationSlice.actions.setNotification(
+        {type: "success", message: "Profile Created Successfully", createdAt: new Date()}
+    ));
 }
 
 function* profilesPatchPersonalDetails({payload}, success) {

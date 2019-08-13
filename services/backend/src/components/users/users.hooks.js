@@ -26,8 +26,12 @@ const linkExistingProfile = () => async (context) => {
                 contactEmail: context.result.email
             }
         });
-        console.log(result);
+        if (result.length > 0) {
+            context.result.linkedProfile = true;
+        }
     }
+
+    return context;
 };
 
 module.exports = {
