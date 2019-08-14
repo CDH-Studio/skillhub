@@ -9,7 +9,7 @@
         "start:prod": "NODE_PATH=src node src/index.js",
         "jest": "jest",
         "scrape:contributors": "NODE_PATH=src node src/scrapeTrainingData.js contributors",
-        "worker:jira": "NODE_PATH=src node src/workers/jiraScrapingWorker.js"
+        "worker": "NODE_PATH=src node src/workers/worker.js"
     },
     "dependencies": {
         "axios": "^0.19.0",
