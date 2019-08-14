@@ -36,6 +36,7 @@ const EditSkillsDialog = ({databaseSkills, skills, handleCancel, handleSubmit, o
 
     const onChangeTextfield = (event) => {
         const searchTerm = event.target.value.replace(/^\s+/g, "");
+
         const searchTermLength = searchTerm.length;
         let newSuggestions = [];
         if (searchTermLength > 0){

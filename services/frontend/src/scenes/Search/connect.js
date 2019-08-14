@@ -17,4 +17,8 @@ const mapStateToProps = (state) => ({
     ], state)
 });
 
-export default connect(mapStateToProps, null);
+const mapDispatchToProps = (dispatch) => ({
+    createProject: (project) => dispatch(projectsRequestsSlice.createProject.actions.request({project}))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps);

@@ -16,6 +16,25 @@ function* projectsFetchAll() {
     yield put(projectProfilesSlice.actions.addProjectProfiles(projectProfiles));
 }
 
+function* createProject({payload}) {
+    try {
+        const result = yield call(api.service("projects").create, payload.project);
+        console.log("Result", result);
+        const normalizedProject = Project.normalizeProject(result);
+        console.log("normalized", normalizedProject);
+        yield put(projectsSlice.actions.addProject(normalizedProject));
+    } catch (error) {
+        yield put(notificationSlice.actions.setNotification(
+            {type: "error", message: error.message, createdAt: new Date()}
+        ));
+        throw error;
+    }
+
+    yield put(notificationSlice.actions.setNotification(
+        {type: "success", message: "Created New Project Successfully", createdAt: new Date()}
+    ));
+}
+
 function* projectsPatchProjectInfo({payload}, success) {
     try {
         const result = yield call(api.service("projects").patch, payload.id, payload);
@@ -80,6 +99,10 @@ function* projectsCreateProjectProfile({payload}, success) {
 function* projectsSaga() {
     yield fork(projectsRequestsSlice.fetchAll.watchRequestSaga(
         projectsFetchAll
+    ));
+
+    yield fork(projectsRequestsSlice.createProject.watchRequestSaga(
+        createProject
     ));
 
     yield fork(projectsRequestsSlice.createProjectProfile.watchRequestSaga(
