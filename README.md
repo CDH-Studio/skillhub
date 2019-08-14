@@ -61,13 +61,13 @@ It runs on port `5001`.
 The Scraper has been setup so that it has one route that triggers all of its scraping activities: `/scraper`. You can hit this route locally with something like:
 
 ```
-curl localhost:5001/scraper
+curl localhost:5001/scraper/contributors
 ```
 
 To run the Scraper on a deployed branch or production, just change the host:
 
 ```
-curl https://cdhsh-XX.scraper.skillhub.ca/scraper
+curl https://cdhsh-XX.scraper.skillhub.ca/scraper/contributors
 ```
 
 This fully exposed, non-authenticated endpoint is merely to ease our development and testing processes.

@@ -1,5 +1,7 @@
 const axios = require("axios");
+const uuidv4 = require("uuid/v4");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
+const {jiraScrapingQueue} = require("workers/queues");
 const {chainingPromisePool, logger: baseLogger} = require("utils/");
 const GitScraper = require("./GitScraper");
 const JiraScraper = require("./JiraScraper");
@@ -23,7 +25,7 @@ class SkillhubBridge {
         this.jiraScraper = new JiraScraper();
     }
 
-    async scrapeToSkillhub() {
+    async scrapeContributors() {
         logger.info("Starting scraping process");
 
         // Scrape projects and convert them to Skillhub format
@@ -39,24 +41,14 @@ class SkillhubBridge {
         // Send the projects and users to the Skillhub backend first, so that they already exist
         // before the issues are sent over to generate the contributors.
         logger.info("Posting projects and users to Skillhub backend");
-        const projectsAndUsersResponse = await this.axios.post(
-            "/scraperBridge", {projects: skillhubProjects, users: skillhubUsers}
-        );
+        const projectsAndUsersResponse = await this.postToSkillhub({projects: skillhubProjects, users: skillhubUsers});
 
         const projectsAndUsersResult = projectsAndUsersResponse.data.result;
         logger.info({message: "Projects and users result", result: projectsAndUsersResult});
 
-        // Concurrently scrape and send the issues to the Skillhub backend to populate the contributors.
-        logger.info("Scraping and posting issues");
-        const contributorsResponse = await chainingPromisePool(
-            projects, this._scrapeProjectIssues.bind(this)
-        );
-
-        const contributorsResult = contributorsResponse.reduce((acc, {data}) => {
-            const {contributors} = data.result;
-            return {...acc, ...contributors};
-        }, {});
-
+        // Asynchronously scrape and send the issues to the Skillhub backend to populate the contributors.
+        logger.info("Queueing the scraping and posting of issues");
+        const contributorsResult = this._queueContributors(projects);
         logger.info({message: "Contributors result", result: contributorsResult});
 
         const result = {
@@ -68,13 +60,7 @@ class SkillhubBridge {
         return result;
     }
 
-    async _scrapeProjectIssues(project = "") {
-        const issues = await this.jiraScraper.getIssues(project);
-        return await this.axios.post("/scraperBridge", {issues});
-    }
-
-    // TODO (CDHSH-112): Move this into the main scrape function
-    async testSkills(org = "") {
+    async scrapeSkills(org = "") {
         const urls = await this.gitScraper.getRepoUrls(org);
 
         const skillsStats = {
@@ -106,9 +92,29 @@ class SkillhubBridge {
             skillsStats["repo"] = skillsStats["repo"].concat(repoStat);
         }
 
-        const skillsResponse = await this.axios.post("/scraperBridge", {skillsStats});
+        const skillsResponse = await this.postToSkillhub({skillsStats});
 
         return skillsResponse.data;
+    }
+
+    async postToSkillhub(data = {}) {
+        return await this.axios.post("/scraperBridge", data);
+    }
+
+    async scrapeProjectIssues(project = {}) {
+        const issues = await this.jiraScraper.getIssues(project);
+        return await this.postToSkillhub({issues});
+    }
+
+    _queueContributors(projects = []) {
+        const jobIds = projects.map((project) => {
+            const jobId = uuidv4();
+            jiraScrapingQueue.add({project}, {jobId});
+
+            return jobId;
+        });
+
+        return jobIds;
     }
 }
 

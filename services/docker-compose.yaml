@@ -53,12 +53,24 @@ services:
     scraper:
         build:
             context: ./scraper
+        image: scraper
         command: npm start
         ports:
         - 5001:5000
         volumes:
         - ./scraper/:/backend
         - scraper-deps:/backend/node_modules
+    scraper-jira-worker:
+        image: scraper
+        command: npm run worker:jira
+        depends_on:
+        - scraper
+        links:
+        - redis
+    redis:
+        image: redis
+        expose:
+        - 6379
 version: '2'
 volumes:
     backend-database-data:

@@ -17,6 +17,13 @@ if (BACKEND_PORT !== "80" && BACKEND_PORT !== "443") {
     BACKEND_URL = `${BACKEND_URL}:${BACKEND_PORT}`;
 }
 
+const REDIS_CONFIG = {
+    redis: {
+        port: 6379,
+        host: "redis"
+    }
+};
+
 module.exports = {
     BACKEND_URL,
     GIT_AUTH_TOKEN,
@@ -25,5 +32,6 @@ module.exports = {
     JIRA_AUTH_TOKEN,
     JIRA_HOST,
     JIRA_PLATFORM,
+    REDIS_CONFIG,
     SKILLHUB_API_KEY
 };
