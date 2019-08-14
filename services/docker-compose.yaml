@@ -52,12 +52,31 @@ services:
     scraper:
         build:
             context: ./scraper
+        image: scraper
         command: npm start
         ports:
         - 5001:5000
         volumes:
         - ./scraper/:/backend
         - scraper-deps:/backend/node_modules
+    scraper-git-worker-1:
+        image: scraper
+        command: npm run worker:git
+        depends_on:
+        - scraper
+        links:
+        - redis
+    scraper-git-worker-2:
+        image: scraper
+        command: npm run worker:git
+        depends_on:
+        - scraper
+        links:
+        - redis
+    redis:
+        image: redis
+        expose:
+        - 6379
 version: '2'
 volumes:
     backend-database-data:

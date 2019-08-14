@@ -1,13 +1,14 @@
 const axios = require("axios");
 const {spawn} = require("child_process");
 const fs = require("fs");
+const uuidv4 = require("uuid/v4");
 const {GIT_AUTH_TOKEN, GIT_HOST, GIT_PLATFORM} = require("config");
 const {chainingPromisePool, logger: baseLogger, loggerUtils} = require("utils/");
 
 const logger = baseLogger.child({module: "GitScraper"});
 const logExecutionTime = loggerUtils.logExecutionTime(logger);
 
-const REPO_STORAGE_PATH = "/tmp/repo";
+const REPO_STORAGE_FOLDER = "/tmp";
 
 const PLATFORM_BITBUCKET = "bitbucket";
 const PLATFORM_GITHUB = "github";
@@ -92,11 +93,15 @@ class GitScraper {
      *  The `skill`s and `file`s are determined by the repo's github-linguist breakdown.
      */
     async generateSkillMapping(repoUrl = "") {
+        const repoPath = REPO_STORAGE_FOLDER + "/" + uuidv4();
+
         return await logExecutionTime("generateSkillMapping", {repoUrl}, async () => {
             try {
-                await this._cloneRepo(repoUrl, REPO_STORAGE_PATH);
-                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, REPO_STORAGE_PATH);
-                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, REPO_STORAGE_PATH);
+                await this._cloneRepo(repoUrl, repoPath);
+                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, repoPath);
+                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, repoPath);
+
+                deleteFolderRecursive(repoPath);
 
                 return rawStats;
             } catch (err) {

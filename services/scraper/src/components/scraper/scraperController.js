@@ -1,5 +1,6 @@
 const express = require("express");
 const {asyncMiddleware} = require("middleware/");
+const {gitScrapingQueue} = require("queues");
 const {SkillhubBridge} = require("scrapers/");
 
 const skillhubBridge = new SkillhubBridge();
@@ -27,6 +28,20 @@ router.get("/skills", asyncMiddleware(async (req, res) => {
 
     const result = await skillhubBridge.testSkills(org);
     res.send({status: "success", result});
+}));
+
+router.get("/skills/jobs", asyncMiddleware(async (req, res) => {
+    const {ids: rawIds} = req.query;
+    const ids = rawIds.split(",");
+
+    const jobs = [];
+
+    for (const id of ids) {
+        const job = await gitScrapingQueue.getJob(id);
+        jobs.push(job);
+    }
+
+    res.send({status: "success", jobs});
 }));
 
 module.exports = router;
