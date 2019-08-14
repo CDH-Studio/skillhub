@@ -180,8 +180,8 @@ CI/CD configuration is all setup by Kubails. For more information on the CI/CD c
 While the application was deployed to GCP during development, Skillhub's 'production' deployment consists of hosting on the SSC (Shared Services Canada) OpenShift cluster. The reasons for this are primarily threefold:
 
 1. The Scraper _needs_ to be in-network in order to access the in-network Jira/Bitbucket instances. The OpenShift cluster is in-network; therefore, it is the logical place to put the Scraper.
-2. Since Skillhub holds the names/emails/skills/etc of employees, it is more secure to only allow access to it from people that are in-network (i.e. employees). Therefor, it is logical to also host the rest of Skillhub on the OpenShift cluster.
-3. The OpenShift cluster is, effectively, an already-setup Kubernetes cluster. This means that we don't have to bother standing a Kubernetes cluster up ourselves in AWS, or paying the exhorbitant monthly fee to use EKS. Therefore, it is logical to host all of Skillhub on the OpenShift cluster.
+2. Since Skillhub holds the names/emails/skills/etc of employees, it is more secure to only allow access to it from people that are in-network (i.e. employees). Therefore, it is logical to also host the rest of Skillhub on the OpenShift cluster.
+3. The OpenShift cluster is, effectively, an already-setup Kubernetes cluster. This means that we don't have to bother standing up a Kubernetes of our own in AWS, or paying the exhorbitant monthly fee to use EKS. Therefore, it is logical to host all of Skillhub on the OpenShift cluster.
 
 Additionally, we are following the precedent set by Jarvis to use the OpenShift cluster for hosting.
 
@@ -199,12 +199,12 @@ Additionally, deployment to the cluster has to be done from a Windows machine, i
 
 The following are the prerequisites to deploying Skillhub to the OpenShift cluster.
 
-1. You need an imaged (i.e. in-network) Windows laptop and AD (Active Directory) account.
-2. You need to get access for your AD account to the OpenShift cluster (ask Mena; she knows who to ask for access).
-3. You need to get access to the Skillhub project on the OpenShift cluster (ask ???; TODO).
-4. You need to install the OpenShift CLI (`oc`); google for instructions on where to find it.
+1. You have an imaged (i.e. in-network) Windows laptop and AD (Active Directory) account.
+2. You have access for your AD account to the OpenShift cluster (ask Mena; she knows who to ask for access).
+3. You have access to the Skillhub project on the OpenShift cluster (ask ???; TODO).
+4. You have installed the OpenShift CLI (`oc`); google for instructions on where to find it.
 
-You'll probably need to use something [Git for Windows](https://gitforwindows.org/) to get a basic `bash` shell -- you're gonna need a proper shell for this stuff (including `make`).
+You'll probably need to use something like [Git for Windows](https://gitforwindows.org/) or [Cmder](https://cmder.net/) to get a basic `bash` shell -- you're gonna need a proper shell for this stuff (including `make`).
 
 ### Deployment Steps
 
@@ -218,15 +218,17 @@ Login to the cluster using `oc`. You can find the command (and token) to login i
 
 Get a copy of this code repository (on the `master` branch) onto your machine.
 
-While you might think that you can just clone it from Github, we have found that `git clone` to external repos just doesn't work. `¯\_(ツ)_/¯`
+While you might think that you can just clone it from Github, we have found that `git clone` to external repos doesn't work. `¯\_(ツ)_/¯`
 
-You can just download a zip of the `master` branch and you'll be fine.
+You can just download a zip of the `master` branch and that should be fine.
 
 #### Deploy the Secrets
 
-Decrypt the zip of service secrets found in `service-secrets.zip`. Ask ??? for the password.
+Decrypt the zip of service secrets found in `service-secrets.zip`. Ask ??? for the password. Then, run:
 
-Run `make deploy-openshift-secrets`.
+```
+make deploy-openshift-secrets
+```
 
 Delete the secrets files and forget that you ever knew the password.
 
@@ -263,11 +265,11 @@ Regenerating the OpenShift manifests requires the Kubails CLI; installation inst
 
 Once you have the Kubails CLI, you'll need to switch the active `kubails.json` config to the OpenShift one. This can be done with `make convert-kubails-to-openshift`.
 
-Then, you can run `kubails cluster manifests generate --namespace=master --tag=master`. This will be put the generated manifests in `manifests/generated`.
+Then, you can run `kubails cluster manifests generate --namespace=master --tag=master`. This will put the generated manifests in `manifests/generated`.
 
-These manifests won't be committed to the repo; if you want them to be, put them into the `manifests/openshift` folder.
+These manifests won't be committed to the repo; if you want them to be, put them into the `manifests/openshift` folder to replace the existing pre-generated ones.
 
-Note that the `--namespace` option doesn't do anything for OpenShift manifests, but it _must_ be specified as `master` (or whatever `__production_namespace` is in `kubails.json`); otherwise, the manifests will be generated as if they were a Kubails branch deployment and the image tags would be wrong.
+Note that the `--namespace` option doesn't do anything for OpenShift manifests, but it _must_ be specified as `master` (or whatever `__production_namespace` is in `kubails.openshift.json`); otherwise, the manifests will be generated as if they were a Kubails branch deployment and the image tags would be wrong.
 
 Additionally, note that the `--tag` option is used to specify the branch that the image builds will pull from. It is `master` by default, but it can be changed here.
 
