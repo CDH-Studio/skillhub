@@ -15,8 +15,6 @@ router.get("/contributors", asyncMiddleware(async (req, res) => {
     res.send({status: "success", result});
 }));
 
-router.get("")
-
 router.get("/skills", asyncMiddleware(async (req, res) => {
     req.setTimeout(0);
 

@@ -177,6 +177,46 @@
             ],
             "type": "NodePort",
             "wait_for_service": null
+        },
+        "scraper-worker": {
+            "command": ["npm", "run", "worker"],
+            "container_port": "5000",
+            "env": [
+                {
+                    "name": "JIRA_HOST",
+                    "value": "https://jira.ised-isde.canada.ca"
+                },
+                {
+                    "name": "JIRA_PLATFORM",
+                    "value": "server"
+                },
+                {
+                    "name": "BACKEND_PROTOCOL",
+                    "value": "https"
+                }
+            ],
+            "external_port": null,
+            "folder": "scraper",
+            "host": null,
+            "image": "scraper",
+            "image_in_project": true,
+            "persistent_volume": {},
+            "pre_startup_command": "",
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {
+                "file": ".env.encrypted",
+                "name": "scraper-secrets",
+                "variables": [
+                    "JIRA_AUTH_TOKEN",
+                    "SKILLHUB_API_KEY"
+                ]
+            },
+            "templates": [
+                "deployment"
+            ],
+            "type": "",
+            "wait_for_service": null
         }
     },
     "__wildcard_certificate_secret": "skillhub-tls"

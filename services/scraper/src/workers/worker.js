@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
-const {jiraScrapingQueue} = require("workers/queues");
+const jiraScrapingWorker = require("./jiraScrapingWorker");
+const {jiraScrapingQueue} = require("./queues");
 
 jiraScrapingQueue.process(2, jiraScrapingWorker);
