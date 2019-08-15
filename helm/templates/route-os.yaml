@@ -1,0 +1,26 @@
+{{- if and .Values.__services .Values.serviceName}}
+{{- $projectName := .Values.__project_name}}
+{{- $serviceName := .Values.serviceName}}
+{{- $serviceMap := index .Values.__services $serviceName}}
+{{- $host := index $serviceMap "host"}}
+
+apiVersion: v1
+kind: Route
+metadata:
+    name: {{$serviceName}}
+    labels:
+        app: {{$projectName}}
+        run: {{$serviceName}}
+    annotations:
+        haproxy.router.openshift.io/timeout: 600s
+spec:
+    host: {{$host}}
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+    to:
+        kind: Service
+        name: {{$serviceName}}
+        weight: 100
+    wildcardPolicy: None
+{{- end}}

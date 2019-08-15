@@ -1,0 +1,11 @@
+{{- if and .Values.__services .Values.serviceName}}
+{{- $projectName := .Values.__project_name}}
+{{- $serviceName := .Values.serviceName}}
+
+apiVersion: v1
+kind: ImageStream
+metadata:
+    name: {{$serviceName}}
+    labels:
+        app: {{$projectName}}
+{{- end}}

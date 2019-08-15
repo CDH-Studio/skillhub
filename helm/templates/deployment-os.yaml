@@ -1,4 +1,3 @@
-
 {{- if and .Values.__services .Values.serviceName}}
 {{- $projectName := .Values.__project_name}}
 {{- $namespace := .Values.namespace | lower}}
@@ -7,8 +6,9 @@
 {{- $serviceName := .Values.serviceName}}
 {{- $serviceMap := index .Values.__services $serviceName}}
 
+{{- $tag := "latest"}}
 {{- $serviceImage := index $serviceMap "image"}}
-{{- $projectImage := printf "gcr.io/%s/%s-%s:%s" .Values.__gcp_project_id .Values.__project_name $serviceImage .Values.tag}}
+{{- $projectImage := printf "gcr.io/%s/%s-%s:%s" .Values.__gcp_project_id .Values.__project_name $serviceImage $tag}}
 {{- $image := (index $serviceMap "image_in_project") | ternary $projectImage $serviceImage}}
 
 {{- $env := index $serviceMap "env"}}
@@ -16,6 +16,7 @@
 {{- $pvClaimName := printf "%s-pv-claim" $serviceName}}
 {{- $volumeName := printf "%s-volume" $serviceName}}
 {{- $volumeConfig := index $serviceMap "persistent_volume"}}
+{{- $storageClass := index $volumeConfig "storage_class"}}
 
 {{- $waitForService := index $serviceMap "wait_for_service"}}
 {{- $preStartupCommand := index $serviceMap "pre_startup_command"}}
@@ -30,14 +31,15 @@ metadata:
         app: {{$projectName}}
         run: {{$serviceName}}
     name: {{$pvClaimName}}
-    namespace: {{$namespace}}
 spec:
     accessModes:
       - ReadWriteOnce
     resources:
         requests:
             storage: {{index $volumeConfig "size"}}
-    storageClassName: {{(index $volumeConfig "storage_class") | default "standard"}}
+    {{- if $storageClass}}
+    storageClassName: {{$storageClass}}
+    {{- end}}
 {{- end}}
 
 ---
@@ -49,7 +51,6 @@ metadata:
         app: {{$projectName}}
         run: {{$serviceName}}
     name: {{$serviceName}}
-    namespace: {{$namespace}}
 
 spec:
     replicas: {{.Values.replicas | default 1}}
@@ -67,9 +68,6 @@ spec:
                 ports:
                   - containerPort: {{index $serviceMap "container_port"}}
                 env:
-                  - name: NAMESPACE
-                    value: {{$namespace}}
-
                   {{- range $key, $value := .Values.__services}}
                   - name: {{$key | upper | replace "-" "_"}}_PORT
                     value: {{$value.external_port | quote}}

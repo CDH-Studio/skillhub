@@ -1,0 +1,79 @@
+##---
+# Source: skillhub/templates/deployment-os.yaml
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    labels:
+        app: skillhub
+        run: backend-database
+    name: backend-database-pv-claim
+spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+        requests:
+            storage: 5Gi
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+
+metadata:
+    labels:
+        app: skillhub
+        run: backend-database
+    name: backend-database
+
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            run: backend-database
+    template:
+        metadata:
+            labels:
+                run: backend-database
+        spec:
+            containers:
+              - image: docker-registry.default.svc:5000/openshift/postgresql:9.6
+                name: backend-database
+                ports:
+                  - containerPort: 5432
+                env:
+                  - name: BACKEND_PORT
+                    value: "80"
+                  - name: BACKEND_HOST
+                    value: "backend-skillhub.apps.ic.gc.ca"
+                  - name: BACKEND_DATABASE_PORT
+                    value: "5432"
+                  - name: BACKEND_DATABASE_HOST
+                    value: "backend-database"
+                  - name: FRONTEND_PORT
+                    value: "80"
+                  - name: FRONTEND_HOST
+                    value: "skillhub.apps.ic.gc.ca"
+                  - name: PREDICTIONS_PORT
+                    value: "80"
+                  - name: PREDICTIONS_HOST
+                    value: "predictions-skillhub.apps.ic.gc.ca"
+                  - name: SCRAPER_PORT
+                    value: "80"
+                  - name: SCRAPER_HOST
+                    value: "scraper-skillhub.apps.ic.gc.ca"
+                  - name: POSTGRESQL_DATABASE
+                    value: "app-database"
+                  - name: POSTGRESQL_USER
+                    value: "app-database-user"
+                  - name: POSTGRESQL_PASSWORD
+                    value: "app-database-password"
+                volumeMounts:
+                  - name: backend-database-volume
+                    mountPath: /var/lib/postgresql/data
+                    subPath: database
+            volumes:
+              - name: backend-database-volume
+                persistentVolumeClaim:
+                    claimName: backend-database-pv-claim
+

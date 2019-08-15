@@ -1,0 +1,22 @@
+##---
+# Source: skillhub/templates/build-config-os.yaml
+
+
+apiVersion: v1
+kind: BuildConfig
+metadata:
+    name: backend
+    labels:
+        app: skillhub
+spec:
+    source:
+        git:
+            uri: https://github.com/CDH-Studio/skillhub.git
+            ref: "master"
+        contextDir: "services/backend"
+    strategy:
+        type: Docker
+    output:
+        to:
+            kind: ImageStreamTag
+            name: "backend:latest"

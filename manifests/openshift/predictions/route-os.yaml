@@ -1,0 +1,23 @@
+##---
+# Source: skillhub/templates/route-os.yaml
+
+
+apiVersion: v1
+kind: Route
+metadata:
+    name: predictions
+    labels:
+        app: skillhub
+        run: predictions
+    annotations:
+        haproxy.router.openshift.io/timeout: 600s
+spec:
+    host: predictions-skillhub.apps.ic.gc.ca
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+    to:
+        kind: Service
+        name: predictions
+        weight: 100
+    wildcardPolicy: None

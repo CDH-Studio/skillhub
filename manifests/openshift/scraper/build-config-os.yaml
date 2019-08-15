@@ -1,3 +1,7 @@
+##---
+# Source: skillhub/templates/build-config-os.yaml
+
+
 apiVersion: v1
 kind: BuildConfig
 metadata:

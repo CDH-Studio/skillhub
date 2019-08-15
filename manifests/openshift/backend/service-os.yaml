@@ -1,0 +1,21 @@
+##---
+# Source: skillhub/templates/service-os.yaml
+
+
+apiVersion: v1
+kind: Service
+
+metadata:
+    name: backend
+    labels:
+        app: skillhub
+        run: backend
+
+spec:
+    type: NodePort
+    selector:
+        run: backend
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 5000

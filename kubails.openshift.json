@@ -1,5 +1,5 @@
 {
-    "__domain": "skillhub.ca",
+    "__domain": "skillhub.apps.ic.gc.ca",
     "__gcp_project_id": "skillhub",
     "__gcp_project_region": "northamerica-northeast1",
     "__gcp_project_zone": "northamerica-northeast1-c",
@@ -9,6 +9,7 @@
     "__production_namespace": "master",
     "__project_name": "skillhub",
     "__project_title": "Skillhub",
+    "__remote_repo_clone_url": "https://github.com/CDH-Studio/skillhub.git",
     "__remote_repo_host": "github",
     "__remote_repo_owner": "cdh-studio",
     "__services": {
@@ -22,7 +23,7 @@
             ],
             "external_port": "80",
             "folder": "backend",
-            "host": "backend.skillhub.ca",
+            "host": "backend-skillhub.apps.ic.gc.ca",
             "image": "backend",
             "image_in_project": true,
             "persistent_volume": {},
@@ -39,9 +40,11 @@
                 ]
             },
             "templates": [
-                "deployment",
-                "ingress",
-                "service"
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
             ],
             "type": "NodePort",
             "wait_for_service": "backend-database"
@@ -50,27 +53,26 @@
             "container_port": "5432",
             "env": [
                 {
-                    "name": "POSTGRES_DB",
+                    "name": "POSTGRESQL_DATABASE",
                     "value": "app-database"
                 },
                 {
-                    "name": "POSTGRES_USER",
+                    "name": "POSTGRESQL_USER",
                     "value": "app-database-user"
                 },
                 {
-                    "name": "POSTGRES_PASSWORD",
+                    "name": "POSTGRESQL_PASSWORD",
                     "value": "app-database-password"
                 }
             ],
             "external_port": "5432",
             "folder": null,
             "host": "backend-database",
-            "image": "postgres:11.1",
+            "image": "docker-registry.default.svc:5000/openshift/postgresql:9.6",
             "image_in_project": false,
             "persistent_volume": {
                 "mount_path": "/var/lib/postgresql/data",
                 "size": "5Gi",
-                "storage_class": "standard",
                 "sub_path": "database"
             },
             "pre_startup_command": null,
@@ -78,8 +80,8 @@
             "replicas": 1,
             "secrets": {},
             "templates": [
-                "deployment",
-                "service"
+                "deployment-os",
+                "service-os"
             ],
             "type": "ClusterIP",
             "wait_for_service": null
@@ -94,7 +96,7 @@
             ],
             "external_port": "80",
             "folder": "frontend",
-            "host": "skillhub.ca",
+            "host": "skillhub.apps.ic.gc.ca",
             "image": "frontend",
             "image_in_project": true,
             "persistent_volume": {},
@@ -103,9 +105,11 @@
             "replicas": 1,
             "secrets": {},
             "templates": [
-                "deployment",
-                "ingress",
-                "service"
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
             ],
             "type": "NodePort",
             "wait_for_service": null
@@ -115,7 +119,7 @@
             "env": [],
             "external_port": "80",
             "folder": "predictions",
-            "host": "predictions.skillhub.ca",
+            "host": "predictions-skillhub.apps.ic.gc.ca",
             "image": "predictions",
             "image_in_project": true,
             "persistent_volume": {},
@@ -130,9 +134,11 @@
                 ]
             },
             "templates": [
-                "deployment",
-                "ingress",
-                "service"
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
             ],
             "type": "NodePort",
             "wait_for_service": null
@@ -155,7 +161,7 @@
             ],
             "external_port": "80",
             "folder": "scraper",
-            "host": "scraper.skillhub.ca",
+            "host": "scraper-skillhub.apps.ic.gc.ca",
             "image": "scraper",
             "image_in_project": true,
             "persistent_volume": {},
@@ -171,9 +177,11 @@
                 ]
             },
             "templates": [
-                "deployment",
-                "ingress",
-                "service"
+                "deployment-config-os",
+                "service-os",
+                "route-os",
+                "image-stream-os",
+                "build-config-os"
             ],
             "type": "NodePort",
             "wait_for_service": null

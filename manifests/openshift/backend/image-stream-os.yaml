@@ -1,6 +1,10 @@
+##---
+# Source: skillhub/templates/image-stream-os.yaml
+
+
 apiVersion: v1
 kind: ImageStream
 metadata:
-    name: scraper
+    name: backend
     labels:
         app: skillhub

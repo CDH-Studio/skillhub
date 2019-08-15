@@ -1,0 +1,21 @@
+##---
+# Source: skillhub/templates/service-os.yaml
+
+
+apiVersion: v1
+kind: Service
+
+metadata:
+    name: frontend
+    labels:
+        app: skillhub
+        run: frontend
+
+spec:
+    type: NodePort
+    selector:
+        run: frontend
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 3000

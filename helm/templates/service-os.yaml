@@ -1,0 +1,24 @@
+{{- if and .Values.__services .Values.serviceName}}
+{{- $projectName := .Values.__project_name}}
+{{- $serviceName := .Values.serviceName}}
+{{- $serviceMap := index .Values.__services .Values.serviceName}}
+{{- $serviceType := index $serviceMap "type"}}
+
+apiVersion: v1
+kind: Service
+
+metadata:
+    name: {{$serviceName}}
+    labels:
+        app: {{$projectName}}
+        run: {{$serviceName}}
+
+spec:
+    type: {{$serviceType}}
+    selector:
+        run: {{$serviceName}}
+    ports:
+    - port: {{index $serviceMap "external_port"}}
+      protocol: TCP
+      targetPort: {{index $serviceMap "container_port"}}
+{{- end}}
