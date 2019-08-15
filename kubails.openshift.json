@@ -168,7 +168,7 @@
             "env": [
                 {
                     "name": "JIRA_HOST",
-                    "value": "https://jira.ised-isde.canada.ca"
+                    "value": "http://jira.ic.gc.ca"
                 },
                 {
                     "name": "JIRA_PLATFORM",
@@ -212,7 +212,7 @@
             "env": [
                 {
                     "name": "JIRA_HOST",
-                    "value": "https://jira.ised-isde.canada.ca"
+                    "value": "http://jira.ic.gc.ca"
                 },
                 {
                     "name": "JIRA_PLATFORM",
