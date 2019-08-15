@@ -8,7 +8,7 @@
 
 {{- $tag := "latest"}}
 {{- $serviceImage := index $serviceMap "image"}}
-{{- $projectImage := printf "gcr.io/%s/%s-%s:%s" .Values.__gcp_project_id .Values.__project_name $serviceImage $tag}}
+{{- $projectImage := printf "docker-registry.default.svc:5000/%s/%s:%s" .Values.__gcp_project_id $serviceImage $tag}}
 {{- $image := (index $serviceMap "image_in_project") | ternary $projectImage $serviceImage}}
 
 {{- $command := index $serviceMap "command"}}
