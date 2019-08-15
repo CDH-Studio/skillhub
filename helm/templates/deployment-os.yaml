@@ -11,6 +11,8 @@
 {{- $projectImage := printf "gcr.io/%s/%s-%s:%s" .Values.__gcp_project_id .Values.__project_name $serviceImage $tag}}
 {{- $image := (index $serviceMap "image_in_project") | ternary $projectImage $serviceImage}}
 
+{{- $command := index $serviceMap "command"}}
+
 {{- $env := index $serviceMap "env"}}
 
 {{- $pvClaimName := printf "%s-pv-claim" $serviceName}}
@@ -67,6 +69,14 @@ spec:
                 name: {{$serviceName}}
                 ports:
                   - containerPort: {{index $serviceMap "container_port"}}
+
+                {{- if $command}}
+                command:
+                  {{- range $command}}
+                  - {{. | quote}}
+                  {{- end}}
+                {{- end}}
+
                 env:
                   {{- range $key, $value := .Values.__services}}
                   - name: {{$key | upper | replace "-" "_"}}_PORT

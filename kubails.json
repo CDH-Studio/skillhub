@@ -236,7 +236,7 @@
                 "deployment"
             ],
             "type": "",
-            "wait_for_service": null
+            "wait_for_service": "redis"
         }
     },
     "__wildcard_certificate_secret": "skillhub-tls"

@@ -2,7 +2,7 @@ const axios = require("axios");
 const uuidv4 = require("uuid/v4");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
 const {jiraScrapingQueue} = require("workers/queues");
-const {chainingPromisePool, logger: baseLogger} = require("utils/");
+const {logger: baseLogger} = require("utils/");
 const GitScraper = require("./GitScraper");
 const JiraScraper = require("./JiraScraper");
 
