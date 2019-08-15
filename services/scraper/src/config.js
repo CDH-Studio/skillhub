@@ -8,6 +8,7 @@ const {
     JIRA_AUTH_TOKEN = null,
     JIRA_HOST = "https://jira.ised-isde.canada.ca",
     JIRA_PLATFORM = "server",
+    REDIS_PORT = 6379,
     SKILLHUB_API_KEY = "bf3d6ab4879949d5845eb50a31e9e3fa"
 } = process.env;
 
@@ -19,8 +20,8 @@ if (BACKEND_PORT !== "80" && BACKEND_PORT !== "443") {
 
 const REDIS_CONFIG = {
     redis: {
-        port: 6379,
-        host: "redis"
+        host: "redis",
+        port: REDIS_PORT
     }
 };
 

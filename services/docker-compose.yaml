@@ -50,6 +50,10 @@ services:
         - 5002:5000
         volumes:
         - ./predictions/:/app
+    redis:
+        image: redis
+        expose:
+        - 6379
     scraper:
         build:
             context: ./scraper
@@ -67,10 +71,6 @@ services:
         - scraper
         links:
         - redis
-    redis:
-        image: redis
-        expose:
-        - 6379
 version: '2'
 volumes:
     backend-database-data:

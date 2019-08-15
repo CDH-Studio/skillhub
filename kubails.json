@@ -137,6 +137,26 @@
             "type": "NodePort",
             "wait_for_service": null
         },
+        "redis": {
+            "container_port": "6379",
+            "env": [],
+            "external_port": "6379",
+            "folder": null,
+            "host": "redis",
+            "image": "redis",
+            "image_in_project": false,
+            "persistent_volume": {},
+            "pre_startup_command": null,
+            "production_replicas": 1,
+            "replicas": 1,
+            "secrets": {},
+            "templates": [
+                "deployment",
+                "service"
+            ],
+            "type": "ClusterIP",
+            "wait_for_service": null
+        },
         "scraper": {
             "container_port": "5000",
             "env": [
@@ -202,7 +222,7 @@
             "image_in_project": true,
             "persistent_volume": {},
             "pre_startup_command": "",
-            "production_replicas": 1,
+            "production_replicas": 2,
             "replicas": 1,
             "secrets": {
                 "file": ".env.encrypted",
