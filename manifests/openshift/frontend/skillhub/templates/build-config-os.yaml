@@ -5,18 +5,18 @@
 apiVersion: v1
 kind: BuildConfig
 metadata:
-    name: predictions
+    name: frontend
     labels:
         app: skillhub
 spec:
     source:
         git:
             uri: https://github.com/CDH-Studio/skillhub.git
-            ref: "master"
-        contextDir: "services/predictions"
+            ref: "CDHSH-128"
+        contextDir: "services/frontend"
     strategy:
         type: Docker
     output:
         to:
             kind: ImageStreamTag
-            name: "predictions:latest"
+            name: "frontend:latest"

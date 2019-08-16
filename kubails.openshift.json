@@ -177,6 +177,14 @@
                 {
                     "name": "BACKEND_PROTOCOL",
                     "value": "https"
+                },
+                {
+                    "name": "PROXY_HOST",
+                    "value": "cdhwg01.prod.prv"
+                },
+                {
+                    "name": "PROXY_PORT",
+                    "value": "80"
                 }
             ],
             "external_port": "80",
@@ -221,6 +229,14 @@
                 {
                     "name": "BACKEND_PROTOCOL",
                     "value": "https"
+                },
+                {
+                    "name": "PROXY_HOST",
+                    "value": "cdhwg01.prod.prv"
+                },
+                {
+                    "name": "PROXY_PORT",
+                    "value": "80"
                 }
             ],
             "external_port": null,

@@ -6,26 +6,31 @@ apiVersion: v1
 kind: DeploymentConfig
 
 metadata:
-    name: backend
+    name: scraper-worker
     labels:
         app: skillhub
-        run: backend
+        run: scraper-worker
 
 spec:
-    replicas: 1
+    replicas: 2
     selector:
-        run: backend
+        run: scraper-worker
     template:
         metadata:
             labels:
-                run: backend
+                run: scraper-worker
         spec:
             containers:
-            - name: backend
-              image: docker-registry.default.svc:5000/skillhub/backend:latest
+            - name: scraper-worker
+              image: docker-registry.default.svc:5000/skillhub/scraper:latest
               imagePullPolicy: Always
               ports:
               - containerPort: 5000
+              command:
+                - "npm"
+                - "run"
+                - "worker"
+
               env:
               - name: BACKEND_PORT
                 value: "80"
@@ -43,37 +48,42 @@ spec:
                 value: "80"
               - name: PREDICTIONS_HOST
                 value: "predictions-skillhub.apps.ic.gc.ca"
+              - name: REDIS_PORT
+                value: "6379"
+              - name: REDIS_HOST
+                value: "redis"
               - name: SCRAPER_PORT
                 value: "80"
               - name: SCRAPER_HOST
                 value: "scraper-skillhub.apps.ic.gc.ca"
-              - name: PREDICTIONS_PROTOCOL
+              - name: SCRAPER_WORKER_PORT
+                value: 
+              - name: SCRAPER_WORKER_HOST
+                value: 
+              - name: JIRA_HOST
+                value: "http://jira.ic.gc.ca"
+              - name: JIRA_PLATFORM
+                value: "server"
+              - name: BACKEND_PROTOCOL
                 value: "https"
-              - name: PREDICTIONS_API_KEY
+              - name: PROXY_HOST
+                value: "cdhwg01.prod.prv"
+              - name: PROXY_PORT
+                value: "80"
+              - name: JIRA_AUTH_TOKEN
                 valueFrom:
                     secretKeyRef:
-                        name: backend-secrets
-                        key: PREDICTIONS_API_KEY
-              - name: SCRAPER_API_KEY
+                        name: scraper-secrets
+                        key: JIRA_AUTH_TOKEN
+              - name: SKILLHUB_API_KEY
                 valueFrom:
                     secretKeyRef:
-                        name: backend-secrets
-                        key: SCRAPER_API_KEY
-              - name: TOKEN_SECRET
-                valueFrom:
-                    secretKeyRef:
-                        name: backend-secrets
-                        key: TOKEN_SECRET
+                        name: scraper-secrets
+                        key: SKILLHUB_API_KEY
             initContainers:
               - name: wait-for-service
                 image: busybox
-                command: ["sh", "-c", "until nslookup backend-database; do echo waiting for backend-database; sleep 2; done;"]
-              - name: pre-startup
-                image: docker-registry.default.svc:5000/skillhub/backend:latest
-                command: ["sh", "-c", "npm run db:retryable-migrate && npm run db:seed"]
-                env:
-                  - name: PREDICTIONS_PROTOCOL
-                    value: "https"
+                command: ["sh", "-c", "until nslookup redis; do echo waiting for redis; sleep 2; done;"]
 
     triggers:
     - type: ConfigChange
@@ -81,7 +91,7 @@ spec:
       imageChangeParams:
           automatic: true
           containerNames:
-          - backend
+          - scraper-worker
           from:
               kind: ImageStreamTag
-              name: "backend:latest"
+              name: "scraper:latest"

@@ -5,18 +5,18 @@
 apiVersion: v1
 kind: BuildConfig
 metadata:
-    name: frontend
+    name: scraper
     labels:
         app: skillhub
 spec:
     source:
         git:
             uri: https://github.com/CDH-Studio/skillhub.git
-            ref: "master"
-        contextDir: "services/frontend"
+            ref: "CDHSH-128"
+        contextDir: "services/scraper"
     strategy:
         type: Docker
     output:
         to:
             kind: ImageStreamTag
-            name: "frontend:latest"
+            name: "scraper:latest"
