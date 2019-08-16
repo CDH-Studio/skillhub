@@ -49,7 +49,7 @@ const SearchLayout = ({
             />
             <div className="search-create-row">
                 <div className="column" />
-                <div className="column">
+                <div className="column center">
                     <SearchField
                         setSearchProperties={setSearchProperties}
                     />
@@ -216,6 +216,7 @@ const SearchField = ({setSearchProperties}) => {
         <div className="search-input">
             <Paper className="search-box">
                 <Input
+                    className="search-field"
                     placeholder="Search..."
                     disableUnderline={true}
                     type="search"

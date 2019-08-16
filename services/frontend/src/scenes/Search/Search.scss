@@ -98,6 +98,7 @@ $search-card-width: $default-spacing * 45;
     justify-content: center;
     padding: $default-spacing;
     padding-bottom: 0;
+    width: $search-card-width+$default-spacing*2;
 
     .input-base {
         position: relative;
@@ -113,12 +114,17 @@ $search-card-width: $default-spacing * 45;
         }
     }
 
+    .search-field {
+        width: 85%;
+    }
+
     .search-box {
         display: flex;
         flex-direction: row;
         align-content: center;
         padding: $default-spacing * 0.5 $default-spacing;
         border-radius: 25px;
+        width: 100%;
     }
 
     .search-icon {
