@@ -18,9 +18,6 @@ $project-card-width: $default-spacing * 45;
     }
 
     .profile-card-details-section {
-        margin: 0 auto;
-        flex: 2;
-
         .profile-card-title {
             font-size: $font-size-title;
             font-weight: bold;
@@ -43,6 +40,7 @@ $project-card-width: $default-spacing * 45;
                 display: flex;
                 font-size: $font-size-content;
                 margin: $default-spacing*0.75 0;
+                overflow-wrap: anywhere;
 
                 svg {
                     font-size: $font-size-content;

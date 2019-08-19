@@ -2,7 +2,7 @@
 @import "styles/_dimens.scss";
 @import "styles/_mixins.scss";
 
-$project-card-width: $default-spacing * 34;
+$project-card-width: $default-spacing * 45;
 
 @mixin query-project-card-width {
     @media (max-width: #{$project-card-width}) {
@@ -17,26 +17,24 @@ $project-card-width: $default-spacing * 34;
     @include hover-box-shadow;
 
     @include query-project-card-width {
-        width: auto;
+        width: $tablet-card-width;
     }
 
     .project-card-content {
         display: flex;
         flex: 1;
-        padding: $default-spacing*1.5 $default-spacing*2;
+        padding-top: $default-spacing * 1.5;
+        padding: $default-spacing*2 $default-spacing*2;
 
         .project-card-activity-section {
             align-self: flex-start;
+            min-width: $default-spacing*6;
             display: flex;
-            flex: 1;
         }
 
         .project-card-content-section {
             flex: 3;
-
-            @include query-project-card-width {
-                margin-left: $default-spacing;
-            }
+            margin-left: $default-spacing;
 
             .project-card-name {
                 font-size: $font-size-subtitle;
