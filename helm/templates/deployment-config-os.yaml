@@ -19,6 +19,8 @@
 {{- $waitForService := index $serviceMap "wait_for_service"}}
 {{- $preStartupCommand := index $serviceMap "pre_startup_command"}}
 
+{{- $sshKey := index $serviceMap "ssh_key"}}
+
 apiVersion: v1
 kind: DeploymentConfig
 
@@ -77,6 +79,20 @@ spec:
                         key: {{.}}
               {{- end}}
               {{- end}}
+
+              {{- if $sshKey}}
+              volumeMounts:
+                - name: {{$sshKey}}
+                  mountPath: "/ssh"
+                  readOnly: true
+              {{- end}}
+              
+            {{- if $sshKey}}
+            volumes:
+              - name: {{$sshKey}}
+                secret:
+                    secretName: {{$sshKey}}
+            {{- end}}
 
             {{- if or $waitForService $preStartupCommand}}
             initContainers:

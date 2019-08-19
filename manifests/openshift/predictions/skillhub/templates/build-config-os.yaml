@@ -12,7 +12,7 @@ spec:
     source:
         git:
             uri: https://github.com/CDH-Studio/skillhub.git
-            ref: "master"
+            ref: "CDHSH-132"
         contextDir: "services/predictions"
     strategy:
         type: Docker

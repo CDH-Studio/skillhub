@@ -167,6 +167,14 @@
             "container_port": "5000",
             "env": [
                 {
+                    "name": "GIT_PLATFORM",
+                    "value": "bitbucket"
+                },
+                {
+                    "name": "GIT_HOST",
+                    "value": "https://asbscr.ic.gc.ca/scm"
+                },
+                {
                     "name": "JIRA_HOST",
                     "value": "http://jira.ic.gc.ca"
                 },
@@ -200,10 +208,12 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
+                    "GIT_AUTH_TOKEN",
                     "JIRA_AUTH_TOKEN",
                     "SKILLHUB_API_KEY"
                 ]
             },
+            "ssh_key": "bitbucket-ssh-key",
             "templates": [
                 "deployment-config-os",
                 "service-os",
@@ -218,6 +228,14 @@
             "command": ["npm", "run", "worker"],
             "container_port": "5000",
             "env": [
+                {
+                    "name": "GIT_PLATFORM",
+                    "value": "bitbucket"
+                },
+                {
+                    "name": "GIT_HOST",
+                    "value": "https://asbscr.ic.gc.ca/scm"
+                },
                 {
                     "name": "JIRA_HOST",
                     "value": "http://jira.ic.gc.ca"
@@ -252,10 +270,12 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
+                    "GIT_AUTH_TOKEN",
                     "JIRA_AUTH_TOKEN",
                     "SKILLHUB_API_KEY"
                 ]
             },
+            "ssh_key": "bitbucket-ssh-key",
             "templates": [
                 "deployment-os"
             ],
