@@ -68,7 +68,7 @@ function* redirectAuthenticatedUser({payload}) {
         }
     } catch (e){
         if (e.name === "NotAuthenticated") {
-            console.error(e.message);
+            console.error(e);
         } else {
             throw (e);
         }

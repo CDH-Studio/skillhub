@@ -68,4 +68,9 @@ $project-card-width: $default-spacing * 45;
         flex-direction: column;
         align-items: center;
     }
+
+    .pagination-container {
+        border-top: 0;
+        padding: $default-spacing * 0.5;
+    }
 }
