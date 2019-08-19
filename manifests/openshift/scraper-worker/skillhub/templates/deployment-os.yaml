@@ -9,24 +9,28 @@ kind: Deployment
 metadata:
     labels:
         app: skillhub
-        run: redis
-    name: redis
+        run: scraper-worker
+    name: scraper-worker
 
 spec:
-    replicas: 1
+    replicas: 2
     selector:
         matchLabels:
-            run: redis
+            run: scraper-worker
     template:
         metadata:
             labels:
-                run: redis
+                run: scraper-worker
         spec:
             containers:
-              - image: docker-registry.default.svc:5000/openshift/redis
-                name: redis
+              - image: docker-registry.default.svc:5000/skillhub/scraper:latest
+                name: scraper-worker
                 ports:
-                  - containerPort: 6379
+                  - containerPort: 5000
+                command:
+                  - "npm"
+                  - "run"
+                  - "worker"
 
                 env:
                   - name: BACKEND_PORT
@@ -57,4 +61,28 @@ spec:
                     value: 
                   - name: SCRAPER_WORKER_HOST
                     value: 
+                  - name: JIRA_HOST
+                    value: "http://jira.ic.gc.ca"
+                  - name: JIRA_PLATFORM
+                    value: "server"
+                  - name: BACKEND_PROTOCOL
+                    value: "https"
+                  - name: PROXY_HOST
+                    value: "cdhwg01.prod.prv"
+                  - name: PROXY_PORT
+                    value: "80"
+                  - name: JIRA_AUTH_TOKEN
+                    valueFrom:
+                        secretKeyRef:
+                            name: scraper-secrets
+                            key: JIRA_AUTH_TOKEN
+                  - name: SKILLHUB_API_KEY
+                    valueFrom:
+                        secretKeyRef:
+                            name: scraper-secrets
+                            key: SKILLHUB_API_KEY
+            initContainers:
+              - name: wait-for-service
+                image: busybox
+                command: ["sh", "-c", "until nslookup redis; do echo waiting for redis; sleep 2; done;"]
 
