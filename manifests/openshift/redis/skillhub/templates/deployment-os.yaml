@@ -1,20 +1,6 @@
 ##---
 # Source: skillhub/templates/deployment-os.yaml
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-    labels:
-        app: skillhub
-        run: backend-database
-    name: backend-database-pv-claim
-spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-        requests:
-            storage: 5Gi
 
 ---
 apiVersion: extensions/v1beta1
@@ -23,24 +9,25 @@ kind: Deployment
 metadata:
     labels:
         app: skillhub
-        run: backend-database
-    name: backend-database
+        run: redis
+    name: redis
 
 spec:
     replicas: 1
     selector:
         matchLabels:
-            run: backend-database
+            run: redis
     template:
         metadata:
             labels:
-                run: backend-database
+                run: redis
         spec:
             containers:
-              - image: docker-registry.default.svc:5000/openshift/postgresql:9.6
-                name: backend-database
+              - image: docker-registry.default.svc:5000/openshift/redis
+                name: redis
                 ports:
-                  - containerPort: 5432
+                  - containerPort: 6379
+
                 env:
                   - name: BACKEND_PORT
                     value: "80"
@@ -58,22 +45,16 @@ spec:
                     value: "80"
                   - name: PREDICTIONS_HOST
                     value: "predictions-skillhub.apps.ic.gc.ca"
+                  - name: REDIS_PORT
+                    value: "6379"
+                  - name: REDIS_HOST
+                    value: "redis"
                   - name: SCRAPER_PORT
                     value: "80"
                   - name: SCRAPER_HOST
                     value: "scraper-skillhub.apps.ic.gc.ca"
-                  - name: POSTGRESQL_DATABASE
-                    value: "app-database"
-                  - name: POSTGRESQL_USER
-                    value: "app-database-user"
-                  - name: POSTGRESQL_PASSWORD
-                    value: "app-database-password"
-                volumeMounts:
-                  - name: backend-database-volume
-                    mountPath: /var/lib/postgresql/data
-                    subPath: database
-            volumes:
-              - name: backend-database-volume
-                persistentVolumeClaim:
-                    claimName: backend-database-pv-claim
+                  - name: SCRAPER_WORKER_PORT
+                    value: 
+                  - name: SCRAPER_WORKER_HOST
+                    value: 
 

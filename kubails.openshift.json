@@ -149,7 +149,7 @@
             "external_port": "6379",
             "folder": null,
             "host": "redis",
-            "image": "redis",
+            "image": "docker-registry.default.svc:5000/openshift/redis",
             "image_in_project": false,
             "persistent_volume": {},
             "pre_startup_command": null,
@@ -168,7 +168,7 @@
             "env": [
                 {
                     "name": "JIRA_HOST",
-                    "value": "https://jira.ised-isde.canada.ca"
+                    "value": "http://jira.ic.gc.ca"
                 },
                 {
                     "name": "JIRA_PLATFORM",
@@ -177,6 +177,14 @@
                 {
                     "name": "BACKEND_PROTOCOL",
                     "value": "https"
+                },
+                {
+                    "name": "PROXY_HOST",
+                    "value": "cdhwg01.prod.prv"
+                },
+                {
+                    "name": "PROXY_PORT",
+                    "value": "80"
                 }
             ],
             "external_port": "80",
@@ -212,7 +220,7 @@
             "env": [
                 {
                     "name": "JIRA_HOST",
-                    "value": "https://jira.ised-isde.canada.ca"
+                    "value": "http://jira.ic.gc.ca"
                 },
                 {
                     "name": "JIRA_PLATFORM",
@@ -221,6 +229,14 @@
                 {
                     "name": "BACKEND_PROTOCOL",
                     "value": "https"
+                },
+                {
+                    "name": "PROXY_HOST",
+                    "value": "cdhwg01.prod.prv"
+                },
+                {
+                    "name": "PROXY_PORT",
+                    "value": "80"
                 }
             ],
             "external_port": null,
