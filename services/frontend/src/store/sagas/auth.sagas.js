@@ -52,17 +52,25 @@ function* redirectUnAuthenticatedUserToAuth({payload}) {
 }
 
 function* redirectAuthenticatedUser({payload}) {
-    if (api.isAuthenticated()) {
-        const userId = yield select(userSlice.selectors.getUserId);
-        const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
-        /* trying to access the app or onboarding pages, redirected due to not having
-         * a profile setup yet */
-        if ((tryingToAccessApp(payload) || tryingToAccessAuth(payload)) && userProfile.length === 0) {
-            yield put(replace(ScreenUrls.ONBOARDING));
-        /* trying to access the auth or onboarding pages, redirected due to already having
-         * an account and profile  */
-        } else if ((tryingToAccessAuth(payload) || tryingToAccessOnboarding(payload)) && userProfile.length > 0) {
-            yield put(replace(ScreenUrls.SEARCH));
+    try {
+        if (api.isAuthenticated()) {
+            const userId = yield select(userSlice.selectors.getUserId);
+            const userProfile = yield call(api.service("profiles").find, {query: {userId: userId}});
+            /* trying to access the app or onboarding pages, redirected due to not having
+            * a profile setup yet */
+            if ((tryingToAccessApp(payload) || tryingToAccessAuth(payload)) && userProfile.length === 0) {
+                yield put(replace(ScreenUrls.ONBOARDING));
+            /* trying to access the auth or onboarding pages, redirected due to already having
+            * an account and profile  */
+            } else if ((tryingToAccessAuth(payload) || tryingToAccessOnboarding(payload)) && userProfile.length > 0) {
+                yield put(replace(ScreenUrls.SEARCH));
+            }
+        }
+    } catch (e){
+        if (e.name === "NotAuthenticated") {
+            console.error(e.message);
+        } else {
+            throw (e);
         }
     }
 }

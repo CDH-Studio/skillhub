@@ -41,6 +41,7 @@ $project-card-width: $default-spacing * 45;
                 font-size: $font-size-content;
                 margin: $default-spacing*0.75 0;
                 overflow-wrap: anywhere;
+                word-break: break-word;
 
                 svg {
                     font-size: $font-size-content;

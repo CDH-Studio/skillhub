@@ -7,7 +7,6 @@ const {omit} = require("lodash");
  * the verifier to check the email while ignoring case. */
 class CustomVerifier extends Verifier {
     verify (req, username, password, done) {
-
         const id = this.service.id;
         const usernameField = this.options.entityUsernameField || this.options.usernameField;
         const params = Object.assign({
