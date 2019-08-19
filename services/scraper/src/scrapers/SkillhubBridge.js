@@ -48,7 +48,7 @@ class SkillhubBridge {
 
         // Asynchronously scrape and send the issues to the Skillhub backend to populate the contributors.
         logger.info("Queueing the scraping and posting of issues");
-        const contributorsResult = this._queueContributors(projects.slice(0, 15));
+        const contributorsResult = this._queueContributors(projects);
         logger.info({message: "Contributors result", result: contributorsResult});
 
         const result = {
