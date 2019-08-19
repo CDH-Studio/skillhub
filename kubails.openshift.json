@@ -214,6 +214,17 @@
             "type": "NodePort",
             "wait_for_service": null
         },
+        "scraper-job": {
+            "env": [],
+            "fixed_tag": "latest",
+            "folder": "scraper-job",
+            "image": "scraper-job",
+            "image_in_project": true,
+            "schedule": "0 0 1 * *",
+            "templates": [
+                "cronjob"
+            ]
+        },
         "scraper-worker": {
             "command": ["npm", "run", "worker"],
             "container_port": "5000",
