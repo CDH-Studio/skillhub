@@ -50,15 +50,27 @@ services:
         - 5002:5000
         volumes:
         - ./predictions/:/app
+    redis:
+        image: redis
+        expose:
+        - 6379
     scraper:
         build:
             context: ./scraper
+        image: scraper
         command: npm start
         ports:
         - 5001:5000
         volumes:
         - ./scraper/:/backend
         - scraper-deps:/backend/node_modules
+    scraper-worker:
+        image: scraper
+        command: npm run worker
+        depends_on:
+        - scraper
+        links:
+        - redis
 version: '2'
 volumes:
     backend-database-data:

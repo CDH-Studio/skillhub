@@ -1,6 +1,7 @@
 const compress = require("compression");
 const cors = require("cors");
 const helmet = require("helmet");
+const morgan = require("morgan");
 
 const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
@@ -21,7 +22,8 @@ const app = express(feathers());
 // Load app configuration
 app.configure(configuration());
 
-// Enable security, CORS, compression, and body parsing
+// Enable request logging, security, CORS, compression, and body parsing
+app.use(morgan(":remote-addr - :remote-user [:date[clf]] \":method :url HTTP/:http-version\" :status :res[content-length] :response-time ms"));  // eslint-disable-line
 app.use(helmet());
 app.use(cors());
 app.use(compress());
