@@ -1,0 +1,57 @@
+##---
+# Source: skillhub/templates/cronjob.yaml
+
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: scraper-job
+    namespace: master
+spec:
+    schedule: "0 0 1 * *"
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 2
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    restartPolicy: OnFailure
+                    containers:
+                    - name: scraper-job
+                      image: gcr.io/skillhub/skillhub-scraper-job:latest
+                      imagePullPolicy: Always
+                      env:
+                      - name: NAMESPACE
+                        value: master
+                      - name: BACKEND_PORT
+                        value: "80"
+                      - name: BACKEND_HOST
+                        value: "backend-skillhub.apps.ic.gc.ca"
+                      - name: BACKEND_DATABASE_PORT
+                        value: "5432"
+                      - name: BACKEND_DATABASE_HOST
+                        value: "backend-database"
+                      - name: FRONTEND_PORT
+                        value: "80"
+                      - name: FRONTEND_HOST
+                        value: "skillhub.apps.ic.gc.ca"
+                      - name: PREDICTIONS_PORT
+                        value: "80"
+                      - name: PREDICTIONS_HOST
+                        value: "predictions-skillhub.apps.ic.gc.ca"
+                      - name: REDIS_PORT
+                        value: "6379"
+                      - name: REDIS_HOST
+                        value: "redis"
+                      - name: SCRAPER_PORT
+                        value: "80"
+                      - name: SCRAPER_HOST
+                        value: "scraper-skillhub.apps.ic.gc.ca"
+                      - name: SCRAPER_JOB_PORT
+                        value: 
+                      - name: SCRAPER_JOB_HOST
+                        value: 
+                      - name: SCRAPER_WORKER_PORT
+                        value: 
+                      - name: SCRAPER_WORKER_HOST
+                        value: 

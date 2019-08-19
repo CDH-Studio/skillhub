@@ -53,6 +53,10 @@ spec:
                     value: "80"
                   - name: SCRAPER_HOST
                     value: "scraper-skillhub.apps.ic.gc.ca"
+                  - name: SCRAPER_JOB_PORT
+                    value: 
+                  - name: SCRAPER_JOB_HOST
+                    value: 
                   - name: SCRAPER_WORKER_PORT
                     value: 
                   - name: SCRAPER_WORKER_HOST
