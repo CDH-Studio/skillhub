@@ -1,13 +1,14 @@
 const axios = require("axios");
 const {spawn} = require("child_process");
 const fs = require("fs");
+const uuidv4 = require("uuid/v4");
 const {GIT_AUTH_TOKEN, GIT_HOST, GIT_PLATFORM} = require("config");
 const {chainingPromisePool, logger: baseLogger, loggerUtils} = require("utils/");
 
 const logger = baseLogger.child({module: "GitScraper"});
 const logExecutionTime = loggerUtils.logExecutionTime(logger);
 
-const REPO_STORAGE_PATH = "/tmp/repo";
+const REPO_STORAGE_FOLDER = "/tmp";
 
 const PLATFORM_BITBUCKET = "bitbucket";
 const PLATFORM_GITHUB = "github";
@@ -15,7 +16,8 @@ const PLATFORM_GITHUB = "github";
 const PLATFORM_CONFIGS = {
     [PLATFORM_BITBUCKET]: {
         basePath: "/rest/api/1.0",
-        getOrgRepos: () => "",  // TODO once we get Bitbucket access
+        getProjects: () => "/projects?limit=1000",
+        getProjectRepos: (project) => `/projects/${project}/repos?limit=1000`
     },
     [PLATFORM_GITHUB]: {
         basePath: "",  // Yes, this should be empty. Github puts the 'api' portion as a subdomain.
@@ -35,6 +37,12 @@ class GitScraper {
 
         if (!authToken && platform === PLATFORM_BITBUCKET) {
             throw Error("Missing Git platform auth token");
+        }
+
+        if (platform === PLATFORM_BITBUCKET) {
+            // Use this without await since we can't have async constructors;
+            // just assume that it works. Very safe.
+            this._enableGitSsh();
         }
 
         this.authToken = authToken || "";
@@ -92,11 +100,15 @@ class GitScraper {
      *  The `skill`s and `file`s are determined by the repo's github-linguist breakdown.
      */
     async generateSkillMapping(repoUrl = "") {
+        const repoPath = REPO_STORAGE_FOLDER + "/" + uuidv4();
+
         return await logExecutionTime("generateSkillMapping", {repoUrl}, async () => {
             try {
-                await this._cloneRepo(repoUrl, REPO_STORAGE_PATH);
-                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, REPO_STORAGE_PATH);
-                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, REPO_STORAGE_PATH);
+                await this._cloneRepo(repoUrl, repoPath);
+                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, repoPath);
+                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, repoPath);
+
+                deleteFolderRecursive(repoPath);
 
                 return rawStats;
             } catch (err) {
@@ -104,6 +116,13 @@ class GitScraper {
                 throw new Error(err);
             }
         });
+    }
+
+    async _enableGitSsh() {
+        await promisifiedSpawn("git", [
+            "config", "--global", "core.sshCommand",
+            "'/usr/bin/ssh -i /ssh/bitbucket-ssh-key'"
+        ]);
     }
 
     /* Clones a repo to a given file path. */

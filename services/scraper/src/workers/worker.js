@@ -9,14 +9,16 @@ if (process.env.NODE_ENV !== "production") {
  * This worker instance handles processing jobs for the Jira and Git scraping processes.
  */
 
+const gitScrapingWorker = require("./gitScrapingWorker");
 const jiraScrapingWorker = require("./jiraScrapingWorker");
-const {jiraScrapingQueue} = require("./queues");
+const {gitScrapingQueue, jiraScrapingQueue} = require("./queues");
 
-// Run 2 concurrent copies of the jira scraping process
+// Run 2 concurrent copies of the scraping processes.
 // 2 seems like a good number.
 //
 // Technically, we could just spin up more containers of the worker instance,
-// instead of making each instance run concurrent processes, but it's a more
-// efficient use of resources to mix-and-match concurrent processes
+// instead of making each instance run concurrent processes, but it seems like
+// a more efficient use of resources to mix-and-match concurrent processes
 // with multiple container instances.
+gitScrapingQueue.process(2, gitScrapingWorker);
 jiraScrapingQueue.process(2, jiraScrapingWorker);

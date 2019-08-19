@@ -1,7 +1,7 @@
 const axios = require("axios");
 const uuidv4 = require("uuid/v4");
 const {BACKEND_URL, SKILLHUB_API_KEY} = require("config");
-const {jiraScrapingQueue} = require("workers/queues");
+const {gitScrapingQueue, jiraScrapingQueue} = require("workers/queues");
 const {logger: baseLogger} = require("utils/");
 const GitScraper = require("./GitScraper");
 const JiraScraper = require("./JiraScraper");
@@ -62,39 +62,16 @@ class SkillhubBridge {
 
     async scrapeSkills(org = "") {
         const urls = await this.gitScraper.getRepoUrls(org);
-
-        const skillsStats = {
-            author: [],
-            oldestCommitDate: [],
-            latestCommitDate: [],
-            changeCount: [],
-            commit: [],
-            file: [],
-            skill: [],
-            repo: []
-        };
+        const jobIds = [];
 
         for (const url of urls) {
-            const skillMapping = await this.gitScraper.generateSkillMapping(url);
+            const jobId = uuidv4();
+            gitScrapingQueue.add({url}, {jobId});
 
-            // Fill up an array equal in length to the number of commits
-            // we get back from the file stats with the repo, so that it can be used
-            // as a marker on the backend that these commits were associated with this repo.
-            const numberOfCommits = skillMapping["commit"].length;
-            const repoStat = new Array(numberOfCommits).fill(url);
-
-            // Combine the new repo stats with the old ones to build one giant array
-            Object.keys(skillMapping).forEach((statKey) => {
-                skillsStats[statKey] = skillsStats[statKey].concat(skillMapping[statKey]);
-            });
-
-            // Combine the newly filled repo array into the existing one
-            skillsStats["repo"] = skillsStats["repo"].concat(repoStat);
+            jobIds.push(jobId);
         }
 
-        const skillsResponse = await this.postToSkillhub({skillsStats});
-
-        return skillsResponse.data;
+        return {jobIds};
     }
 
     async postToSkillhub(data = {}) {
@@ -104,6 +81,11 @@ class SkillhubBridge {
     async scrapeProjectIssues(project = {}) {
         const issues = await this.jiraScraper.getIssues(project);
         return await this.postToSkillhub({issues});
+    }
+
+    async scrapeGitRepo(url = "") {
+        const skillsStats = await this.gitScraper.generateSkillMapping(url);
+        return await this.postToSkillhub({skillsStats});
     }
 
     _queueContributors(projects = []) {
