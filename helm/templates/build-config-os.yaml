@@ -6,7 +6,8 @@
 
 {{- $tag := "latest"}}
 {{- $branch := .Values.tag | default "master"}}
-{{- $imageStreamTag := printf "%s:%s" $serviceName $tag}}
+{{- $imageName := index $serviceMap "image"}}
+{{- $imageStreamTag := printf "%s:%s" $imageName $tag}}
 
 apiVersion: v1
 kind: BuildConfig

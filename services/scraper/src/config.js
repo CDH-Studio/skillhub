@@ -8,6 +8,7 @@ const {
     JIRA_AUTH_TOKEN = null,
     JIRA_HOST = "https://jira.ised-isde.canada.ca",
     JIRA_PLATFORM = "server",
+    REDIS_PORT = 6379,
     SKILLHUB_API_KEY = "bf3d6ab4879949d5845eb50a31e9e3fa"
 } = process.env;
 
@@ -17,6 +18,13 @@ if (BACKEND_PORT !== "80" && BACKEND_PORT !== "443") {
     BACKEND_URL = `${BACKEND_URL}:${BACKEND_PORT}`;
 }
 
+const REDIS_CONFIG = {
+    redis: {
+        host: "redis",
+        port: REDIS_PORT
+    }
+};
+
 module.exports = {
     BACKEND_URL,
     GIT_AUTH_TOKEN,
@@ -25,5 +33,6 @@ module.exports = {
     JIRA_AUTH_TOKEN,
     JIRA_HOST,
     JIRA_PLATFORM,
+    REDIS_CONFIG,
     SKILLHUB_API_KEY
 };
