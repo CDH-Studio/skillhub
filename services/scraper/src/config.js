@@ -8,6 +8,8 @@ const {
     JIRA_AUTH_TOKEN = null,
     JIRA_HOST = "https://jira.ised-isde.canada.ca",
     JIRA_PLATFORM = "server",
+    PROXY_HOST = null,
+    PROXY_PORT = null,
     REDIS_PORT = 6379,
     SKILLHUB_API_KEY = "bf3d6ab4879949d5845eb50a31e9e3fa"
 } = process.env;
@@ -33,6 +35,8 @@ module.exports = {
     JIRA_AUTH_TOKEN,
     JIRA_HOST,
     JIRA_PLATFORM,
+    PROXY_HOST,
+    PROXY_PORT,
     REDIS_CONFIG,
     SKILLHUB_API_KEY
 };

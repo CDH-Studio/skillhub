@@ -6,26 +6,27 @@ apiVersion: v1
 kind: DeploymentConfig
 
 metadata:
-    name: scraper
+    name: frontend
     labels:
         app: skillhub
-        run: scraper
+        run: frontend
 
 spec:
     replicas: 1
     selector:
-        run: scraper
+        run: frontend
     template:
         metadata:
             labels:
-                run: scraper
+                run: frontend
         spec:
             containers:
-            - name: scraper
-              image: docker-registry.default.svc:5000/skillhub/scraper:latest
+            - name: frontend
+              image: docker-registry.default.svc:5000/skillhub/frontend:latest
               imagePullPolicy: Always
               ports:
-              - containerPort: 5000
+              - containerPort: 3000
+
               env:
               - name: BACKEND_PORT
                 value: "80"
@@ -43,26 +44,20 @@ spec:
                 value: "80"
               - name: PREDICTIONS_HOST
                 value: "predictions-skillhub.apps.ic.gc.ca"
+              - name: REDIS_PORT
+                value: "6379"
+              - name: REDIS_HOST
+                value: "redis"
               - name: SCRAPER_PORT
                 value: "80"
               - name: SCRAPER_HOST
                 value: "scraper-skillhub.apps.ic.gc.ca"
-              - name: JIRA_HOST
-                value: "https://jira.ised-isde.canada.ca"
-              - name: JIRA_PLATFORM
-                value: "server"
-              - name: BACKEND_PROTOCOL
-                value: "https"
-              - name: JIRA_AUTH_TOKEN
-                valueFrom:
-                    secretKeyRef:
-                        name: scraper-secrets
-                        key: JIRA_AUTH_TOKEN
-              - name: SKILLHUB_API_KEY
-                valueFrom:
-                    secretKeyRef:
-                        name: scraper-secrets
-                        key: SKILLHUB_API_KEY
+              - name: SCRAPER_WORKER_PORT
+                value: 
+              - name: SCRAPER_WORKER_HOST
+                value: 
+              - name: NODE_ENV
+                value: "production"
 
     triggers:
     - type: ConfigChange
@@ -70,7 +65,7 @@ spec:
       imageChangeParams:
           automatic: true
           containerNames:
-          - scraper
+          - frontend
           from:
               kind: ImageStreamTag
-              name: "scraper:latest"
+              name: "frontend:latest"

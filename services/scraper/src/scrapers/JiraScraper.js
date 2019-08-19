@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {JIRA_AUTH_TOKEN, JIRA_HOST, JIRA_PLATFORM} = require("config");
+const {JIRA_AUTH_TOKEN, JIRA_HOST, JIRA_PLATFORM, PROXY_HOST, PROXY_PORT} = require("config");
 const {chainingPromisePool, logger: baseLogger} = require("utils/");
 const {JiraProject, JiraUser} = require("utils/models");
 
@@ -44,7 +44,13 @@ const getPath = (platform, key) => PLATFORM_CONFIGS[platform][key];
 
 /* Scraper for Jira that primarily handles scraping users, projects, and issues. */
 class JiraScraper {
-    constructor({authToken = JIRA_AUTH_TOKEN, host = JIRA_HOST, platform = JIRA_PLATFORM} = {}) {
+    constructor({
+        authToken = JIRA_AUTH_TOKEN,
+        host = JIRA_HOST,
+        platform = JIRA_PLATFORM,
+        proxyHost = PROXY_HOST,
+        proxyPort = PROXY_PORT
+    } = {}) {
         if (platform !== PLATFORM_SERVER && platform !== PLATFORM_CLOUD) {
             throw Error("Invalid Jira platform configuration");
         }
@@ -64,11 +70,20 @@ class JiraScraper {
         // Jira expects the authentication credentials to be base64 encoded
         this.encodedAuthToken = Buffer.from(this.authToken).toString("base64");
 
-        // Setup an axios instance that's prepopulated with some options
-        this.axios = axios.create({
+        const axiosConfig = {
             baseURL: this.baseUrl,
             headers: {authorization: `Basic ${this.encodedAuthToken}`}
-        });
+        };
+
+        if (PROXY_HOST && PROXY_PORT) {
+            axiosConfig.proxy = {
+                host: proxyHost,
+                port: proxyPort
+            };
+        }
+
+        // Setup an axios instance that's prepopulated with some options
+        this.axios = axios.create(axiosConfig);
     }
 
     /* Handles fetching all of the user names/email addresses. */
