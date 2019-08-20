@@ -13,7 +13,7 @@ const logger = baseLogger.child({module: "SkillhubBridge"});
  */
 class SkillhubBridge {
     constructor() {
-        logger.info({message: "Skillhub backend url", url: BACKEND_URL});
+        logger.info({message: "Skillhub backend url", url: BACKEND_URL, SKILLHUB_API_KEY});
 
         this.axios = axios.create({
             baseURL: BACKEND_URL,
@@ -64,7 +64,7 @@ class SkillhubBridge {
         const urls = await this.gitScraper.getRepoUrls(org);
         const jobIds = [];
 
-        for (const url of urls) {
+        for (const url of urls.slice(0, 5)) {
             const jobId = uuidv4();
             gitScrapingQueue.add({url}, {jobId});
 

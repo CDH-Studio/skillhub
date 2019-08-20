@@ -16,7 +16,7 @@ const PLATFORM_GITHUB = "github";
 const PLATFORM_CONFIGS = {
     [PLATFORM_BITBUCKET]: {
         basePath: "/rest/api/1.0",
-        getProjects: () => "/projects?limit=1000",
+        getProjects: "/projects?limit=1000",
         getProjectRepos: (project) => `/projects/${project}/repos?limit=1000`
     },
     [PLATFORM_GITHUB]: {
@@ -62,13 +62,54 @@ class GitScraper {
      */
     async getRepoUrls(organization = "") {
         return await logExecutionTime("getRepoUrls", {organization}, async () => {
-            const path = getPath(this.platform, "getOrgRepos")(organization);
+            if (this.platform === PLATFORM_BITBUCKET) {
+                return await this._getRepoUrlsBitbucket();
+            } else if (this.platform === PLATFORM_GITHUB) {
+                if (!organization) {
+                    throw new Error("Must provide an organization as a query param.");
+                }
 
-            const result = await this.axios.get(path);
-            const cloneUrls = result.data.map(({clone_url: cloneUrl}) => cloneUrl);
-
-            return cloneUrls;
+                return await this._getRepoUrlsGithub(organization);
+            } else {
+                return [];
+            }
         });
+    }
+
+    async _getRepoUrlsBitbucket() {
+        logger.info({message: "Starting to get Bitbucket clone urls..."});
+        const getProjectsPath = getPath(this.platform, "getProjects");
+
+        const projectsResult = await this.axios.get(getProjectsPath);
+        const projects = projectsResult.data.values.map(({key}) => key);
+
+        let cloneUrls = [];
+
+        for (const project of projects) {
+            const reposPath = getPath(this.platform, "getProjectRepos")(project);
+
+            const reposResult = await this.axios.get(reposPath);
+            const repoCloneUrls = reposResult.data.values.map((repo) => {
+                const cloneLinkObject = repo.links.filter(({name}) => name === "ssh");
+                return cloneLinkObject.href;
+            });
+
+            cloneUrls = cloneUrls.concat(repoCloneUrls);
+        }
+
+        logger.info({message: "Bitbucket clone urls", cloneUrls});
+        return cloneUrls;
+    }
+
+    async _getRepoUrlsGithub(organization) {
+        logger.info({message: "Starting to get Github clone urls..."});
+        const path = getPath(this.platform, "getOrgRepos")(organization);
+
+        const result = await this.axios.get(path);
+        const cloneUrls = result.data.map(({clone_url: cloneUrl}) => cloneUrl);
+
+        logger.info({message: "Github clone urls", cloneUrls});
+        return cloneUrls;
     }
 
     /* Clones the given repo and generates a raw skill mapping for it. This raw skill mapping can then be used

@@ -34,13 +34,13 @@ router.get("/skills", asyncMiddleware(async (req, res) => {
 
     const {org} = req.query;
 
-    if (!org) {
-        res.status(400).send({status: "error", message: "Must provide an organization as a query param."});
-        return;
+    try {
+        const result = await skillhubBridge.scrapeSkills(org);
+        res.send({status: "success", result});
+    } catch (e) {
+        const status = (e.message === "Must provide an organization as a query param.") ? 400 : 500;
+        res.status(status).send({status: "error", message: e.message});
     }
-
-    const result = await skillhubBridge.scrapeSkills(org);
-    res.send({status: "success", result});
 }));
 
 router.get("/contributors/jobs", asyncMiddleware(getJobs(jiraScrapingQueue)));

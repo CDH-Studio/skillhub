@@ -31,9 +31,14 @@ RUN \
 WORKDIR $APP_HOME
 
 RUN \
+    # So that the dynamic OpenShift user can access $HOME
     chgrp -R 0 $HOME && \
+    # So that the dynamic OpenShift user can access $HOME
     chmod -R g=u $HOME && \
+    # So that the run.sh script can add the dynamic OpenShift user _as a user_
+    # Which is needed because ssh needs a proper user defined to work
     chmod g+w /etc/passwd && \
+    # So that git doesn't yell about not having permissions to ~/.config
     chmod -R g+w $HOME/.config/
 
 # Move in the project's dependencies and code
