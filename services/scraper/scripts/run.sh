@@ -9,6 +9,12 @@ fi
 echo "Home Folder"
 echo "$(ls /home/scraper)"
 
+echo "ssh folder"
+echo "$(ls /home/scraper/ssh)"
+
+echo "ssh2 folder"
+echo "$(ls /home/scraper/ssh2)"
+
 if [ -w /home/scraper/ssh2/bitbucket-known-hosts ]; then
     echo "Copying known hosts"
     cp /home/scraper/ssh2/bitbucket-known-hosts /home/scraper/.ssh/known_hosts
