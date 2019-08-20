@@ -34,7 +34,7 @@ RUN \
     chmod -R g=u $HOME
 
 # Copy in the SSH config
-COPY ./vendor/ssh-config $HOME/.ssh/
+COPY ./vendor/ssh-config $HOME/.ssh/config
 
 # Move in the project's dependencies and code
 COPY package.json package-lock.json ./
