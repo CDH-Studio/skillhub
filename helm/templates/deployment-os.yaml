@@ -121,7 +121,7 @@ spec:
                     mountPath: {{index $sshKey "mount_path"}}
                     readOnly: true
                   - name: {{index $sshKey "known_hosts_secret_name"}}
-                    mountPath: {{index $sshKey "mount_path"}}
+                    mountPath: {{index $sshKey "known_hosts_mount_path"}}
                     readOnly: true
                 {{- end}}
               

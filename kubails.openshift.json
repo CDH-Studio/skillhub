@@ -216,7 +216,8 @@
             "ssh_key": {
                 "secret_name": "bitbucket-ssh-key",
                 "mount_path": "/home/scraper/ssh",
-                "known_hosts_secret_name": "bitbucket-known-hosts"
+                "known_hosts_secret_name": "bitbucket-known-hosts",
+                "known_hosts_mount_path": "/home/scraper/ssh2"
             },
             "templates": [
                 "deployment-config-os",
@@ -282,7 +283,8 @@
             "ssh_key": {
                 "secret_name": "bitbucket-ssh-key",
                 "mount_path": "/home/scraper/ssh",
-                "known_hosts_secret_name": "bitbucket-known-hosts"
+                "known_hosts_secret_name": "bitbucket-known-hosts",
+                "known_hosts_mount_path": "/home/scraper/ssh2"
             },
             "templates": [
                 "deployment-os"

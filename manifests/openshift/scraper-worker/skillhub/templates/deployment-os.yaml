@@ -95,7 +95,7 @@ spec:
                     mountPath: /home/scraper/ssh
                     readOnly: true
                   - name: bitbucket-known-hosts
-                    mountPath: /home/scraper/ssh
+                    mountPath: /home/scraper/ssh2
                     readOnly: true
             volumes:
               - name: bitbucket-ssh-key
