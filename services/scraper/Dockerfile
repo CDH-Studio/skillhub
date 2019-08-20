@@ -31,7 +31,8 @@ WORKDIR $APP_HOME
 
 RUN \
     chgrp -R 0 $HOME && \
-    chmod -R g=u $HOME
+    chmod -R g=u $HOME && \
+    chmod g+w /etc/passwd
 
 # Copy in the SSH config
 COPY ./vendor/ssh-config $HOME/.ssh/config
