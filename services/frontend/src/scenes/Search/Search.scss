@@ -23,7 +23,8 @@ $search-card-width: $default-spacing * 45;
 }
 
 .list-container {
-    padding: 0 $default-spacing*2;
+    padding-left: $default-spacing*2;
+    padding-right: $default-spacing;
     display: flex;
     flex-direction: column;
     height: calc(100% - #{$navbar-height});
@@ -35,18 +36,18 @@ $search-card-width: $default-spacing * 45;
     }
 
     .profile-list-card {
+        @include query-search-card-width {
+            width: $tablet-card-width;
+        }
+        @include animate(bounceIn, 0.5s);
+        @include hover-box-shadow;
+
         display: flex;
         flex-shrink: 0;
         margin-bottom: $default-spacing;
         margin-top: $default-spacing;
         padding: $default-spacing * 2;
         width: $search-card-width;
-        @include animate(bounceIn, 0.5s);
-        @include query-search-card-width {
-            width: auto;
-            min-width: $minimum-width;
-        }
-        @include hover-box-shadow;
     }
 
     .projects-list-card {
@@ -131,6 +132,7 @@ $search-card-width: $default-spacing * 45;
     justify-content: center;
     padding: $default-spacing;
     border-top: 1px solid $color-text-secondary;
+    padding: $default-spacing;
 
     .paginator {
         display: flex;

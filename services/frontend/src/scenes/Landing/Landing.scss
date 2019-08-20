@@ -72,7 +72,7 @@
                 font-weight: bold;
                 margin-bottom: $default-spacing * 2;
                 text-align: center;
-                z-index: inherit;
+                z-index: 1;
             }
 
             .landing-create-profile {
@@ -84,7 +84,7 @@
                 color: $color-light;
                 display: flex;
                 padding: $default-spacing $default-spacing*2;
-                z-index: inherit;
+                z-index: 1;
             }
         }
     }

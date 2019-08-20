@@ -1,11 +1,14 @@
-import React, {useCallback, useState, useMemo} from "react";
+import React, {useCallback, useState, useMemo, useEffect} from "react";
 import {useInput} from "utils/hooks";
 import {Add, Search} from "@material-ui/icons";
 import {ProjectCard, RoleInputDialog} from "components/";
 import {Project} from "utils/models";
 import {Button, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@material-ui/core";
+import ReactPaginate from "react-paginate";
 import connect from "./connect";
 import "./Projects.scss";
+
+const CARDS_PER_PAGE = 10;
 
 const Projects = ({
     clearCreateError, error, isUserProfile, onSubmit, profile, projects, roleInputDialogOpen,
@@ -64,6 +67,13 @@ const Projects = ({
     );
 };
 
+const handlePageChange = (newPageIndex, setData, cards) => {
+    setData(cards.slice(
+        newPageIndex * CARDS_PER_PAGE,
+        newPageIndex * CARDS_PER_PAGE + CARDS_PER_PAGE
+    ));
+};
+
 const SearchDialog = ({
     clearCreateError, error, onSubmit, profile, roleInputDialogOpen,
     searchDialogOpen, setDialogState, unrelatedProjects
@@ -95,7 +105,12 @@ const SearchDialog = ({
         Project.searchProjects(unrelatedProjects, searchTerm)
     ), [unrelatedProjects, searchTerm]);
 
-    const projectCards = useMemo(() => searchedProjects.map((project) => (
+    const [paginatedProjects, setPaginatedProjects] = useState(searchedProjects);
+    useEffect(() => (
+        handlePageChange(0, setPaginatedProjects, searchedProjects)
+    ), [searchTerm, searchedProjects]);
+
+    const projectCards = useMemo(() => paginatedProjects.map((project) => (
         <ProjectCard
             className="add-projects-dialog-card"
             key={project.id}
@@ -105,7 +120,7 @@ const SearchDialog = ({
             setCurrentProject={() => setCurrentProject(project)}
             {...project}
         />
-    )), [searchedProjects, openRoleInputDialog, setCurrentProject]);
+    )), [paginatedProjects, openRoleInputDialog, setCurrentProject]);
 
     return (
         <>
@@ -150,6 +165,21 @@ const SearchDialog = ({
                     {projectCards}
                 </DialogContent>
                 <DialogActions>
+                    <div className="pagination-container">
+                        <ReactPaginate
+                            previousLabel={"Previous"}
+                            nextLabel={"Next"}
+                            pageCount={Math.ceil(searchedProjects.length / CARDS_PER_PAGE)}
+                            marginPagesDisplayed={1}
+                            pageRangeDisplayed={2}
+                            onPageChange={(newPageIndex) => {
+                                handlePageChange(newPageIndex.selected, setPaginatedProjects, searchedProjects);
+                            }}
+                            containerClassName={"paginator"}
+                            subContainerClassName={"pages pagination"}
+                            activeClassName={"active"}
+                        />
+                    </div>
                     <Button onClick={closeSearchDialog} color="primary">
                         Cancel
                     </Button>
