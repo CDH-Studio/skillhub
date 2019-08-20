@@ -2,3 +2,6 @@
 
 # Don't touch line endings of model files
 *.joblib binary
+*.jpg binary
+*.png binary
+*.pdf binary
