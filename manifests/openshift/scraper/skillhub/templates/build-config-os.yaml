@@ -1,0 +1,22 @@
+##---
+# Source: skillhub/templates/build-config-os.yaml
+
+
+apiVersion: v1
+kind: BuildConfig
+metadata:
+    name: scraper
+    labels:
+        app: skillhub
+spec:
+    source:
+        git:
+            uri: https://github.com/CDH-Studio/skillhub.git
+            ref: "master"
+        contextDir: "services/scraper"
+    strategy:
+        type: Docker
+    output:
+        to:
+            kind: ImageStreamTag
+            name: "scraper:latest"

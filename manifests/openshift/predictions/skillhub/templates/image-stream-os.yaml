@@ -1,0 +1,10 @@
+##---
+# Source: skillhub/templates/image-stream-os.yaml
+
+
+apiVersion: v1
+kind: ImageStream
+metadata:
+    name: predictions
+    labels:
+        app: skillhub

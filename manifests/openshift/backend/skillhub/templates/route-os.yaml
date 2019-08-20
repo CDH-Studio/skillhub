@@ -1,0 +1,23 @@
+##---
+# Source: skillhub/templates/route-os.yaml
+
+
+apiVersion: v1
+kind: Route
+metadata:
+    name: backend
+    labels:
+        app: skillhub
+        run: backend
+    annotations:
+        haproxy.router.openshift.io/timeout: 600s
+spec:
+    host: backend-skillhub.apps.ic.gc.ca
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+    to:
+        kind: Service
+        name: backend
+        weight: 100
+    wildcardPolicy: None

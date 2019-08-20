@@ -6,7 +6,7 @@
     .project-info-card-active-section {
         align-self: flex-start;
         display: flex;
-        flex: 1;
+        width: $default-spacing*6;
     }
 
     .project-info-card-content-section {
