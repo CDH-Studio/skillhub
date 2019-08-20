@@ -17,15 +17,16 @@ RUN \
     apt-get install -y nodejs
 
 # Setup a non-root user
-RUN \
-    mkdir -p /home/scraper && \
-    groupadd -r scraper && \
-    useradd -r -g scraper -d /home/scraper -s /sbin/nologin -c "Docker image user" scraper
-
 ENV HOME=/home/scraper
 ENV APP_HOME=/home/scraper/code
 
-RUN mkdir $APP_HOME && mkdir $HOME/.ssh
+RUN \
+    mkdir -p $HOME && \
+    mkdir -p $APP_HOME && \
+    mkdir -p $HOME/.ssh && \
+    useradd -u 10001 -r -g 0 -d $HOME -s /sbin/nologin -c "Docker image user" scraper && \
+    chown -R 10001:0 $HOME
+
 WORKDIR $APP_HOME
 
 RUN \
@@ -42,6 +43,6 @@ RUN npm install
 COPY . .
 
 EXPOSE 5000
-USER scraper
+USER 10001
 
 CMD ["npm", "run", "start:prod"]
