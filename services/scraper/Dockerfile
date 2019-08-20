@@ -28,6 +28,10 @@ ENV APP_HOME=/home/scraper/code
 RUN mkdir $APP_HOME && mkdir $HOME/.ssh
 WORKDIR $APP_HOME
 
+RUN \
+    chgrp -R 0 $HOME && \
+    chmod -R g=u $HOME
+
 # Copy in the SSH config
 COPY ./vendor/ssh-config $HOME/.ssh/
 
