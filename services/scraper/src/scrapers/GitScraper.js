@@ -90,7 +90,7 @@ class GitScraper {
 
             const reposResult = await this.axios.get(reposPath);
             const repoCloneUrls = reposResult.data.values.map((repo) => {
-                const cloneLinkObject = repo.links.filter(({name}) => name === "ssh");
+                const cloneLinkObject = repo.links.clone.filter(({name}) => name === "ssh");
                 return cloneLinkObject.href;
             });
 
