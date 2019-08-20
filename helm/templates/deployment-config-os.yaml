@@ -85,6 +85,9 @@ spec:
                 - name: {{index $sshKey "secret_name"}}
                   mountPath: {{index $sshKey "mount_path"}}
                   readOnly: true
+                - name: {{index $sshKey "known_hosts_secret_name"}}
+                  mountPath: {{index $sshKey "mount_path"}}
+                  readOnly: true
               {{- end}}
               
             {{- if $sshKey}}
@@ -92,6 +95,9 @@ spec:
               - name: {{index $sshKey "secret_name"}}
                 secret:
                     secretName: {{index $sshKey "secret_name"}}
+              - name: {{index $sshKey "known_hosts_secret_name"}}
+                secret:
+                    secretName: {{index $sshKey "known_hosts_secret_name"}}
             {{- end}}
 
             {{- if or $waitForService $preStartupCommand}}

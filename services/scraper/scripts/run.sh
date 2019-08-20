@@ -6,9 +6,13 @@ if ! whoami &> /dev/null; then
     fi
 fi
 
+if [ -w ~/ssh/bitbucket-known-hosts ]; then
+    cp ~/ssh/bitbucket-known-hosts ~/.ssh/known_hosts
+fi
+
 if [ -w ~/ssh/bitbucket-ssh-key ]; then
-    eval $(ssh-agent -s)
-    ssh-add ~/ssh/bitbucket-ssh-key
+    cp ~/ssh/bitbucket-ssh-key ~/.ssh/id_rsa
+    chmod 400 ~/.ssh/id_rsa
 fi
 
 npm run start:prod

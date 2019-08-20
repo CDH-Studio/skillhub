@@ -280,7 +280,8 @@
             },
             "ssh_key": {
                 "secret_name": "bitbucket-ssh-key",
-                "mount_path": "/home/scraper/ssh"
+                "mount_path": "/home/scraper/ssh",
+                "known_hosts_secret_name": "bitbucket-known-hosts"
             },
             "templates": [
                 "deployment-os"

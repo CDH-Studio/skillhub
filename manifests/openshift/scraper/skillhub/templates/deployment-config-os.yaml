@@ -89,10 +89,16 @@ spec:
                 - name: bitbucket-ssh-key
                   mountPath: /home/scraper/ssh
                   readOnly: true
+                - name: 
+                  mountPath: /home/scraper/ssh
+                  readOnly: true
             volumes:
               - name: bitbucket-ssh-key
                 secret:
                     secretName: bitbucket-ssh-key
+              - name: 
+                secret:
+                    secretName: 
 
     triggers:
     - type: ConfigChange

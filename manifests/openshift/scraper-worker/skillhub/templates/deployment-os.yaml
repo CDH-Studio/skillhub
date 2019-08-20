@@ -94,10 +94,16 @@ spec:
                   - name: bitbucket-ssh-key
                     mountPath: /home/scraper/ssh
                     readOnly: true
+                  - name: bitbucket-known-hosts
+                    mountPath: /home/scraper/ssh
+                    readOnly: true
             volumes:
               - name: bitbucket-ssh-key
                 secret:
                     secretName: bitbucket-ssh-key
+              - name: bitbucket-known-hosts
+                secret:
+                    secretName: bitbucket-known-hosts
             initContainers:
               - name: wait-for-service
                 image: busybox
