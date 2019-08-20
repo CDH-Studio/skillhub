@@ -28,9 +28,8 @@ spec:
                 ports:
                   - containerPort: 5000
                 command:
-                  - "npm"
-                  - "run"
-                  - "worker"
+                  - "sh"
+                  - "./scripts/run_worker.sh"
 
                 env:
                   - name: BACKEND_PORT

@@ -230,7 +230,7 @@
             "wait_for_service": null
         },
         "scraper-worker": {
-            "command": ["npm", "run", "worker"],
+            "command": ["sh", "./scripts/run_worker.sh"],
             "container_port": "5000",
             "env": [
                 {
