@@ -24,6 +24,7 @@ RUN \
     mkdir -p $HOME && \
     mkdir -p $APP_HOME && \
     mkdir -p $HOME/.ssh && \
+    mkdir -p $HOME/.config && \
     useradd -u 10001 -r -g 0 -d $HOME -s /sbin/nologin -c "Docker image user" scraper && \
     chown -R 10001:0 $HOME
 
@@ -32,7 +33,8 @@ WORKDIR $APP_HOME
 RUN \
     chgrp -R 0 $HOME && \
     chmod -R g=u $HOME && \
-    chmod g+w /etc/passwd
+    chmod g+w /etc/passwd && \
+    chmod -R g+w $HOME/.config/
 
 # Copy in the SSH config
 COPY ./vendor/ssh-config $HOME/.ssh/config

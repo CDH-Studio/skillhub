@@ -6,4 +6,9 @@ if ! whoami &> /dev/null; then
     fi
 fi
 
+if [ -w ~/ssh/bitbucket-ssh-key ]; then
+    eval $(ssh-agent -s)
+    ssh-add ~/ssh/bitbucket-ssh-key
+fi
+
 npm run start:prod
