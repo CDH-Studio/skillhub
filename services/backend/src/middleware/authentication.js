@@ -1,6 +1,7 @@
 const authentication = require("@feathersjs/authentication");
 const jwt = require("@feathersjs/authentication-jwt");
 const local = require("@feathersjs/authentication-local");
+const CustomVerifier = require("./CustomVerifier");
 
 module.exports = function (app) {
     const config = app.get("authentication");
@@ -17,7 +18,7 @@ module.exports = function (app) {
     // Set up authentication with the secret
     app.configure(authentication(config));
     app.configure(jwt());
-    app.configure(local());
+    app.configure(local({Verifier: CustomVerifier}));
 
     // The `authentication` service is used to create a JWT.
     // The before `create` hook registers strategies that can be used

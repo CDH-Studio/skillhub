@@ -47,6 +47,7 @@ $project-card-width: $default-spacing * 45;
 
 .add-projects-dialog-card {
     margin: $default-spacing*0.5 0;
+    width: 100%;
 }
 
 .search-dialog {
@@ -66,5 +67,10 @@ $project-card-width: $default-spacing * 45;
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .pagination-container {
+        border-top: 0;
+        padding: $default-spacing * 0.5;
     }
 }

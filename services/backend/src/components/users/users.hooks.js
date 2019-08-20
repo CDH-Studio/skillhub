@@ -5,8 +5,19 @@ const errors = require("@feathersjs/errors");
 
 const EMAIL_REGEX = /^\S+@\S+$/;
 
-const validateUserInfo = () => (context) => {
+const validateUserInfo = () => async (context) => {
     const {email, password} = context.data;
+    const result = await context.app.service("users").find({
+        query: {
+            email: {
+                $iLike: email
+            }
+        }
+    });
+
+    if (result.length > 0) {
+        throw new errors.BadRequest("Account already exists");
+    }
 
     if (!email || !password) {
         throw new errors.BadRequest("Missing credentials");
