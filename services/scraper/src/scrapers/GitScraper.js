@@ -82,7 +82,7 @@ class GitScraper {
 
         logger.info({message: "Scraping projects..."});
         const projectsResult = await this.axios.get(getProjectsPath);
-        logger.info({message: "Projects result", projectsResult: projectsResult.data});
+        logger.info({message: "Projects result", projectsResult: JSON.stringify(projectsResult.data)});
         const projects = projectsResult.data.values.map(({key}) => key);
 
         let cloneUrls = [];
@@ -94,14 +94,16 @@ class GitScraper {
 
             logger.info({message: "Scraping repos..."});
             const reposResult = await this.axios.get(reposPath);
-            logger.info({message: "Repos result", repoResult: reposResult.data});
+            logger.info({message: "Repos result", repoResult: JSON.stringify(reposResult.data)});
 
             const repoCloneUrls = reposResult.data.values.map((repo) => {
+                logger.info({message: "repo", repo: JSON.stringify(repo)});
                 const cloneLinkObject = repo.links.clone.filter(({name}) => name === "ssh");
+                logger.info({message: "cloneLinkObject", cloneLinkObject: JSON.stringify(cloneLinkObject)});
                 return cloneLinkObject.href;
             });
 
-            logger.info({repoCloneUrls});
+            logger.info({message: "repoCloneUrls", repoCloneUrls: JSON.stringify(repoCloneUrls)});
             cloneUrls = cloneUrls.concat(repoCloneUrls);
         }
 
