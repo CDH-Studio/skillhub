@@ -98,9 +98,13 @@ class GitScraper {
 
             const repoCloneUrls = reposResult.data.values.map((repo) => {
                 logger.info({message: "repo", repo: JSON.stringify(repo)});
-                const cloneLinkObject = repo.links.clone.filter(({name}) => name === "ssh");
-                logger.info({message: "cloneLinkObject", cloneLinkObject: JSON.stringify(cloneLinkObject)});
-                return cloneLinkObject.href;
+                const cloneLinkObjects = repo.links.clone.filter(({name}) => name === "ssh");
+                
+                if (cloneLinkObjects.length) {
+                    return cloneLinkObjects[0].href;
+                } else {
+                    return null;
+                }
             });
 
             logger.info({message: "repoCloneUrls", repoCloneUrls: JSON.stringify(repoCloneUrls)});
