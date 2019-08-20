@@ -36,9 +36,6 @@ RUN \
     chmod g+w /etc/passwd && \
     chmod -R g+w $HOME/.config/
 
-# Copy in the SSH config
-COPY ./vendor/ssh-config $HOME/.ssh/config
-
 # Move in the project's dependencies and code
 COPY package.json package-lock.json ./
 RUN npm install
