@@ -213,7 +213,10 @@
                     "SKILLHUB_API_KEY"
                 ]
             },
-            "ssh_key": "bitbucket-ssh-key",
+            "ssh_key": {
+                "secret_name": "bitbucket-ssh-key",
+                "mount_path": "/home/scraper/ssh"
+            },
             "templates": [
                 "deployment-config-os",
                 "service-os",
@@ -275,7 +278,10 @@
                     "SKILLHUB_API_KEY"
                 ]
             },
-            "ssh_key": "bitbucket-ssh-key",
+            "ssh_key": {
+                "secret_name": "bitbucket-ssh-key",
+                "mount_path": "/home/scraper/ssh"
+            },
             "templates": [
                 "deployment-os"
             ],

@@ -92,7 +92,7 @@ spec:
                             key: SKILLHUB_API_KEY
                 volumeMounts:
                   - name: bitbucket-ssh-key
-                    mountPath: "/ssh"
+                    mountPath: /home/scraper/ssh
                     readOnly: true
             volumes:
               - name: bitbucket-ssh-key

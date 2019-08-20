@@ -39,12 +39,6 @@ class GitScraper {
             throw Error("Missing Git platform auth token");
         }
 
-        if (platform === PLATFORM_BITBUCKET) {
-            // Use this without await since we can't have async constructors;
-            // just assume that it works. Very safe.
-            this._enableGitSsh();
-        }
-
         this.authToken = authToken || "";
         this.host = host;
         this.platform = platform;
@@ -116,13 +110,6 @@ class GitScraper {
                 throw new Error(err);
             }
         });
-    }
-
-    async _enableGitSsh() {
-        await promisifiedSpawn("git", [
-            "config", "--global", "core.sshCommand",
-            "'/usr/bin/ssh -i /ssh/bitbucket-ssh-key'"
-        ]);
     }
 
     /* Clones a repo to a given file path. */

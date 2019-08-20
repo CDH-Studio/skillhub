@@ -16,15 +16,28 @@ RUN \
     curl -sL https://deb.nodesource.com/setup_10.x | bash && \
     apt-get install -y nodejs
 
-RUN mkdir -p /backend
+# Setup a non-root user
+RUN \
+    mkdir -p /home/scraper && \
+    groupadd -r scraper && \
+    useradd -r -g scraper -d /home/scraper -s /sbin/nologin -c "Docker image user" scraper
 
-WORKDIR /backend
+ENV HOME=/home/scraper
+ENV APP_HOME=/home/scraper/code
 
+RUN mkdir $APP_HOME && mkdir $HOME/.ssh
+WORKDIR $APP_HOME
+
+# Copy in the SSH config
+COPY ./vendor/ssh-config $HOME/.ssh/
+
+# Move in the project's dependencies and code
 COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
 
 EXPOSE 5000
+USER scraper
 
 CMD ["npm", "run", "start:prod"]

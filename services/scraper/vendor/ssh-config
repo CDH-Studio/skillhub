@@ -1,0 +1,5 @@
+Host bitbucket
+    Hostname asbscr.ic.gc.ca
+    Port 7999
+    IdentityFile ~/ssh/bitbucket-ssh-key
+    IdentitesOnly yes

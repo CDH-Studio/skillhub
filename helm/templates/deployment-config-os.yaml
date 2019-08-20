@@ -82,16 +82,16 @@ spec:
 
               {{- if $sshKey}}
               volumeMounts:
-                - name: {{$sshKey}}
-                  mountPath: "/ssh"
+                - name: {{index $sshKey "secret_name"}}
+                  mountPath: {{index $sshKey "mount_path"}}
                   readOnly: true
               {{- end}}
               
             {{- if $sshKey}}
             volumes:
-              - name: {{$sshKey}}
+              - name: {{index $sshKey "secret_name"}}
                 secret:
-                    secretName: {{$sshKey}}
+                    secretName: {{index $sshKey "secret_name"}}
             {{- end}}
 
             {{- if or $waitForService $preStartupCommand}}
