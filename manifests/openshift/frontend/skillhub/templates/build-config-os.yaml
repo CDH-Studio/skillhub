@@ -12,7 +12,7 @@ spec:
     source:
         git:
             uri: https://github.com/CDH-Studio/skillhub.git
-            ref: "CDHSH-132"
+            ref: "master"
         contextDir: "services/frontend"
     strategy:
         type: Docker
