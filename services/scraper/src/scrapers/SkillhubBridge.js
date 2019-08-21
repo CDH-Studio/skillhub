@@ -64,7 +64,7 @@ class SkillhubBridge {
         const urls = await this.gitScraper.getRepoUrls(org);
         const jobIds = [];
 
-        for (const url of urls.slice(0, 5)) {
+        for (const url of urls) {
             const jobId = uuidv4();
             gitScrapingQueue.add({url}, {jobId});
 

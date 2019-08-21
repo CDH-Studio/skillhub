@@ -87,7 +87,7 @@ class GitScraper {
 
         let cloneUrls = [];
 
-        logger.info({message: "Looping over projects..."})
+        logger.info({message: "Looping over projects..."});
         for (const project of projects) {
             logger.info({message: "Projects", project});
             const reposPath = getPath(this.platform, "getProjectRepos")(project);
@@ -99,7 +99,7 @@ class GitScraper {
             const repoCloneUrls = reposResult.data.values.map((repo) => {
                 logger.info({message: "repo", repo: JSON.stringify(repo)});
                 const cloneLinkObjects = repo.links.clone.filter(({name}) => name === "ssh");
-                
+
                 if (cloneLinkObjects.length) {
                     return cloneLinkObjects[0].href;
                 } else {
