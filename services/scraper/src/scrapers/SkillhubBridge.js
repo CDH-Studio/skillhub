@@ -13,7 +13,7 @@ const logger = baseLogger.child({module: "SkillhubBridge"});
  */
 class SkillhubBridge {
     constructor() {
-        logger.info({message: "Skillhub backend url", url: BACKEND_URL, SKILLHUB_API_KEY});
+        logger.info({message: "Skillhub backend url", url: BACKEND_URL});
 
         this.axios = axios.create({
             baseURL: BACKEND_URL,

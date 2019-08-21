@@ -80,24 +80,18 @@ class GitScraper {
         logger.info({message: "Starting to get Bitbucket clone urls..."});
         const getProjectsPath = getPath(this.platform, "getProjects");
 
-        logger.info({message: "Scraping projects..."});
         const projectsResult = await this.axios.get(getProjectsPath);
-        logger.info({message: "Projects result", projectsResult: JSON.stringify(projectsResult.data)});
         const projects = projectsResult.data.values.map(({key}) => key);
+        logger.info({message: "Bitbucket projects", projects});
 
         let cloneUrls = [];
 
-        logger.info({message: "Looping over projects..."});
         for (const project of projects) {
-            logger.info({message: "Projects", project});
             const reposPath = getPath(this.platform, "getProjectRepos")(project);
 
-            logger.info({message: "Scraping repos..."});
             const reposResult = await this.axios.get(reposPath);
-            logger.info({message: "Repos result", repoResult: JSON.stringify(reposResult.data)});
 
             const repoCloneUrls = reposResult.data.values.map((repo) => {
-                logger.info({message: "repo", repo: JSON.stringify(repo)});
                 const cloneLinkObjects = repo.links.clone.filter(({name}) => name === "ssh");
 
                 if (cloneLinkObjects.length) {
@@ -107,7 +101,6 @@ class GitScraper {
                 }
             });
 
-            logger.info({message: "repoCloneUrls", repoCloneUrls: JSON.stringify(repoCloneUrls)});
             cloneUrls = cloneUrls.concat(repoCloneUrls);
         }
 
