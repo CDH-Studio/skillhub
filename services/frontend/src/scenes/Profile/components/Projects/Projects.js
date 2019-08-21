@@ -21,7 +21,18 @@ const Projects = ({
     const projectCards = useMemo(() => projects.reduce((acc, project) => {
         const projectActive = Project.isActive(project);
 
-        if (projectActive) {
+        if (isUserProfile && projectActive) {
+            return [
+                ...acc,
+                <ProjectCard
+                    className="profile-project-card"
+                    key={project.id}
+                    isActive={projectActive}
+                    showMoreSkills={true}
+                    {...project}
+                />
+            ];
+        } else if (!isUserProfile) {
             return [
                 ...acc,
                 <ProjectCard
@@ -34,7 +45,7 @@ const Projects = ({
             ];
         }
         return acc;
-    }, []), [projects]);
+    }, []), [isUserProfile, projects]);
 
     return (
         <>
@@ -49,7 +60,7 @@ const Projects = ({
                 unrelatedProjects={unrelatedProjects}
             />
             <div className="profile-card-projects-header-section">
-                <h2>{sectionName}</h2>
+                <h2>{isUserProfile ? sectionName : "Projects"}</h2>
                 {isUserProfile &&
                     <IconButton
                         className="profile-card-edit-projects-button"
