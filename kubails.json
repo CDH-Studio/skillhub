@@ -161,6 +161,14 @@
             "container_port": "5000",
             "env": [
                 {
+                    "name": "GIT_PLATFORM",
+                    "value": "github"
+                },
+                {
+                    "name": "GIT_HOST",
+                    "value": "https://api.github.com"
+                },
+                {
                     "name": "JIRA_HOST",
                     "value": "https://jira.ised-isde.canada.ca"
                 },
@@ -186,6 +194,7 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
+                    "GIT_AUTH_TOKEN",
                     "JIRA_AUTH_TOKEN",
                     "SKILLHUB_API_KEY"
                 ]
@@ -202,6 +211,14 @@
             "command": ["npm", "run", "worker"],
             "container_port": "5000",
             "env": [
+                {
+                    "name": "GIT_PLATFORM",
+                    "value": "github"
+                },
+                {
+                    "name": "GIT_HOST",
+                    "value": "https://api.github.com"
+                },
                 {
                     "name": "JIRA_HOST",
                     "value": "https://jira.ised-isde.canada.ca"
@@ -228,6 +245,7 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
+                    "GIT_AUTH_TOKEN",
                     "JIRA_AUTH_TOKEN",
                     "SKILLHUB_API_KEY"
                 ]

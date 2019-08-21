@@ -1,13 +1,14 @@
 const axios = require("axios");
 const {spawn} = require("child_process");
 const fs = require("fs");
+const uuidv4 = require("uuid/v4");
 const {GIT_AUTH_TOKEN, GIT_HOST, GIT_PLATFORM} = require("config");
 const {chainingPromisePool, logger: baseLogger, loggerUtils} = require("utils/");
 
 const logger = baseLogger.child({module: "GitScraper"});
 const logExecutionTime = loggerUtils.logExecutionTime(logger);
 
-const REPO_STORAGE_PATH = "/tmp/repo";
+const REPO_STORAGE_FOLDER = "/tmp";
 
 const PLATFORM_BITBUCKET = "bitbucket";
 const PLATFORM_GITHUB = "github";
@@ -15,7 +16,8 @@ const PLATFORM_GITHUB = "github";
 const PLATFORM_CONFIGS = {
     [PLATFORM_BITBUCKET]: {
         basePath: "/rest/api/1.0",
-        getOrgRepos: () => "",  // TODO once we get Bitbucket access
+        getProjects: "/projects?limit=1000",
+        getProjectRepos: (project) => `/projects/${project}/repos?limit=1000`
     },
     [PLATFORM_GITHUB]: {
         basePath: "",  // Yes, this should be empty. Github puts the 'api' portion as a subdomain.
@@ -60,13 +62,61 @@ class GitScraper {
      */
     async getRepoUrls(organization = "") {
         return await logExecutionTime("getRepoUrls", {organization}, async () => {
-            const path = getPath(this.platform, "getOrgRepos")(organization);
+            if (this.platform === PLATFORM_BITBUCKET) {
+                return await this._getRepoUrlsBitbucket();
+            } else if (this.platform === PLATFORM_GITHUB) {
+                if (!organization) {
+                    throw new Error("Must provide an organization as a query param.");
+                }
 
-            const result = await this.axios.get(path);
-            const cloneUrls = result.data.map(({clone_url: cloneUrl}) => cloneUrl);
-
-            return cloneUrls;
+                return await this._getRepoUrlsGithub(organization);
+            } else {
+                return [];
+            }
         });
+    }
+
+    async _getRepoUrlsBitbucket() {
+        logger.info({message: "Starting to get Bitbucket clone urls..."});
+        const getProjectsPath = getPath(this.platform, "getProjects");
+
+        const projectsResult = await this.axios.get(getProjectsPath);
+        const projects = projectsResult.data.values.map(({key}) => key);
+        logger.info({message: "Bitbucket projects", projects});
+
+        let cloneUrls = [];
+
+        for (const project of projects) {
+            const reposPath = getPath(this.platform, "getProjectRepos")(project);
+
+            const reposResult = await this.axios.get(reposPath);
+
+            const repoCloneUrls = reposResult.data.values.map((repo) => {
+                const cloneLinkObjects = repo.links.clone.filter(({name}) => name === "ssh");
+
+                if (cloneLinkObjects.length) {
+                    return cloneLinkObjects[0].href;
+                } else {
+                    return null;
+                }
+            });
+
+            cloneUrls = cloneUrls.concat(repoCloneUrls);
+        }
+
+        logger.info({message: "Bitbucket clone urls", cloneUrls});
+        return cloneUrls;
+    }
+
+    async _getRepoUrlsGithub(organization) {
+        logger.info({message: "Starting to get Github clone urls..."});
+        const path = getPath(this.platform, "getOrgRepos")(organization);
+
+        const result = await this.axios.get(path);
+        const cloneUrls = result.data.map(({clone_url: cloneUrl}) => cloneUrl);
+
+        logger.info({message: "Github clone urls", cloneUrls});
+        return cloneUrls;
     }
 
     /* Clones the given repo and generates a raw skill mapping for it. This raw skill mapping can then be used
@@ -92,11 +142,15 @@ class GitScraper {
      *  The `skill`s and `file`s are determined by the repo's github-linguist breakdown.
      */
     async generateSkillMapping(repoUrl = "") {
+        const repoPath = REPO_STORAGE_FOLDER + "/" + uuidv4();
+
         return await logExecutionTime("generateSkillMapping", {repoUrl}, async () => {
             try {
-                await this._cloneRepo(repoUrl, REPO_STORAGE_PATH);
-                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, REPO_STORAGE_PATH);
-                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, REPO_STORAGE_PATH);
+                await this._cloneRepo(repoUrl, repoPath);
+                const skillFileBreakdown = await this._getSkillFileBreakdown(repoUrl, repoPath);
+                const rawStats = await this._generateRawStats(skillFileBreakdown, repoUrl, repoPath);
+
+                deleteFolderRecursive(repoPath);
 
                 return rawStats;
             } catch (err) {

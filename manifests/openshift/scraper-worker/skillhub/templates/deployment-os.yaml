@@ -28,9 +28,8 @@ spec:
                 ports:
                   - containerPort: 5000
                 command:
-                  - "npm"
-                  - "run"
-                  - "worker"
+                  - "sh"
+                  - "./scripts/run_worker.sh"
 
                 env:
                   - name: BACKEND_PORT
@@ -61,6 +60,10 @@ spec:
                     value: 
                   - name: SCRAPER_WORKER_HOST
                     value: 
+                  - name: GIT_PLATFORM
+                    value: "bitbucket"
+                  - name: GIT_HOST
+                    value: "https://asbscr.ic.gc.ca/scm"
                   - name: JIRA_HOST
                     value: "http://jira.ic.gc.ca"
                   - name: JIRA_PLATFORM
@@ -71,6 +74,11 @@ spec:
                     value: "cdhwg01.prod.prv"
                   - name: PROXY_PORT
                     value: "80"
+                  - name: GIT_AUTH_TOKEN
+                    valueFrom:
+                        secretKeyRef:
+                            name: scraper-secrets
+                            key: GIT_AUTH_TOKEN
                   - name: JIRA_AUTH_TOKEN
                     valueFrom:
                         secretKeyRef:
@@ -81,6 +89,20 @@ spec:
                         secretKeyRef:
                             name: scraper-secrets
                             key: SKILLHUB_API_KEY
+                volumeMounts:
+                  - name: bitbucket-ssh-key
+                    mountPath: /home/scraper/ssh
+                    readOnly: true
+                  - name: bitbucket-known-hosts
+                    mountPath: /home/scraper/ssh2
+                    readOnly: true
+            volumes:
+              - name: bitbucket-ssh-key
+                secret:
+                    secretName: bitbucket-ssh-key
+              - name: bitbucket-known-hosts
+                secret:
+                    secretName: bitbucket-known-hosts
             initContainers:
               - name: wait-for-service
                 image: busybox

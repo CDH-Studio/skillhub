@@ -23,6 +23,7 @@
 {{- $waitForService := index $serviceMap "wait_for_service"}}
 {{- $preStartupCommand := index $serviceMap "pre_startup_command"}}
 
+{{- $sshKey := index $serviceMap "ssh_key"}}
 
 {{- if $volumeConfig}}
 ---
@@ -113,12 +114,33 @@ spec:
                     subPath: {{$subPath}}
                     {{- end}}
                 {{- end}}
+
+                {{- if $sshKey}}
+                volumeMounts:
+                  - name: {{index $sshKey "secret_name"}}
+                    mountPath: {{index $sshKey "mount_path"}}
+                    readOnly: true
+                  - name: {{index $sshKey "known_hosts_secret_name"}}
+                    mountPath: {{index $sshKey "known_hosts_mount_path"}}
+                    readOnly: true
+                {{- end}}
+              
               
             {{- if $volumeConfig}}
             volumes:
               - name: {{$volumeName}}
                 persistentVolumeClaim:
                     claimName: {{$pvClaimName}}
+            {{- end}}
+
+            {{- if $sshKey}}
+            volumes:
+              - name: {{index $sshKey "secret_name"}}
+                secret:
+                    secretName: {{index $sshKey "secret_name"}}
+              - name: {{index $sshKey "known_hosts_secret_name"}}
+                secret:
+                    secretName: {{index $sshKey "known_hosts_secret_name"}}
             {{- end}}
 
             {{- if or $waitForService $preStartupCommand}}

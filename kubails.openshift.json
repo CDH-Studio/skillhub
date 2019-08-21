@@ -167,6 +167,14 @@
             "container_port": "5000",
             "env": [
                 {
+                    "name": "GIT_PLATFORM",
+                    "value": "bitbucket"
+                },
+                {
+                    "name": "GIT_HOST",
+                    "value": "https://asbscr.ic.gc.ca/scm"
+                },
+                {
                     "name": "JIRA_HOST",
                     "value": "http://jira.ic.gc.ca"
                 },
@@ -200,9 +208,16 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
+                    "GIT_AUTH_TOKEN",
                     "JIRA_AUTH_TOKEN",
                     "SKILLHUB_API_KEY"
                 ]
+            },
+            "ssh_key": {
+                "secret_name": "bitbucket-ssh-key",
+                "mount_path": "/home/scraper/ssh",
+                "known_hosts_secret_name": "bitbucket-known-hosts",
+                "known_hosts_mount_path": "/home/scraper/ssh2"
             },
             "templates": [
                 "deployment-config-os",
@@ -215,9 +230,17 @@
             "wait_for_service": null
         },
         "scraper-worker": {
-            "command": ["npm", "run", "worker"],
+            "command": ["sh", "./scripts/run_worker.sh"],
             "container_port": "5000",
             "env": [
+                {
+                    "name": "GIT_PLATFORM",
+                    "value": "bitbucket"
+                },
+                {
+                    "name": "GIT_HOST",
+                    "value": "https://asbscr.ic.gc.ca/scm"
+                },
                 {
                     "name": "JIRA_HOST",
                     "value": "http://jira.ic.gc.ca"
@@ -252,9 +275,16 @@
                 "file": ".env.encrypted",
                 "name": "scraper-secrets",
                 "variables": [
+                    "GIT_AUTH_TOKEN",
                     "JIRA_AUTH_TOKEN",
                     "SKILLHUB_API_KEY"
                 ]
+            },
+            "ssh_key": {
+                "secret_name": "bitbucket-ssh-key",
+                "mount_path": "/home/scraper/ssh",
+                "known_hosts_secret_name": "bitbucket-known-hosts",
+                "known_hosts_mount_path": "/home/scraper/ssh2"
             },
             "templates": [
                 "deployment-os"
