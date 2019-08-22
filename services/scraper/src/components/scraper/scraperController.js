@@ -21,6 +21,11 @@ const getJobs = (queue) => async (req, res) => {
     res.send({status: "success", jobs});
 };
 
+const getQueueSize = (queue) => async (req, res) => {
+    const queueSize = await queue.count();
+    res.send({status: "success", queueSize});
+};
+
 router.get("/contributors", asyncMiddleware(async (req, res) => {
     // Remove timeout since this is a (potentially) long running operation
     req.setTimeout(0);
@@ -45,5 +50,8 @@ router.get("/skills", asyncMiddleware(async (req, res) => {
 
 router.get("/contributors/jobs", asyncMiddleware(getJobs(jiraScrapingQueue)));
 router.get("/skills/jobs", asyncMiddleware(getJobs(gitScrapingQueue)));
+
+router.get("/contributors/size", asyncMiddleware(getQueueSize(jiraScrapingQueue)));
+router.get("/skills/size", asyncMiddleware(getQueueSize(gitScrapingQueue)));
 
 module.exports = router;
