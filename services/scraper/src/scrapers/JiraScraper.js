@@ -28,7 +28,7 @@ const PLATFORM_CONFIGS = {
         getIssuesCount: "/search?maxResults=0",
         getProjects: "/project",
         getProjectsLastUpdated: "/search?maxResults=1&fields=updated",
-        getUsers: `/user/search?query=%20&maxResults=${MAX_RESULTS_USER}`,
+        getUsers: (query = "%20") => `/user/search?query=${query}&maxResults=${MAX_RESULTS_USER}`,
     },
     [PLATFORM_SERVER]: {
         basePath: "/rest/api/2",
@@ -36,7 +36,7 @@ const PLATFORM_CONFIGS = {
         getIssuesCount: "/search?maxResults=0",
         getProjects: "/project",
         getProjectsLastUpdated: "/search?maxResults=1&fields=updated",
-        getUsers: `/user/search?username=.&maxResults=${MAX_RESULTS_USER}`,
+        getUsers: (query = ".") => `/user/search?username=${query}&maxResults=${MAX_RESULTS_USER}`,
     }
 };
 
@@ -88,37 +88,42 @@ class JiraScraper {
 
     /* Handles fetching all of the user names/email addresses. */
     async getUsers() {
-        const path = getPath(this.platform, "getUsers");
-        logger.info({message: "Starting users scraping", path});
+        logger.info({message: "Starting users scraping"});
 
         let result = null;
         let users = [];
-        let index = 0;
+        const addedUsersIndex = {};
 
-        // Loop until all the users have been scraped; this only matters
-        // if there exists more than 1000 (MAX_RESULTS_USER) users on the Jira instance.
-        do {
-            logger.info({message: "Looping through users", index});
+        for (let i = 0; i < 26; i++) {
+            logger.info({message: "Looping through users", index: i});
 
-            const pathWithIndex = `${path}&startAt=${index}`;
-            result = await this.axios.get(pathWithIndex);
+            // Perform searches for each letter of the alphabet
+            // Have to do this because even though the API has a pagination option with `startAt`,
+            // it doesn't actually let us get any more than the first 1000 users.
+            // So doing a wildcard search can't get any more than 1000 users for internal/server Jira.
+            // As such, we try to break it down into doing searches by alphabet to _hopefully_ get everything.
+            // This still has the limitation of not being able to get more than 1000 users per letter.
+            const path = getPath(this.platform, "getUsers")(String.fromCharCode(97 + i));
+            result = await this.axios.get(path);
 
             users = result.data.reduce((acc, user) => {
-                if (!user.key.includes("addon_")) {
+                const username = user.key;
+
+                if (!username.includes("addon_") && !(username in addedUsersIndex)) {
                     // Convert the user data to a format that Skillhub will understand, so that
                     // Skillhub can ingest the data more easily
                     acc.push(new JiraUser(user));
+
+                    addedUsersIndex[username] = true;
                 }
 
                 return acc;
             }, users);
 
             logger.info({message: "Scraped users", usersCount: users.length});
+        }
 
-            index += result.data.length;
-        } while (result.data.length !== 0);
-
-        logger.info("Finished users scraping");
+        logger.info({message: "Finished users scraping", usersCount: users.lengths});
         return users;
     }
 
