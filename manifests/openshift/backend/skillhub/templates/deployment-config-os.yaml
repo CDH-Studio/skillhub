@@ -79,7 +79,7 @@ spec:
                 command: ["sh", "-c", "until nslookup backend-database; do echo waiting for backend-database; sleep 2; done;"]
               - name: pre-startup
                 image: docker-registry.default.svc:5000/skillhub/backend:latest
-                command: ["sh", "-c", "npm run db:retryable-migrate && npm run db:seed"]
+                command: ["sh", "-c", "npm run db:retryable-migrate"]
                 env:
                   - name: PREDICTIONS_PROTOCOL
                     value: "https"

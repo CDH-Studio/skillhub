@@ -27,7 +27,7 @@
             "image": "backend",
             "image_in_project": true,
             "persistent_volume": {},
-            "pre_startup_command": "npm run db:retryable-migrate && npm run db:seed",
+            "pre_startup_command": "npm run db:retryable-migrate",
             "production_replicas": 1,
             "replicas": 1,
             "secrets": {
