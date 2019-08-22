@@ -209,9 +209,10 @@ class ScraperBridgeService {
 
         for (const name in projectPredictions) {
             const {prediction} = projectPredictions[name];
+            const reformattedName = reformatLastNameFirst(name);
 
             if (prediction) {
-                const profile = await profilesService.create({name}, {hydrate: true});
+                const profile = await profilesService.create({name: reformattedName}, {hydrate: true});
                 profiles.push(profile);
             }
         }
@@ -260,6 +261,15 @@ class ScraperBridgeService {
         }, result);
     }
 }
+
+const reformatLastNameFirst = (name) => {
+    if (name.includes(",")) {
+        const splitName = name.split(",").map((n) => n.trim());
+        return `${splitName[1]} ${splitName[0]}`;
+    }
+
+    return name;
+};
 
 module.exports = (app) => {
     app.use("/scraperBridge", new ScraperBridgeService());
