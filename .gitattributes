@@ -1,7 +1,9 @@
 * text=auto eol=lf
 
-# Don't touch line endings of model files
+# Don't touch line endings of binary files
 *.joblib binary
 *.jpg binary
+*.JPG binary
 *.png binary
 *.pdf binary
+*.deb binary
