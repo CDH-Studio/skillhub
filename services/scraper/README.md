@@ -1,6 +1,6 @@
 # Scraper
 
-## Running the Scraper
+# Running the Scraper
 
 The Scraper is currently setup to pull data from the CDH Studio accessible [Jira instance](https://jira.ised-isde.canada.ca).
 
@@ -18,7 +18,7 @@ It runs on port `5001`.
 
 **NOTE**: If there isn't a `.env` present for the scraper to pull Jira credentials from, it will throw an error when starting with `make start`. This is fine and can be ignored (assuming you don't need to test or develop the scraper).
 
-## Using the Scraper
+# Using the Scraper
 
 The Scraper has been setup so that it has one route that triggers all of its scraping activities: `/scraper`. You can hit this route locally with something like:
 
