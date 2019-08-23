@@ -2,6 +2,8 @@
 
 A platform for discovering skills.
 
+![Skillhub Screenshot](Wiki%20Images/SkillhubHomePage.png?raw=true)
+
 # Contributors
 
 - Devin Sit
@@ -28,95 +30,19 @@ You must have the following already installed:
 - docker
 - docker-compose
 
-## Running the Web App Services
+## Running the Entire Application
 
-To run the web app locally, run the following:
+To run the entire application locally, run the following:
 
 ```
 make start
 ```
 
-You can then access the frontend at `localhost:3000`, and the backend at `localhost:5000`.
+You can then access the frontend at `localhost:3000`.
 
 ## Running the Scraper
 
-The Scraper is currently setup to pull data from the CDH Studio accessible [Jira instance](https://jira.ised-isde.canada.ca).
-
-In order to run the scraper locally, you'll need to have an account on the Jira instance.
-
-Once you have your account, you'll need to create a `.env` file in `services/scraper`, with the following format:
-
-```
-JIRA_AUTH_TOKEN=jira_username:jira_password
-```
-
-Once the `.env` is created, running `make start` should bring up the scraper without any errors.
-
-It runs on port `5001`.
-
-**NOTE**: If there isn't a `.env` present for the scraper to pull Jira credentials from, it will throw an error when starting with `make start`. This is fine and can be ignored (assuming you don't need to test or develop the scraper).
-
-### Using the Scraper
-
-The Scraper has been setup so that it has one route that triggers all of its scraping activities: `/scraper`. You can hit this route locally with something like:
-
-```
-curl localhost:5001/scraper/contributors
-```
-
-To run the Scraper on a deployed branch or production, just change the host:
-
-```
-curl https://cdhsh-XX.scraper.skillhub.ca/scraper/contributors
-```
-
-This fully exposed, non-authenticated endpoint is merely to ease our development and testing processes.
-
-In production, the scraper would most likely be running in-network, where it would have to be reconfigured to run the scraping process automatically when the container comes up.
-
-In development, it makes more sense to have this be triggered manually for easier testing.
-
-## Running the Predictions Service
-
-The `predictions` service handles taking in raw Jira data, processing it, and making various types of predictions using machine learning models.
-
-Contributor predictions are made by looking at all of the issues for a given Jira project, and seeing if the ratio of various features (e.g. # of assigned tickets, # of comments made, etc) is high enough to roughly indicate that the user was a contributor to the project.
-
-Obviously, the 'roughly' part comes into play since it is a machine learning model that is making the call.
-
-Running the predictions service is just like any other service; it'll come up as part of `make start`.
-
-### Predictions Service Authentication
-
-In order to make any calls to the predictions service, you'll need the API key. When running locally, the value of the API key can be in `services/predictions/src/config.py`, under `SKILLHUB_API_KEY`.
-
-To use the API key with curl, for example, you need to specify it as a header, like so:
-
-```
-curl -H "x-api-key: ${SKILLHUB_API_KEY}"
-```
-
-If you want to call the predictions service once it has been deployed to a branch environment or to production, please contact Devin to get access to the prod API key.
-
-### Making a Contributor Prediction
-
-In order to make a contributor prediction by hand, you first need to get a hold of some raw Jira issue data.
-
-If you want to grab it manually from CDH Studio accessible Jira instance, you can do something like this:
-
-```
-curl -u "${YOUR JIRA USERNAME}:${YOUR JIRA PASSWORD}" https://jira.ised-isde.canada.ca/rest/api/2/search?jql=project=${A JIRA PROJECT KEY}&maxResults=1000&expand=changelog > data.json
-```
-
-where you subsitute in the correct information for your Jira username/password, as well as a Jira project key.
-
-This'll only get you the first 1000 issues for the project, but that should be enough for just quick testing purposes.
-
-Once you have your Jira data in a JSON file, you can then call the predictions service like so:
-
-```
-curl -X POST -H "x-api-key: ${SKILLHUB_API_KEY}" --data @data.json localhost:5002/api/v1/contributors/predict
-```
+For instructions on how to manually run and use the Scraper, see the [Scraper README](services/scraper/README.md).
 
 ## Running the Linter/Tests Locally
 
