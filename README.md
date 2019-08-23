@@ -8,6 +8,32 @@ Skillhub can be accessed [here](https://skillhub.apps.ic.gc.ca).
 
 **NOTE**: Skillhub can only be accessed while logged onto the Government of Canada network.
 
+# Table of Contents
+
+- [What is Skillhub?](#what-is-skillhub)
+- [Contributors](#contributors)
+- [Tech Stack](#tech-stack)
+- [Repo Structure](#repo-structure)
+- [Local Development](#local-development)
+  * [Web App Development Prerequisites](#web-app-development-prerequisites)
+  * [Running the Entire Application](#running-the-entire-application)
+  * [Running the Linter/Tests Locally](#running-the-lintertests-locally)
+- [OpenShift](#openshift)
+  * [Deploying to OpenShift](#deploying-to-openshift)
+    + [Overview](#overview)
+    + [Prerequisites](#prerequisites)
+    + [Deployment Steps](#deployment-steps)
+      - [Login to the Cluster](#login-to-the-cluster)
+      - [Get a copy of the Repo](#get-a-copy-of-the-repo)
+      - [Deploy the Secrets](#deploy-the-secrets)
+      - [Deploy the Manifests](#deploy-the-manifests)
+      - [Start the Image Builds](#start-the-image-builds)
+    + [Regenerating the Manifests](#regenerating-the-manifests)
+- [Running the Scraper (OpenShift)](#running-the-scraper-openshift)
+  * [Checking on Progress](#checking-on-progress)
+- [License](#license)
+- [Contact](#contact)
+
 # What is Skillhub?
 
 Skillhub is a skills discovery platform to enable managers and developers to find other developers that have the skills that they're looking for. Whether that be for provisioning a new project, or just to find someone to help out in a pinch, Skillhub is the place to go.
