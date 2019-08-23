@@ -52,11 +52,11 @@ For more background information on what Skillhub is and why it exists, check out
 
 # Contributors
 
-- Devin Sit 
+- [Devin Sit](https://devinsit.com)
     * Team Lead, Software Architect, Infrastructure Architect, Full Stack Developer
-- Joshua Gorman
+- [Joshua Gorman](https://github.com/Liannus)
     * Full Stack Developer
-- Bhalachandra Malghan
+- [Bhalachandra Malghan](https://www.linkedin.com/in/bmalghan)
     * Full Stack Developer
 
 # Tech Stack
@@ -89,6 +89,19 @@ Here we'll go through the top-level structure of the Skillhub repository, explai
 ├── terraform                       # The Terraform configuration files for creating the necessary infrastructure to deploy Skillhub to GCP
 └── Wiki Images                     # The images used in the Github wiki
 ```
+
+# Architecture Overview
+
+Skillhub is broken down into four different services: Frontend, Backend, Predictions, Scraper.
+
+* Frontend: Serves the React app that is the web interface for Skillhub.
+* Backend: Manages data coming into and out of the database.
+* Predictions: Makes predictions relating to project contributors and profile skills.
+* Scraper: Scrapes Jira/Bitbucket for data and sends it to the Backend for persistence.
+
+The interactions between all of these services can be roughly described using the following diagram:
+
+![Architecture](Wiki%20Images/Skillhub_Architecture.png?raw=true)
 
 # Local Development
 
@@ -167,13 +180,19 @@ Login to the cluster using `oc`. You can find the command (and token) to login i
 
 Get a copy of this code repository (on the `master` branch) onto your machine.
 
-While you might think that you can just clone it from Github, we have found that `git clone` to external repos doesn't work. `¯\_(ツ)_/¯`
+While you might think that you can just clone it from Github, we have found that `git clone` to external repos doesn't work by default; you have to setup a proxy server with:
 
-You can just download a zip of the `master` branch and that should be fine.
+```
+git config --global http.proxy http://cdhwg01.prod.prv:80
+```
+
+**NOTE**: This proxy server might not be correct.
+
+You can also just download a zip of the `master` branch and that should be fine.
 
 #### Deploy the Secrets
 
-Decrypt the zip of service secrets found in `service-secrets.zip`. Ask ??? for the password. Then, run:
+Decrypt the zip of service secrets found in `service-secrets.zip`. Ask Mena/Ali for the password. Then, run:
 
 ```
 make deploy-openshift-secrets
