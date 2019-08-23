@@ -6,6 +6,16 @@ It is a Feathers.js-based REST API that handles everything relating to storing o
 
 Everything relating to the domain model is ultimately settled here in the Backend, since only the Backend has access to the Postgres database.
 
+# Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Code Structure](#code-structure)
+- [Interactions with Other Services](#interactions-with-other-services)
+  * [Frontend](#frontend)
+  * [Predictions](#predictions)
+  * [Scraper](#scraper)
+- [Secrets](#secrets)
+
 # Tech Stack
 
 - Language: JavaScript/Node

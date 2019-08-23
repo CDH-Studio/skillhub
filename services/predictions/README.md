@@ -6,6 +6,24 @@ It is a Flask-based API that takes in raw data from the Backend service to form 
 
 The Predictions service can look rather simple from the surface since it just looks like "take data in, process it, run through a model, return results", but there are a number of nuances to each of these steps.
 
+# Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Code Structure](#code-structure)
+  * [Controllers Setup](#controllers-setup)
+- [Interactions with Other Services](#interactions-with-other-services)
+  * [Backend](#backend)
+  * [Frontend](#frontend)
+  * [Scraper](#scraper)
+- [Secrets](#secrets)
+- [Running the Predictions Service](#running-the-predictions-service)
+  * [Predictions Service Authentication](#predictions-service-authentication)
+- [Making a Contributor Prediction](#making-a-contributor-prediction)
+- [Model Training](#model-training)
+  * [Contributors Model](#contributors-model)
+    + [Picking/Generating a Dataset](#pickinggenerating-a-dataset)
+    + [Training the Model](#training-the-model)
+
 # Tech Stack
 
 - Language: Python

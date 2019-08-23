@@ -31,6 +31,7 @@ Skillhub can be accessed [here](https://skillhub.apps.ic.gc.ca).
     + [Regenerating the Manifests](#regenerating-the-manifests)
 - [Running the Scraper (OpenShift)](#running-the-scraper-openshift)
   * [Checking on Progress](#checking-on-progress)
+- [Wiki](#wiki)
 - [License](#license)
 - [Contact](#contact)
 

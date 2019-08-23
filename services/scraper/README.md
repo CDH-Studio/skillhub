@@ -6,6 +6,18 @@ It is an Express-based API that calls out to the Jira/Bitbucket APIs and scrapes
 
 The Scraper service also makes use of a series of worker instances (backed by a Redis-based job queue) to concurrently perform the scraping in a more robust fashion.
 
+# Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Code Structure](#code-structure)
+- [Interactions with Other Services](#interactions-with-other-services)
+  * [Backend](#backend)
+  * [Frontend](#frontend)
+  * [Predictions](#predictions)
+- [Secrets](#secrets)
+- [Running the Scraper](#running-the-scraper)
+- [Using the Scraper](#using-the-scraper)
+
 # Tech Stack
 
 - Language: JavaScript/Node

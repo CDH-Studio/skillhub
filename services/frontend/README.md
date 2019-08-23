@@ -6,6 +6,18 @@ It is a React-based single page application (SPA) that gives the user the interf
 
 The Frontend is probably the most complicated part of the application, since it incorporates a number of advanced libraries and concepts from the React ecosystem (not to mention just generally being full of tech debt).
 
+# Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Code Structure](#code-structure)
+- [Interactions with Other Services](#interactions-with-other-services)
+  * [Backend](#backend)
+  * [Predictions](#predictions)
+  * [Scraper](#scraper)
+- [Secrets](#secrets)
+- [A Note on Environment Variables](#a-note-on-environment-variables)
+  * [How it Works](#how-it-works)
+
 # Tech Stack
 
 - Languages: JavaScript + Sass
