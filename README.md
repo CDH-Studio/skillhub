@@ -2,20 +2,106 @@
 
 A platform for discovering skills.
 
+![Skillhub Screenshot](Wiki%20Images/SkillhubHomePage.png?raw=true)
+
+Skillhub can be accessed [here](https://skillhub.apps.ic.gc.ca).
+
+**NOTE**: Skillhub can only be accessed while logged onto the Government of Canada network.
+
+# Table of Contents
+
+- [What is Skillhub?](#what-is-skillhub)
+- [Contributors](#contributors)
+- [Tech Stack](#tech-stack)
+- [Repo Structure](#repo-structure)
+- [Local Development](#local-development)
+  * [Web App Development Prerequisites](#web-app-development-prerequisites)
+  * [Running the Entire Application](#running-the-entire-application)
+  * [Running the Linter/Tests Locally](#running-the-lintertests-locally)
+- [OpenShift](#openshift)
+  * [Deploying to OpenShift](#deploying-to-openshift)
+    + [Overview](#overview)
+    + [Prerequisites](#prerequisites)
+    + [Deployment Steps](#deployment-steps)
+      - [Login to the Cluster](#login-to-the-cluster)
+      - [Get a copy of the Repo](#get-a-copy-of-the-repo)
+      - [Deploy the Secrets](#deploy-the-secrets)
+      - [Deploy the Manifests](#deploy-the-manifests)
+      - [Start the Image Builds](#start-the-image-builds)
+    + [Regenerating the Manifests](#regenerating-the-manifests)
+- [Running the Scraper (OpenShift)](#running-the-scraper-openshift)
+  * [Checking on Progress](#checking-on-progress)
+- [License](#license)
+- [Contact](#contact)
+
+# What is Skillhub?
+
+Skillhub is a skills discovery platform to enable managers and developers to find other developers that have the skills that they're looking for. Whether that be for provisioning a new project, or just to find someone to help out in a pinch, Skillhub is the place to go.
+
+In particular for Innovation Canada, this solves an ongoing problem that has had several attempts at fixing. These attempts have mainly focused around getting developers to fill out questionnaires and surveys to compile a profile of skills.
+
+However, these attemps have, for the most part, all failed due to two primary reasons: people don't like filling out these surveys (because it takes time), and the information becomes out of date very quickly (because people don't want to constantly be filling out surveys). 
+
+As such, Skillhub tries to fill both of these gaps by introducing an automated process for building an individual's skills profile. It uses various forms of data analysis and machine learning to look at different data sources (primarily, issue tracking in Jira and code repositories in Bitbucket) to build a profile of what technology-related skills an individual has, as well as what projects they have worked on.
+
+These profiles are then exposed in an intuitive web interface where other users can go search for other people.
+
+We think that Skillhub can be the bridge to close the gap for skills tracking and discovery.
+
+For more background information on what Skillhub is and why it exists, check out [our wiki](https://github.com/CDH-Studio/skillhub/wiki).
+
 # Contributors
 
-- Devin Sit
-- Joshua Gorman
-- Bhalachandra Malghan
+- [Devin Sit](https://devinsit.com)
+    * Team Lead, Software Architect, Infrastructure Architect, Full Stack Developer
+- [Joshua Gorman](https://github.com/Liannus)
+    * Full Stack Developer
+- [Bhalachandra Malghan](https://www.linkedin.com/in/bmalghan)
+    * Full Stack Developer
 
 # Tech Stack
 
 - Services Framework: [Kubails](https://github.com/DevinSit/kubails)
-- Frontend Framework: React + Redux + Redux-Saga
-- Backend Framework: Node + Express + Feathers
+- Frontend Service Framework: React + Redux + Redux-Saga
+- Backend Service Framework: Node + Express + Feathers
+- Predictions Service Framework: Python + Flask + Scikit-Learn
+- Scraper Service Framework: Node + Express
 - Database: Postgres
 - Testing Framework: Jest
-- Hosting: Docker + Kubernetes
+- Hosting: Docker/Kubernetes + OpenShift/GCP
+
+# Repo Structure
+
+Here we'll go through the top-level structure of the Skillhub repository, explaining what each folder and file is used for. For any sub-folder (like individual services), you can check out their co-located READMEs for more in-depth explanations of their structure.
+
+```
+├── cloudbuild.yaml                 # Cloud Build (CI/CD) pipeline for GCP
+├── helm                            # Helm templates used to generate the Kubernetes manifests
+├── kubails.json                    # Kubails configuration file GCP
+├── kubails.openshift.json          # Kubails configurataion file for OpenShift
+├── LICENSE                         # MIT License file
+├── Makefile                        # Makefile that contains the primary commands for controlling the repo
+├── manifests                       # Where the Kubernetes manifests are stored/generated to
+├── README.md                       # This file :)
+├── scripts                         # Other scripts that enable operation of the repo
+├── services                        # Where all the application code is stored; each service is one container = one microservice
+├── service-secrets.zip             # The password-protected zip containing the secrets used in production; Mena, Ali, and Devin have the password
+├── terraform                       # The Terraform configuration files for creating the necessary infrastructure to deploy Skillhub to GCP
+└── Wiki Images                     # The images used in the Github wiki
+```
+
+# Architecture Overview
+
+Skillhub is broken down into four different services: Frontend, Backend, Predictions, Scraper.
+
+* Frontend: Serves the React app that is the web interface for Skillhub.
+* Backend: Manages data coming into and out of the database.
+* Predictions: Makes predictions relating to project contributors and profile skills.
+* Scraper: Scrapes Jira/Bitbucket for data and sends it to the Backend for persistence.
+
+The interactions between all of these services can be roughly described using the following diagram:
+
+![Architecture](Wiki%20Images/Skillhub_Architecture.png?raw=true)
 
 # Local Development
 
@@ -28,95 +114,19 @@ You must have the following already installed:
 - docker
 - docker-compose
 
-## Running the Web App Services
+## Running the Entire Application
 
-To run the web app locally, run the following:
+To run the entire application locally, run the following:
 
 ```
 make start
 ```
 
-You can then access the frontend at `localhost:3000`, and the backend at `localhost:5000`.
+You can then access the frontend at `localhost:3000`.
 
-## Running the Scraper
+Checkout the `services/docker-compose.yaml` file for information on which ports to use to access all of the other services.
 
-The Scraper is currently setup to pull data from the CDH Studio accessible [Jira instance](https://jira.ised-isde.canada.ca).
-
-In order to run the scraper locally, you'll need to have an account on the Jira instance.
-
-Once you have your account, you'll need to create a `.env` file in `services/scraper`, with the following format:
-
-```
-JIRA_AUTH_TOKEN=jira_username:jira_password
-```
-
-Once the `.env` is created, running `make start` should bring up the scraper without any errors.
-
-It runs on port `5001`.
-
-**NOTE**: If there isn't a `.env` present for the scraper to pull Jira credentials from, it will throw an error when starting with `make start`. This is fine and can be ignored (assuming you don't need to test or develop the scraper).
-
-### Using the Scraper
-
-The Scraper has been setup so that it has one route that triggers all of its scraping activities: `/scraper`. You can hit this route locally with something like:
-
-```
-curl localhost:5001/scraper/contributors
-```
-
-To run the Scraper on a deployed branch or production, just change the host:
-
-```
-curl https://cdhsh-XX.scraper.skillhub.ca/scraper/contributors
-```
-
-This fully exposed, non-authenticated endpoint is merely to ease our development and testing processes.
-
-In production, the scraper would most likely be running in-network, where it would have to be reconfigured to run the scraping process automatically when the container comes up.
-
-In development, it makes more sense to have this be triggered manually for easier testing.
-
-## Running the Predictions Service
-
-The `predictions` service handles taking in raw Jira data, processing it, and making various types of predictions using machine learning models.
-
-Contributor predictions are made by looking at all of the issues for a given Jira project, and seeing if the ratio of various features (e.g. # of assigned tickets, # of comments made, etc) is high enough to roughly indicate that the user was a contributor to the project.
-
-Obviously, the 'roughly' part comes into play since it is a machine learning model that is making the call.
-
-Running the predictions service is just like any other service; it'll come up as part of `make start`.
-
-### Predictions Service Authentication
-
-In order to make any calls to the predictions service, you'll need the API key. When running locally, the value of the API key can be in `services/predictions/src/config.py`, under `SKILLHUB_API_KEY`.
-
-To use the API key with curl, for example, you need to specify it as a header, like so:
-
-```
-curl -H "x-api-key: ${SKILLHUB_API_KEY}"
-```
-
-If you want to call the predictions service once it has been deployed to a branch environment or to production, please contact Devin to get access to the prod API key.
-
-### Making a Contributor Prediction
-
-In order to make a contributor prediction by hand, you first need to get a hold of some raw Jira issue data.
-
-If you want to grab it manually from CDH Studio accessible Jira instance, you can do something like this:
-
-```
-curl -u "${YOUR JIRA USERNAME}:${YOUR JIRA PASSWORD}" https://jira.ised-isde.canada.ca/rest/api/2/search?jql=project=${A JIRA PROJECT KEY}&maxResults=1000&expand=changelog > data.json
-```
-
-where you subsitute in the correct information for your Jira username/password, as well as a Jira project key.
-
-This'll only get you the first 1000 issues for the project, but that should be enough for just quick testing purposes.
-
-Once you have your Jira data in a JSON file, you can then call the predictions service like so:
-
-```
-curl -X POST -H "x-api-key: ${SKILLHUB_API_KEY}" --data @data.json localhost:5002/api/v1/contributors/predict
-```
+For information on how to use/run each of the other services, check out the READMEs found in each of their folders under the `services/` folder.
 
 ## Running the Linter/Tests Locally
 
@@ -126,54 +136,6 @@ To run the linter or tests locally, do the following:
 
 1. Make sure the services are running (i.e. `make start`).
 2. Run the corresponding Make command(s) depending on what you want linted/tested, e.g. `make lint-frontend-locally`.
-
-# Model Training
-
-If the models for the predictions ever need to be retrained, the following will show you how to do it.
-
-## Contributors Model
-
-Training the contributors model happens in two steps: picking/generating a dataset, and then training the model on that data set.
-
-### Picking/Generating a Dataset
-
-To find out which datasets already exist, look in the `services/predictions/src/training/training_data/` folder. If you want to use an existing dataset, make note of the 'hash' -- the part of the CSV file name before `--training-data.csv`.
-
-If you instead want to generate a new dataset from the CDH Studio accessible [Jira instance](https://jira.ised-isde.canada.ca), you can run generation process with the following `make` command:
-
-```
-make generate-contributors-model-training-data JIRA_AUTH_TOKEN="YOUR_JIRA_USERNAME:YOUR_JIRA_PASSWORD"
-```
-
-This will add another CSV file to the `training_data` folder. Again, make note of its hash.
-
-**NOTE 1:** One of the already existing datasets is the `our_jira_and_ccdev--training-data.csv` file. This dataset is special because it includes, as the name implies, all of the data from our [Jira instance](https://jira.ised-isde.canada.ca), as well as the data from the `CCDEV` project from the on-network [Jira instance](http://jira.ic.gc.ca).
-
-This is the dataset that was used to train the current contributors model.
-
-**NOTE 2:**: Since running `make generate-contributors-model-training-data` runs `scraper` and `predictions` service scripts on your host machine (_not_ in a Docker container), you'll need to make sure to have appropriate installations of Node/npm and Python 3/pipenv to install the packages and run the scripts.
-
-### Training the Model
-
-Once you have your dataset hash from the last section, training the model is just another `make` command:
-
-```
-make train-contributors-model DATASET_HASH="YOUR_DATASET_HASH"
-```
-
-On a 4 core i5-6200U laptop, this took about 4.5 minutes to train. It runs the grid search in parallel, so more cores = faster training.
-
-Once it's done, it'll output the trained model to `services/predictions/src/trained_models/`.
-
-To make use of the trained model in the `predictions` service, you'll need to manually update the `CONTRIBUTORS_MODEL` variable in the `services/predictions/src/config.py` file to use the new file name.
-
-# CI/CD Setup
-
-The CI/CD pipeline is fully automated to handle linting, testing, and deployment of the web app to GCP.
-
-All commits (on every branch) are linted, tested, and deployed to a live namespace on a Kubernetes cluster that is hosted on GCP. Commits on `master` are available at the root `https://skillhub.ca` URL, whereas all other branches are available at separate `https://BRANCH_NAME.skillhub.ca` URLs.
-
-CI/CD configuration is all setup by Kubails. For more information on the CI/CD configuration, visit the Kubails docs (TODO).
 
 # OpenShift
 
@@ -200,8 +162,8 @@ Additionally, deployment to the cluster has to be done from a Windows machine, i
 The following are the prerequisites to deploying Skillhub to the OpenShift cluster.
 
 1. You have an imaged (i.e. in-network) Windows laptop and AD (Active Directory) account.
-2. You have access for your AD account to the OpenShift cluster (ask Mena; she knows who to ask for access).
-3. You have access to the Skillhub project on the OpenShift cluster (ask ???; TODO).
+2. Your AD account has access to the OpenShift cluster (ask Mena; she knows who to ask for access).
+3. You have access to the Skillhub project on the OpenShift cluster (ask Mena or Ali).
 4. You have installed the OpenShift CLI (`oc`); google for instructions on where to find it.
 
 You'll probably need to use something like [Git for Windows](https://gitforwindows.org/) or [Cmder](https://cmder.net/) to get a basic `bash` shell -- you're gonna need a proper shell for this stuff (including `make`).
@@ -218,13 +180,19 @@ Login to the cluster using `oc`. You can find the command (and token) to login i
 
 Get a copy of this code repository (on the `master` branch) onto your machine.
 
-While you might think that you can just clone it from Github, we have found that `git clone` to external repos doesn't work. `¯\_(ツ)_/¯`
+While you might think that you can just clone it from Github, we have found that `git clone` to external repos doesn't work by default; you have to setup a proxy server with:
 
-You can just download a zip of the `master` branch and that should be fine.
+```
+git config --global http.proxy http://cdhwg01.prod.prv:80
+```
+
+**NOTE**: This proxy server might not be correct.
+
+You can also just download a zip of the `master` branch and that should be fine.
 
 #### Deploy the Secrets
 
-Decrypt the zip of service secrets found in `service-secrets.zip`. Ask ??? for the password. Then, run:
+Decrypt the zip of service secrets found in `service-secrets.zip`. Ask Mena/Ali for the password. Then, run:
 
 ```
 make deploy-openshift-secrets
@@ -275,68 +243,40 @@ Additionally, note that the `--tag` option is used to specify the branch that th
 
 If you want to switch the Kubails config back to GCP, just run `make convert-kubails-to-gcp`. Make sure you only run this _after_ running `make convert-kubails-to-openshift`, otherwise the files will be named weirdly.
 
-# Code Structure
+# Running the Scraper (OpenShift)
 
-The bulk of the file structure of the repo is Kubails dependent, and as such has more to do with deployment. For more information on the default Kubails structure, visit the Kubails docs (TODO).
-
-In terms of actual application code, all of it (for the web app) can be found in the `services/` folder. It is broken down as follows:
+To manually run the Scraper deployed on OpenShift, run the following commands:
 
 ```
-├── backend                                 # The backend Node/Feathers API
-│   ├── config/                             # Feathers configuration files
-│   ├── Dockerfile                          # Docker configuration
-│   ├── Makefile                            # Makefile with commands that are used by Kubails
-│   ├── package.json                        # Backend JavaScript dependencies
-│   ├── scripts/                            # Other useful scripts for the backend
-│   │
-│   └── src/                                # Source files
-│       ├── app.hooks.js                    # Top level app-scoped hooks
-│       ├── app.js                          # Main app setup
-│       ├── components/                     # The different domain services (e.g. 'transactions')
-│       ├── db/                             # Database configuration and model schemas
-│       ├── hooks/                          # Other feathers hooks
-│       ├── index.js                        # Main entrypoint to the API
-│       ├── middleware/                     # Node/Feathers middleware
-│       └── utils/                          # Other utilities for the API
-│
-├── docker-compose.yaml                     # docker-compose config used by Kubails for local development
-│
-└── frontend                                # The frontend React app
-    ├── Dockerfile                          # Docker configuration
-    ├── jsconfig.json                       # create-react-app configuration to enable absolute imports
-    ├── Makefile                            # Makefile with commands that are used by Kubails
-    ├── package.json                        # Frontend JavaScript dependencies
-    ├── public/                             # Public static assets
-    ├── scripts/                            # Other useful scripts for the frontend
-    ├── server/                             # The Node server that serves the frontend React app
-    │
-    └── src                                 # Source files
-        ├── api/                            # Interface to the backend API (currently using the Feathers client)
-        ├── App.js                          # Main app setup
-        ├── App.scss                        # Main app styling (only very top-level)
-        ├── AppRouter.js                    # Router for the authenticated app
-        ├── assets/                         # All static assets (like icons, fonts, etc)
-        ├── components/                     # Standalone React components (usually non-store connected, but they can be)
-        ├── config.js                       # Frontend-wide configuration values
-        ├── index.js                        # Main entrypoint to the frontend
-        ├── index.scss                      # Where the css reset is activated
-        ├── scenes/                         # Large, store-connected components that might have internal state (not necessarily equal to a 'page')
-        ├── serviceWorker.js                # Service workers configuration
-        │
-        ├── store/                          # All Redux store related code
-        │   ├── crossSliceSelectors.js      # Combines slice selectors to create cross-slice selectors
-        │   ├── index.js                    # Re-exports everything from the store for convenience
-        │   ├── mountpoints.js              # The strings to mount reducers at in the store
-        │   ├── rootReducer.js              # Combines all the slice reducers into the one root reducer
-        │   ├── sagas/                      # Sagas (for redux-saga) for handling side-effects and app-wide business logic
-        │   ├── slices/                     # The store slices composed of actions, reducers, and selectors for each data domain
-        │   ├── store.js                    # Setup code for the store
-        │   └── utils/                      # Other utilities for the store
-        │
-        ├── styles/                         # Frontend-wide styles (colors, sass mixins, dimensional constants, etc)
-        │
-        └── utils/                          # Other utilities for the frontend
-            ├── hooks/                      # Custom React hooks
-            ├── models/                     # Models for the domain objects that contain data schema and related business logic
-            └── screenUrls.js               # The string constants the define the URLs for each page
+curl https://skillhub.apps.ic.gc.ca/scraper/contributors
+curl https://skillhub.apps.ic.gc.ca/scraper/skills
 ```
+
+Alternatively, visit those links in a web browser. They should each only take a few seconds to complete; however, the actual scraping happens in the background, which can take up to a couple of hours to finish.
+
+## Checking on Progress
+
+To check on the progress of each scraping process, you can run these commands:
+
+```
+curl https://skillhub.apps.ic.gc.ca/scraper/contributors/size
+curl https://skillhub.apps.ic.gc.ca/scraper/skills/size
+```
+
+The responses you get back will contain the number of jobs that are left in each queue (the contributors and skills processes use separate job queues).
+
+For contributors, each job is equal to one project that still needs to be scraped/processed from Jira.
+
+For skills, each job is equal to one repo that still needs to be scraped/processed from Bitbucket.
+
+# Wiki
+
+You can find more information about the project and our processes in our [Github Wiki](https://github.com/CDH-Studio/skillhub/wiki).
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+# Contact 
+
+* [CDH Studio Website](https://cdhstudio.ca/)
