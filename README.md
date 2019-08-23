@@ -269,6 +269,10 @@ For contributors, each job is equal to one project that still needs to be scrape
 
 For skills, each job is equal to one repo that still needs to be scraped/processed from Bitbucket.
 
+# Wiki
+
+You can find more information about the project and our processes in our [Github Wiki](https://github.com/CDH-Studio/skillhub/wiki).
+
 # License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
